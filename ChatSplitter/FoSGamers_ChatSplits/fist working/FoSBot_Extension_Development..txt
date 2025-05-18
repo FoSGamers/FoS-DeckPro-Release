@@ -1,0 +1,59 @@
+Chat: FoSBot_Extension_Development.
+Started: 2024-06-17 15:02:55
+
+[2024-06-17 15:02:55] FoSGamers:
+I need you to break the following in to smart programing steps to make the FoSBot chrome extension as described. 
+Comprehensive Summary for FoSBot Extension Development
+Project Overview: FoSBot is a sophisticated chatbot application designed to monitor and interact with live chats across various platforms. It provides a user-friendly graphical interface (GUI) for setting up and managing multiple chat monitors, ensuring robust performance and detailed logging for debugging purposes. The application integrates with Google Sheets for inventory management, OBS (Open Broadcaster Software) for multimedia control during live streams, and saving critical settings and data online.
+Core Components
+1. Initial Setup and Launch
+Extension Popup
+* Single Launch Button: Ensure it only contains a single button to launch the main console tab.
+2. Main Console Tab
+General Layout
+    * Navigation Menu: Provides buttons to switch between different sections: Dashboard, Settings, and Plugins. Plugins will only appear in the menu once they are installed.
+    * Dashboard: Displays key metrics and statuses, with real-time updates. Designed to be visually appealing, modern, and user-friendly.
+    * Settings: Includes input fields for bot username, API key, Google API Key, OBS WebSocket Server and plugin-specific settings that only appear when the corresponding plugins are installed. All settings are organized for easy access and intuitive navigation.
+    * Plugin Management: Allows users to view available plugins, install them, and manage installed plugins. The interface is designed to be sleek and modern, ensuring an intuitive user experience.
+1. Main Console Tab
+    * Chat Monitoring: Monitors multiple chat pages in separate tabs within the main console tab.
+    * Embedded Browser(s): Tabs that contain embedded browser(s) to display live chats.
+    * Real-Time Updates: Ensures that chat content updates in real-time.
+    * Bot Mentions: Detects and responds to mentions of the bot’s username.
+    * Predefined Prompts: Responds to predefined prompts.
+    * Response Formatting: Formats responses with the username of the person who sent the message.
+    * Direct Interaction: Allows users to type messages directly to the bot.
+    * Automatic Debugging: Implements memory profiling and error handling features.
+    * Login Management: Handles Google authentication for chats requiring login.
+    * Background Operation: Keeps the login tab open and running in the background to maintain chat monitoring.
+    * Customizable Bot Name: Allows the user to customize the bot name or use the username they log in with.
+    * Consolidated Chat Filtering: Filter messages in the consolidated chat by username, live chat site, mod, buyer, questions, and other helpful criteria using a dropdown option.
+    * Targeted Responses: Allows responding to everyone in all monitored live chats or to specific filtered groups and combinations of filters.
+    * Interactive Tabs: Allows interacting with live chat site browsers as though they were regular tabs in Google Chrome, including logging in and sending messages. This should use any native chrome extension capabilities.
+    * Optional Bot Username and Password: Bot username and password fields should be optional, as users can log in through the interactive tabs.
+Plugins and Additional Features
+All plugins are designed to be developed individually and integrated seamlessly into the FoSBot Extension. Users can select and install plugins from a list of available plugins, enabling dynamic plugin management and future expansions. Once installed, plugins will appear in the GUI for easy access and management.
+Integration with Google Sheets (OAuth Authentication)
+1. OAuth 2.0 Setup
+    * Google Cloud Console: Set up a project, enable Google Sheets API, and create OAuth 2.0 credentials.
+    * Client ID and Scopes: Use the OAuth 2.0 client ID to authenticate users and obtain access tokens.
+2. Client-Side OAuth 2.0 Flow
+    * Authentication Flow: Implemented in oauth.js to handle authentication and sign-in status.
+    * API Requests: Uses the access token to make authorized requests to Google Sheets API for listing and updating inventory, saving metrics, saving predefined prompts and responses, and main settings saved.
+GUI Sections and Updates
+1. Dashboard: Displays the main content area for the dashboard.
+2. Settings: Includes fields for configuring bot username, API key, Google Sheets authentication, and plugin-specific settings (which only appear when the corresponding plugins are installed).
+3. Plugins: Section for managing and displaying installed plugins.
+4. Main Console: Everything in the Main Console tab.
+5. Additional Sections (Visible After Plugin Installation): Includes corresponding plugins once they are installed and activated.
+Plugin Management System
+Overview: The FoSBot Extension will include a plugin management system to allow users to add new plugins easily with an API created specifically for FoSBot and all it functions. This system will enable users to select plugins from a list and install them into the FoSBot Extension. The plugins can be developed individually and integrated seamlessly.
+1. Plugin Directory: Create a directory for storing plugin files.
+2. Plugin Loader: Implement a system to dynamically load and activate plugins based on user preferences.
+3. Plugin Configuration: Allow users to enable or disable plugins from the settings menu.
+4. Plugin API: Provide a standardized API for plugins to interact with the core features of the extension.
+5. Consistent GUI Integration: Ensure that all plugins, once installed, integrate seamlessly into the FoSBot Extension's GUI for a consistent user experience.
+6. Plugin Selection: Users can select new plugins from a list of available plugins.
+7. Installation: The selected plugins can be installed into the FoSBot Extension.
+8. Activation: Once installed, plugins can be activated and configured through the settings menu.
+9. Consistent GUI Integration: Ensure that all newly added plugins integrate seamlessly into the FoSBot Extension's GUI for a consistent user experience.

@@ -1,0 +1,36 @@
+{
+    "modules": [
+        {
+            "ID": "chatbot_plus",
+            "Name": "FoSGamers Chatbot+",
+            "Description": "Unified chat interface with YouTube integration",
+            "Entry": "modules/chatbot_plus/main.py",
+            "RequiresCode": true,
+            "Status": "Working"
+        },
+        {
+            "ID": "chatsplitter",
+            "Name": "ChatSplitter App",
+            "Description": "Split chat messages into different windows",
+            "Entry": "modules/chatsplitter/main.py",
+            "RequiresCode": false,
+            "Status": "Working"
+        },
+        {
+            "ID": "youtube_login",
+            "Name": "YouTube Login",
+            "Description": "Authenticate with YouTube API",
+            "Entry": "modules/youtube_login/main.py",
+            "RequiresCode": true,
+            "Status": "Working"
+        },
+        {
+            "ID": "command_manager",
+            "Name": "Command Manager",
+            "Description": "Manage and edit chat commands",
+            "Entry": "modules/command_manager/main.py",
+            "RequiresCode": true,
+            "Status": "Working"
+        }
+    ]
+}

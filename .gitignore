@@ -1,0 +1,41 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+*.log
+
+# Virtual environments
+venv/
+*/venv/
+*/venv*/
+*/.flask_session/
+*/.pytest_cache/
+.env
+.env.*
+
+# Backup and output folders
+backups/
+Backup*/
+backup*/
+output/
+logs/
+*.zip
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# System files
+Thumbs.db
+ehthumbs.db
+Icon?

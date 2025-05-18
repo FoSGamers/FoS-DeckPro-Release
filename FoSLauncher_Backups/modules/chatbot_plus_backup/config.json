@@ -1,0 +1,24 @@
+{
+    "name": "Chatbot Plus",
+    "description": "Advanced chatbot with YouTube integration",
+    "enabled": true,
+    "requires_code": false,
+    "features": {
+        "youtube_integration": {
+            "enabled": true,
+            "requires_code": true
+        },
+        "twitch_integration": {
+            "enabled": false,
+            "requires_code": true
+        },
+        "discord_integration": {
+            "enabled": false,
+            "requires_code": true
+        },
+        "unified_chat": {
+            "enabled": true,
+            "requires_code": false
+        }
+    }
+} 

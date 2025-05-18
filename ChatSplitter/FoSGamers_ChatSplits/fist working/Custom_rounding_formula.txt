@@ -1,0 +1,70 @@
+Chat: Custom_rounding_formula
+Started: 2025-04-04 07:04:28
+
+[2025-04-04 07:04:27] FoSGamers:
+how do I have a column in google sheets custom round a number up from anything that has .35 or higher will go to the next number instead of lower. so 1.35 would go to 2 instead of being less that 1.5 so it goes to 1. 
+
+[2025-04-04 07:04:28] ChatGPT:
+To round numbers **up** in Google Sheets when they reach **.35 or higher**, and otherwise round down (like 1.34 → 1, 1.35 → 2), you can use a **custom formula** like this:
+
+```excel
+=IF(MOD(A1,1)>=0.35,INT(A1)+1,INT(A1))
+```
+
+### Breakdown:
+- `A1` is the cell with the number.
+- `MOD(A1,1)` gives you the decimal portion (e.g., `1.35 → 0.35`).
+- If the decimal is `>= 0.35`, it adds 1 to the integer portion.
+- Otherwise, it just uses the integer portion (`INT(A1)`).
+
+### Example Results:
+| Input | Output |
+|-------|--------|
+| 1.34  | 1      |
+| 1.35  | 2      |
+| 2.7   | 3      |
+| 5.1   | 5      |
+
+Let me know if you want this applied to a whole column or need it nested in a bigger formula!
+
+[2025-04-04 07:04:36] FoSGamers:
+
+Please remember to search the user's documents if an answer to their question is not contained in the above snippets. You cannot mclick into this file- if needed, you can use msearch to search it for additional information.
+
+
+[2025-04-04 07:04:50] FoSGamers:
+price is in cell H
+
+[2025-04-04 07:04:50] ChatGPT:
+Got it! If the price is in column **H**, you can use this formula in another column (say, column **I**) to apply the custom rounding:
+
+```excel
+=IF(MOD(H1,1)>=0.35,INT(H1)+1,INT(H1))
+```
+
+Just drag it down to apply it to all rows.
+
+### Bonus Tip:
+If you want this formula to always work no matter the row, but you're pasting it into a column like **I**, just update the row number dynamically:
+
+```excel
+=IF(MOD(H2,1)>=0.35,INT(H2)+1,INT(H2))
+```
+
+Use the correct row (e.g., `H2`, `H3`, etc.) depending on where you're entering it.
+
+Let me know if you want this applied directly *within* another function or automated via script!
+
+[2025-04-04 07:05:02] FoSGamers:
+it starts on row 2
+
+[2025-04-04 07:05:03] ChatGPT:
+Perfect! Then in **cell I2**, paste this version:
+
+```excel
+=IF(MOD(H2,1)>=0.35,INT(H2)+1,INT(H2))
+```
+
+Then drag it down as far as needed to apply the rounding logic to each value in column H starting from row 2.
+
+If you want to make it fancy later with headers or conditional formatting, I’ve got you—just say the word 😎

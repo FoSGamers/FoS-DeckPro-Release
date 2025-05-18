@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhance! Modular Exporter</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Enhance! Modular Exporter</h1>
+
+    <!-- Flash Messages Area -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div id="flash-messages">
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- File Upload Section -->
+    <div class="card">
+        <h2>1. Load Conversations</h2>
+        <form method="post" enctype="multipart/form-data" action="{{ url_for('index') }}">
+            <label for="file">Select conversations.json:</label>
+            <input type="file" id="file" name="file" accept=".json" required>
+            <button type="submit">Load File</button>
+        </form>
+        {% if not has_data %}
+        <p><i>Upload your 'conversations.json' file to see export options.</i></p>
+        {% endif %}
+    </div>
+
+    {% if has_data %}
+    <!-- Main Form appears after file load -->
+    <form id="export-form" action="{{ url_for('export') }}" method="post">
+        <div class="main-layout">
+
+            <!-- == Left Column: Filters & Chat List == -->
+            <div class="column column-left">
+                <div class="card filter-card">
+                    <h2>2. Filter & Select Chats</h2>
+                    <!-- Filter Form (Submits via GET using JS) -->
+                    <div class="filter-controls">
+                         <div class="filter-group"><label for="search">Title:</label><input type="text" id="search" name="search" value="{{ filter_values.search }}" placeholder="Filter by title..."></div>
+                         <div class="filter-group date-filter"><input type="checkbox" id="date_filter" name="date_filter" {% if filter_values.date_filter %}checked{% endif %}><label for="date_filter">Date:</label><input type="date" id="start_date" name="start_date" value="{{ filter_values.start_date }}"><span>to</span><input type="date" id="end_date" name="end_date" value="{{ filter_values.end_date }}"></div>
+                          <button type="button" id="apply-filter-btn">Apply Filters</button>
+                     </div>
+                    <!-- Chat List -->
+                    <div class="chat-list-section">
+                        <label for="chat-listbox">Chats ({{ chats|length }} matching filters):</label>
+                        <div class="listbox-container"><select id="chat-listbox" name="selected_chats" multiple size="15">{% for chat in chats %}<option value="{{ chat.original_index }}" title="{{ chat.title | e }}">{{ chat.title | e }}</option>{% else %}<option disabled>No matching chats.</option>{% endfor %}</select></div>
+                        <div class="select-all-controls"><input type="checkbox" id="select-all-cb"><label for="select-all-cb">Select All/None</label><span id="selection-count">Selected: 0</span></div>
+                    </div>
+                </div>
+            </div><!-- End Left Column -->
+
+            <!-- == Center Column: Export Options == -->
+            <div class="column column-center">
+                <div class="card options-card" id="export-options">
+                    <h2>3. Export Options</h2>
+                    <!-- Format Options -->
+                    <fieldset><legend>Formats</legend>
+                        <label><input type="checkbox" name="export_txt" value="1" checked> .txt</label>
+                        <label><input type="checkbox" name="export_md" value="1" checked> .md</label>
+                        <label><input type="checkbox" name="export_html" value="1"> .html</label>
+                        <label><input type="checkbox" name="export_db" value="1"> .csv</label>
+                        <label><input type="checkbox" name="export_sqlite" value="1"> .sqlite</label>
+                    </fieldset>
+                    <!-- Folder Options -->
+                    <fieldset><legend>Folder Structure <small>(N/A if merging)</small></legend>
+                        <label><input type="radio" name="folder_mode" value="Default" checked> Default</label>
+                        <label><input type="radio" name="folder_mode" value="Smart"> Smart Folders</label>
+                    </fieldset>
+                    <!-- Splitting Options -->
+                    <fieldset><legend>File Splitting <small>(N/A if merging)</small></legend>
+                        <label><input type="radio" name="split_mode" value="None" checked> None</label>
+                        <label><input type="radio" name="split_mode" value="Size"> Size(MB)</label>
+                        <label><input type="radio" name="split_mode" value="Count"> Count</label>
+                        <input type="number" name="split_value" min="1" value="10" style="width:60px;">
+                    </fieldset>
+                    <!-- Advanced Options -->
+                     <fieldset><legend>Advanced</legend>
+                         <!-- Note: These are the feature toggles from your Tkinter app -->
+                         <label><input type="checkbox" name="anonymize" value="1"> Anonymize</label>
+                         <label><input type="checkbox" name="leet_speak" value="1"> L33t Sp34k</label>
+                         <label><input type="checkbox" name="use_chatid_filename" value="1"> Filename=ID</label>
+                         <label><input type="checkbox" name="html_embed_css" value="1" checked> Embed CSS</label>
+                         <!-- 'Turbo Mode' and 'BG Cycle' were visual Tkinter effects, not data processing options, so they aren't included here. -->
+                    </fieldset>
+                </div>
+                 <!-- Action Buttons -->
+                 <div class="card action-buttons">
+                     <button type="submit" name="export_selected" class="export-btn">Export Selected</button>
+                     <button type="submit" name="merge_selected" class="merge-btn" title="Merges selected chats.">Merge Selected</button>
+                 </div>
+            </div><!-- End Center Column -->
+
+            <!-- == Right Column: Preview == -->
+            <div class="column column-right">
+                 <div class="card preview-card">
+                    <h2>Chat Preview</h2>
+                    <textarea id="preview-area" readonly rows="20" placeholder="(Select a single chat to preview)"></textarea>
+                </div>
+                 <!-- Future Log Area could go here -->
+                 <!-- <div class="card log-card"><h2>Log</h2><div id="log-area"></div></div> -->
+            </div><!-- End Right Column -->
+
+        </div> <!-- end main-layout -->
+    </form>
+    {% endif %} {# End if has_data #}
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!-- File: static/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoSBot Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 10px; background: #f0f0f0; }
+        #header { background: #333; color: white; padding: 10px; text-align: center; }
+        #tab-buttons { margin: 10px 0; }
+        .tab-button { padding: 8px 16px; margin-right: 5px; background: #ddd; border: none; cursor: pointer; }
+        .tab-button.active { background: #007bff; color: white; }
+        #main-content { display: flex; }
+        #content-area { flex: 3; background: white; padding: 15px; border-radius: 5px; }
+        #sidebar { flex: 1; margin-left: 10px; background: #e9ecef; padding: 10px; border-radius: 5px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        #chat-output { max-height: 500px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; }
+        .chat-message { margin: 5px 0; }
+        .chat-message-whatnot { color: #ff4500; }
+        .chat-message-youtube { color: #ff0000; }
+        .chat-message-twitch { color: #9146ff; }
+        .chat-message-x { color: #1da1f2; }
+        #streamer-input { width: 100%; padding: 5px; margin-top: 10px; }
+        #sendButton, #clearButton { margin-top: 5px; padding: 5px 10px; }
+        #status-indicators div { margin: 5px 0; }
+        .status-light { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; }
+        .status-light.connected { background: green; }
+        .status-light.disconnected { background: red; }
+        .status-light.error { background: orange; }
+        .status-light.disabled { background: gray; }
+        .settings-section { margin-bottom: 20px; }
+        .settings-section h3 { margin-bottom: 10px; }
+        .auth-status { display: inline-block; margin-right: 10px; }
+        .control-button { margin: 5px; padding: 5px 10px; }
+        .download-link { color: #007bff; text-decoration: underline; cursor: pointer; }
+        .instructions { margin-top: 10px; font-size: 14px; }
+        #commands-table { width: 100%; border-collapse: collapse; }
+        #commands-table th, #commands-table td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        #commands-table th { background: #f4f4f4; }
+        .command-action { cursor: pointer; color: #007bff; }
+        #add-command-form { margin-top: 10px; }
+        #add-command-form input { margin: 5px 0; padding: 5px; width: 100%; }
+        #csv-upload { margin-top: 10px; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
+        .modal-content { background: white; margin: 15% auto; padding: 20px; width: 50%; border-radius: 5px; }
+        .close { float: right; cursor: pointer; font-size: 20px; }
+    </style>
+</head>
+<body>
+    <div id="header">
+        <h1>FoSBot Dashboard</h1>
+    </div>
+    <div id="tab-buttons">
+        <button class="tab-button active" data-tab="chat">Chat</button>
+        <button class="tab-button" data-tab="commands">Commands</button>
+        <button class="tab-button" data-tab="settings">Settings</button>
+    </div>
+    <div id="main-content">
+        <div id="content-area">
+            <!-- Chat Tab -->
+            <div id="chat-container" class="tab-content active" data-tab-content="chat">
+                <h2>Live Chat</h2>
+                <div id="chat-output"></div>
+                <input type="text" id="streamerInput" placeholder="Type a message or command...">
+                <button id="sendButton">Send</button>
+                <button id="clearButton">Clear Chat</button>
+            </div>
+
+            <!-- Commands Tab -->
+            <div id="commands-container" class="tab-content" data-tab-content="commands">
+                <h2>Manage Commands</h2>
+                <p>Create custom commands like <code>!roll</code> for your streams!</p>
+                <table id="commands-table">
+                    <thead>
+                        <tr>
+                            <th>Command</th>
+                            <th>Response</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <form id="add-command-form">
+                    <input type="text" id="command-name" placeholder="Command (e.g., roll)" required>
+                    <input type="text" id="command-response" placeholder="Response (e.g., Rolled a {user} d20!)" required>
+                    <button type="submit">Add Command</button>
+                </form>
+                <div id="csv-upload">
+                    <label for="csv-file">Upload CSV (format: command,response):</label>
+                    <input type="file" id="csv-file" accept=".csv">
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="settings-container" class="tab-content" data-tab-content="settings">
+                <h2>Application Settings</h2>
+                <p id="settings-status"></p>
+
+                <!-- Whatnot Section -->
+                <div class="settings-section">
+                    <h3>Whatnot Integration</h3>
+                    <div id="whatnot-status-area">
+                        <span class="auth-status">Status: Loading...</span>
+                    </div>
+                    <p>
+                        <a href="/whatnot_extension.zip" class="download-link" download>Download Whatnot Extension</a>
+                        <button class="control-button" onclick="openWhatnotGuide()">Guided Setup</button>
+                    </p>
+                    <div class="instructions">
+                        <strong>Quick Setup:</strong>
+                        <p>Click "Guided Setup" for step-by-step help or download the extension and follow the README!</p>
+                    </div>
+                </div>
+
+                <!-- YouTube Section -->
+                <div class="settings-section">
+                    <h3>YouTube Authentication</h3>
+                    <div id="youtube-auth-area">
+                        <span class="auth-status">Loading...</span>
+                        <button class="control-button" data-platform="youtube" data-action="login">Login</button>
+                        <button class="control-button" data-platform="youtube" data-action="logout" disabled>Logout</button>
+                    </div>
+                </div>
+
+                <!-- Twitch Section -->
+                <div class="settings-section">
+                    <h3>Twitch Authentication</h3>
+                    <div id="twitch-auth-area">
+                        <span class="auth-status">Loading...</span>
+                        <button class="control-button" data-platform="twitch" data-action="login">Login</button>
+                        <button class="control-button" data-platform="twitch" data-action="logout" disabled>Logout</button>
+                    </div>
+                </div>
+
+                <!-- X Section -->
+                <div class="settings-section">
+                    <h3>X Authentication</h3>
+                    <div id="x-auth-area">
+                        <span class="auth-status">Loading...</span>
+                        <button class="control-button" data-platform="x" data-action="login">Login</button>
+                        <button class="control-button" data-platform="x" data-action="logout" disabled>Logout</button>
+                    </div>
+                </div>
+
+                <!-- App Config Section -->
+                <div class="settings-section">
+                    <h3>General Settings</h3>
+                    <form id="app-settings-form">
+                        <label>Command Prefix:</label><br>
+                        <input type="text" name="COMMAND_PREFIX" maxlength="5" value="!"><br>
+                        <label>Log Level:</label><br>
+                        <select name="LOG_LEVEL">
+                            <option value="DEBUG">DEBUG</option>
+                            <option value="INFO">INFO</option>
+                            <option value="WARNING">WARNING</option>
+                            <option value="ERROR">ERROR</option>
+                            <option value="CRITICAL">CRITICAL</option>
+                        </select><br>
+                        <label>Extra Twitch Channels (optional, comma-separated):</label><br>
+                        <input type="text" name="TWITCH_CHANNELS" placeholder="channel1,channel2"><br>
+                        <button type="submit">Save</button>
+                    </form>
+                </div>
+
+                <!-- Service Control Section -->
+                <div class="settings-section">
+                    <h3>Service Control</h3>
+                    <div>
+                        <button class="control-button" data-service="whatnot" data-command="start">Start Whatnot</button>
+                        <button class="control-button" data-service="whatnot" data-command="stop">Stop Whatnot</button>
+                        <button class="control-button" data-service="whatnot" data-command="restart">Restart Whatnot</button>
+                    </div>
+                    <div>
+                        <button class="control-button" data-service="youtube" data-command="start">Start YouTube</button>
+                        <button class="control-button" data-service="youtube" data-command="stop">Stop YouTube</button>
+                        <button class="control-button" data-service="youtube" data-command="restart">Restart YouTube</button>
+                    </div>
+                    <div>
+                        <button class="control-button" data-service="twitch" data-command="start">Start Twitch</button>
+                        <button class="control-button" data-service="twitch" data-command="stop">Stop Twitch</button>
+                        <button class="control-button" data-service="twitch" data-command="restart">Restart Twitch</button>
+                    </div>
+                    <div>
+                        <button class="control-button" data-service="x" data-command="start">Start X</button>
+                        <button class="control-button" data-service="x" data-command="stop">Stop X</button>
+                        <button class="control-button" data-service="x" data-command="restart">Restart X</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div id="sidebar">
+            <h3>Status</h3>
+            <div id="status-indicators">
+                <div id="status-ws"><span class="status-light"></span><span class="status-text">WebSocket: Unknown</span></div>
+                <div id="status-whatnot"><span class="status-light"></span><span class="status-text">Whatnot: Unknown</span></div>
+                <div id="status-youtube"><span class="status-light"></span><span class="status-text">YouTube: Unknown</span></div>
+                <div id="status-twitch"><span class="status-light"></span><span class="status-text">Twitch: Unknown</span></div>
+                <div id="status-x"><span class="status-light"></span><span class="status-text">X: Unknown</span></div>
+            </div>
+            <h3>Logs</h3>
+            <div id="log-output" style="max-height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;"></div>
+        </div>
+    </div>
+
+    <!-- Whatnot Setup Modal -->
+    <div id="whatnot-guide-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeWhatnotGuide()">×</span>
+            <h3>Whatnot Extension Setup</h3>
+            <ol>
+                <li>Click <a href="/whatnot_extension.zip" download>"Download Whatnot Extension"</a> above.</li>
+                <li>Unzip to a folder (e.g., <code>~/FoSBot_Whatnot</code>).</li>
+                <li>In Chrome, go to <code>chrome://extensions/</code>, enable "Developer mode," click "Load unpacked," select the folder.</li>
+                <li>On a Whatnot stream, click the extension icon, enable "Select Mode," click chat elements, save.</li>
+            </ol>
+            <p><strong>Watch:</strong> <a href="https://patreon.com/yourvideo" target="_blank">Setup Video</a></p>
+            <button onclick="closeWhatnotGuide()">Close</button>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
+<!-- File: static/index.html -->

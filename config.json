@@ -1,0 +1,26 @@
+{
+    "base_dir": "/Users/jgleason/Development",
+    "access": {
+        "modules": {
+            "chatbot_plus": {
+                "features": {
+                    "youtube": true,
+                    "websocket": true
+                }
+            },
+            "chatsplitter": {
+                "features": {
+                    "enabled": true
+                }
+            }
+        }
+    },
+    "websocket": {
+        "host": "localhost",
+        "port": 8765
+    },
+    "gui": {
+        "theme": "dark",
+        "window_size": "800x600"
+    }
+}

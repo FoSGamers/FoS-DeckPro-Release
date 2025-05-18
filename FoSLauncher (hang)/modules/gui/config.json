@@ -1,0 +1,66 @@
+{
+    "master_code": "FoSGamers2024",
+    "access_codes": {
+        "basic": {
+            "code": "FoSBasic2024",
+            "permissions": [
+                "view_modules",
+                "use_basic_features"
+            ]
+        },
+        "premium": {
+            "code": "FoSPlus2024",
+            "permissions": [
+                "view_modules",
+                "use_basic_features",
+                "use_premium_features",
+                "manage_modules"
+            ]
+        }
+    },
+    "modules": {
+        "chatbot_plus": {
+            "name": "Stream Chat Manager",
+            "description": "Manage your YouTube, Twitch, and Discord chat in one place",
+            "enabled": true,
+            "requires_code": true,
+            "features": {
+                "youtube_integration": {
+                    "enabled": true,
+                    "requires_code": true
+                },
+                "twitch_integration": {
+                    "enabled": false,
+                    "requires_code": true
+                },
+                "discord_integration": {
+                    "enabled": false,
+                    "requires_code": true
+                },
+                "unified_chat": {
+                    "enabled": true,
+                    "requires_code": false
+                }
+            }
+        },
+        "game_launcher": {
+            "name": "Game Library",
+            "description": "Organize and launch your games",
+            "enabled": false,
+            "requires_code": false
+        },
+        "stream_manager": {
+            "name": "Stream Setup",
+            "description": "Configure your streaming software and overlays",
+            "enabled": false,
+            "requires_code": true
+        },
+        "content_planner": {
+            "name": "Content Calendar",
+            "description": "Plan and schedule your streaming content",
+            "enabled": false,
+            "requires_code": true
+        }
+    },
+    "master_code_entered": true
+}

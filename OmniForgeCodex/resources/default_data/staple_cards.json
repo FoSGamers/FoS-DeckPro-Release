@@ -1,0 +1,14 @@
+{
+  "pauper_60": {
+    "Aggro": ["Lightning Bolt"],
+    "Control": ["Counterspell"],
+    "Midrange": ["Delver of Secrets"],
+    "Combo": []
+  },
+  "pauper_edh": {
+    "Aggro": [],
+    "Control": [],
+    "Midrange": [],
+    "Combo": []
+  }
+}

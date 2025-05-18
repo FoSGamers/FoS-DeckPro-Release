@@ -1,0 +1,25 @@
+{
+    "name": "Chatbot Plus",
+    "version": "1.0.0",
+    "description": "Enhanced chat interface for YouTube and other platforms",
+    "settings": {
+        "auto_connect": true,
+        "max_messages": 1000,
+        "message_delay": 1.0,
+        "feature_flags": {
+            "youtube": true,
+            "twitch": false,
+            "x": false,
+            "obs_sync": false
+        },
+        "youtube": {
+            "enabled": true,
+            "auto_join": true
+        }
+    },
+    "permissions": {
+        "default": ["chat", "view"],
+        "premium": ["chat", "view", "moderate", "use_premium_features"],
+        "master": ["chat", "view", "moderate", "use_premium_features", "admin"]
+    }
+} 

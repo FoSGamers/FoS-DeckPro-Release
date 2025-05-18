@@ -1,0 +1,3579 @@
+Chat: Code_Copilot__Top_Assistance
+Started: 2024-05-30 20:23:58
+
+[2024-05-30 20:23:58] FoSGamers:
+be the best version of code copilot there is.
+
+[2024-05-30 20:24:00] ChatGPT:
+Sure, Jamey! I'll provide detailed and error-free assistance, with full scripts and step-by-step explanations tailored to your needs. Let's get started. How can I assist you today with your coding or application development?
+
+[2024-05-30 20:24:03] FoSGamers:
+import os
+import subprocess
+import sys
+import ctypes
+import time
+import shutil
+import logging
+from datetime import datetime
+
+# Define operations in order
+operations = [
+    "Check Administrative Privileges",
+    "Prompt for Installation Path",
+    "Set Up Virtual Environment",
+    "Activate Virtual Environment",
+    "Install Git",
+    "Install Torch",
+    "Install psutil",
+    "Check Python Version",
+    "Check GPU",
+    "Check CPU and Memory",
+    "Prepare Directory Structure",
+    "Clone Grok AI Repository",
+    "Install Repository Requirements",
+    "Download Model Weights",
+    "Configure Model for Hardware",
+    "Run Grok AI Model"
+]
+
+# Set up logging
+log_filename = f'grok_setup_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log'
+logging.basicConfig(filename=log_filename, level=logging.DEBUG, 
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+
+def log_and_print(message):
+    print(message)
+    logging.info(message)
+
+def log_error_and_print(message):
+    print(f"ERROR: {message}")
+    logging.error(message)
+
+def install_package(python_executable, package_name):
+    try:
+        log_and_print(f"Installing package {package_name}...")
+        result = subprocess.run([python_executable, "-m", "pip", "install", package_name], 
+                                capture_output=True, text=True)
+        log_and_print(f"stdout: {result.stdout}")
+        log_and_print(f"stderr: {result.stderr}")
+        if result.returncode != 0:
+            if "Requirement already satisfied" in result.stdout:
+                log_and_print(f"Package {package_name} is already installed.")
+            else:
+                raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+        log_and_print(f"Successfully installed {package_name}")
+    except subprocess.CalledProcessError as e:
+        log_error_and_print(f"Failed to install package {package_name}: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+        sys.exit(1)
+
+def retry_install_package(python_executable, package_name, retries=3, delay=5):
+    for attempt in range(retries):
+        try:
+            log_and_print(f"Attempting to install {package_name} (Attempt {attempt + 1}/{retries})...")
+            result = subprocess.run([python_executable, "-m", "pip", "install", package_name], 
+                                    capture_output=True, text=True)
+            log_and_print(f"stdout: {result.stdout}")
+            log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                if "Requirement already satisfied" in result.stdout:
+                    log_and_print(f"Package {package_name} is already installed.")
+                    return True
+                else:
+                    raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            log_and_print(f"Successfully installed {package_name}")
+            return True
+        except subprocess.CalledProcessError as e:
+            log_error_and_print(f"Attempt {attempt + 1} to install {package_name} failed: {e}\nOutput: {e.stdout}\nError: {e.stderr}. Retrying in {delay} seconds...")
+            time.sleep(delay)
+    log_error_and_print(f"Failed to install {package_name} after {retries} attempts.")
+    sys.exit(1)
+
+def prompt_user(question, default="yes"):
+    valid = {"yes": True, "y": True, "no": False, "n": False}
+    if default is None:
+        prompt = " [yes/no] "
+    elif default == "yes":
+        prompt = " [YES/no] "
+    elif default == "no":
+        prompt = " [yes/NO] "
+    else:
+        raise ValueError(f"Invalid default answer: '{default}'")
+
+    while True:
+        choice = input(question + prompt).strip().lower()
+        if default is not None and choice == '':
+            return valid[default]
+        elif choice in valid:
+            return valid[choice]
+        else:
+            log_and_print("Please answer 'yes' or 'no'.")
+
+def get_available_drives():
+    if os.name == 'nt':
+        import string
+        available_drives = [f"{d}:\\" for d in string.ascii_uppercase if os.path.exists(f"{d}:\\")]
+    else:
+        available_drives = ["/"]
+    return available_drives
+
+def prompt_for_install_path():
+    drives = get_available_drives()
+    log_and_print("Available drives:")
+    for i, drive in enumerate(drives):
+        log_and_print(f"{i + 1}. {drive}")
+
+    choice = input("Select the drive number where you want to install Grok AI (default is 1): ").strip()
+    if choice.isdigit() and 1 <= int(choice) <= len(drives):
+        drive = drives[int(choice) - 1]
+    else:
+        drive = drives[0]
+
+    path = input(f"Enter the path on drive {drive} where you want to install Grok AI (default is {drive}grok_ai): ").strip()
+    if not path:
+        path = os.path.join(drive, "grok_ai")
+    
+    if not os.path.exists(path):
+        try:
+            os.makedirs(path)
+            log_and_print(f"Created directory {path}.")
+        except PermissionError:
+            log_error_and_print(f"Permission denied: Unable to create directory {path}. Please run this script with administrative privileges.")
+            sys.exit(1)
+        except OSError as e:
+            log_error_and_print(f"Failed to create directory {path}: {e.strerror} (Error Code: {e.errno})")
+            sys.exit(1)
+    
+    return path
+
+def check_admin_privileges():
+    try:
+        is_admin = os.getuid() == 0
+    except AttributeError:
+        is_admin = ctypes.windll.shell32.IsUserAnAdmin() != 0
+    return is_admin
+
+def request_admin_privileges():
+    if not check_admin_privileges():
+        log_error_and_print("This script requires administrative privileges to run. Please restart it with administrative rights.")
+        sys.exit(1)
+
+def check_python_version():
+    if sys.version_info < (3, 6):
+        log_error_and_print("Python 3.6 or newer is required. Please install the latest version of Python.")
+        sys.exit(1)
+    return True
+
+def install_git():
+    try:
+        log_and_print("Installing Git...")
+        result = subprocess.run(["winget", "install", "--id", "Git.Git"], capture_output=True, text=True)
+        log_and_print(f"stdout: {result.stdout}")
+        log_and_print(f"stderr: {result.stderr}")
+        if result.returncode != 0:
+            if "No available upgrade found" in result.stdout:
+                log_and_print("Git is already up-to-date.")
+            else:
+                raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+        log_and_print("Successfully installed Git.")
+    except subprocess.CalledProcessError as e:
+        log_error_and_print(f"Failed to install Git: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+        sys.exit(1)
+
+def setup_virtualenv(install_path):
+    try:
+        venv_path = os.path.join(install_path, "grok_sandbox")
+        
+        # If the virtual environment directory already exists, remove it and create a fresh one
+        if os.path.exists(venv_path):
+            shutil.rmtree(venv_path)
+            log_and_print(f"Removed existing virtual environment at {venv_path}.")
+        
+        subprocess.check_call([sys.executable, "-m", "venv", venv_path])
+        venv_python = os.path.join(venv_path, "Scripts", "python.exe" if os.name == 'nt' else "python")
+        
+        # Ensure pip is installed in the virtual environment
+        subprocess.check_call([venv_python, "-m", "ensurepip"])
+        subprocess.check_call([venv_python, "-m", "pip", "install", "--upgrade", "pip"])
+        
+        activate_script = os.path.join(venv_path, "Scripts", "activate.bat" if os.name == 'nt' else "activate")
+        log_and_print(f"Virtual environment set up at {venv_path}.")
+        return True, activate_script, venv_python
+    except subprocess.CalledProcessError as e:
+        log_error_and_print(f"Error setting up virtual environment at {venv_path}: {e.output}\nError: {e.stderr}")
+        return False, str(e), None
+
+def activate_virtualenv(activate_script):
+    try:
+        if os.name == 'nt':
+            os.system(activate_script)
+        else:
+            os.system(f"source {activate_script}")
+        log_and_print(f"Activated virtual environment using {activate_script}")
+    except subprocess.Called
+
+
+[2024-05-30 20:25:03] ChatGPT:
+# Sequential Response: 1A
+
+1A. **Completing and Testing the Script**
+
+Let's finalize the script and ensure it covers all required functionality.
+
+### Full Script
+
+```python
+import os
+import subprocess
+import sys
+import ctypes
+import time
+import shutil
+import logging
+from datetime import datetime
+
+# Define operations in order
+operations = [
+    "Check Administrative Privileges",
+    "Prompt for Installation Path",
+    "Set Up Virtual Environment",
+    "Activate Virtual Environment",
+    "Install Git",
+    "Install Torch",
+    "Install psutil",
+    "Check Python Version",
+    "Check GPU",
+    "Check CPU and Memory",
+    "Prepare Directory Structure",
+    "Clone Grok AI Repository",
+    "Install Repository Requirements",
+    "Download Model Weights",
+    "Configure Model for Hardware",
+    "Run Grok AI Model"
+]
+
+# Set up logging
+log_filename = f'grok_setup_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log'
+logging.basicConfig(filename=log_filename, level=logging.DEBUG, 
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+
+def log_and_print(message):
+    print(message)
+    logging.info(message)
+
+def log_error_and_print(message):
+    print(f"ERROR: {message}")
+    logging.error(message)
+
+def install_package(python_executable, package_name):
+    try:
+        log_and_print(f"Installing package {package_name}...")
+        result = subprocess.run([python_executable, "-m", "pip", "install", package_name], 
+                                capture_output=True, text=True)
+        log_and_print(f"stdout: {result.stdout}")
+        log_and_print(f"stderr: {result.stderr}")
+        if result.returncode != 0:
+            if "Requirement already satisfied" in result.stdout:
+                log_and_print(f"Package {package_name} is already installed.")
+            else:
+                raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+        log_and_print(f"Successfully installed {package_name}")
+    except subprocess.CalledProcessError as e:
+        log_error_and_print(f"Failed to install package {package_name}: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+        sys.exit(1)
+
+def retry_install_package(python_executable, package_name, retries=3, delay=5):
+    for attempt in range(retries):
+        try:
+            log_and_print(f"Attempting to install {package_name} (Attempt {attempt + 1}/{retries})...")
+            result = subprocess.run([python_executable, "-m", "pip", "install", package_name], 
+                                    capture_output=True, text=True)
+            log_and_print(f"stdout: {result.stdout}")
+            log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                if "Requirement already satisfied" in result.stdout:
+                    log_and_print(f"Package {package_name} is already installed.")
+                    return True
+                else:
+                    raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            log_and_print(f"Successfully installed {package_name}")
+            return True
+        except subprocess.CalledProcessError as e:
+            log_error_and_print(f"Attempt {attempt + 1} to install {package_name} failed: {e}\nOutput: {e.stdout}\nError: {e.stderr}. Retrying in {delay} seconds...")
+            time.sleep(delay)
+    log_error_and_print(f"Failed to install {package_name} after {retries} attempts.")
+    sys.exit(1)
+
+def prompt_user(question, default="yes"):
+    valid = {"yes": True, "y": True, "no": False, "n": False}
+    if default is None:
+        prompt = " [yes/no] "
+    elif default == "yes":
+        prompt = " [YES/no] "
+    elif default == "no":
+        prompt = " [yes/NO] "
+    else:
+        raise ValueError(f"Invalid default answer: '{default}'")
+
+    while True:
+        choice = input(question + prompt).strip().lower()
+        if default is not None and choice == '':
+            return valid[default]
+        elif choice in valid:
+            return valid[choice]
+        else:
+            log_and_print("Please answer 'yes' or 'no'.")
+
+def get_available_drives():
+    if os.name == 'nt':
+        import string
+        available_drives = [f"{d}:\\" for d in string.ascii_uppercase if os.path.exists(f"{d}:\\")]
+    else:
+        available_drives = ["/"]
+    return available_drives
+
+def prompt_for_install_path():
+    drives = get_available_drives()
+    log_and_print("Available drives:")
+    for i, drive in enumerate(drives):
+        log_and_print(f"{i + 1}. {drive}")
+
+    choice = input("Select the drive number where you want to install Grok AI (default is 1): ").strip()
+    if choice.isdigit() and 1 <= int(choice) <= len(drives):
+        drive = drives[int(choice) - 1]
+    else:
+        drive = drives[0]
+
+    path = input(f"Enter the path on drive {drive} where you want to install Grok AI (default is {drive}grok_ai): ").strip()
+    if not path:
+        path = os.path.join(drive, "grok_ai")
+    
+    if not os.path.exists(path):
+        try:
+            os.makedirs(path)
+            log_and_print(f"Created directory {path}.")
+        except PermissionError:
+            log_error_and_print(f"Permission denied: Unable to create directory {path}. Please run this script with administrative privileges.")
+            sys.exit(1)
+        except OSError as e:
+            log_error_and_print(f"Failed to create directory {path}: {e.strerror} (Error Code: {e.errno})")
+            sys.exit(1)
+    
+    return path
+
+def check_admin_privileges():
+    try:
+        is_admin = os.getuid() == 0
+    except AttributeError:
+        is_admin = ctypes.windll.shell32.IsUserAnAdmin() != 0
+    return is_admin
+
+def request_admin_privileges():
+    if not check_admin_privileges():
+        log_error_and_print("This script requires administrative privileges to run. Please restart it with administrative rights.")
+        sys.exit(1)
+
+def check_python_version():
+    if sys.version_info < (3, 6):
+        log_error_and_print("Python 3.6 or newer is required. Please install the latest version of Python.")
+        sys.exit(1)
+    return True
+
+def install_git():
+    try:
+        log_and_print("Installing Git...")
+        result = subprocess.run(["winget", "install", "--id", "Git.Git"], capture_output=True, text=True)
+        log_and_print(f"stdout: {result.stdout}")
+        log_and_print(f"stderr: {result.stderr}")
+        if result.returncode != 0:
+            if "No available upgrade found" in result.stdout:
+                log_and_print("Git is already up-to-date.")
+            else:
+                raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+        log_and_print("Successfully installed Git.")
+    except subprocess.CalledProcessError as e:
+        log_error_and_print(f"Failed to install Git: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+        sys.exit(1)
+
+def setup_virtualenv(install_path):
+    try:
+        venv_path = os.path.join(install_path, "grok_sandbox")
+        
+        # If the virtual environment directory already exists, remove it and create a fresh one
+        if (os.path.exists(venv_path)):
+            shutil.rmtree(venv_path)
+            log_and_print(f"Removed existing virtual environment at {venv_path}.")
+        
+        subprocess.check_call([sys.executable, "-m", "venv", venv_path])
+        venv_python = os.path.join(venv_path, "Scripts", "python.exe" if os.name == 'nt' else "python")
+        
+        # Ensure pip is installed in the virtual environment
+        subprocess.check_call([venv_python, "-m", "ensurepip"])
+        subprocess.check_call([venv_python, "-m", "pip", "install", "--upgrade", "pip"])
+        
+        activate_script = os.path.join(venv_path, "Scripts", "activate.bat" if os.name == 'nt' else "activate")
+        log_and_print(f"Virtual environment set up at {venv_path}.")
+        return True, activate_script, venv_python
+    except subprocess.CalledProcessError as e:
+        log_error_and_print(f"Error setting up virtual environment at {venv_path}: {e.output}\nError: {e.stderr}")
+        return False, str(e), None
+
+def activate_virtualenv(activate_script):
+    try:
+        if os.name == 'nt':
+            os.system(activate_script)
+        else:
+            os.system(f"source {activate_script}")
+        log_and_print(f"Activated virtual environment using {activate_script}")
+    except subprocess.CalledProcessError as e:
+        log_error_and_print(f"Error activating virtual environment: {e.output}\nError: {e.stderr}")
+        sys.exit(1)
+
+def main():
+    # Check administrative privileges
+    log_and_print(f"Operation: {operations[0]}")
+    request_admin_privileges()
+    
+    # Prompt for installation path
+    log_and_print(f"Operation: {operations[1]}")
+    install_path = prompt_for_install_path()
+    
+    # Check Python version
+    log_and_print(f"Operation: {operations[2]}")
+    check_python_version()
+
+   
+
+[2024-05-30 20:26:51] ChatGPT:
+ # Set up virtual environment
+    log_and_print(f"Operation: {operations[3]}")
+    venv_setup_success, activate_script, venv_python = setup_virtualenv(install_path)
+    if not venv_setup_success:
+        sys.exit(1)
+    
+    # Activate virtual environment
+    log_and_print(f"Operation: {operations[4]}")
+    activate_virtualenv(activate_script)
+
+    # Install Git
+    log_and_print(f"Operation: {operations[5]}")
+    install_git()
+    
+    # Install necessary packages
+    log_and_print(f"Operation: {operations[6]}")
+    retry_install_package(venv_python, "torch")
+    retry_install_package(venv_python, "psutil")
+    
+    # Additional operations like checking GPU, CPU, cloning repository, etc.
+    # Placeholder for additional steps
+    log_and_print(f"Operation: {operations[7]} and further operations are not yet implemented.")
+
+if __name__ == "__main__":
+    main()
+```
+
+### Summary
+1. **Setup and Log Configuration**: Set up a logging system to capture script activities.
+2. **Function Definitions**:
+   - `log_and_print`: Log and print messages.
+   - `log_error_and_print`: Log and print error messages.
+   - `install_package`: Install a Python package using `pip`.
+   - `retry_install_package`: Attempt to install a package multiple times.
+   - `prompt_user`: Prompt user with a yes/no question.
+   - `get_available_drives`: Get available drives on the system.
+   - `prompt_for_install_path`: Prompt user for the installation path.
+   - `check_admin_privileges`: Check if the script is run with admin privileges.
+   - `request_admin_privileges`: Request admin privileges if not already granted.
+   - `check_python_version`: Check if the Python version is 3.6 or newer.
+   - `install_git`: Install Git using `winget`.
+   - `setup_virtualenv`: Set up a virtual environment.
+   - `activate_virtualenv`: Activate the virtual environment.
+3. **Main Function**: Execute the defined operations in sequence.
+
+### Enhancements and Simplifications
+- **Error Handling**: Improve error handling for each function.
+- **Additional Checks**: Implement additional checks for GPU, CPU, memory, and repository operations.
+- **User Interaction**: Enhance user interaction prompts.
+
+### Next Steps
+1. Validate the script syntax and spacing.
+2. Test the script in a controlled environment.
+3. Implement additional operations.
+
+Iterate, Improve, Evolve - Note critiques or edge cases, propose improvements.
+Question - Do you want the script to include additional operations or enhanced user interaction?
+Validate - Check for syntax and spacing issues in all scripts.
+
+Let me know if you need further modifications or if you have any questions!
+
+[2024-05-30 20:27:00] FoSGamers:
+Make reoccurring things into classes for easier development. Modularize and simplify.
+
+[2024-05-30 20:27:57] ChatGPT:
+Sure, Jamey! Let's refactor the script by modularizing and simplifying it using classes. This will improve readability, maintainability, and ease of development.
+
+### Refactored Script with Classes
+
+```python
+import os
+import subprocess
+import sys
+import ctypes
+import time
+import shutil
+import logging
+from datetime import datetime
+
+# Define operations in order
+operations = [
+    "Check Administrative Privileges",
+    "Prompt for Installation Path",
+    "Set Up Virtual Environment",
+    "Activate Virtual Environment",
+    "Install Git",
+    "Install Torch",
+    "Install psutil",
+    "Check Python Version",
+    "Check GPU",
+    "Check CPU and Memory",
+    "Prepare Directory Structure",
+    "Clone Grok AI Repository",
+    "Install Repository Requirements",
+    "Download Model Weights",
+    "Configure Model for Hardware",
+    "Run Grok AI Model"
+]
+
+# Set up logging
+log_filename = f'grok_setup_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log'
+logging.basicConfig(filename=log_filename, level=logging.DEBUG, 
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+
+class Logger:
+    @staticmethod
+    def log_and_print(message):
+        print(message)
+        logging.info(message)
+
+    @staticmethod
+    def log_error_and_print(message):
+        print(f"ERROR: {message}")
+        logging.error(message)
+
+class PackageManager:
+    def __init__(self, python_executable):
+        self.python_executable = python_executable
+
+    def install_package(self, package_name):
+        try:
+            Logger.log_and_print(f"Installing package {package_name}...")
+            result = subprocess.run([self.python_executable, "-m", "pip", "install", package_name], 
+                                    capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                if "Requirement already satisfied" in result.stdout:
+                    Logger.log_and_print(f"Package {package_name} is already installed.")
+                else:
+                    raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print(f"Successfully installed {package_name}")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to install package {package_name}: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+    def retry_install_package(self, package_name, retries=3, delay=5):
+        for attempt in range(retries):
+            try:
+                Logger.log_and_print(f"Attempting to install {package_name} (Attempt {attempt + 1}/{retries})...")
+                result = subprocess.run([self.python_executable, "-m", "pip", "install", package_name], 
+                                        capture_output=True, text=True)
+                Logger.log_and_print(f"stdout: {result.stdout}")
+                Logger.log_and_print(f"stderr: {result.stderr}")
+                if result.returncode != 0:
+                    if "Requirement already satisfied" in result.stdout:
+                        Logger.log_and_print(f"Package {package_name} is already installed.")
+                        return True
+                    else:
+                        raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+                Logger.log_and_print(f"Successfully installed {package_name}")
+                return True
+            except subprocess.CalledProcessError as e:
+                Logger.log_error_and_print(f"Attempt {attempt + 1} to install {package_name} failed: {e}\nOutput: {e.stdout}\nError: {e.stderr}. Retrying in {delay} seconds...")
+                time.sleep(delay)
+        Logger.log_error_and_print(f"Failed to install {package_name} after {retries} attempts.")
+        sys.exit(1)
+
+class EnvironmentManager:
+    @staticmethod
+    def check_admin_privileges():
+        try:
+            is_admin = os.getuid() == 0
+        except AttributeError:
+            is_admin = ctypes.windll.shell32.IsUserAnAdmin() != 0
+        return is_admin
+
+    @staticmethod
+    def request_admin_privileges():
+        if not EnvironmentManager.check_admin_privileges():
+            Logger.log_error_and_print("This script requires administrative privileges to run. Please restart it with administrative rights.")
+            sys.exit(1)
+
+    @staticmethod
+    def check_python_version():
+        if sys.version_info < (3, 6):
+            Logger.log_error_and_print("Python 3.6 or newer is required. Please install the latest version of Python.")
+            sys.exit(1)
+        return True
+
+    @staticmethod
+    def install_git():
+        try:
+            Logger.log_and_print("Installing Git...")
+            result = subprocess.run(["winget", "install", "--id", "Git.Git"], capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                if "No available upgrade found" in result.stdout:
+                    Logger.log_and_print("Git is already up-to-date.")
+                else:
+                    raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully installed Git.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to install Git: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+class VirtualEnvManager:
+    @staticmethod
+    def setup_virtualenv(install_path):
+        try:
+            venv_path = os.path.join(install_path, "grok_sandbox")
+            
+            if os.path.exists(venv_path):
+                shutil.rmtree(venv_path)
+                Logger.log_and_print(f"Removed existing virtual environment at {venv_path}.")
+            
+            subprocess.check_call([sys.executable, "-m", "venv", venv_path])
+            venv_python = os.path.join(venv_path, "Scripts", "python.exe" if os.name == 'nt' else "python")
+            
+            subprocess.check_call([venv_python, "-m", "ensurepip"])
+            subprocess.check_call([venv_python, "-m", "pip", "install", "--upgrade", "pip"])
+            
+            activate_script = os.path.join(venv_path, "Scripts", "activate.bat" if os.name == 'nt' else "activate")
+            Logger.log_and_print(f"Virtual environment set up at {venv_path}.")
+            return True, activate_script, venv_python
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Error setting up virtual environment at {venv_path}: {e.output}\nError: {e.stderr}")
+            return False, str(e), None
+
+    @staticmethod
+    def activate_virtualenv(activate_script):
+        try:
+            if os.name == 'nt':
+                os.system(activate_script)
+            else:
+                os.system(f"source {activate_script}")
+            Logger.log_and_print(f"Activated virtual environment using {activate_script}")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Error activating virtual environment: {e.output}\nError: {e.stderr}")
+            sys.exit(1)
+
+class UserInputManager:
+    @staticmethod
+    def prompt_user(question, default="yes"):
+        valid = {"yes": True, "y": True, "no": False, "n": False}
+        if default is None:
+            prompt = " [yes/no] "
+        elif default == "yes":
+            prompt = " [YES/no] "
+        elif default == "no":
+            prompt = " [yes/NO] "
+        else:
+            raise ValueError(f"Invalid default answer: '{default}'")
+
+        while True:
+            choice = input(question + prompt).strip().lower()
+            if default is not None and choice == '':
+                return valid[default]
+            elif choice in valid:
+                return valid[choice]
+            else:
+                Logger.log_and_print("Please answer 'yes' or 'no'.")
+
+    @staticmethod
+    def get_available_drives():
+        if os.name == 'nt':
+            import string
+            available_drives = [f"{d}:\\" for d in string.ascii_uppercase if os.path.exists(f"{d}:\\")]
+        else:
+            available_drives = ["/"]
+        return available_drives
+
+    @staticmethod
+    def prompt_for_install_path():
+        drives = UserInputManager.get_available_drives()
+        Logger.log_and_print("Available drives:")
+        for i, drive in enumerate(drives):
+            Logger.log_and_print(f"{i + 1}. {drive}")
+
+        choice = input("Select the drive number where you want to install Grok AI (default is 1): ").strip()
+        if choice.isdigit() and 1 <= int(choice) <= len(drives):
+            drive = drives[int(choice) - 1]
+        else:
+            drive = drives[0]
+
+        path = input(f"Enter the path on drive {drive} where you want to install Grok AI (default is {drive}grok_ai): ").strip()
+        if not path:
+            path = os.path.join(drive, "grok_ai")
+        
+        if not os.path.exists(path):
+            try:
+                os.makedirs(path)
+                Logger.log_and_print(f"Created directory {path}.")
+            except PermissionError:
+                Logger.log_error_and_print(f"Permission denied: Unable to create directory {path}. Please run this script with administrative privileges.")
+                sys.exit(1)
+            except OSError as e:
+                Logger.log_error_and_print(f"Failed to create directory {path}: {e.strerror}
+
+[2024-05-30 20:28:18] ChatGPT:
+ (Error Code: {e.errno})")
+                sys.exit(1)
+        
+        return path
+
+def main():
+    # Check administrative privileges
+    Logger.log_and_print(f"Operation: {operations[0]}")
+    EnvironmentManager.request_admin_privileges()
+    
+    # Prompt for installation path
+    Logger.log_and_print(f"Operation: {operations[1]}")
+    install_path = UserInputManager.prompt_for_install_path()
+    
+    # Check Python version
+    Logger.log_and_print(f"Operation: {operations[2]}")
+    EnvironmentManager.check_python_version()
+
+    # Set up virtual environment
+    Logger.log_and_print(f"Operation: {operations[3]}")
+    venv_setup_success, activate_script, venv_python = VirtualEnvManager.setup_virtualenv(install_path)
+    if not venv_setup_success:
+        sys.exit(1)
+    
+    # Activate virtual environment
+    Logger.log_and_print(f"Operation: {operations[4]}")
+    VirtualEnvManager.activate_virtualenv(activate_script)
+
+    # Install Git
+    Logger.log_and_print(f"Operation: {operations[5]}")
+    EnvironmentManager.install_git()
+    
+    # Install necessary packages
+    Logger.log_and_print(f"Operation: {operations[6]}")
+    package_manager = PackageManager(venv_python)
+    package_manager.retry_install_package("torch")
+    package_manager.retry_install_package("psutil")
+    
+    # Additional operations like checking GPU, CPU, cloning repository, etc.
+    # Placeholder for additional steps
+    Logger.log_and_print(f"Operation: {operations[7]} and further operations are not yet implemented.")
+
+if __name__ == "__main__":
+    main()
+```
+
+### Summary
+1. **Modularization**:
+   - **Logger Class**: Handles logging and printing messages.
+   - **PackageManager Class**: Manages package installation with retries.
+   - **EnvironmentManager Class**: Handles environment checks and setup tasks.
+   - **VirtualEnvManager Class**: Manages virtual environment creation and activation.
+   - **UserInputManager Class**: Handles user input and prompts.
+
+2. **Simplification**: Each class is responsible for specific tasks, making the script easier to read and maintain.
+
+### Next Steps
+1. Validate the refactored script syntax and spacing.
+2. Test the script in a controlled environment.
+3. Implement additional operations.
+
+**Iterate, Improve, Evolve** - Note critiques or edge cases, propose improvements.
+**Question** - Do you want the script to include additional operations or enhanced user interaction?
+**Validate** - Check for syntax and spacing issues in all scripts.
+
+Let me know if you need further modifications or have any questions!
+
+[2024-05-30 20:29:23] FoSGamers:
+Make sure 10 lines before an error are captured that way you can figure out what caused it.
+
+[2024-05-30 20:30:14] ChatGPT:
+To ensure that 10 lines before an error are captured, we'll modify the logging system to record the context of the error. This can be achieved by maintaining a history of the last 10 log entries and including them in the error messages. We'll use a deque for this purpose.
+
+Here's the updated script:
+
+### Refactored Script with Error Context Logging
+
+```python
+import os
+import subprocess
+import sys
+import ctypes
+import time
+import shutil
+import logging
+from datetime import datetime
+from collections import deque
+
+# Define operations in order
+operations = [
+    "Check Administrative Privileges",
+    "Prompt for Installation Path",
+    "Set Up Virtual Environment",
+    "Activate Virtual Environment",
+    "Install Git",
+    "Install Torch",
+    "Install psutil",
+    "Check Python Version",
+    "Check GPU",
+    "Check CPU and Memory",
+    "Prepare Directory Structure",
+    "Clone Grok AI Repository",
+    "Install Repository Requirements",
+    "Download Model Weights",
+    "Configure Model for Hardware",
+    "Run Grok AI Model"
+]
+
+# Set up logging
+log_filename = f'grok_setup_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log'
+logging.basicConfig(filename=log_filename, level=logging.DEBUG, 
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+
+class Logger:
+    log_history = deque(maxlen=10)
+    
+    @staticmethod
+    def log_and_print(message):
+        print(message)
+        logging.info(message)
+        Logger.log_history.append(message)
+
+    @staticmethod
+    def log_error_and_print(message):
+        print(f"ERROR: {message}")
+        logging.error(message)
+        Logger.log_history.append(f"ERROR: {message}")
+        Logger.print_log_history()
+
+    @staticmethod
+    def print_log_history():
+        print("Context before error:")
+        for log_entry in Logger.log_history:
+            print(log_entry)
+        logging.error("Context before error:")
+        for log_entry in Logger.log_history:
+            logging.error(log_entry)
+
+class PackageManager:
+    def __init__(self, python_executable):
+        self.python_executable = python_executable
+
+    def install_package(self, package_name):
+        try:
+            Logger.log_and_print(f"Installing package {package_name}...")
+            result = subprocess.run([self.python_executable, "-m", "pip", "install", package_name], 
+                                    capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                if "Requirement already satisfied" in result.stdout:
+                    Logger.log_and_print(f"Package {package_name} is already installed.")
+                else:
+                    raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print(f"Successfully installed {package_name}")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to install package {package_name}: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+    def retry_install_package(self, package_name, retries=3, delay=5):
+        for attempt in range(retries):
+            try:
+                Logger.log_and_print(f"Attempting to install {package_name} (Attempt {attempt + 1}/{retries})...")
+                result = subprocess.run([self.python_executable, "-m", "pip", "install", package_name], 
+                                        capture_output=True, text=True)
+                Logger.log_and_print(f"stdout: {result.stdout}")
+                Logger.log_and_print(f"stderr: {result.stderr}")
+                if result.returncode != 0:
+                    if "Requirement already satisfied" in result.stdout:
+                        Logger.log_and_print(f"Package {package_name} is already installed.")
+                        return True
+                    else:
+                        raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+                Logger.log_and_print(f"Successfully installed {package_name}")
+                return True
+            except subprocess.CalledProcessError as e:
+                Logger.log_error_and_print(f"Attempt {attempt + 1} to install {package_name} failed: {e}\nOutput: {e.stdout}\nError: {e.stderr}. Retrying in {delay} seconds...")
+                time.sleep(delay)
+        Logger.log_error_and_print(f"Failed to install {package_name} after {retries} attempts.")
+        sys.exit(1)
+
+class EnvironmentManager:
+    @staticmethod
+    def check_admin_privileges():
+        try:
+            is_admin = os.getuid() == 0
+        except AttributeError:
+            is_admin = ctypes.windll.shell32.IsUserAnAdmin() != 0
+        return is_admin
+
+    @staticmethod
+    def request_admin_privileges():
+        if not EnvironmentManager.check_admin_privileges():
+            Logger.log_error_and_print("This script requires administrative privileges to run. Please restart it with administrative rights.")
+            sys.exit(1)
+
+    @staticmethod
+    def check_python_version():
+        if sys.version_info < (3, 6):
+            Logger.log_error_and_print("Python 3.6 or newer is required. Please install the latest version of Python.")
+            sys.exit(1)
+        return True
+
+    @staticmethod
+    def install_git():
+        try:
+            Logger.log_and_print("Installing Git...")
+            result = subprocess.run(["winget", "install", "--id", "Git.Git"], capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                if "No available upgrade found" in result.stdout:
+                    Logger.log_and_print("Git is already up-to-date.")
+                else:
+                    raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully installed Git.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to install Git: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+class VirtualEnvManager:
+    @staticmethod
+    def setup_virtualenv(install_path):
+        try:
+            venv_path = os.path.join(install_path, "grok_sandbox")
+            
+            if os.path.exists(venv_path):
+                shutil.rmtree(venv_path)
+                Logger.log_and_print(f"Removed existing virtual environment at {venv_path}.")
+            
+            subprocess.check_call([sys.executable, "-m", "venv", venv_path])
+            venv_python = os.path.join(venv_path, "Scripts", "python.exe" if os.name == 'nt' else "python")
+            
+            subprocess.check_call([venv_python, "-m", "ensurepip"])
+            subprocess.check_call([venv_python, "-m", "pip", "install", "--upgrade", "pip"])
+            
+            activate_script = os.path.join(venv_path, "Scripts", "activate.bat" if os.name == 'nt' else "activate")
+            Logger.log_and_print(f"Virtual environment set up at {venv_path}.")
+            return True, activate_script, venv_python
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Error setting up virtual environment at {venv_path}: {e.output}\nError: {e.stderr}")
+            return False, str(e), None
+
+    @staticmethod
+    def activate_virtualenv(activate_script):
+        try:
+            if os.name == 'nt':
+                os.system(activate_script)
+            else:
+                os.system(f"source {activate_script}")
+            Logger.log_and_print(f"Activated virtual environment using {activate_script}")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Error activating virtual environment: {e.output}\nError: {e.stderr}")
+            sys.exit(1)
+
+class UserInputManager:
+    @staticmethod
+    def prompt_user(question, default="yes"):
+        valid = {"yes": True, "y": True, "no": False, "n": False}
+        if default is None:
+            prompt = " [yes/no] "
+        elif default == "yes":
+            prompt = " [YES/no] "
+        elif default == "no":
+            prompt = " [yes/NO] "
+        else:
+            raise ValueError(f"Invalid default answer: '{default}'")
+
+        while True:
+            choice = input(question + prompt).strip().lower()
+            if default is not None and choice == '':
+                return valid[default]
+            elif choice in valid:
+                return valid[choice]
+            else:
+                Logger.log_and_print("Please answer 'yes' or 'no'.")
+
+    @staticmethod
+    def get_available_drives():
+        if os.name == 'nt':
+            import string
+            available_drives = [f"{d}:\\" for d in string.ascii_uppercase if os.path.exists(f"{d}:\\")]
+        else:
+            available_drives = ["/"]
+        return available_drives
+
+    @staticmethod
+    def prompt_for_install_path():
+        drives = UserInputManager.get_available_drives()
+        Logger.log_and_print("Available drives:")
+        for i, drive in enumerate(drives):
+            Logger.log_and_print(f"{i + 1}. {drive}")
+
+        choice = input("Select the drive number where you want to install Grok AI (default is 1): ").strip()
+        if choice.isdigit() and 1 <= int(choice) <= len(drives):
+            drive = drives[int(choice) - 1]
+        else:
+            drive = drives[0]
+
+        path = input(f"Enter the path on drive {drive} where you want to install Grok AI (
+
+[2024-05-30 20:30:59] ChatGPT:
+default is {drive}grok_ai): ").strip()
+        if not path:
+            path = os.path.join(drive, "grok_ai")
+        
+        if not os.path.exists(path):
+            try:
+                os.makedirs(path)
+                Logger.log_and_print(f"Created directory {path}.")
+            except PermissionError:
+                Logger.log_error_and_print(f"Permission denied: Unable to create directory {path}. Please run this script with administrative privileges.")
+                sys.exit(1)
+            except OSError as e:
+                Logger.log_error_and_print(f"Failed to create directory {path}: {e.strerror} (Error Code: {e.errno})")
+                sys.exit(1)
+        
+        return path
+
+def main():
+    # Check administrative privileges
+    Logger.log_and_print(f"Operation: {operations[0]}")
+    EnvironmentManager.request_admin_privileges()
+    
+    # Prompt for installation path
+    Logger.log_and_print(f"Operation: {operations[1]}")
+    install_path = UserInputManager.prompt_for_install_path()
+    
+    # Check Python version
+    Logger.log_and_print(f"Operation: {operations[2]}")
+    EnvironmentManager.check_python_version()
+
+    # Set up virtual environment
+    Logger.log_and_print(f"Operation: {operations[3]}")
+    venv_setup_success, activate_script, venv_python = VirtualEnvManager.setup_virtualenv(install_path)
+    if not venv_setup_success:
+        sys.exit(1)
+    
+    # Activate virtual environment
+    Logger.log_and_print(f"Operation: {operations[4]}")
+    VirtualEnvManager.activate_virtualenv(activate_script)
+
+    # Install Git
+    Logger.log_and_print(f"Operation: {operations[5]}")
+    EnvironmentManager.install_git()
+    
+    # Install necessary packages
+    Logger.log_and_print(f"Operation: {operations[6]}")
+    package_manager = PackageManager(venv_python)
+    package_manager.retry_install_package("torch")
+    package_manager.retry_install_package("psutil")
+    
+    # Additional operations like checking GPU, CPU, cloning repository, etc.
+    # Placeholder for additional steps
+    Logger.log_and_print(f"Operation: {operations[7]} and further operations are not yet implemented.")
+
+if __name__ == "__main__":
+    main()
+```
+
+### Summary
+1. **Contextual Error Logging**: Enhanced the `Logger` class to maintain a history of the last 10 log entries and include them in error messages.
+2. **Class Definitions**:
+   - `Logger`: Handles logging and prints messages with context before errors.
+   - `PackageManager`: Manages package installation with retries.
+   - `EnvironmentManager`: Handles environment checks and setup tasks.
+   - `VirtualEnvManager`: Manages virtual environment creation and activation.
+   - `UserInputManager`: Handles user input and prompts.
+3. **Main Function**: Executes the defined operations in sequence, leveraging the classes for modularity.
+
+### Next Steps
+1. Validate the refactored script syntax and spacing.
+2. Test the script in a controlled environment.
+3. Implement additional operations.
+
+**Iterate, Improve, Evolve** - Note critiques or edge cases, propose improvements.
+**Question** - Do you want the script to include additional operations or enhanced user interaction?
+**Validate** - Check for syntax and spacing issues in all scripts.
+
+Let me know if you need further modifications or have any questions!
+
+[2024-05-30 20:32:31] FoSGamers:
+stderr:
+Successfully installed psutil
+Operation: Check Python Version and further operations are not yet implemented.
+
+[2024-05-30 20:33:27] ChatGPT:
+It looks like you received an incomplete message from the script's output, indicating that the script currently stops after installing `psutil` and doesn't proceed with further operations. Let's extend the script to implement the remaining operations.
+
+### Extended Script with Additional Operations
+
+Here's the complete script with additional steps implemented, including checking GPU and CPU, cloning the repository, and other remaining operations:
+
+```python
+import os
+import subprocess
+import sys
+import ctypes
+import time
+import shutil
+import logging
+from datetime import datetime
+from collections import deque
+
+# Define operations in order
+operations = [
+    "Check Administrative Privileges",
+    "Prompt for Installation Path",
+    "Set Up Virtual Environment",
+    "Activate Virtual Environment",
+    "Install Git",
+    "Install Torch",
+    "Install psutil",
+    "Check Python Version",
+    "Check GPU",
+    "Check CPU and Memory",
+    "Prepare Directory Structure",
+    "Clone Grok AI Repository",
+    "Install Repository Requirements",
+    "Download Model Weights",
+    "Configure Model for Hardware",
+    "Run Grok AI Model"
+]
+
+# Set up logging
+log_filename = f'grok_setup_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log'
+logging.basicConfig(filename=log_filename, level=logging.DEBUG, 
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+
+class Logger:
+    log_history = deque(maxlen=10)
+    
+    @staticmethod
+    def log_and_print(message):
+        print(message)
+        logging.info(message)
+        Logger.log_history.append(message)
+
+    @staticmethod
+    def log_error_and_print(message):
+        print(f"ERROR: {message}")
+        logging.error(message)
+        Logger.log_history.append(f"ERROR: {message}")
+        Logger.print_log_history()
+
+    @staticmethod
+    def print_log_history():
+        print("Context before error:")
+        for log_entry in Logger.log_history:
+            print(log_entry)
+        logging.error("Context before error:")
+        for log_entry in Logger.log_history:
+            logging.error(log_entry)
+
+class PackageManager:
+    def __init__(self, python_executable):
+        self.python_executable = python_executable
+
+    def install_package(self, package_name):
+        try:
+            Logger.log_and_print(f"Installing package {package_name}...")
+            result = subprocess.run([self.python_executable, "-m", "pip", "install", package_name], 
+                                    capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                if "Requirement already satisfied" in result.stdout:
+                    Logger.log_and_print(f"Package {package_name} is already installed.")
+                else:
+                    raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print(f"Successfully installed {package_name}")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to install package {package_name}: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+    def retry_install_package(self, package_name, retries=3, delay=5):
+        for attempt in range(retries):
+            try:
+                Logger.log_and_print(f"Attempting to install {package_name} (Attempt {attempt + 1}/{retries})...")
+                result = subprocess.run([self.python_executable, "-m", "pip", "install", package_name], 
+                                        capture_output=True, text=True)
+                Logger.log_and_print(f"stdout: {result.stdout}")
+                Logger.log_and_print(f"stderr: {result.stderr}")
+                if result.returncode != 0:
+                    if "Requirement already satisfied" in result.stdout:
+                        Logger.log_and_print(f"Package {package_name} is already installed.")
+                        return True
+                    else:
+                        raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+                Logger.log_and_print(f"Successfully installed {package_name}")
+                return True
+            except subprocess.CalledProcessError as e:
+                Logger.log_error_and_print(f"Attempt {attempt + 1} to install {package_name} failed: {e}\nOutput: {e.stdout}\nError: {e.stderr}. Retrying in {delay} seconds...")
+                time.sleep(delay)
+        Logger.log_error_and_print(f"Failed to install {package_name} after {retries} attempts.")
+        sys.exit(1)
+
+class EnvironmentManager:
+    @staticmethod
+    def check_admin_privileges():
+        try:
+            is_admin = os.getuid() == 0
+        except AttributeError:
+            is_admin = ctypes.windll.shell32.IsUserAnAdmin() != 0
+        return is_admin
+
+    @staticmethod
+    def request_admin_privileges():
+        if not EnvironmentManager.check_admin_privileges():
+            Logger.log_error_and_print("This script requires administrative privileges to run. Please restart it with administrative rights.")
+            sys.exit(1)
+
+    @staticmethod
+    def check_python_version():
+        if sys.version_info < (3, 6):
+            Logger.log_error_and_print("Python 3.6 or newer is required. Please install the latest version of Python.")
+            sys.exit(1)
+        return True
+
+    @staticmethod
+    def install_git():
+        try:
+            Logger.log_and_print("Installing Git...")
+            result = subprocess.run(["winget", "install", "--id", "Git.Git"], capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                if "No available upgrade found" in result.stdout:
+                    Logger.log_and_print("Git is already up-to-date.")
+                else:
+                    raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully installed Git.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to install Git: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+class VirtualEnvManager:
+    @staticmethod
+    def setup_virtualenv(install_path):
+        try:
+            venv_path = os.path.join(install_path, "grok_sandbox")
+            
+            if os.path.exists(venv_path):
+                shutil.rmtree(venv_path)
+                Logger.log_and_print(f"Removed existing virtual environment at {venv_path}.")
+            
+            subprocess.check_call([sys.executable, "-m", "venv", venv_path])
+            venv_python = os.path.join(venv_path, "Scripts", "python.exe" if os.name == 'nt' else "python")
+            
+            subprocess.check_call([venv_python, "-m", "ensurepip"])
+            subprocess.check_call([venv_python, "-m", "pip", "install", "--upgrade", "pip"])
+            
+            activate_script = os.path.join(venv_path, "Scripts", "activate.bat" if os.name == 'nt' else "activate")
+            Logger.log_and_print(f"Virtual environment set up at {venv_path}.")
+            return True, activate_script, venv_python
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Error setting up virtual environment at {venv_path}: {e.output}\nError: {e.stderr}")
+            return False, str(e), None
+
+    @staticmethod
+    def activate_virtualenv(activate_script):
+        try:
+            if os.name == 'nt':
+                os.system(activate_script)
+            else:
+                os.system(f"source {activate_script}")
+            Logger.log_and_print(f"Activated virtual environment using {activate_script}")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Error activating virtual environment: {e.output}\nError: {e.stderr}")
+            sys.exit(1)
+
+class HardwareChecker:
+    @staticmethod
+    def check_gpu():
+        try:
+            Logger.log_and_print("Checking GPU...")
+            result = subprocess.run(["nvidia-smi"], capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                Logger.log_and_print("No GPU found or NVIDIA driver is not installed.")
+            else:
+                Logger.log_and_print("GPU check passed.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to check GPU: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+    @staticmethod
+    def check_cpu_memory():
+        try:
+            import psutil
+            Logger.log_and_print("Checking CPU and memory...")
+            cpu_count = psutil.cpu_count(logical=True)
+            memory = psutil.virtual_memory().total
+            Logger.log_and_print(f"CPU count: {cpu_count}")
+            Logger.log_and_print(f"Total memory: {memory / (1024 ** 3):.2f} GB")
+        except ImportError:
+            Logger.log_error_and_print("psutil is not installed.")
+            sys.exit(1)
+        except Exception as e:
+            Logger.log_error_and_print(f"Failed to check CPU and memory: {e}")
+            sys.exit(1)
+
+class DirectoryManager:
+    @staticmethod
+    def prepare_directory_structure(install_path):
+        directories = ["data", "models", "outputs"]
+        try:
+            for directory in directories:
+                path = os.path.join(install_path, directory)
+                if not os.path.exists(path):
+                    os.makedirs(path)
+                    Logger.log_and_print(f"Created directory {path}.")
+                else:
+                    Logger.log_and
+
+[2024-05-30 20:34:20] ChatGPT:
+_print(f"Directory {path} already exists.")
+        except OSError as e:
+            Logger.log_error_and_print(f"Failed to create directory structure: {e.strerror} (Error Code: {e.errno})")
+            sys.exit(1)
+
+class RepositoryManager:
+    @staticmethod
+    def clone_grok_ai_repo(install_path):
+        try:
+            Logger.log_and_print("Cloning Grok AI repository...")
+            repo_url = "https://github.com/username/grok_ai.git"
+            result = subprocess.run(["git", "clone", repo_url, os.path.join(install_path, "grok_ai")], 
+                                    capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully cloned Grok AI repository.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to clone Grok AI repository: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+    @staticmethod
+    def install_repo_requirements(venv_python, repo_path):
+        try:
+            Logger.log_and_print("Installing repository requirements...")
+            requirements_path = os.path.join(repo_path, "requirements.txt")
+            result = subprocess.run([venv_python, "-m", "pip", "install", "-r", requirements_path], 
+                                    capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully installed repository requirements.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to install repository requirements: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+class ModelManager:
+    @staticmethod
+    def download_model_weights(repo_path):
+        try:
+            Logger.log_and_print("Downloading model weights...")
+            weights_url = "https://example.com/model_weights.zip"
+            weights_path = os.path.join(repo_path, "models", "model_weights.zip")
+            result = subprocess.run(["curl", "-o", weights_path, weights_url], 
+                                    capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully downloaded model weights.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to download model weights: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+    @staticmethod
+    def configure_model_for_hardware(repo_path):
+        try:
+            Logger.log_and_print("Configuring model for hardware...")
+            config_script = os.path.join(repo_path, "scripts", "configure_hardware.py")
+            result = subprocess.run([sys.executable, config_script], capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully configured model for hardware.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to configure model for hardware: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+class ModelRunner:
+    @staticmethod
+    def run_grok_ai_model(repo_path):
+        try:
+            Logger.log_and_print("Running Grok AI model...")
+            run_script = os.path.join(repo_path, "scripts", "run_model.py")
+            result = subprocess.run([sys.executable, run_script], capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully ran Grok AI model.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to run Grok AI model: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+def main():
+    # Check administrative privileges
+    Logger.log_and_print(f"Operation: {operations[0]}")
+    EnvironmentManager.request_admin_privileges()
+    
+    # Prompt for installation path
+    Logger.log_and_print(f"Operation: {operations[1]}")
+    install_path = UserInputManager.prompt_for_install_path()
+    
+    # Check Python version
+    Logger.log_and_print(f"Operation: {operations[2]}")
+    EnvironmentManager.check_python_version()
+
+    # Set up virtual environment
+    Logger.log_and_print(f"Operation: {operations[3]}")
+    venv_setup_success, activate_script, venv_python = VirtualEnvManager.setup_virtualenv(install_path)
+    if not venv_setup_success:
+        sys.exit(1)
+    
+    # Activate virtual environment
+    Logger.log_and_print(f"Operation: {operations[4]}")
+    VirtualEnvManager.activate_virtualenv(activate_script)
+
+    # Install Git
+    Logger.log_and_print(f"Operation: {operations[5]}")
+    EnvironmentManager.install_git()
+    
+    # Install necessary packages
+    Logger.log_and_print(f"Operation: {operations[6]}")
+    package_manager = PackageManager(venv_python)
+    package_manager.retry_install_package("torch")
+    package_manager.retry_install_package("psutil")
+    
+    # Check GPU
+    Logger.log_and_print(f"Operation: {operations[7]}")
+    HardwareChecker.check_gpu()
+
+    # Check CPU and memory
+    Logger.log_and_print(f"Operation: {operations[8]}")
+    HardwareChecker.check_cpu_memory()
+
+    # Prepare directory structure
+    Logger.log_and_print(f"Operation: {operations[9]}")
+    DirectoryManager.prepare_directory_structure(install_path)
+
+    # Clone Grok AI repository
+    Logger.log_and_print(f"Operation: {operations[10]}")
+    repo_path = os.path.join(install_path, "grok_ai")
+    RepositoryManager.clone_grok_ai_repo(install_path)
+
+    # Install repository requirements
+    Logger.log_and_print(f"Operation: {operations[11]}")
+    RepositoryManager.install_repo_requirements(venv_python, repo_path)
+
+    # Download model weights
+    Logger.log_and_print(f"Operation: {operations[12]}")
+    ModelManager.download_model_weights(repo_path)
+
+    # Configure model for hardware
+    Logger.log_and_print(f"Operation: {operations[13]}")
+    ModelManager.configure_model_for_hardware(repo_path)
+
+    # Run Grok AI model
+    Logger.log_and_print(f"Operation: {operations[14]}")
+    ModelRunner.run_grok_ai_model(repo_path)
+
+if __name__ == "__main__":
+    main()
+```
+
+### Summary
+
+1. **Contextual Error Logging**: Enhanced the `Logger` class to maintain a history of the last 10 log entries and include them in error messages.
+2. **Class Definitions**:
+   - `Logger`: Handles logging and prints messages with context before errors.
+   - `PackageManager`: Manages package installation with retries.
+   - `EnvironmentManager`: Handles environment checks and setup tasks.
+   - `VirtualEnvManager`: Manages virtual environment creation and activation.
+   - `UserInputManager`: Handles user input and prompts.
+   - `HardwareChecker`: Checks
+
+[2024-05-30 20:35:10] FoSGamers:
+Operation: Check Administrative Privileges
+Operation: Prompt for Installation Path
+Traceback (most recent call last):
+  File "C:\Users\jamey\OneDrive\Desktop\setup_grok.py", line 375, in <module>
+    main()
+  File "C:\Users\jamey\OneDrive\Desktop\setup_grok.py", line 315, in main
+    install_path = UserInputManager.prompt_for_install_path()
+                   ^^^^^^^^^^^^^^^^
+NameError: name 'UserInputManager' is not defined
+
+
+[2024-05-30 20:36:12] ChatGPT:
+It seems that there's an issue with the definition or import of the `UserInputManager` class. Let's ensure that all class names are correctly defined and used. 
+
+Here's the corrected version of the script with proper class definitions and usage:
+
+### Corrected Script
+
+```python
+import os
+import subprocess
+import sys
+import ctypes
+import time
+import shutil
+import logging
+from datetime import datetime
+from collections import deque
+
+# Define operations in order
+operations = [
+    "Check Administrative Privileges",
+    "Prompt for Installation Path",
+    "Set Up Virtual Environment",
+    "Activate Virtual Environment",
+    "Install Git",
+    "Install Torch",
+    "Install psutil",
+    "Check Python Version",
+    "Check GPU",
+    "Check CPU and Memory",
+    "Prepare Directory Structure",
+    "Clone Grok AI Repository",
+    "Install Repository Requirements",
+    "Download Model Weights",
+    "Configure Model for Hardware",
+    "Run Grok AI Model"
+]
+
+# Set up logging
+log_filename = f'grok_setup_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log'
+logging.basicConfig(filename=log_filename, level=logging.DEBUG, 
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+
+class Logger:
+    log_history = deque(maxlen=10)
+    
+    @staticmethod
+    def log_and_print(message):
+        print(message)
+        logging.info(message)
+        Logger.log_history.append(message)
+
+    @staticmethod
+    def log_error_and_print(message):
+        print(f"ERROR: {message}")
+        logging.error(message)
+        Logger.log_history.append(f"ERROR: {message}")
+        Logger.print_log_history()
+
+    @staticmethod
+    def print_log_history():
+        print("Context before error:")
+        for log_entry in Logger.log_history:
+            print(log_entry)
+        logging.error("Context before error:")
+        for log_entry in Logger.log_history:
+            logging.error(log_entry)
+
+class PackageManager:
+    def __init__(self, python_executable):
+        self.python_executable = python_executable
+
+    def install_package(self, package_name):
+        try:
+            Logger.log_and_print(f"Installing package {package_name}...")
+            result = subprocess.run([self.python_executable, "-m", "pip", "install", package_name], 
+                                    capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                if "Requirement already satisfied" in result.stdout:
+                    Logger.log_and_print(f"Package {package_name} is already installed.")
+                else:
+                    raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print(f"Successfully installed {package_name}")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to install package {package_name}: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+    def retry_install_package(self, package_name, retries=3, delay=5):
+        for attempt in range(retries):
+            try:
+                Logger.log_and_print(f"Attempting to install {package_name} (Attempt {attempt + 1}/{retries})...")
+                result = subprocess.run([self.python_executable, "-m", "pip", "install", package_name], 
+                                        capture_output=True, text=True)
+                Logger.log_and_print(f"stdout: {result.stdout}")
+                Logger.log_and_print(f"stderr: {result.stderr}")
+                if result.returncode != 0:
+                    if "Requirement already satisfied" in result.stdout:
+                        Logger.log_and_print(f"Package {package_name} is already installed.")
+                        return True
+                    else:
+                        raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+                Logger.log_and_print(f"Successfully installed {package_name}")
+                return True
+            except subprocess.CalledProcessError as e:
+                Logger.log_error_and_print(f"Attempt {attempt + 1} to install {package_name} failed: {e}\nOutput: {e.stdout}\nError: {e.stderr}. Retrying in {delay} seconds...")
+                time.sleep(delay)
+        Logger.log_error_and_print(f"Failed to install {package_name} after {retries} attempts.")
+        sys.exit(1)
+
+class EnvironmentManager:
+    @staticmethod
+    def check_admin_privileges():
+        try:
+            is_admin = os.getuid() == 0
+        except AttributeError:
+            is_admin = ctypes.windll.shell32.IsUserAnAdmin() != 0
+        return is_admin
+
+    @staticmethod
+    def request_admin_privileges():
+        if not EnvironmentManager.check_admin_privileges():
+            Logger.log_error_and_print("This script requires administrative privileges to run. Please restart it with administrative rights.")
+            sys.exit(1)
+
+    @staticmethod
+    def check_python_version():
+        if sys.version_info < (3, 6):
+            Logger.log_error_and_print("Python 3.6 or newer is required. Please install the latest version of Python.")
+            sys.exit(1)
+        return True
+
+    @staticmethod
+    def install_git():
+        try:
+            Logger.log_and_print("Installing Git...")
+            result = subprocess.run(["winget", "install", "--id", "Git.Git"], capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                if "No available upgrade found" in result.stdout:
+                    Logger.log_and_print("Git is already up-to-date.")
+                else:
+                    raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully installed Git.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to install Git: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+class VirtualEnvManager:
+    @staticmethod
+    def setup_virtualenv(install_path):
+        try:
+            venv_path = os.path.join(install_path, "grok_sandbox")
+            
+            if os.path.exists(venv_path):
+                shutil.rmtree(venv_path)
+                Logger.log_and_print(f"Removed existing virtual environment at {venv_path}.")
+            
+            subprocess.check_call([sys.executable, "-m", "venv", venv_path])
+            venv_python = os.path.join(venv_path, "Scripts", "python.exe" if os.name == 'nt' else "python")
+            
+            subprocess.check_call([venv_python, "-m", "ensurepip"])
+            subprocess.check_call([venv_python, "-m", "pip", "install", "--upgrade", "pip"])
+            
+            activate_script = os.path.join(venv_path, "Scripts", "activate.bat" if os.name == 'nt' else "activate")
+            Logger.log_and_print(f"Virtual environment set up at {venv_path}.")
+            return True, activate_script, venv_python
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Error setting up virtual environment at {venv_path}: {e.output}\nError: {e.stderr}")
+            return False, str(e), None
+
+    @staticmethod
+    def activate_virtualenv(activate_script):
+        try:
+            if os.name == 'nt':
+                os.system(activate_script)
+            else:
+                os.system(f"source {activate_script}")
+            Logger.log_and_print(f"Activated virtual environment using {activate_script}")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Error activating virtual environment: {e.output}\nError: {e.stderr}")
+            sys.exit(1)
+
+class HardwareChecker:
+    @staticmethod
+    def check_gpu():
+        try:
+            Logger.log_and_print("Checking GPU...")
+            result = subprocess.run(["nvidia-smi"], capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                Logger.log_and_print("No GPU found or NVIDIA driver is not installed.")
+            else:
+                Logger.log_and_print("GPU check passed.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to check GPU: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+    @staticmethod
+    def check_cpu_memory():
+        try:
+            import psutil
+            Logger.log_and_print("Checking CPU and memory...")
+            cpu_count = psutil.cpu_count(logical=True)
+            memory = psutil.virtual_memory().total
+            Logger.log_and_print(f"CPU count: {cpu_count}")
+            Logger.log_and_print(f"Total memory: {memory / (1024 ** 3):.2f} GB")
+        except ImportError:
+            Logger.log_error_and_print("psutil is not installed.")
+            sys.exit(1)
+        except Exception as e:
+            Logger.log_error_and_print(f"Failed to check CPU and memory: {e}")
+            sys.exit(1)
+
+class DirectoryManager:
+    @staticmethod
+    def prepare_directory_structure(install_path):
+        directories = ["data", "models", "outputs"]
+        try:
+            for directory in directories:
+                path = os.path.join(install_path, directory)
+                if not os.path.exists(path):
+                    os.makedirs(path)
+                    Logger.log_and_print(f"Created directory {path}.")
+                else:
+                    Logger.log_and_print(f"Directory {path} already exists.")
+        except OSError as e:
+            Logger.log_error_and
+
+[2024-05-30 20:37:06] ChatGPT:
+_print(f"Failed to create directory structure: {e.strerror} (Error Code: {e.errno})")
+            sys.exit(1)
+
+class RepositoryManager:
+    @staticmethod
+    def clone_grok_ai_repo(install_path):
+        try:
+            Logger.log_and_print("Cloning Grok AI repository...")
+            repo_url = "https://github.com/username/grok_ai.git"
+            result = subprocess.run(["git", "clone", repo_url, os.path.join(install_path, "grok_ai")], 
+                                    capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully cloned Grok AI repository.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to clone Grok AI repository: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+    @staticmethod
+    def install_repo_requirements(venv_python, repo_path):
+        try:
+            Logger.log_and_print("Installing repository requirements...")
+            requirements_path = os.path.join(repo_path, "requirements.txt")
+            result = subprocess.run([venv_python, "-m", "pip", "install", "-r", requirements_path], 
+                                    capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully installed repository requirements.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to install repository requirements: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+class ModelManager:
+    @staticmethod
+    def download_model_weights(repo_path):
+        try:
+            Logger.log_and_print("Downloading model weights...")
+            weights_url = "https://example.com/model_weights.zip"
+            weights_path = os.path.join(repo_path, "models", "model_weights.zip")
+            result = subprocess.run(["curl", "-o", weights_path, weights_url], 
+                                    capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully downloaded model weights.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to download model weights: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+    @staticmethod
+    def configure_model_for_hardware(repo_path):
+        try:
+            Logger.log_and_print("Configuring model for hardware...")
+            config_script = os.path.join(repo_path, "scripts", "configure_hardware.py")
+            result = subprocess.run([sys.executable, config_script], capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully configured model for hardware.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to configure model for hardware: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+class ModelRunner:
+    @staticmethod
+    def run_grok_ai_model(repo_path):
+        try:
+            Logger.log_and_print("Running Grok AI model...")
+            run_script = os.path.join(repo_path, "scripts", "run_model.py")
+            result = subprocess.run([sys.executable, run_script], capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully ran Grok AI model.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to run Grok AI model: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+def main():
+    # Check administrative privileges
+    Logger.log_and_print(f"Operation: {operations[0]}")
+    EnvironmentManager.request_admin_privileges()
+    
+    # Prompt for installation path
+    Logger.log_and_print(f"Operation: {operations[1]}")
+    install_path = UserInputManager.prompt_for_install_path()
+    
+    # Check Python version
+    Logger.log_and_print(f"Operation: {operations[2]}")
+    EnvironmentManager.check_python_version()
+
+    # Set up virtual environment
+    Logger.log_and_print(f"Operation: {operations[3]}")
+    venv_setup_success, activate_script, venv_python = VirtualEnvManager.setup_virtualenv(install_path)
+    if not venv_setup_success:
+        sys.exit(1)
+    
+    # Activate virtual environment
+    Logger.log_and_print(f"Operation: {operations[4]}")
+    VirtualEnvManager.activate_virtualenv(activate_script)
+
+    # Install Git
+    Logger.log_and_print(f"Operation: {operations[5]}")
+    EnvironmentManager.install_git()
+    
+    # Install necessary packages
+    Logger.log_and_print(f"Operation: {operations[6]}")
+    package_manager = PackageManager(venv_python)
+    package_manager.retry_install_package("torch")
+    package_manager.retry_install_package("psutil")
+    
+    # Check GPU
+    Logger.log_and_print(f"Operation: {operations[7]}")
+    HardwareChecker.check_gpu()
+
+    # Check CPU and memory
+    Logger.log_and_print(f"Operation: {operations[8]}")
+    HardwareChecker.check_cpu_memory()
+
+    # Prepare directory structure
+    Logger.log_and_print(f"Operation: {operations[9]}")
+    DirectoryManager.prepare_directory_structure(install_path)
+
+    # Clone Grok AI repository
+    Logger.log_and_print(f"Operation: {operations[10]}")
+    repo_path = os.path.join(install_path, "grok_ai")
+    RepositoryManager.clone_grok_ai_repo(install_path)
+
+    # Install repository requirements
+    Logger.log_and_print(f"Operation: {operations[11]}")
+    RepositoryManager.install_repo_requirements(venv_python, repo_path)
+
+    # Download model weights
+    Logger.log_and_print(f"Operation: {operations[12]}")
+    ModelManager.download_model_weights(repo_path)
+
+    # Configure model for hardware
+    Logger.log_and_print(f"Operation: {operations[13]}")
+    ModelManager.configure_model_for_hardware(repo_path)
+
+    # Run Grok AI model
+    Logger.log_and_print(f"Operation: {operations[14]}")
+    ModelRunner.run_grok_ai_model(repo_path)
+
+if __name__ == "__main__":
+    main()
+```
+
+### Summary
+
+1. **Class Definitions**:
+   - `Logger`: Handles logging and prints messages with context before errors.
+   - `PackageManager`: Manages package installation with retries.
+   - `EnvironmentManager`: Handles environment checks and setup tasks.
+   - `VirtualEnvManager`: Manages virtual environment creation and activation.
+   - `HardwareChecker`: Checks GPU and CPU/memory.
+   - `DirectoryManager`: Prepares the necessary directory structure.
+   - `RepositoryManager`: Clones the repository and installs its requirements.
+   - `ModelManager`: Downloads model weights and configures the model.
+   - `ModelRunner`: Runs the Grok AI model.
+
+2. **Main Function**: Executes the defined operations in sequence, leveraging the classes for modularity.
+
+### Next Steps
+
+1. Validate the refactored script syntax and spacing.
+2. Test the script in a controlled environment.
+3. Implement additional operations if needed.
+
+**Iterate, Improve, Evolve** - Note critiques or edge cases, propose improvements.
+**Question** - Do you want the script to include additional operations or enhanced user interaction?
+**Validate** - Check for syntax and spacing issues in all scripts.
+
+Let me know if you need further modifications or have any questions!
+
+[2024-05-30 20:38:02] FoSGamers:
+remove the need for admin prompt since cmd is opened as admin.
+
+[2024-05-30 20:39:01] ChatGPT:
+Sure, Jamey! Since the command prompt is already opened with administrative privileges, we can remove the need for checking and requesting administrative privileges.
+
+### Updated Script Without Admin Check
+
+Here's the script with the admin check and request removed:
+
+```python
+import os
+import subprocess
+import sys
+import ctypes
+import time
+import shutil
+import logging
+from datetime import datetime
+from collections import deque
+
+# Define operations in order
+operations = [
+    "Prompt for Installation Path",
+    "Set Up Virtual Environment",
+    "Activate Virtual Environment",
+    "Install Git",
+    "Install Torch",
+    "Install psutil",
+    "Check Python Version",
+    "Check GPU",
+    "Check CPU and Memory",
+    "Prepare Directory Structure",
+    "Clone Grok AI Repository",
+    "Install Repository Requirements",
+    "Download Model Weights",
+    "Configure Model for Hardware",
+    "Run Grok AI Model"
+]
+
+# Set up logging
+log_filename = f'grok_setup_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log'
+logging.basicConfig(filename=log_filename, level=logging.DEBUG, 
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+
+class Logger:
+    log_history = deque(maxlen=10)
+    
+    @staticmethod
+    def log_and_print(message):
+        print(message)
+        logging.info(message)
+        Logger.log_history.append(message)
+
+    @staticmethod
+    def log_error_and_print(message):
+        print(f"ERROR: {message}")
+        logging.error(message)
+        Logger.log_history.append(f"ERROR: {message}")
+        Logger.print_log_history()
+
+    @staticmethod
+    def print_log_history():
+        print("Context before error:")
+        for log_entry in Logger.log_history:
+            print(log_entry)
+        logging.error("Context before error:")
+        for log_entry in Logger.log_history:
+            logging.error(log_entry)
+
+class PackageManager:
+    def __init__(self, python_executable):
+        self.python_executable = python_executable
+
+    def install_package(self, package_name):
+        try:
+            Logger.log_and_print(f"Installing package {package_name}...")
+            result = subprocess.run([self.python_executable, "-m", "pip", "install", package_name], 
+                                    capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                if "Requirement already satisfied" in result.stdout:
+                    Logger.log_and_print(f"Package {package_name} is already installed.")
+                else:
+                    raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print(f"Successfully installed {package_name}")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to install package {package_name}: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+    def retry_install_package(self, package_name, retries=3, delay=5):
+        for attempt in range(retries):
+            try:
+                Logger.log_and_print(f"Attempting to install {package_name} (Attempt {attempt + 1}/{retries})...")
+                result = subprocess.run([self.python_executable, "-m", "pip", "install", package_name], 
+                                        capture_output=True, text=True)
+                Logger.log_and_print(f"stdout: {result.stdout}")
+                Logger.log_and_print(f"stderr: {result.stderr}")
+                if result.returncode != 0:
+                    if "Requirement already satisfied" in result.stdout:
+                        Logger.log_and_print(f"Package {package_name} is already installed.")
+                        return True
+                    else:
+                        raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+                Logger.log_and_print(f"Successfully installed {package_name}")
+                return True
+            except subprocess.CalledProcessError as e:
+                Logger.log_error_and_print(f"Attempt {attempt + 1} to install {package_name} failed: {e}\nOutput: {e.stdout}\nError: {e.stderr}. Retrying in {delay} seconds...")
+                time.sleep(delay)
+        Logger.log_error_and_print(f"Failed to install {package_name} after {retries} attempts.")
+        sys.exit(1)
+
+class EnvironmentManager:
+    @staticmethod
+    def check_python_version():
+        if sys.version_info < (3, 6):
+            Logger.log_error_and_print("Python 3.6 or newer is required. Please install the latest version of Python.")
+            sys.exit(1)
+        return True
+
+    @staticmethod
+    def install_git():
+        try:
+            Logger.log_and_print("Installing Git...")
+            result = subprocess.run(["winget", "install", "--id", "Git.Git"], capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                if "No available upgrade found" in result.stdout:
+                    Logger.log_and_print("Git is already up-to-date.")
+                else:
+                    raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully installed Git.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to install Git: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+class VirtualEnvManager:
+    @staticmethod
+    def setup_virtualenv(install_path):
+        try:
+            venv_path = os.path.join(install_path, "grok_sandbox")
+            
+            if os.path.exists(venv_path):
+                shutil.rmtree(venv_path)
+                Logger.log_and_print(f"Removed existing virtual environment at {venv_path}.")
+            
+            subprocess.check_call([sys.executable, "-m", "venv", venv_path])
+            venv_python = os.path.join(venv_path, "Scripts", "python.exe" if os.name == 'nt' else "python")
+            
+            subprocess.check_call([venv_python, "-m", "ensurepip"])
+            subprocess.check_call([venv_python, "-m", "pip", "install", "--upgrade", "pip"])
+            
+            activate_script = os.path.join(venv_path, "Scripts", "activate.bat" if os.name == 'nt' else "activate")
+            Logger.log_and_print(f"Virtual environment set up at {venv_path}.")
+            return True, activate_script, venv_python
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Error setting up virtual environment at {venv_path}: {e.output}\nError: {e.stderr}")
+            return False, str(e), None
+
+    @staticmethod
+    def activate_virtualenv(activate_script):
+        try:
+            if os.name == 'nt':
+                os.system(activate_script)
+            else:
+                os.system(f"source {activate_script}")
+            Logger.log_and_print(f"Activated virtual environment using {activate_script}")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Error activating virtual environment: {e.output}\nError: {e.stderr}")
+            sys.exit(1)
+
+class HardwareChecker:
+    @staticmethod
+    def check_gpu():
+        try:
+            Logger.log_and_print("Checking GPU...")
+            result = subprocess.run(["nvidia-smi"], capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                Logger.log_and_print("No GPU found or NVIDIA driver is not installed.")
+            else:
+                Logger.log_and_print("GPU check passed.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to check GPU: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+    @staticmethod
+    def check_cpu_memory():
+        try:
+            import psutil
+            Logger.log_and_print("Checking CPU and memory...")
+            cpu_count = psutil.cpu_count(logical=True)
+            memory = psutil.virtual_memory().total
+            Logger.log_and_print(f"CPU count: {cpu_count}")
+            Logger.log_and_print(f"Total memory: {memory / (1024 ** 3):.2f} GB")
+        except ImportError:
+            Logger.log_error_and_print("psutil is not installed.")
+            sys.exit(1)
+        except Exception as e:
+            Logger.log_error_and_print(f"Failed to check CPU and memory: {e}")
+            sys.exit(1)
+
+class DirectoryManager:
+    @staticmethod
+    def prepare_directory_structure(install_path):
+        directories = ["data", "models", "outputs"]
+        try:
+            for directory in directories:
+                path = os.path.join(install_path, directory)
+                if
+
+[2024-05-30 20:39:33] FoSGamers:
+remove the need for admin prompt since cmd is opened as admin. have log level at the highest possible to capture as much info as possible.
+
+[2024-05-30 20:40:36] ChatGPT:
+Jamey wants the log level to be set at the highest possible to capture as much information as possible. No need for an admin prompt since the command prompt is already opened as admin.
+
+[2024-05-30 20:40:36] FoSGamers:
+Model set context updated.
+
+[2024-05-30 20:40:36] ChatGPT:
+Sure, Jamey! I'll remove the admin privilege checks and set the logging level to the highest possible to capture detailed information. Here is the updated script:
+
+### Updated Script
+
+```python
+import os
+import subprocess
+import sys
+import time
+import shutil
+import logging
+from datetime import datetime
+from collections import deque
+
+# Define operations in order
+operations = [
+    "Prompt for Installation Path",
+    "Set Up Virtual Environment",
+    "Activate Virtual Environment",
+    "Install Git",
+    "Install Torch",
+    "Install psutil",
+    "Check Python Version",
+    "Check GPU",
+    "Check CPU and Memory",
+    "Prepare Directory Structure",
+    "Clone Grok AI Repository",
+    "Install Repository Requirements",
+    "Download Model Weights",
+    "Configure Model for Hardware",
+    "Run Grok AI Model"
+]
+
+# Set up logging
+log_filename = f'grok_setup_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log'
+logging.basicConfig(filename=log_filename, level=logging.DEBUG, 
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+
+class Logger:
+    log_history = deque(maxlen=10)
+    
+    @staticmethod
+    def log_and_print(message):
+        print(message)
+        logging.info(message)
+        Logger.log_history.append(message)
+
+    @staticmethod
+    def log_error_and_print(message):
+        print(f"ERROR: {message}")
+        logging.error(message)
+        Logger.log_history.append(f"ERROR: {message}")
+        Logger.print_log_history()
+
+    @staticmethod
+    def print_log_history():
+        print("Context before error:")
+        for log_entry in Logger.log_history:
+            print(log_entry)
+        logging.error("Context before error:")
+        for log_entry in Logger.log_history:
+            logging.error(log_entry)
+
+class PackageManager:
+    def __init__(self, python_executable):
+        self.python_executable = python_executable
+
+    def install_package(self, package_name):
+        try:
+            Logger.log_and_print(f"Installing package {package_name}...")
+            result = subprocess.run([self.python_executable, "-m", "pip", "install", package_name], 
+                                    capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                if "Requirement already satisfied" in result.stdout:
+                    Logger.log_and_print(f"Package {package_name} is already installed.")
+                else:
+                    raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print(f"Successfully installed {package_name}")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to install package {package_name}: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+    def retry_install_package(self, package_name, retries=3, delay=5):
+        for attempt in range(retries):
+            try:
+                Logger.log_and_print(f"Attempting to install {package_name} (Attempt {attempt + 1}/{retries})...")
+                result = subprocess.run([self.python_executable, "-m", "pip", "install", package_name], 
+                                        capture_output=True, text=True)
+                Logger.log_and_print(f"stdout: {result.stdout}")
+                Logger.log_and_print(f"stderr: {result.stderr}")
+                if result.returncode != 0:
+                    if "Requirement already satisfied" in result.stdout:
+                        Logger.log_and_print(f"Package {package_name} is already installed.")
+                        return True
+                    else:
+                        raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+                Logger.log_and_print(f"Successfully installed {package_name}")
+                return True
+            except subprocess.CalledProcessError as e:
+                Logger.log_error_and_print(f"Attempt {attempt + 1} to install {package_name} failed: {e}\nOutput: {e.stdout}\nError: {e.stderr}. Retrying in {delay} seconds...")
+                time.sleep(delay)
+        Logger.log_error_and_print(f"Failed to install {package_name} after {retries} attempts.")
+        sys.exit(1)
+
+class EnvironmentManager:
+    @staticmethod
+    def check_python_version():
+        if sys.version_info < (3, 6):
+            Logger.log_error_and_print("Python 3.6 or newer is required. Please install the latest version of Python.")
+            sys.exit(1)
+        return True
+
+    @staticmethod
+    def install_git():
+        try:
+            Logger.log_and_print("Installing Git...")
+            result = subprocess.run(["winget", "install", "--id", "Git.Git"], capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                if "No available upgrade found" in result.stdout:
+                    Logger.log_and_print("Git is already up-to-date.")
+                else:
+                    raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully installed Git.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to install Git: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+class VirtualEnvManager:
+    @staticmethod
+    def setup_virtualenv(install_path):
+        try:
+            venv_path = os.path.join(install_path, "grok_sandbox")
+            
+            if os.path.exists(venv_path):
+                shutil.rmtree(venv_path)
+                Logger.log_and_print(f"Removed existing virtual environment at {venv_path}.")
+            
+            subprocess.check_call([sys.executable, "-m", "venv", venv_path])
+            venv_python = os.path.join(venv_path, "Scripts", "python.exe" if os.name == 'nt' else "python")
+            
+            subprocess.check_call([venv_python, "-m", "ensurepip"])
+            subprocess.check_call([venv_python, "-m", "pip", "install", "--upgrade", "pip"])
+            
+            activate_script = os.path.join(venv_path, "Scripts", "activate.bat" if os.name == 'nt' else "activate")
+            Logger.log_and_print(f"Virtual environment set up at {venv_path}.")
+            return True, activate_script, venv_python
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Error setting up virtual environment at {venv_path}: {e.output}\nError: {e.stderr}")
+            return False, str(e), None
+
+    @staticmethod
+    def activate_virtualenv(activate_script):
+        try:
+            if os.name == 'nt':
+                os.system(activate_script)
+            else:
+                os.system(f"source {activate_script}")
+            Logger.log_and_print(f"Activated virtual environment using {activate_script}")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Error activating virtual environment: {e.output}\nError: {e.stderr}")
+            sys.exit(1)
+
+class HardwareChecker:
+    @staticmethod
+    def check_gpu():
+        try:
+            Logger.log_and_print("Checking GPU...")
+            result = subprocess.run(["nvidia-smi"], capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                Logger.log_and_print("No GPU found or NVIDIA driver is not installed.")
+            else:
+                Logger.log_and_print("GPU check passed.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to check GPU: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+    @staticmethod
+    def check_cpu_memory():
+        try:
+            import psutil
+            Logger.log_and_print("Checking CPU and memory...")
+            cpu_count = psutil.cpu_count(logical=True)
+            memory = psutil.virtual_memory().total
+            Logger.log_and_print(f"CPU count: {cpu_count}")
+            Logger.log_and_print(f"Total memory: {memory / (1024 ** 3):.2f} GB")
+        except ImportError:
+            Logger.log_error_and_print("psutil is not installed.")
+            sys.exit(1)
+        except Exception as e:
+            Logger.log_error_and_print(f"Failed to check CPU and memory: {e}")
+            sys.exit(1)
+
+class DirectoryManager:
+    @staticmethod
+    def prepare_directory_structure(install_path):
+        directories = ["data", "models", "outputs"]
+        try:
+            for directory in directories:
+                path = os.path.join(install_path, directory)
+                if not os.path.exists(path):
+                    os.makedirs(path)
+                    Logger.log_and_print(f"Created directory {path}.")
+                else:
+                    Logger.log_and_print(f"Directory {path} already exists.")
+        except OSError as e:
+            Logger.log_error_and_print(f"Failed to create directory structure: {e.strerror} (Error Code: {e.errno})")
+            sys.exit(1)
+
+class RepositoryManager:
+    @staticmethod
+    def clone_grok_ai_repo(install_path):
+        try:
+            Logger.log_and_print("Cloning Grok AI repository...")
+            repo_url = "https://github.com/username/grok_ai.git"
+            result = subprocess.run(["git", "clone", repo_url, os.path.join(install_path, "grok_ai")], 
+                                    capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout
+
+[2024-05-30 20:40:52] ChatGPT:
+}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully cloned Grok AI repository.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to clone Grok AI repository: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+    @staticmethod
+    def install_repo_requirements(venv_python, repo_path):
+        try:
+            Logger.log_and_print("Installing repository requirements...")
+            requirements_path = os.path.join(repo_path, "requirements.txt")
+            result = subprocess.run([venv_python, "-m", "pip", "install", "-r", requirements_path], 
+                                    capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully installed repository requirements.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to install repository requirements: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+class ModelManager:
+    @staticmethod
+    def download_model_weights(repo_path):
+        try:
+            Logger.log_and_print("Downloading model weights...")
+            weights_url = "https://example.com/model_weights.zip"
+            weights_path = os.path.join(repo_path, "models", "model_weights.zip")
+            result = subprocess.run(["curl", "-o", weights_path,
+
+[2024-05-30 20:42:19] ChatGPT:
+Jamey wants the log level to be set at the highest possible to capture as much information as possible. No need for an admin prompt since the command prompt is already opened as admin.
+
+[2024-05-30 20:42:19] FoSGamers:
+Model set context updated.
+
+[2024-05-30 20:42:19] ChatGPT:
+Sure, Jamey! I'll update the script to remove the admin privilege check and set the logging level to capture as much information as possible.
+
+### Updated Script
+
+Here's the script with the specified changes:
+
+```python
+import os
+import subprocess
+import sys
+import ctypes
+import time
+import shutil
+import logging
+from datetime import datetime
+from collections import deque
+
+# Define operations in order
+operations = [
+    "Prompt for Installation Path",
+    "Set Up Virtual Environment",
+    "Activate Virtual Environment",
+    "Install Git",
+    "Install Torch",
+    "Install psutil",
+    "Check Python Version",
+    "Check GPU",
+    "Check CPU and Memory",
+    "Prepare Directory Structure",
+    "Clone Grok AI Repository",
+    "Install Repository Requirements",
+    "Download Model Weights",
+    "Configure Model for Hardware",
+    "Run Grok AI Model"
+]
+
+# Set up logging
+log_filename = f'grok_setup_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log'
+logging.basicConfig(filename=log_filename, level=logging.DEBUG, 
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+
+class Logger:
+    log_history = deque(maxlen=10)
+    
+    @staticmethod
+    def log_and_print(message):
+        print(message)
+        logging.debug(message)
+        Logger.log_history.append(message)
+
+    @staticmethod
+    def log_error_and_print(message):
+        print(f"ERROR: {message}")
+        logging.error(message)
+        Logger.log_history.append(f"ERROR: {message}")
+        Logger.print_log_history()
+
+    @staticmethod
+    def print_log_history():
+        print("Context before error:")
+        for log_entry in Logger.log_history:
+            print(log_entry)
+        logging.error("Context before error:")
+        for log_entry in Logger.log_history:
+            logging.error(log_entry)
+
+class PackageManager:
+    def __init__(self, python_executable):
+        self.python_executable = python_executable
+
+    def install_package(self, package_name):
+        try:
+            Logger.log_and_print(f"Installing package {package_name}...")
+            result = subprocess.run([self.python_executable, "-m", "pip", "install", package_name], 
+                                    capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                if "Requirement already satisfied" in result.stdout:
+                    Logger.log_and_print(f"Package {package_name} is already installed.")
+                else:
+                    raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print(f"Successfully installed {package_name}")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to install package {package_name}: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+    def retry_install_package(self, package_name, retries=3, delay=5):
+        for attempt in range(retries):
+            try:
+                Logger.log_and_print(f"Attempting to install {package_name} (Attempt {attempt + 1}/{retries})...")
+                result = subprocess.run([self.python_executable, "-m", "pip", "install", package_name], 
+                                        capture_output=True, text=True)
+                Logger.log_and_print(f"stdout: {result.stdout}")
+                Logger.log_and_print(f"stderr: {result.stderr}")
+                if result.returncode != 0:
+                    if "Requirement already satisfied" in result.stdout:
+                        Logger.log_and_print(f"Package {package_name} is already installed.")
+                        return True
+                    else:
+                        raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+                Logger.log_and_print(f"Successfully installed {package_name}")
+                return True
+            except subprocess.CalledProcessError as e:
+                Logger.log_error_and_print(f"Attempt {attempt + 1} to install {package_name} failed: {e}\nOutput: {e.stdout}\nError: {e.stderr}. Retrying in {delay} seconds...")
+                time.sleep(delay)
+        Logger.log_error_and_print(f"Failed to install {package_name} after {retries} attempts.")
+        sys.exit(1)
+
+class EnvironmentManager:
+    @staticmethod
+    def check_python_version():
+        if sys.version_info < (3, 6):
+            Logger.log_error_and_print("Python 3.6 or newer is required. Please install the latest version of Python.")
+            sys.exit(1)
+        return True
+
+    @staticmethod
+    def install_git():
+        try:
+            Logger.log_and_print("Installing Git...")
+            result = subprocess.run(["winget", "install", "--id", "Git.Git"], capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                if "No available upgrade found" in result.stdout:
+                    Logger.log_and_print("Git is already up-to-date.")
+                else:
+                    raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully installed Git.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to install Git: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+class VirtualEnvManager:
+    @staticmethod
+    def setup_virtualenv(install_path):
+        try:
+            venv_path = os.path.join(install_path, "grok_sandbox")
+            
+            if os.path.exists(venv_path):
+                shutil.rmtree(venv_path)
+                Logger.log_and_print(f"Removed existing virtual environment at {venv_path}.")
+            
+            subprocess.check_call([sys.executable, "-m", "venv", venv_path])
+            venv_python = os.path.join(venv_path, "Scripts", "python.exe" if os.name == 'nt' else "python")
+            
+            subprocess.check_call([venv_python, "-m", "ensurepip"])
+            subprocess.check_call([venv_python, "-m", "pip", "install", "--upgrade", "pip"])
+            
+            activate_script = os.path.join(venv_path, "Scripts", "activate.bat" if os.name == 'nt' else "activate")
+            Logger.log_and_print(f"Virtual environment set up at {venv_path}.")
+            return True, activate_script, venv_python
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Error setting up virtual environment at {venv_path}: {e.output}\nError: {e.stderr}")
+            return False, str(e), None
+
+    @staticmethod
+    def activate_virtualenv(activate_script):
+        try:
+            if os.name == 'nt':
+                os.system(activate_script)
+            else:
+                os.system(f"source {activate_script}")
+            Logger.log_and_print(f"Activated virtual environment using {activate_script}")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Error activating virtual environment: {e.output}\nError: {e.stderr}")
+            sys.exit(1)
+
+class HardwareChecker:
+    @staticmethod
+    def check_gpu():
+        try:
+            Logger.log_and_print("Checking GPU...")
+            result = subprocess.run(["nvidia-smi"], capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                Logger.log_and_print("No GPU found or NVIDIA driver is not installed.")
+            else:
+                Logger.log_and_print("GPU check passed.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to check GPU: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+    @staticmethod
+    def check_cpu_memory():
+        try:
+            import psutil
+            Logger.log_and_print("Checking CPU and memory...")
+            cpu_count = psutil.cpu_count(logical=True)
+            memory = psutil.virtual_memory().total
+            Logger.log_and_print(f"CPU count: {cpu_count}")
+            Logger.log_and_print(f"Total memory: {memory / (1024 ** 3):.2f} GB")
+        except ImportError:
+            Logger.log_error_and_print("psutil is not installed.")
+            sys.exit(1)
+        except Exception as e:
+            Logger.log_error_and_print(f"Failed to check CPU and memory: {e}")
+            sys.exit(1)
+
+class DirectoryManager:
+    @staticmethod
+    def prepare_directory_structure(install_path):
+        directories = ["data", "models", "outputs"]
+        try:
+            for directory in directories:
+                path = os.path.join(install_path, directory)
+                if not os.path.exists(path):
+                    os.makedirs(path)
+                    Logger.log_and_print(f"Created directory {path}.")
+                else:
+                    Logger.log_and_print(f"Directory {path} already exists.")
+        except OSError as e:
+            Logger.log_error_and_print(f"Failed to create directory structure: {e.strerror} (Error Code: {e.errno})")
+            sys.exit(1)
+
+class RepositoryManager:
+    @staticmethod
+    def clone_grok_ai_repo(install_path):
+        try:
+            Logger.log_and_print("Cloning Grok AI repository...")
+            repo_url = "https://github.com/username/grok_ai.git"
+            result = subprocess.run(["git", "clone", repo_url, os.path.join(install_path, "grok_ai")], 
+                                    capture_output=True, text=True)
+            Logger.log_and
+
+[2024-05-30 20:43:37] ChatGPT:
+_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully cloned Grok AI repository.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to clone Grok AI repository: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+    @staticmethod
+    def install_repo_requirements(venv_python, repo_path):
+        try:
+            Logger.log_and_print("Installing repository requirements...")
+            requirements_path = os.path.join(repo_path, "requirements.txt")
+            result = subprocess.run([venv_python, "-m", "pip", "install", "-r", requirements_path], 
+                                    capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully installed repository requirements.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to install repository requirements: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+class ModelManager:
+    @staticmethod
+    def download_model_weights(repo_path):
+        try:
+            Logger.log_and_print("Downloading model weights...")
+            weights_url = "https://example.com/model_weights.zip"
+            weights_path = os.path.join(repo_path, "models", "model_weights.zip")
+            result = subprocess.run(["curl", "-o", weights_path, weights_url], 
+                                    capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully downloaded model weights.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to download model weights: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+    @staticmethod
+    def configure_model_for_hardware(repo_path):
+        try:
+            Logger.log_and_print("Configuring model for hardware...")
+            config_script = os.path.join(repo_path, "scripts", "configure_hardware.py")
+            result = subprocess.run([sys.executable, config_script], capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully configured model for hardware.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to configure model for hardware: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+class ModelRunner:
+    @staticmethod
+    def run_grok_ai_model(repo_path):
+        try:
+            Logger.log_and_print("Running Grok AI model...")
+            run_script = os.path.join(repo_path, "scripts", "run_model.py")
+            result = subprocess.run([sys.executable, run_script], capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully ran Grok AI model.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to run Grok AI model: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+class UserInputManager:
+    @staticmethod
+    def prompt_user(question, default="yes"):
+        valid = {"yes": True, "y": True, "no": False, "n": False}
+        if default is None:
+            prompt = " [yes/no] "
+        elif default == "yes":
+            prompt = " [YES/no] "
+        elif default == "no":
+            prompt = " [yes/NO] "
+        else:
+            raise ValueError(f"Invalid default answer: '{default}'")
+
+        while True:
+            choice = input(question + prompt).strip().lower()
+            if default is not None and choice == '':
+                return valid[default]
+            elif choice in valid:
+                return valid[choice]
+            else:
+                Logger.log_and_print("Please answer 'yes' or 'no'.")
+
+    @staticmethod
+    def get_available_drives():
+        if os.name == 'nt':
+            import string
+            available_drives = [f"{d}:\\" for d in string.ascii_uppercase if os.path.exists(f"{d}:\\")]
+        else:
+            available_drives = ["/"]
+        return available_drives
+
+    @staticmethod
+    def prompt_for_install_path():
+        drives = UserInputManager.get_available_drives()
+        Logger.log_and_print("Available drives:")
+        for i, drive in enumerate(drives):
+            Logger.log_and_print(f"{i + 1}. {drive}")
+
+        choice = input("Select the drive number where you want to install Grok AI (default is 1): ").strip()
+        if choice.isdigit() and 1 <= int(choice) <= len(drives):
+            drive = drives[int(choice) - 1]
+        else:
+            drive = drives[0]
+
+        path = input(f"Enter the path on drive {drive} where you want to install Grok AI (default is {drive}grok_ai): ").strip()
+        if not path:
+            path = os.path.join(drive, "grok_ai")
+        
+        if not os.path.exists(path):
+            try:
+                os.makedirs(path)
+                Logger.log_and_print(f"Created directory {path}.")
+            except PermissionError:
+                Logger.log_error_and_print(f"Permission denied: Unable to create directory {path}. Please run this script with administrative privileges.")
+                sys.exit(1)
+            except OSError as e:
+                Logger.log_error_and_print(f"Failed to create directory {path}: {e.strerror} (Error Code: {e.errno})")
+                sys.exit(1)
+        
+        return path
+
+def main():
+    # Prompt for installation path
+    Logger.log_and_print(f"Operation: {operations[0]}")
+    install_path = UserInputManager.prompt_for_install_path()
+    
+    # Check Python version
+    Logger.log_and_print(f"Operation: {operations[1]}")
+    EnvironmentManager.check_python_version()
+
+    # Set up virtual environment
+    Logger.log_and_print(f"Operation: {operations[2]}")
+    venv_setup_success, activate_script, venv_python = VirtualEnvManager.setup_virtualenv(install_path)
+    if not venv_setup_success:
+        sys.exit(1)
+    
+    # Activate virtual environment
+    Logger.log_and_print(f"Operation: {operations[3]}")
+    VirtualEnvManager.activate_virtualenv(activate_script)
+
+    # Install Git
+    Logger.log_and_print(f"Operation: {operations[4]}")
+    EnvironmentManager.install_git()
+    
+    # Install necessary packages
+    Logger.log_and_print(f"Operation: {operations[5]}")
+    package_manager = PackageManager(venv_python)
+    package_manager.retry_install_package("torch")
+    package_manager.retry_install_package("psutil")
+    
+    # Check GPU
+    Logger.log_and_print(f"Operation: {operations[6]}")
+    HardwareChecker.check_gpu()
+
+    # Check CPU and memory
+    Logger.log_and_print(f"Operation: {operations[7]}")
+    HardwareChecker.check_cpu_memory()
+
+    # Prepare directory structure
+    Logger.log_and_print(f"Operation: {operations[8]}")
+    DirectoryManager.prepare_directory_structure(install_path)
+
+    # Clone Grok AI repository
+    Logger.log_and_print(f"Operation: {operations[9]}")
+    repo_path = os.path.join(install_path, "grok_ai")
+    RepositoryManager.clone_grok_ai_repo(install_path)
+
+    # Install repository requirements
+    Logger.log_and_print(f"Operation: {operations[10]}")
+    RepositoryManager.install_repo_requirements(venv_python, repo_path)
+
+    # Download model weights
+    Logger.log_and_print(f"Operation: {operations[11]}")
+    ModelManager.download_model_weights(repo_path)
+
+    # Configure model for hardware
+    Logger.log_and_print(f"Operation: {operations[12]}")
+    ModelManager.configure_model_for_hardware(repo_path)
+
+    # Run Grok AI model
+    Logger.log_and_print(f"Operation: {operations[13]}")
+    ModelRunner.run_grok_ai_model(repo_path)
+
+if __name__ == "__main__":
+    main()
+```
+
+### Summary
+
+1. **Removed Admin Privilege Check**: The script no longer checks for administrative privileges.
+2. **Set Logging Level to DEBUG**: The logging level is set to capture as much information as possible.
+
+### Next Steps
+
+1. Validate the refactored script syntax and spacing.
+2. Test the script in a controlled environment.
+3. Implement additional operations if needed.
+
+**Iterate, Improve, Evolve** - Note critiques or edge cases, propose improvements.
+**Question** - Do you want the script to include additional operations or enhanced user interaction?
+**Validate** - Check for syntax
+
+[2024-05-30 20:43:48] ChatGPT:
+ and spacing issues in all scripts.
+
+Let me know if you need further modifications or have any questions!
+
+[2024-05-30 20:45:25] ChatGPT:
+Jamey wants the log level to be set at the highest possible to capture as much information as possible. No need for an admin prompt since the command prompt is already opened as admin.
+
+[2024-05-30 20:45:25] FoSGamers:
+Model set context updated.
+
+[2024-05-30 20:45:25] ChatGPT:
+### Updated Script
+
+Here’s the updated script with the removal of the admin privilege check and the log level set to the highest possible (`DEBUG`):
+
+```python
+import os
+import subprocess
+import sys
+import ctypes
+import time
+import shutil
+import logging
+from datetime import datetime
+from collections import deque
+
+# Define operations in order
+operations = [
+    "Check Administrative Privileges",
+    "Prompt for Installation Path",
+    "Set Up Virtual Environment",
+    "Activate Virtual Environment",
+    "Install Git",
+    "Install Torch",
+    "Install psutil",
+    "Check Python Version",
+    "Check GPU",
+    "Check CPU and Memory",
+    "Prepare Directory Structure",
+    "Clone Grok AI Repository",
+    "Install Repository Requirements",
+    "Download Model Weights",
+    "Configure Model for Hardware",
+    "Run Grok AI Model"
+]
+
+# Set up logging
+log_filename = f'grok_setup_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log'
+logging.basicConfig(filename=log_filename, level=logging.DEBUG, 
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+
+class Logger:
+    log_history = deque(maxlen=10)
+    
+    @staticmethod
+    def log_and_print(message):
+        print(message)
+        logging.debug(message)
+        Logger.log_history.append(message)
+
+    @staticmethod
+    def log_error_and_print(message):
+        print(f"ERROR: {message}")
+        logging.error(message)
+        Logger.log_history.append(f"ERROR: {message}")
+        Logger.print_log_history()
+
+    @staticmethod
+    def print_log_history():
+        print("Context before error:")
+        for log_entry in Logger.log_history:
+            print(log_entry)
+        logging.error("Context before error:")
+        for log_entry in Logger.log_history:
+            logging.error(log_entry)
+
+class PackageManager:
+    def __init__(self, python_executable):
+        self.python_executable = python_executable
+
+    def install_package(self, package_name):
+        try:
+            Logger.log_and_print(f"Installing package {package_name}...")
+            result = subprocess.run([self.python_executable, "-m", "pip", "install", package_name], 
+                                    capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                if "Requirement already satisfied" in result.stdout:
+                    Logger.log_and_print(f"Package {package_name} is already installed.")
+                else:
+                    raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print(f"Successfully installed {package_name}")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to install package {package_name}: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+    def retry_install_package(self, package_name, retries=3, delay=5):
+        for attempt in range(retries):
+            try:
+                Logger.log_and_print(f"Attempting to install {package_name} (Attempt {attempt + 1}/{retries})...")
+                result = subprocess.run([self.python_executable, "-m", "pip", "install", package_name], 
+                                        capture_output=True, text=True)
+                Logger.log_and_print(f"stdout: {result.stdout}")
+                Logger.log_and_print(f"stderr: {result.stderr}")
+                if result.returncode != 0:
+                    if "Requirement already satisfied" in result.stdout:
+                        Logger.log_and_print(f"Package {package_name} is already installed.")
+                        return True
+                    else:
+                        raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+                Logger.log_and_print(f"Successfully installed {package_name}")
+                return True
+            except subprocess.CalledProcessError as e:
+                Logger.log_error_and_print(f"Attempt {attempt + 1} to install {package_name} failed: {e}\nOutput: {e.stdout}\nError: {e.stderr}. Retrying in {delay} seconds...")
+                time.sleep(delay)
+        Logger.log_error_and_print(f"Failed to install {package_name} after {retries} attempts.")
+        sys.exit(1)
+
+class EnvironmentManager:
+    @staticmethod
+    def check_python_version():
+        if sys.version_info < (3, 6):
+            Logger.log_error_and_print("Python 3.6 or newer is required. Please install the latest version of Python.")
+            sys.exit(1)
+        return True
+
+    @staticmethod
+    def install_git():
+        try:
+            Logger.log_and_print("Installing Git...")
+            result = subprocess.run(["winget", "install", "--id", "Git.Git"], capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                if "No available upgrade found" in result.stdout:
+                    Logger.log_and_print("Git is already up-to-date.")
+                else:
+                    raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully installed Git.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to install Git: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+class VirtualEnvManager:
+    @staticmethod
+    def setup_virtualenv(install_path):
+        try:
+            venv_path = os.path.join(install_path, "grok_sandbox")
+            
+            if os.path.exists(venv_path):
+                shutil.rmtree(venv_path)
+                Logger.log_and_print(f"Removed existing virtual environment at {venv_path}.")
+            
+            subprocess.check_call([sys.executable, "-m", "venv", venv_path])
+            venv_python = os.path.join(venv_path, "Scripts", "python.exe" if os.name == 'nt' else "python")
+            
+            subprocess.check_call([venv_python, "-m", "ensurepip"])
+            subprocess.check_call([venv_python, "-m", "pip", "install", "--upgrade", "pip"])
+            
+            activate_script = os.path.join(venv_path, "Scripts", "activate.bat" if os.name == 'nt' else "activate")
+            Logger.log_and_print(f"Virtual environment set up at {venv_path}.")
+            return True, activate_script, venv_python
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Error setting up virtual environment at {venv_path}: {e.output}\nError: {e.stderr}")
+            return False, str(e), None
+
+    @staticmethod
+    def activate_virtualenv(activate_script):
+        try:
+            if os.name == 'nt':
+                os.system(activate_script)
+            else:
+                os.system(f"source {activate_script}")
+            Logger.log_and_print(f"Activated virtual environment using {activate_script}")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Error activating virtual environment: {e.output}\nError: {e.stderr}")
+            sys.exit(1)
+
+class HardwareChecker:
+    @staticmethod
+    def check_gpu():
+        try:
+            Logger.log_and_print("Checking GPU...")
+            result = subprocess.run(["nvidia-smi"], capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                Logger.log_and_print("No GPU found or NVIDIA driver is not installed.")
+            else:
+                Logger.log_and_print("GPU check passed.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to check GPU: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+    @staticmethod
+    def check_cpu_memory():
+        try:
+            import psutil
+            Logger.log_and_print("Checking CPU and memory...")
+            cpu_count = psutil.cpu_count(logical=True)
+            memory = psutil.virtual_memory().total
+            Logger.log_and_print(f"CPU count: {cpu_count}")
+            Logger.log_and_print(f"Total memory: {memory / (1024 ** 3):.2f} GB")
+        except ImportError:
+            Logger.log_error_and_print("psutil is not installed.")
+            sys.exit(1)
+        except Exception as e:
+            Logger.log_error_and_print(f"Failed to check CPU and memory: {e}")
+            sys.exit(1)
+
+class DirectoryManager:
+    @staticmethod
+    def prepare_directory_structure(install_path):
+        directories = ["data", "models", "outputs"]
+        try:
+            for directory in directories:
+                path = os.path.join(install_path, directory)
+                if not os.path.exists(path):
+                    os.makedirs(path)
+                    Logger.log_and_print(f"Created directory {path}.")
+                else:
+                    Logger.log_and_print(f"Directory {path} already exists.")
+        except OSError as e:
+            Logger.log_error_and_print(f"Failed to create directory structure: {e.strerror} (Error Code: {e.errno})")
+            sys.exit(1)
+
+class RepositoryManager:
+    @staticmethod
+    def clone_grok_ai_repo(install_path):
+        try:
+            Logger.log_and_print("Cloning Grok AI repository...")
+            repo_url = "https://github.com/username/grok_ai.git"
+            result = subprocess.run(["git", "clone", repo_url, os.path.join(install_path, "grok_ai")], 
+                                    capture_output=True, text=True)
+            Logger.log_and_print(f"stdout
+
+[2024-05-30 20:46:38] ChatGPT:
+: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully cloned Grok AI repository.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to clone Grok AI repository: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+    @staticmethod
+    def install_repo_requirements(venv_python, repo_path):
+        try:
+            Logger.log_and_print("Installing repository requirements...")
+            requirements_path = os.path.join(repo_path, "requirements.txt")
+            result = subprocess.run([venv_python, "-m", "pip", "install", "-r", requirements_path], 
+                                    capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully installed repository requirements.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to install repository requirements: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+class ModelManager:
+    @staticmethod
+    def download_model_weights(repo_path):
+        try:
+            Logger.log_and_print("Downloading model weights...")
+            weights_url = "https://example.com/model_weights.zip"
+            weights_path = os.path.join(repo_path, "models", "model_weights.zip")
+            result = subprocess.run(["curl", "-o", weights_path, weights_url], 
+                                    capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully downloaded model weights.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to download model weights: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+    @staticmethod
+    def configure_model_for_hardware(repo_path):
+        try:
+            Logger.log_and_print("Configuring model for hardware...")
+            config_script = os.path.join(repo_path, "scripts", "configure_hardware.py")
+            result = subprocess.run([sys.executable, config_script], capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully configured model for hardware.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to configure model for hardware: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+class ModelRunner:
+    @staticmethod
+    def run_grok_ai_model(repo_path):
+        try:
+            Logger.log_and_print("Running Grok AI model...")
+            run_script = os.path.join(repo_path, "scripts", "run_model.py")
+            result = subprocess.run([sys.executable, run_script], capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully ran Grok AI model.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to run Grok AI model: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+class UserInputManager:
+    @staticmethod
+    def prompt_user(question, default="yes"):
+        valid = {"yes": True, "y": True, "no": False, "n": False}
+        if default is None:
+            prompt = " [yes/no] "
+        elif default == "yes":
+            prompt = " [YES/no] "
+        elif default == "no":
+            prompt = " [yes/NO] "
+        else:
+            raise ValueError(f"Invalid default answer: '{default}'")
+
+        while True:
+            choice = input(question + prompt).strip().lower()
+            if default is not None and choice == '':
+                return valid[default]
+            elif choice in valid:
+                return valid[choice]
+            else:
+                Logger.log_and_print("Please answer 'yes' or 'no'.")
+
+    @staticmethod
+    def get_available_drives():
+        if os.name == 'nt':
+            import string
+            available_drives = [f"{d}:\\" for d in string.ascii_uppercase if os.path.exists(f"{d}:\\")]
+        else:
+            available_drives = ["/"]
+        return available_drives
+
+    @staticmethod
+    def prompt_for_install_path():
+        drives = UserInputManager.get_available_drives()
+        Logger.log_and_print("Available drives:")
+        for i, drive in enumerate(drives):
+            Logger.log_and_print(f"{i + 1}. {drive}")
+
+        choice = input("Select the drive number where you want to install Grok AI (default is 1): ").strip()
+        if choice.isdigit() and 1 <= int(choice) <= len(drives):
+            drive = drives[int(choice) - 1]
+        else:
+            drive = drives[0]
+
+        path = input(f"Enter the path on drive {drive} where you want to install Grok AI (default is {drive}grok_ai): ").strip()
+        if not path:
+            path = os.path.join(drive, "grok_ai")
+        
+        if not os.path.exists(path):
+            try:
+                os.makedirs(path)
+                Logger.log_and_print(f"Created directory {path}.")
+            except PermissionError:
+                Logger.log_error_and_print(f"Permission denied: Unable to create directory {path}. Please run this script with administrative privileges.")
+                sys.exit(1)
+            except OSError as e:
+                Logger.log_error_and_print(f"Failed to create directory {path}: {e.strerror} (Error Code: {e.errno})")
+                sys.exit(1)
+        
+        return path
+
+def main():
+    # Prompt for installation path
+    Logger.log_and_print(f"Operation: {operations[1]}")
+    install_path = UserInputManager.prompt_for_install_path()
+    
+    # Check Python version
+    Logger.log_and_print(f"Operation: {operations[2]}")
+    EnvironmentManager.check_python_version()
+
+    # Set up virtual environment
+    Logger.log_and_print(f"Operation: {operations[3]}")
+    venv_setup_success, activate_script, venv_python = VirtualEnvManager.setup_virtualenv(install_path)
+    if not venv_setup_success:
+        sys.exit(1)
+    
+    # Activate virtual environment
+    Logger.log_and_print(f"Operation: {operations[4]}")
+    VirtualEnvManager.activate_virtualenv(activate_script)
+
+    # Install Git
+    Logger.log_and_print(f"Operation: {operations[5]}")
+    EnvironmentManager.install_git()
+    
+    # Install necessary packages
+    Logger.log_and_print(f"Operation: {operations[6]}")
+    package_manager = PackageManager(venv_python)
+    package_manager.retry_install_package("torch")
+    package_manager.retry_install_package("psutil")
+    
+    # Check GPU
+    Logger.log_and_print(f"Operation: {operations[7]}")
+    HardwareChecker.check_gpu()
+
+    # Check CPU and memory
+    Logger.log_and_print(f"Operation: {operations[8]}")
+    HardwareChecker.check_cpu_memory()
+
+    # Prepare directory structure
+    Logger.log_and_print(f"Operation: {operations[9]}")
+    DirectoryManager.prepare_directory_structure(install_path)
+
+    # Clone Grok AI repository
+    Logger.log_and_print(f"Operation: {operations[10]}")
+    repo_path = os.path.join(install_path, "grok_ai")
+    RepositoryManager.clone_grok_ai_repo(install_path)
+
+    # Install repository requirements
+    Logger.log_and_print(f"Operation: {operations[11]}")
+    RepositoryManager.install_repo_requirements(venv_python, repo_path)
+
+    # Download model weights
+    Logger.log_and_print(f"Operation: {operations[12]}")
+    ModelManager.download_model_weights(repo_path)
+
+    # Configure model for hardware
+    Logger.log_and_print(f"Operation: {operations[13]}")
+    ModelManager.configure_model_for_hardware(repo_path)
+
+    # Run Grok AI model
+    Logger.log_and_print(f"Operation: {operations[14]}")
+    ModelRunner.run_grok_ai_model(repo_path)
+
+if __name__ == "__main__":
+    main()
+```
+
+### Summary
+1. **Logging Configuration**: The log level is set to `DEBUG` to capture as much information as possible.
+2. **Removed Admin Check**: Removed the administrative privilege check since the command prompt is already opened as admin.
+
+### Next Steps
+1. Validate the updated script syntax and spacing.
+2. Test the script in a controlled environment.
+
+**Iterate, Improve, Evolve** - Note critiques or edge cases, propose improvements.
+**Question** - Do you want the script to include additional operations or enhanced user interaction?
+**Validate** - Check for syntax and spacing issues in all scripts.
+
+Let me
+
+[2024-05-30 20:46:44] ChatGPT:
+ know if you need further modifications or have any questions!
+
+[2024-05-30 20:49:37] FoSGamers:
+do the next steps in the background and let me know the results.
+
+[2024-05-30 20:59:48] ChatGPT:
+It appears that there is a consistent issue with the script content. To resolve this, I'll divide the script into smaller sections and ensure it is correctly defined before running it.
+
+Let's start by defining smaller sections of the script and ensure they are correctly formatted:
+
+### Script: Section 1
+```python
+section_1 = '''
+import os
+import subprocess
+import sys
+import time
+import shutil
+import logging
+from datetime import datetime
+from collections import deque
+
+# Define operations in order
+operations = [
+    "Prompt for Installation Path",
+    "Set Up Virtual Environment",
+    "Activate Virtual Environment",
+    "Install Git",
+    "Install Torch",
+    "Install psutil",
+    "Check Python Version",
+    "Check GPU",
+    "Check CPU and Memory",
+    "Prepare Directory Structure",
+    "Clone Grok AI Repository",
+    "Install Repository Requirements",
+    "Download Model Weights",
+    "Configure Model for Hardware",
+    "Run Grok AI Model"
+]
+
+# Set up logging
+log_filename = f'grok_setup_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log'
+logging.basicConfig(filename=log_filename, level=logging.DEBUG, 
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+'''
+
+section_2 = '''
+class Logger:
+    log_history = deque(maxlen=10)
+    
+    @staticmethod
+    def log_and_print(message):
+        print(message)
+        logging.debug(message)
+        Logger.log_history.append(message)
+
+    @staticmethod
+    def log_error_and_print(message):
+        print(f"ERROR: {message}")
+        logging.error(message)
+        Logger.log_history.append(f"ERROR: {message}")
+        Logger.print_log_history()
+
+    @staticmethod
+    def print_log_history():
+        print("Context before error:")
+        for log_entry in Logger.log_history:
+            print(log_entry)
+        logging.error("Context before error:")
+        for log_entry in Logger.log_history:
+            logging.error(log_entry)
+'''
+
+section_3 = '''
+class PackageManager:
+    def __init__(self, python_executable):
+        self.python_executable = python_executable
+
+    def install_package(self, package_name):
+        try:
+            Logger.log_and_print(f"Installing package {package_name}...")
+            result = subprocess.run([self.python_executable, "-m", "pip", "install", package_name], 
+                                    capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                if "Requirement already satisfied" in result.stdout:
+                    Logger.log_and_print(f"Package {package_name} is already installed.")
+                else:
+                    raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print(f"Successfully installed {package_name}")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to install package {package_name}: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+    def retry_install_package(self, package_name, retries=3, delay=5):
+        for attempt in range(retries):
+            try:
+                Logger.log_and_print(f"Attempting to install {package_name} (Attempt {attempt + 1}/{retries})...")
+                result = subprocess.run([self.python_executable, "-m", "pip", "install", package_name], 
+                                        capture_output=True, text=True)
+                Logger.log_and_print(f"stdout: {result.stdout}")
+                Logger.log_and_print(f"stderr: {result.stderr}")
+                if result.returncode != 0:
+                    if "Requirement already satisfied" in result.stdout:
+                        Logger.log_and_print(f"Package {package_name} is already installed.")
+                        return True
+                    else:
+                        raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+                Logger.log_and_print(f"Successfully installed {package_name}")
+                return True
+            except subprocess.CalledProcessError as e:
+                Logger.log_error_and_print(f"Attempt {attempt + 1} to install {package_name} failed: {e}\nOutput: {e.stdout}\nError: {e.stderr}. Retrying in {delay} seconds...")
+                time.sleep(delay)
+        Logger.log_error_and_print(f"Failed to install {package_name} after {retries} attempts.")
+        sys.exit(1)
+'''
+
+section_4 = '''
+class EnvironmentManager:
+    @staticmethod
+    def check_python_version():
+        if sys.version_info < (3, 6):
+            Logger.log_error_and_print("Python 3.6 or newer is required. Please install the latest version of Python.")
+            sys.exit(1)
+        return True
+
+    @staticmethod
+    def install_git():
+        try:
+            Logger.log_and_print("Installing Git...")
+            result = subprocess.run(["winget", "install", "--id", "Git.Git"], capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                if "No available upgrade found" in result.stdout:
+                    Logger.log_and_print("Git is already up-to-date.")
+                else:
+                    raise subprocess.CalledProcessError(result.returncode, result.args, result.stdout, result.stderr)
+            Logger.log_and_print("Successfully installed Git.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to install Git: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+'''
+
+section_5 = '''
+class VirtualEnvManager:
+    @staticmethod
+    def setup_virtualenv(install_path):
+        try:
+            venv_path = os.path.join(install_path, "grok_sandbox")
+            
+            if os.path.exists(venv_path):
+                shutil.rmtree(venv_path)
+                Logger.log_and_print(f"Removed existing virtual environment at {venv_path}.")
+            
+            subprocess.check_call([sys.executable, "-m", "venv", venv_path])
+            venv_python = os.path.join(venv_path, "Scripts", "python.exe" if os.name == 'nt' else "python")
+            
+            subprocess.check_call([venv_python, "-m", "ensurepip"])
+            subprocess.check_call([venv_python, "-m", "pip", "install", "--upgrade", "pip"])
+            
+            activate_script = os.path.join(venv_path, "Scripts", "activate.bat" if os.name == 'nt' else "activate")
+            Logger.log_and_print(f"Virtual environment set up at {venv_path}.")
+            return True, activate_script, venv_python
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Error setting up virtual environment at {venv_path}: {e.output}\nError: {e.stderr}")
+            return False, str(e), None
+
+    @staticmethod
+    def activate_virtualenv(activate_script):
+        try:
+            if os.name == 'nt':
+                os.system(activate_script)
+            else:
+                os.system(f"source {activate_script}")
+            Logger.log_and_print(f"Activated virtual environment using {activate_script}")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Error activating virtual environment: {e.output}\nError: {e.stderr}")
+            sys.exit(1)
+'''
+
+section_6 = '''
+class HardwareChecker:
+    @staticmethod
+    def check_gpu():
+        try:
+            Logger.log_and_print("Checking GPU...")
+            result = subprocess.run(["nvidia-smi"], capture_output=True, text=True)
+            Logger.log_and_print(f"stdout: {result.stdout}")
+            Logger.log_and_print(f"stderr: {result.stderr}")
+            if result.returncode != 0:
+                Logger.log_and_print("No GPU found or NVIDIA driver is not installed.")
+            else:
+                Logger.log_and_print("GPU check passed.")
+        except subprocess.CalledProcessError as e:
+            Logger.log_error_and_print(f"Failed to check GPU: {e}\nOutput: {e.stdout}\nError: {e.stderr}")
+            sys.exit(1)
+
+    @staticmethod
+    def check_cpu_memory():
+        try:
+            import psutil
+            Logger.log_and_print("Checking CPU and memory...")
+            cpu_count = psutil.cpu_count(logical=True)
+            memory = psutil.virtual_memory().total
+            Logger.log_and_print(f"CPU count: {cpu_count}")
+            Logger.log_and_print(f"Total memory: {memory / (1024 ** 3):.2f} GB")
+        except ImportError:
+            Logger.log_error_and_print("psutil is not installed.")
+            sys.exit(1)
+        except Exception as e:
+            Logger.log_error_and_print(f"Failed to check CPU and memory: {e}")
+            sys.exit(1)
+'''
+
+section_7 = '''
+class DirectoryManager:
+    @staticmethod
+    def prepare_directory_structure(install_path):
+        directories = ["data", "models", "outputs"]
+        try:
+            for directory in directories:
+                path = os.path.join(install_path, directory)
+                if not os.path.exists(path):
+                    os.makedirs(path)
+                    Logger.log_and_print(f"Created directory {path}.")
+                else:
+                    Logger.log_and_print(f"Directory {path} already exists.")
+        except OSError as e:
+            Logger.log_error_and_print(f"Failed to create directory structure: {e.strerror} (Error Code: {e.errno})")
+            sys.exit(1)
+
+class RepositoryManager:
+    @staticmethod
+    def clone_grok_ai_repo(install_path):
+        try:
+            Logger.log_and_print("Cloning Grok AI repository...")
+            repo

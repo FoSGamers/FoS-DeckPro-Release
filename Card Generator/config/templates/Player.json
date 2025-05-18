@@ -1,0 +1,68 @@
+{
+  "card_type": "players",
+  "font_settings": {
+    "title": {
+      "font_file": "RubikGlitch-Regular.ttf",
+      "size": 100,
+      "color": "#000000",
+      "x": 100,
+      "y": 60,
+      "bold": true,
+      "italic": false,
+      "all_caps": true,
+      "underline": false,
+      "letter_spacing": 1,
+      "line_spacing": 0,
+      "shadow": false
+    },
+    "subtype": {
+      "font_file": "RubikGemstones-Regular.ttf",
+      "size": 40,
+      "color": "#333333",
+      "x": 100,
+      "y": 180,
+      "bold": false,
+      "italic": false,
+      "all_caps": false,
+      "underline": false,
+      "letter_spacing": 0,
+      "line_spacing": 0,
+      "shadow": false
+    },
+    "body": {
+      "font_file": "AROneSans-Regular.ttf",
+      "size": 36,
+      "color": "#222222",
+      "x": 60,
+      "y": 400,
+      "bold": false,
+      "italic": false,
+      "all_caps": false,
+      "underline": false,
+      "letter_spacing": 0,
+      "line_spacing": 0,
+      "shadow": false
+    },
+    "stats": {
+      "font_file": "AROneSans-Regular.ttf",
+      "size": 28,
+      "color": "#111111",
+      "x": 60,
+      "y": 500,
+      "bold": false,
+      "italic": false,
+      "all_caps": false,
+      "underline": false,
+      "letter_spacing": 0,
+      "line_spacing": 0,
+      "shadow": false
+    }
+  },
+  "checked_fields": [
+    "Stats",
+    "Equipment",
+    "Buffs"
+  ],
+  "layout_settings": {},
+  "style_settings": {}
+}

@@ -1,0 +1,10 @@
+{
+  "pauper_edh": {
+    "budget": 25.0,
+    "singleton": true
+  },
+  "pauper_60": {
+    "budget": 25.0,
+    "singleton": false
+  }
+}

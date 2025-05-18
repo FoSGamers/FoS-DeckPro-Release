@@ -1,0 +1,17 @@
+[
+  {
+    "command": "!test",
+    "response": "test",
+    "category": "test"
+  },
+  {
+    "command": "!test2",
+    "response": "test",
+    "category": "test"
+  },
+  {
+    "command": "!test3",
+    "response": "test",
+    "category": "test"
+  }
+]

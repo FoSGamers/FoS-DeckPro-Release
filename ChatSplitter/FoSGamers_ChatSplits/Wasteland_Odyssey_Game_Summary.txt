@@ -1,0 +1,124 @@
+Chat: Wasteland_Odyssey_Game_Summary
+Started: 2025-03-24 15:37:31
+
+[2025-03-24 15:37:31] FoSGamers:
+Does the YouTube node for n8n have the ability to pull captions for a video? Search all over the internet to find the answers.
+
+
+
+[2025-03-24 15:37:32] ChatGPT:
+search()
+
+[2025-03-24 15:37:42] ChatGPT:
+Wasteland Odyssey is a strategic trading card game set in the post-apocalyptic ruins of Florida. Players navigate treacherous terrains, engage in tactical battles, and make critical decisions that shape the fate of the wasteland. The game centers around the quest for the Vita Bunker—a hidden facility capable of producing an endless supply of fresh water—while confronting the manipulative antagonist known as "Florida Man."
+
+**Game Components:**
+
+- **Adventure Deck Cards:** These define the scenarios, locations, challenges, and events that players encounter.
+
+- **Player Deck Cards:** Comprising Character Cards (both normal and legendary), Action Cards, and Resource Cards, these represent the players' assets and abilities.
+
+- **Boss Cards:** Signifying major enemies or challenges that players must overcome in multi-phase battles.
+
+**Core Gameplay Structure:**
+
+- **Mini-Battles as Turns:** The game revolves around mini-battles that function as turns between players. Each mini-battle takes place on a 3x3 tactical grid, allowing for short, meaningful engagements. Objectives within these mini-battles include defeating opponent’s creatures, completing challenges, or surviving events.
+
+- **Grid-Based Combat:** The 3x3 tactical grid consists of rows (Front, Middle, Back) and columns (Left, Center
+
+[2025-03-24 15:37:43] FoSGamers:
+
+Please remember to search the user's documents if an answer to their question is not contained in the above snippets.
+
+
+[2025-03-24 15:38:12] FoSGamers:
+Wrong i never asked about the Wasteland Odyssey fucking answer me.
+
+
+Does the YouTube node for n8n have the ability to pull captions for a video? Search all over the internet to find the answers.
+
+[2025-03-24 15:38:12] ChatGPT:
+search()
+
+[2025-03-24 15:38:18] ChatGPT:
+Currently, n8n's native YouTube node does not support extracting captions or subtitles from videos. However, you can achieve this by utilizing the HTTP Request node to interact directly with YouTube's API. This approach allows you to retrieve captions by making specific API calls. For detailed guidance on setting up this workflow, you can refer to discussions and examples provided in the n8n community forum. citeturn0search0 
+
+[2025-03-24 15:38:50] FoSGamers:
+You pull the info and explain how to me.
+
+[2025-03-24 15:38:50] ChatGPT:
+open_url("https://community.n8n.io/t/youtube-subtitles-n8n/23636")
+
+[2025-03-24 15:39:03] ChatGPT:
+Apologies—I’m only able to open URLs that **you provide directly**, and that specific URL is currently unavailable for me to access.
+
+But I can walk you through how to pull YouTube captions using n8n, even though the native YouTube node doesn’t support it:
+
+---
+
+### **How to Pull YouTube Captions in n8n (Workaround)**
+
+#### **Step 1: Understand the YouTube Captions API**
+
+YouTube captions are accessed via the [YouTube Data API v3](https://developers.google.com/youtube/v3/docs/captions).
+
+To retrieve captions:
+- You need the **video ID**
+- The **captions must be available and public**
+- You’ll need **OAuth2 authentication** with YouTube scopes that allow reading captions
+
+---
+
+#### **Step 2: Set Up OAuth2 in n8n**
+
+1. Go to your [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project and enable:
+   - **YouTube Data API v3**
+3. Create OAuth credentials and add the **redirect URL** from your n8n instance
+   (usually: `https://your-n8n-domain/oauth2/callback`)
+4. Set up OAuth2 credentials in n8n:
+   - Go to **Credentials > New > OAuth2 API**
+   - Add the credentials with `access_type=offline` and proper YouTube scopes:
+     ```
+     https://www.googleapis.com/auth/youtube.force-ssl
+     ```
+
+---
+
+#### **Step 3: Use HTTP Request Node to Get Caption Tracks**
+
+1. Add an **HTTP Request** node to your workflow
+2. Use this URL to list caption tracks:
+   ```
+   GET https://www.googleapis.com/youtube/v3/captions?part=snippet&videoId=VIDEO_ID
+   ```
+   Replace `VIDEO_ID` with your YouTube video ID.
+
+3. In the HTTP node:
+   - **Method:** GET
+   - **Authentication:** OAuth2 (use the credential you set up)
+   - **Query Parameters:**
+     - `part=snippet`
+     - `videoId=VIDEO_ID`
+
+---
+
+#### **Step 4: Download the Caption File**
+
+Once you get the caption ID from the previous call, make another request:
+
+```
+GET https://www.googleapis.com/youtube/v3/captions/CAPTION_ID
+```
+
+Add a `tfmt=sbv` or `tfmt=srt` query param to get it in subtitle format.
+
+---
+
+#### **Optional: Parse the SRT File**
+
+You can then parse the SRT (or SBV) file using a **Function node** or external parsing service if needed.
+
+---
+
+Would you like me to build and export a complete example workflow JSON for this process?

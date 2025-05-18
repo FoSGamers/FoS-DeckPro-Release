@@ -1,0 +1,36 @@
+{
+    "youtube": {
+        "auth": {
+            "description": "Authenticate with YouTube",
+            "usage": "!youtube auth",
+            "permission_level": "basic",
+            "enabled": true
+        },
+        "list": {
+            "description": "List available streams",
+            "usage": "!youtube list",
+            "permission_level": "basic",
+            "enabled": true
+        },
+        "connect": {
+            "description": "Connect to a stream",
+            "usage": "!youtube connect",
+            "permission_level": "basic",
+            "enabled": true
+        },
+        "disconnect": {
+            "description": "Disconnect from current stream",
+            "usage": "!youtube disconnect",
+            "permission_level": "basic",
+            "enabled": true
+        }
+    },
+    "help": {
+        "help": {
+            "description": "Show help information",
+            "usage": "!help [category]",
+            "permission_level": "basic",
+            "enabled": true
+        }
+    }
+}

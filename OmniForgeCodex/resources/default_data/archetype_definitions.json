@@ -1,0 +1,22 @@
+{
+  "Aggro": {
+    "creature_weight": 0.6,
+    "instant_weight": 0.2,
+    "max_cmc": 4
+  },
+  "Control": {
+    "creature_weight": 0.2,
+    "instant_weight": 0.5,
+    "max_cmc": 6
+  },
+  "Midrange": {
+    "creature_weight": 0.4,
+    "instant_weight": 0.3,
+    "max_cmc": 5
+  },
+  "Combo": {
+    "creature_weight": 0.3,
+    "instant_weight": 0.4,
+    "max_cmc": 5
+  }
+}

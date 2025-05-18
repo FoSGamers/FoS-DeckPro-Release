@@ -1,0 +1,12 @@
+Chat: Side-slipping_Boat_Maneuver
+Started: 2024-12-15 20:06:35
+
+[2024-12-15 20:06:35] FoSGamers:
+What is the correct nautical term for when you crab walk a boat into a dock or anywhere?
+
+[2024-12-15 20:06:41] ChatGPT:
+The correct nautical term for "crab walking" a boat into a dock or another location is **"side-slipping"** or **"walking the boat sideways"**. This maneuver involves using a combination of the boat's thrusters, engines, and rudder to move laterally without significant forward or backward motion. 
+
+For larger vessels equipped with **bow thrusters** and **stern thrusters**, this technique is often referred to as **"thruster maneuvering"**. For smaller boats, it may simply involve skilled use of propulsion and steering to achieve the same effect. 
+
+The term "crabbing" or "crabbing a boat" can also be informally used, but it is less precise in a formal maritime context.

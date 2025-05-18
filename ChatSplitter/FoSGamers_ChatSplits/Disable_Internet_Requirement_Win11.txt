@@ -1,0 +1,184 @@
+Chat: Disable_Internet_Requirement_Win11
+Started: 2025-01-03 06:29:13
+
+[2025-01-03 06:29:13] FoSGamers:
+How do I disable the need to be connected to the internet at all times on new windows 11 so we can still use a computer saying that we don't always have internet
+
+[2025-01-03 06:29:32] ChatGPT:
+Disabling the requirement for a constant internet connection on a Windows 11 computer can be useful if you're in a situation where the internet is not always available. Here’s how you can set up your computer to function offline:
+
+---
+
+### **1. Install Windows 11 Without Internet**
+If you're setting up a new PC, follow these steps during installation:
+
+- **For Home Edition:**
+  1. Disconnect from the internet by disabling Wi-Fi or unplugging the Ethernet cable.
+  2. When prompted to connect to the internet, press `Shift + F10` to open the Command Prompt.
+  3. Type the following command and press Enter:
+     ```
+     taskkill /F /IM oobenetworkconnectionflow.exe
+     ```
+  4. This will skip the internet connection check and allow you to set up a local account.
+
+- **For Pro Edition:**
+  - Select the option to set up a local account during installation, or follow the steps above if needed.
+
+---
+
+### **2. Switch to a Local Account**
+If the system is already set up, but you want to remove the internet dependency:
+
+1. Open **Settings** (`Windows + I`).
+2. Navigate to **Accounts** > **Your Info**.
+3. Under **Account Settings**, click **Sign in with a local account instead**.
+4. Follow the prompts to create a local user account and switch.
+
+---
+
+### **3. Enable Offline Mode for Applications**
+Many apps require an internet connection by default, but you can adjust their settings:
+
+- **Microsoft Office/365:**
+  1. Open an Office app.
+  2. Navigate to **File** > **Account**.
+  3. Sign out of your account to use the apps offline.
+
+- **OneDrive:**
+  1. Right-click the OneDrive icon in the taskbar.
+  2. Select **Pause syncing** to stop constant cloud syncs.
+
+- **Windows Store Apps:**
+  - Use apps that have offline capabilities, or download offline versions.
+
+---
+
+### **4. Disable Online Features**
+1. Open **Settings** > **System** > **Notifications**.
+2. Turn off unnecessary notifications, especially those tied to cloud services.
+3. Disable features like automatic Windows updates to avoid connectivity prompts:
+   - Go to **Settings** > **Windows Update** > **Advanced options**.
+   - Turn off **Download updates over metered connections** and set active hours to prevent automatic updates.
+
+---
+
+### **5. Ensure Key Features Work Offline**
+Some services require configuration to function without an internet connection:
+
+- **Local File Access:**
+  - Save files locally instead of relying on cloud storage.
+
+- **Apps Installation:**
+  - Download apps and updates manually when connected to the internet and install them offline.
+
+---
+
+### **6. Disable Internet-Dependent Features**
+To stop reminders about internet-related features:
+1. Disable Cortana and Bing Search:
+   - Open **Settings** > **Privacy & Security** > **Search Permissions**.
+   - Turn off online search and results.
+2. Turn off telemetry:
+   - Go to **Settings** > **Privacy & Security** > **Diagnostics & Feedback**.
+   - Set the diagnostic data to **Required only**.
+
+---
+
+### **7. Use Offline Tools**
+- Opt for offline versions of software where possible (e.g., LibreOffice instead of Microsoft Office).
+- Keep a USB drive or external storage with necessary installation files for offline use.
+
+By setting up a local account, disabling online-only features, and prioritizing offline tools, you can make your Windows 11 PC fully functional without a constant internet connection.
+
+[2025-01-03 06:31:21] FoSGamers:
+I want to show on, shut off the internet dependency on the local administrator account. It's not allowing me to do it under accounts your info.
+
+[2025-01-03 06:31:38] ChatGPT:
+If you're unable to disable the internet dependency through the **Accounts > Your Info** section on a local administrator account in Windows 11, you can bypass the issue by forcing the system to use a local account and disabling mandatory internet connection checks.
+
+Here’s how to do it step by step:
+
+---
+
+### **1. Switch to a Local Account Using Command Prompt**
+If the GUI does not allow you to switch to a local account, you can force it using the Command Prompt.
+
+1. Press `Windows + R`, type `cmd`, and press `Ctrl + Shift + Enter` to run Command Prompt as Administrator.
+2. Enter the following command to create a new local administrator account:
+   ```
+   net user LocalAdmin /add
+   net localgroup Administrators LocalAdmin /add
+   ```
+   Replace `LocalAdmin` with your desired account name.
+3. Log out of the current account and log into the new local administrator account.
+
+---
+
+### **2. Disable Mandatory Internet Requirement**
+Modify the system settings to prevent internet dependency using Group Policy or the Registry.
+
+#### **Using Group Policy Editor (Pro and Enterprise Editions Only)**
+1. Press `Windows + R`, type `gpedit.msc`, and press Enter.
+2. Navigate to:
+   - **Computer Configuration** > **Administrative Templates** > **System** > **Logon**.
+3. Double-click **Do not display the ‘Getting Started’ screen**.
+4. Set it to **Enabled** and click **OK**.
+5. Restart your system.
+
+#### **Using the Registry Editor (For All Editions)**
+1. Press `Windows + R`, type `regedit`, and press Enter.
+2. Navigate to:
+   - `HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System`.
+3. Right-click and create a **DWORD (32-bit) Value** called `DontRequireOnlineAccount`.
+4. Set its value to `1`.
+5. Restart your computer.
+
+---
+
+### **3. Enable Offline Mode for Existing Administrator Account**
+If you want to ensure that the existing account no longer checks for internet:
+
+1. **Disable Online Account Sync**:
+   - Open **Settings** > **Accounts** > **Sync Your Settings**.
+   - Turn off all sync settings.
+
+2. **Remove Microsoft Account Association**:
+   - Open **Command Prompt as Administrator**.
+   - Type:
+     ```
+     net user Administrator /active:yes
+     ```
+   - Log into the **Administrator** account and switch the connected account to a local account:
+     - Press `Windows + R`, type `lusrmgr.msc`, and press Enter.
+     - Expand **Users**.
+     - Right-click your user account, choose **Properties**, and remove any ties to Microsoft accounts under **Profile**.
+
+---
+
+### **4. Block Internet Access via Firewall**
+To ensure that Windows services do not try to force internet dependency:
+1. Open **Windows Defender Firewall**.
+2. Go to **Advanced Settings** > **Outbound Rules**.
+3. Create a new rule:
+   - Block programs like `MicrosoftEdge.exe` and `oobenetworkconnectionflow.exe`.
+
+---
+
+### **5. Ensure Local Functionality**
+1. **Disable Internet-Dependent Features**:
+   - Turn off Cortana and Bing by going to:
+     - **Settings > Privacy > Search Permissions**.
+   - Set search to local results only.
+2. **Disable Background Services**:
+   - Press `Windows + R`, type `services.msc`, and disable services like:
+     - **Connected User Experiences and Telemetry**.
+     - **Windows Update Medic Service** (if you want manual updates only).
+
+---
+
+### **Final Step: Test the Offline Environment**
+Log out and log back into the account. Verify that:
+1. You can access settings and applications without internet prompts.
+2. Your local administrator account is active, and system features do not require an internet connection.
+
+If these steps are followed correctly, your administrator account will function entirely offline.

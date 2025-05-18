@@ -1,0 +1,22 @@
+{
+    "manifest_version": 3,
+    "name": "FoSBot Whatnot Helper",
+    "version": "0.7.2",
+    "description": "Connects Whatnot live streams to FoSBot",
+    "permissions": [
+        "storage",
+        "activeTab"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": ["https://*.whatnot.com/*"],
+            "js": ["content.js"]
+        }
+    ],
+    "action": {
+        "default_popup": "popup.html"
+    }
+}

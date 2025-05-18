@@ -1,0 +1,11 @@
+# Version History: 0.7.2 -> 0.7.3
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+*.egg-info/
+.env
+data/*
+*.zip

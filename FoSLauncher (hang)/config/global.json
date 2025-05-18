@@ -1,0 +1,24 @@
+{
+    "version": "1.0.0",
+    "global": {
+        "settings": {
+            "theme": "dark",
+            "language": "en",
+            "auto_update": true,
+            "log_level": "INFO"
+        },
+        "security": {
+            "master_code": "FoSGamers2024",
+            "access_codes": {
+                "premium": {
+                    "code": "premium123",
+                    "permissions": ["premium", "basic"]
+                },
+                "basic": {
+                    "code": "basic123",
+                    "permissions": ["basic"]
+                }
+            }
+        }
+    }
+} 

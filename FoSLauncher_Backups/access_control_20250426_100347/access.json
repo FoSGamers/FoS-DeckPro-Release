@@ -1,0 +1,27 @@
+{
+    "version": "1.0.0",
+    "users": {
+        "default": {
+            "modules": {
+                "chatsplitter": {
+                    "unlocked": true,
+                    "features": ["basic_export"]
+                },
+                "chatbot_plus": {
+                    "unlocked": false,
+                    "features": []
+                },
+                "command_manager": {
+                    "unlocked": false,
+                    "features": []
+                }
+            }
+        }
+    },
+    "access_codes": {
+        "master": {
+            "code": "FoSGamers2024",
+            "modules": ["all"]
+        }
+    }
+} 

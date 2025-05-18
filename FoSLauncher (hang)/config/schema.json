@@ -1,0 +1,66 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "version": {
+            "type": "string",
+            "description": "Configuration version"
+        },
+        "global": {
+            "type": "object",
+            "properties": {
+                "settings": {
+                    "type": "object",
+                    "properties": {
+                        "theme": {
+                            "type": "string",
+                            "enum": ["dark", "light"]
+                        },
+                        "language": {
+                            "type": "string"
+                        },
+                        "auto_update": {
+                            "type": "boolean"
+                        },
+                        "log_level": {
+                            "type": "string",
+                            "enum": ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+                        }
+                    },
+                    "required": ["theme", "language", "auto_update", "log_level"]
+                },
+                "security": {
+                    "type": "object",
+                    "properties": {
+                        "master_code": {
+                            "type": "string"
+                        },
+                        "access_codes": {
+                            "type": "object",
+                            "patternProperties": {
+                                "^.*$": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "string"
+                                        },
+                                        "permissions": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    },
+                                    "required": ["code", "permissions"]
+                                }
+                            }
+                        }
+                    },
+                    "required": ["master_code", "access_codes"]
+                }
+            },
+            "required": ["settings", "security"]
+        }
+    },
+    "required": ["version", "global"]
+} 

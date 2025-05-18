@@ -1,0 +1,4 @@
+command,response
+!hello,Hello! Welcome to FoSGamers.
+!help,Available commands: !help, !about, !commands
+!about,FoSGamers Chatbot+ using FastAPI and WebSockets

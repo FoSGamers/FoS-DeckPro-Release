@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoSBot Dashboard</title>
+    <style>
+        /* Basic Reset & Font */
+        *, *::before, *::after { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+            margin: 0; display: flex; flex-direction: column; height: 100vh;
+            background-color: #f0f2f5; font-size: 14px; color: #333;
+        }
+        button { cursor: pointer; padding: 8px 15px; border: none; border-radius: 4px; font-weight: 600; transition: background-color .2s ease; font-size: 13px; line-height: 1.5; }
+        input[type=text], input[type=password], input[type=url] {
+            padding: 9px 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px;
+            width: calc(100% - 24px); margin-bottom: 10px; background-color: #fff;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,.075);
+        }
+        label { display: block; margin-bottom: 4px; font-weight: 600; font-size: .85em; color: #555; }
+        a { color: #007bff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        /* Header */
+        #header { background-color: #343a40; color: #f8f9fa; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,.15); position: sticky; top: 0; z-index: 100;}
+        #header h1 { margin: 0; font-size: 1.5em; font-weight: 600; }
+        #status-indicators { display: flex; flex-wrap: wrap; gap: 10px 15px; font-size: .8em; }
+        #status-indicators span { display: flex; align-items: center; background-color: rgba(255,255,255,0.1); padding: 3px 8px; border-radius: 10px; }
+        .status-light { width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; border: 1px solid rgba(0,0,0,.2); flex-shrink: 0;}
+        .status-text { color: #adb5bd; }
+        .status-disconnected, .status-disabled, .status-stopped, .status-logged_out { background-color: #6c757d; } /* Grey */
+        .status-connected { background-color: #28a745; box-shadow: 0 0 5px #28a745; } /* Green */
+        .status-connecting { background-color: #ffc107; animation: pulseConnect 1.5s infinite ease-in-out; } /* Yellow */
+        .status-error, .status-crashed, .status-auth_error { background-color: #dc3545; animation: pulseError 1s infinite ease-in-out; } /* Red */
+        .status-disconnecting { background-color: #fd7e14; } /* Orange */
+
+        /* Keyframes */
+        @keyframes pulseConnect { 0%, 100% { opacity: .6; } 50% { opacity: 1; } }
+        @keyframes pulseError { 0% { transform: scale(.9); box-shadow: 0 0 3px #dc3545;} 50% { transform: scale(1.1); box-shadow: 0 0 8px #dc3545;} 100% { transform: scale(.9); box-shadow: 0 0 3px #dc3545;} }
+
+        /* Main Layout */
+        #main-container { display: flex; flex: 1; overflow: hidden; flex-direction: column;}
+        #tab-buttons { background-color: #e9ecef; padding: 5px 15px; border-bottom: 1px solid #dee2e6; flex-shrink: 0; }
+        #tab-buttons button { background: none; border: none; padding: 10px 15px; cursor: pointer; font-size: 1em; color: #495057; border-bottom: 3px solid transparent; margin-right: 5px; font-weight: 500; }
+        #tab-buttons button.active { border-bottom-color: #007bff; font-weight: 700; color: #0056b3; }
+        #content-area { flex: 1; display: flex; overflow: hidden; }
+
+        /* Tab Content Panes */
+        .tab-content { display: none; height: 100%; width: 100%; overflow: hidden; }
+        .tab-content.active { display: flex; flex-direction: row; }
+
+        /* Chat Area */
+        #chat-container { flex: 3; display: flex; flex-direction: column; border-right: 1px solid #dee2e6; }
+        #chat-output { flex: 1; overflow-y: scroll; padding: 10px 15px; background-color: #fff; line-height: 1.6; }
+        #chat-output div { margin-bottom: 6px; word-wrap: break-word; padding: 2px 0; }
+        #chat-output .platform-tag { font-weight: 700; margin-right: 5px; display: inline-block; min-width: 35px; text-align: right; }
+        .twitch { color: #9146ff; } .youtube { color: #ff0000; } .x { color: #1da1f2; } .whatnot { color: #ff6b00; } .streamer_admin { color: #fd7e14; font-weight: bold;} .system { color: #6c757d; font-style: italic; }
+        .streamer-msg { background-color: #fff3cd; padding: 4px 8px; border-left: 3px solid #ffeeba; border-radius: 3px; margin: 2px -8px; }
+        .timestamp { font-size: .75em; color: #6c757d; margin-left: 8px; float: right; opacity: .8; }
+
+        /* Input Area */
+        #input-area { display: flex; padding: 12px; border-top: 1px solid #dee2e6; background-color: #e9ecef; align-items: center; flex-shrink: 0;}
+        #streamerInput { flex: 1; margin-right: 8px; }
+        #sendButton { background-color: #28a745; color: #fff; }
+        #sendButton:hover { background-color: #218838; }
+        #clearButton { background-color: #ffc107; color: #212529; margin-left: 5px; }
+        #clearButton:hover { background-color: #e0a800; }
+
+        /* Settings Area */
+        #settings-container { padding: 25px; overflow-y: auto; background-color: #fff; flex: 1; }
+        .settings-section { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #e9ecef; }
+        .settings-section:last-of-type { border-bottom: none; }
+        .settings-section h3 { margin-top: 0; margin-bottom: 15px; color: #495057; font-size: 1.2em; font-weight: 600; }
+        .settings-section button[type=submit] { background-color: #007bff; color: #fff; margin-top: 15px; min-width: 120px;}
+        .settings-section button[type=submit]:hover { background-color: #0056b3; }
+        .form-group { margin-bottom: 15px; }
+        #settings-status { font-style: italic; margin-bottom: 15px; padding: 10px; border-radius: 4px; display: none; border: 1px solid transparent; }
+        #settings-status.success { color: #0f5132; background-color: #d1e7dd; border-color: #badbcc; display: block;}
+        #settings-status.error { color: #842029; background-color: #f8d7da; border-color: #f5c2c7; display: block;}
+        .control-buttons-container > div { margin-bottom: 10px; }
+        .control-button { margin: 0 5px 5px 0; padding: 6px 12px; font-size: 12px; }
+        .control-button[data-command="start"] { background-color: #28a745; color: white; }
+        .control-button[data-command="stop"] { background-color: #dc3545; color: white; }
+        .control-button[data-command="restart"] { background-color: #ffc107; color: #212529; }
+        /* OAuth Buttons */
+        .oauth-login-button { background-color: #6441a5; color: white; padding: 10px 15px; font-size: 14px; } /* Twitch Purple */
+        .oauth-login-button:hover { background-color: #4a2f7c; }
+        .oauth-logout-button { background-color: #dc3545; color: white; padding: 6px 10px; font-size: 12px; margin-left: 10px; }
+        .auth-status { margin-left: 15px; font-style: italic; color: #6c757d; }
+        .auth-status strong { color: #28a745; }
+        .auth-status.not-logged-in { color: #dc3545; }
+
+
+        /* Sidebar */
+        #sidebar { flex: 1; padding: 15px; background-color: #f8f9fa; border-left: 1px solid #dee2e6; overflow-y: auto; font-size: 12px; min-width: 280px; max-width: 350px;}
+        #sidebar h3 { margin-top: 0; margin-bottom: 10px; color: #495057; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        #log-output { height: 250px; overflow-y: scroll; border: 1px solid #e0e0e0; padding: 8px; margin-top: 10px; font-family: Menlo, Monaco, Consolas, 'Courier New', monospace; background-color: #fff; border-radius: 3px; margin-bottom: 15px; line-height: 1.4;}
+        .log-error { color: #dc3545; font-weight: bold; }
+        .log-warning { color: #ffc107; }
+        .log-info { color: #0dcaf0; }
+        .log-debug { color: #6c757d; }
+
+    </style>
+</head>
+<body>
+    <div id="header">
+        <h1>FoSBot Dashboard</h1>
+        <div id="status-indicators">
+            <span id="status-ws">WS: <span class="status-light status-disconnected"></span><span class="status-text">Offline</span></span>
+            <span id="status-twitch">Twitch: <span class="status-light status-disabled"></span><span class="status-text">Off</span></span>
+            <span id="status-youtube">YouTube: <span class="status-light status-disabled"></span><span class="status-text">Off</span></span>
+            <span id="status-x">X: <span class="status-light status-disabled"></span><span class="status-text">Off</span></span>
+            <span id="status-whatnot">Whatnot: <span class="status-light status-disabled"></span><span class="status-text">Ext</span></span>
+        </div>
+    </div>
+
+    <div id="tab-buttons">
+        <button class="tab-button active" data-tab="chat">Chat</button>
+        <button class="tab-button" data-tab="settings">Settings</button>
+    </div>
+
+    <div id="main-content">
+        <div id="content-area">
+            <!-- Chat Tab -->
+            <div id="chat-container" class="tab-content active" data-tab-content="chat">
+                <div id="chat-output">
+                    <div>Welcome! Attempting to connect to backend...</div>
+                </div>
+                <div id="input-area">
+                    <input type="text" id="streamerInput" placeholder="Type message or command (e.g., !roll) to send...">
+                    <button id="sendButton">Send</button>
+                    <button id="clearButton">Clear Display</button>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="settings-container" class="tab-content" data-tab-content="settings">
+                <h2>Application Settings</h2>
+                <p id="settings-status"></p>
+
+                <!-- Twitch Section - OAuth -->
+                <div class="settings-section">
+                    <h3>Twitch Authentication</h3>
+                    <div id="twitch-auth-area">
+                        <!-- Content added by JS -->
+                        <span class="auth-status">Loading...</span>
+                    </div>
+                    <div id="twitch-manual-settings" style="margin-top: 15px; border-top: 1px dashed #ccc; padding-top: 15px; display: none;"> <!-- Hidden by default -->
+                         <h4>Manual Overrides (Advanced/Debug)</h4>
+                         <form id="twitch-settings-form-manual">
+                             <div class="form-group"><label for="twitch-nick">Bot Username (TWITCH_NICK)</label><input type="text" id="twitch-nick" name="TWITCH_NICK"></div>
+                             <div class="form-group"><label for="twitch-channels">Channel(s) to Join (TWITCH_CHANNELS, comma-sep)</label><input type="text" id="twitch-channels" name="TWITCH_CHANNELS"></div>
+                             <div class="form-group"><label for="twitch-client-id-manual">Client ID (TWITCH_CLIENT_ID)</label><input type="text" id="twitch-client-id-manual" name="TWITCH_CLIENT_ID"></div>
+                             <!-- Tokens no longer manually set here -->
+                             <button type="submit">Save Manual Twitch Settings</button>
+                             <small>Note: These usually come from .env or OAuth. Use with caution.</small>
+                         </form>
+                     </div>
+                </div>
+
+                <!-- YouTube Section - Placeholder for OAuth -->
+                <div class="settings-section">
+                    <h3>YouTube Authentication</h3>
+                     <div id="youtube-auth-area">
+                        <button class="oauth-login-button" style="background-color: #ff0000;" disabled>Login with YouTube (NYI)</button>
+                        <span class="auth-status">Not Implemented</span>
+                     </div>
+                    <!-- Keep manual form for now if needed for API key/secrets file path -->
+                     <form id="youtube-settings-form" style="margin-top: 15px;">
+                        <div class="form-group"><label for="youtube-api-key">API Key (YOUTUBE_API_KEY)</label><input type="text" id="youtube-api-key" name="YOUTUBE_API_KEY"></div>
+                        <div class="form-group"><label for="youtube-secrets-file">Client Secrets File Path (YOUTUBE_CLIENT_SECRETS_FILE)</label><input type="text" id="youtube-secrets-file" name="YOUTUBE_CLIENT_SECRETS_FILE" placeholder="/full/path/to/client_secret.json"></div>
+                        <div class="form-group"><label for="youtube-chat-id">Live Chat ID (YOUTUBE_LIVE_CHAT_ID, optional)</label><input type="text" id="youtube-chat-id" name="YOUTUBE_LIVE_CHAT_ID" placeholder="Leave blank to auto-detect"></div>
+                        <button type="submit">Save YouTube Manual Settings</button>
+                     </form>
+                </div>
+
+                <!-- X/Twitter Section - Placeholder for OAuth -->
+                <div class="settings-section">
+                    <h3>X / Twitter Authentication</h3>
+                     <div id="x-auth-area">
+                        <button class="oauth-login-button" style="background-color: #1da1f2;" disabled>Login with X (NYI)</button>
+                         <span class="auth-status">Not Implemented</span>
+                    </div>
+                    <!-- Keep manual form for now -->
+                     <form id="x-settings-form" style="margin-top: 15px;">
+                        <div class="form-group"><label for="x-bearer">Bearer Token (X_BEARER_TOKEN)</label><input type="text" id="x-bearer" name="X_BEARER_TOKEN"></div>
+                        <div class="form-group"><label for="x-api-key">API Key (X_API_KEY)</label><input type="text" id="x-api-key" name="X_API_KEY"></div>
+                        <div class="form-group"><label for="x-api-secret">API Secret (X_API_SECRET)</label><input type="password" id="x-api-secret" name="X_API_SECRET" placeholder="Enter NEW secret to update"></div>
+                        <div class="form-group"><label for="x-access-token">Access Token (X_ACCESS_TOKEN)</label><input type="text" id="x-access-token" name="X_ACCESS_TOKEN"></div>
+                        <div class="form-group"><label for="x-access-secret">Access Secret (X_ACCESS_SECRET)</label><input type="password" id="x-access-secret" name="X_ACCESS_SECRET" placeholder="Enter NEW secret to update"></div>
+                        <div class="form-group"><label for="x-monitor">Hashtag/Mention to Monitor (X_HASHTAG_OR_MENTION)</label><input type="text" id="x-monitor" name="X_HASHTAG_OR_MENTION" placeholder="#YourTag or @YourBot"></div>
+                        <button type="submit">Save X/Twitter Manual Settings</button>
+                     </form>
+                </div>
+
+                 <!-- App Config Section -->
+                 <div class="settings-section">
+                     <h3>App Config</h3>
+                     <form id="app-settings-form">
+                         <div class="form-group">
+                            <label for="app-command-prefix">Command Prefix (COMMAND_PREFIX)</label>
+                            <input type="text" id="app-command-prefix" name="COMMAND_PREFIX" style="width: 50px;">
+                        </div>
+                         <button type="submit">Save App Settings</button>
+                     </form>
+                </div>
+
+                <!-- Service Control Section -->
+                <div class="settings-section">
+                    <h3>Service Control</h3>
+                    <p>Start/Stop/Restart platform connection services. Status shown in header.</p>
+                    <div class="control-buttons-container">
+                        <div>
+                            Twitch:
+                            <button class="control-button" data-service="twitch" data-command="start">Start</button>
+                            <button class="control-button" data-service="twitch" data-command="stop">Stop</button>
+                            <button class="control-button" data-service="twitch" data-command="restart">Restart</button>
+                        </div>
+                         <div>
+                            YouTube:
+                            <button class="control-button" data-service="youtube" data-command="start">Start</button>
+                            <button class="control-button" data-service="youtube" data-command="stop">Stop</button>
+                            <button class="control-button" data-service="youtube" data-command="restart">Restart</button>
+                        </div>
+                         <div>
+                            X/Twitter:
+                            <button class="control-button" data-service="x" data-command="start">Start</button>
+                            <button class="control-button" data-service="x" data-command="stop">Stop</button>
+                            <button class="control-button" data-service="x" data-command="restart">Restart</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div> <!-- End Settings Tab -->
+        </div> <!-- End Content Area -->
+
+        <!-- Sidebar -->
+        <div id="sidebar">
+            <h3>Status & Logs</h3>
+            <div id="general-status">App Status: Initializing...</div>
+            <div id="log-output"></div>
+            <!-- Future: User Lists, Game Info etc. -->
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>

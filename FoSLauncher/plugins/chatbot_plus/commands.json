@@ -1,0 +1,76 @@
+{
+    "youtube": {
+        "auth": {
+            "description": "Authenticate with YouTube",
+            "usage": "!youtube auth",
+            "permission_level": "basic",
+            "enabled": true
+        },
+        "list": {
+            "description": "List available streams",
+            "usage": "!youtube list",
+            "permission_level": "basic",
+            "enabled": true
+        },
+        "connect": {
+            "description": "Connect to a stream",
+            "usage": "!youtube connect <stream_id>",
+            "permission_level": "basic",
+            "enabled": true
+        },
+        "disconnect": {
+            "description": "Disconnect from current stream",
+            "usage": "!youtube disconnect",
+            "permission_level": "basic",
+            "enabled": true
+        }
+    },
+    "chat": {
+        "clear": {
+            "description": "Clear the chat window",
+            "usage": "!chat clear",
+            "permission_level": "basic",
+            "enabled": true
+        },
+        "save": {
+            "description": "Save chat history to file",
+            "usage": "!chat save [filename]",
+            "permission_level": "basic",
+            "enabled": true
+        }
+    },
+    "commands": {
+        "add": {
+            "description": "Add a new custom command",
+            "usage": "!commands add <name> <response>",
+            "permission_level": "admin",
+            "enabled": true
+        },
+        "remove": {
+            "description": "Remove a custom command",
+            "usage": "!commands remove <name>",
+            "permission_level": "admin",
+            "enabled": true
+        },
+        "list": {
+            "description": "List all custom commands",
+            "usage": "!commands list",
+            "permission_level": "basic",
+            "enabled": true
+        }
+    },
+    "help": {
+        "help": {
+            "description": "Show help information",
+            "usage": "!help [category]",
+            "permission_level": "basic",
+            "enabled": true
+        },
+        "commands": {
+            "description": "Show available commands",
+            "usage": "!help commands",
+            "permission_level": "basic",
+            "enabled": true
+        }
+    }
+}

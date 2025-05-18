@@ -1,0 +1,722 @@
+Chat: Automate_OBS_from_Chat
+Started: 2024-05-30 09:57:12
+
+[2024-05-30 09:57:12] FoSGamers:
+I need an application that will read the prompts from a user in a live chat on a website and be able to make OBS studio automatically produce the image associated with it on screen. The point of the application is so I can have a text based adventure set up with prompts The user can use in the chat and when they select the prompt in animation will show up on screen for them.
+
+[2024-05-30 09:57:45] ChatGPT:
+To create an application that reads prompts from a user in a live chat on a website and automatically makes OBS Studio produce the associated image on screen, you'll need to integrate several components. Here's a step-by-step approach to accomplish this:
+
+1. **Set Up WebSocket for Live Chat**: Use a WebSocket to capture live chat messages from the website.
+2. **OBS WebSocket Plugin**: Install the OBS WebSocket plugin to allow remote control of OBS Studio.
+3. **Python Script**: Develop a Python script to manage the communication between the live chat and OBS Studio.
+4. **Automate Image Display in OBS**: Use the OBS WebSocket API to display images based on chat prompts.
+
+### Step 1: Set Up WebSocket for Live Chat
+
+First, you need a WebSocket server to capture chat messages. You can use a simple Python WebSocket server.
+
+```python
+# live_chat_server.py
+import asyncio
+import websockets
+import json
+
+clients = set()
+
+async def chat_handler(websocket, path):
+    clients.add(websocket)
+    try:
+        async for message in websocket:
+            data = json.loads(message)
+            # Handle the incoming chat message here
+            print(f"Received message: {data}")
+            await notify_clients(data)
+    finally:
+        clients.remove(websocket)
+
+async def notify_clients(message):
+    if clients:
+        await asyncio.wait([client.send(json.dumps(message)) for client in clients])
+
+start_server = websockets.serve(chat_handler, "localhost", 6789)
+
+asyncio.get_event_loop().run_until_complete(start_server)
+asyncio.get_event_loop().run_forever()
+```
+
+### Step 2: Install OBS WebSocket Plugin
+
+Download and install the OBS WebSocket plugin from [OBS WebSocket GitHub](https://github.com/Palakis/obs-websocket). Follow the installation instructions.
+
+### Step 3: Python Script for Communication
+
+Create a Python script to handle WebSocket communication with OBS Studio.
+
+```python
+# obs_control.py
+import asyncio
+import websockets
+import json
+
+async def control_obs(action, source_name, file_path):
+    async with websockets.connect("ws://localhost:4455") as websocket:
+        auth_payload = {
+            "op": 1,
+            "d": {
+                "rpcVersion": 1,
+                "authentication": "your_authentication_token"  # if authentication is enabled
+            }
+        }
+        await websocket.send(json.dumps(auth_payload))
+        response = await websocket.recv()
+        print(f"Auth response: {response}")
+
+        request_payload = {
+            "op": 6,
+            "d": {
+                "requestType": action,
+                "requestData": {
+                    "sourceName": source_name,
+                    "filePath": file_path
+                }
+            }
+        }
+        await websocket.send(json.dumps(request_payload))
+        response = await websocket.recv()
+        print(f"OBS response: {response}")
+
+async def handle_chat_messages():
+    async with websockets.connect("ws://localhost:6789") as websocket:
+        async for message in websocket:
+            data = json.loads(message)
+            prompt = data.get("prompt")
+            # Map the prompt to the corresponding image and action
+            if prompt == "show_image_1":
+                await control_obs("SetSourceSettings", "Image Source", "/path/to/image1.png")
+            elif prompt == "show_image_2":
+                await control_obs("SetSourceSettings", "Image Source", "/path/to/image2.png")
+
+if __name__ == "__main__":
+    asyncio.run(handle_chat_messages())
+```
+
+### Step 4: Automate Image Display in OBS
+
+Ensure you have an image source in OBS Studio named "Image Source." The Python script will update this source with the new image based on the chat prompt.
+
+### Complete Script
+
+Combining everything, ensure the scripts are running:
+
+1. Start the live chat server:
+   ```sh
+   python live_chat_server.py
+   ```
+
+2. Run the OBS control script:
+   ```sh
+   python obs_control.py
+   ```
+
+### Summary
+
+1. Created a WebSocket server to capture live chat messages.
+2. Installed the OBS WebSocket plugin to enable remote control of OBS Studio.
+3. Developed a Python script to manage communication between the chat server and OBS Studio, handling prompts to display specific images.
+
+#### Hotkeys
+- **Iterate, Improve, Evolve**: Test with different prompts and animations.
+- **Question**: Do you need additional animations or other multimedia elements?
+- **Validate**: Ensure paths to images and OBS WebSocket settings are correct.
+
+[2024-05-30 09:59:11] FoSGamers:
+Confirm all dependencies are here for running this and also have it automatically do it at the beginning of start of the application so I don’t need to worry about it. Make this an extremely user-friendly application where it prompts the user for whatever information is needed and also saves it for later use so the user does not need to keep giving it over and over and over.
+
+[2024-05-30 09:59:48] ChatGPT:
+To create a user-friendly application that handles all dependencies, prompts the user for necessary information, and saves it for future use, we need to:
+
+1. Ensure all necessary Python libraries are installed.
+2. Modify the scripts to prompt the user for information and save it.
+3. Create a main script to run everything automatically.
+
+### Step 1: Confirm Dependencies
+
+Ensure you have the following Python libraries installed:
+- `websockets`
+- `asyncio`
+- `json`
+
+You can install these using:
+```sh
+pip install websockets asyncio
+```
+
+### Step 2: Modify Scripts to Prompt User and Save Information
+
+We will modify the `obs_control.py` script to prompt the user for OBS WebSocket settings and save them in a configuration file.
+
+#### Configuration Management
+
+```python
+# config_manager.py
+import json
+import os
+
+CONFIG_FILE = "config.json"
+
+def save_config(config):
+    with open(CONFIG_FILE, "w") as file:
+        json.dump(config, file)
+
+def load_config():
+    if os.path.exists(CONFIG_FILE):
+        with open(CONFIG_FILE, "r") as file:
+            return json.load(file)
+    return {}
+
+def get_config_value(key, prompt):
+    config = load_config()
+    if key not in config:
+        config[key] = input(prompt)
+        save_config(config)
+    return config[key]
+```
+
+#### Modified OBS Control Script
+
+```python
+# obs_control.py
+import asyncio
+import websockets
+import json
+from config_manager import get_config_value
+
+async def control_obs(action, source_name, file_path):
+    obs_host = get_config_value("obs_host", "Enter OBS WebSocket host (e.g., ws://localhost:4455): ")
+    obs_password = get_config_value("obs_password", "Enter OBS WebSocket password (if any): ")
+
+    async with websockets.connect(obs_host) as websocket:
+        auth_payload = {
+            "op": 1,
+            "d": {
+                "rpcVersion": 1,
+                "authentication": obs_password
+            }
+        }
+        await websocket.send(json.dumps(auth_payload))
+        response = await websocket.recv()
+        print(f"Auth response: {response}")
+
+        request_payload = {
+            "op": 6,
+            "d": {
+                "requestType": action,
+                "requestData": {
+                    "sourceName": source_name,
+                    "filePath": file_path
+                }
+            }
+        }
+        await websocket.send(json.dumps(request_payload))
+        response = await websocket.recv()
+        print(f"OBS response: {response}")
+
+async def handle_chat_messages():
+    chat_host = get_config_value("chat_host", "Enter WebSocket chat host (e.g., ws://localhost:6789): ")
+
+    async with websockets.connect(chat_host) as websocket:
+        async for message in websocket:
+            data = json.loads(message)
+            prompt = data.get("prompt")
+            # Map the prompt to the corresponding image and action
+            if prompt == "show_image_1":
+                await control_obs("SetSourceSettings", "Image Source", "/path/to/image1.png")
+            elif prompt == "show_image_2":
+                await control_obs("SetSourceSettings", "Image Source", "/path/to/image2.png")
+
+if __name__ == "__main__":
+    asyncio.run(handle_chat_messages())
+```
+
+### Step 3: Main Script to Run Everything
+
+Create a main script to start both the live chat server and the OBS control script.
+
+```python
+# main.py
+import subprocess
+import time
+
+# Start the live chat server
+chat_server = subprocess.Popen(["python", "live_chat_server.py"])
+time.sleep(1)  # Give the server time to start
+
+# Start the OBS control script
+obs_control = subprocess.Popen(["python", "obs_control.py"])
+
+# Keep the main script running
+try:
+    while True:
+        time.sleep(1)
+except KeyboardInterrupt:
+    chat_server.terminate()
+    obs_control.terminate()
+```
+
+### Complete and User-Friendly Application
+
+1. **Install Dependencies**:
+   ```sh
+   pip install websockets asyncio
+   ```
+
+2. **Save Scripts**:
+   - `config_manager.py`
+   - `live_chat_server.py`
+   - `obs_control.py`
+   - `main.py`
+
+3. **Run the Main Script**:
+   ```sh
+   python main.py
+   ```
+
+### Summary
+
+1. **Dependencies**: Installed `websockets` and `asyncio`.
+2. **Configuration Management**: Added `config_manager.py` for managing configurations.
+3. **OBS Control Script**: Modified to prompt for OBS settings and save them.
+4. **Main Script**: Created `main.py` to start the server and control script automatically.
+
+### Hotkeys
+
+- **Iterate, Improve, Evolve**: Test for different prompts and user configurations.
+- **Question**: Do you need additional functionalities or customization for specific prompts?
+- **Validate**: Ensure correct paths for images and WebSocket settings.
+
+Let me know if you need further enhancements or modifications!
+
+[2024-05-30 10:06:15] FoSGamers:
+Make this game below work with the application above and also generate images for the stages, but ask me first if I want to have the image generated.
+
+Wasteland Adventure
+	1	Boss is a tree like creature that grows “Weedlings” that attract its prey through scent.
+	2	The main characters father was taken by the scent when he was a toddler
+	1	The father pushed him safe into a cryo chamber and turned it on
+	3	To start you pick the character and it’s strength
+	1	Basic, premium, and collector make are 0,+1,+2 for added skill points
+	2	Basic is 6 skill points to distribute
+	1	The higher the skill the better chances you have when rolling for something.
+	2	Strength, Agility, Intelligence, Engineer, Health, Luck
+	3	Skills say what damage you do as a character per item/body part/spell used
+	4	Pack pulls can add extra skill or hit points/criticals
+	4	As they wander through the wasteland they encounter multiple scenarios. 
+	1	a safe where they roll to open 
+	1	Luck helps to give rolls for how easy or hard it is to open a safe. 1-3 rolls
+	2	Easy safe is 1-5, medium 6-15, hard 16-20
+	3	Opening easy safe
+	1	1-15 open, 16-20 safe breaks
+	4	Open medium safe
+	1	1-10 open 11-20 safe breaks
+	5	Open hard safe
+	1	1-5 open 6-20 safe breaks
+	2	rad creature
+	1	Luck helps with size rolls again
+	1	Small Bug is 1-5, medium 6-15, bug 16-20
+	2	Bug
+	1	Flying with pinchers 
+	1	It attacks with pinch for high damage which is 1-5 or body bump for regular damage 6-20
+	2	Hit body is 1-7, hit head is 8-14, hit pinchers 15-16, hit soft body 17-20
+	3	Gatordillo
+	1	Slow, and,strong armor, big bite
+	1	Bite 1-8, tail whip 9-20
+	2	Hit body is 1-7, hit head is 8-15, hit tail 16-18, Miss 19-20
+	4	Feral Ghoul 
+	1	Fast, weak, agile (by accident)
+	1	Bite 1-3, punch/scratch 4-15, kick 16-18, multi-punch 19-20 (becomes regular if missing an arm)
+	2	Hit body is 1-7, hit head is 8-9, hit arm 10-15, hit leg 16-20
+	5	Raider
+	1	Average on everything
+	1	Land hit 1-9, miss 10-16, hard hit 17-20
+	2	Shoot, punch, axe swing, all the same
+	1	They hit body 1-10, limb 11-18, head 19-20
+	3	You hit body 1-6, head 7-10, limb 11-17, miss 18-20
+	3	Trader/shop owner
+	1	Cheap 1-5, regular 6-16, expensive 17-20
+	4	Smitty (blacksmith type)
+	1	Cheap 1-5, regular 6-16, expensive 17-20
+	5	The first boss is the 1st weedling (they think this is the final boss until the end of the fight where the “Control Vine” is cut)
+	6	The second boss is the second weedling but being older it is corrupted too much to help when the “Control Vine” is cut but this makes the weedling slower for a period of time. The weedling/being controlling knows this so protect the vine this fight and all future ones.
+	1	They find their 3rd companion “Brute the Mue” (actual mute with no tongue) being lured into the second “Weedling”
+	7	Third boss protects it’s vine by having armor on it
+	1	The 4th companion is “Doctor Ghoul” (like doctor who)
+	8	The final boss is the “Glowing King Weed. It hides in a burnt out vault that had a direct nuke hit. It grew from the radiation to the strength and size it is now. It has expanded to take over the whole farm area. It’s body is composed of what looks like human pieces mixed into the tree. Eye, ears, noses, random arms and legs.
+
+
+[2024-05-30 10:06:46] ChatGPT:
+To integrate the game "Wasteland Adventure" with the application and generate images for the stages, we will follow these steps:
+
+1. **Enhance the existing Python application** to handle game prompts and image generation requests.
+2. **Modify the live chat server** to handle specific game commands.
+3. **Create a script for game logic** that interacts with the chat and OBS.
+4. **Generate images** using DALL-E only when prompted by the user.
+
+### Step 1: Enhance Existing Application
+
+We need to enhance the `obs_control.py` and `live_chat_server.py` scripts to handle game commands and image generation.
+
+#### Configuration Management
+
+Update `config_manager.py` to include a prompt for image generation preference.
+
+```python
+# config_manager.py
+import json
+import os
+
+CONFIG_FILE = "config.json"
+
+def save_config(config):
+    with open(CONFIG_FILE, "w") as file:
+        json.dump(config, file)
+
+def load_config():
+    if os.path.exists(CONFIG_FILE):
+        with open(CONFIG_FILE, "r") as file:
+            return json.load(file)
+    return {}
+
+def get_config_value(key, prompt):
+    config = load_config()
+    if key not in config:
+        config[key] = input(prompt)
+        save_config(config)
+    return config[key]
+
+def get_image_generation_preference():
+    return get_config_value("image_generation", "Do you want to generate images for the stages? (yes/no): ").lower() == "yes"
+```
+
+#### Updated OBS Control Script
+
+Add game logic and handle image generation requests in `obs_control.py`.
+
+```python
+# obs_control.py
+import asyncio
+import websockets
+import json
+from config_manager import get_config_value, get_image_generation_preference
+
+async def control_obs(action, source_name, file_path):
+    obs_host = get_config_value("obs_host", "Enter OBS WebSocket host (e.g., ws://localhost:4455): ")
+    obs_password = get_config_value("obs_password", "Enter OBS WebSocket password (if any): ")
+
+    async with websockets.connect(obs_host) as websocket:
+        auth_payload = {
+            "op": 1,
+            "d": {
+                "rpcVersion": 1,
+                "authentication": obs_password
+            }
+        }
+        await websocket.send(json.dumps(auth_payload))
+        response = await websocket.recv()
+        print(f"Auth response: {response}")
+
+        request_payload = {
+            "op": 6,
+            "d": {
+                "requestType": action,
+                "requestData": {
+                    "sourceName": source_name,
+                    "filePath": file_path
+                }
+            }
+        }
+        await websocket.send(json.dumps(request_payload))
+        response = await websocket.recv()
+        print(f"OBS response: {response}")
+
+async def handle_chat_messages():
+    chat_host = get_config_value("chat_host", "Enter WebSocket chat host (e.g., ws://localhost:6789): ")
+    generate_images = get_image_generation_preference()
+
+    async with websockets.connect(chat_host) as websocket:
+        async for message in websocket:
+            data = json.loads(message)
+            prompt = data.get("prompt")
+            
+            # Map the prompt to the corresponding image and action
+            if prompt == "show_image_1":
+                await control_obs("SetSourceSettings", "Image Source", "/path/to/image1.png")
+            elif prompt == "show_image_2":
+                await control_obs("SetSourceSettings", "Image Source", "/path/to/image2.png")
+            elif prompt.startswith("stage_"):
+                stage_number = prompt.split("_")[1]
+                if generate_images:
+                    await generate_stage_image(stage_number)
+                # Handle stage logic here
+
+[2024-05-30 10:07:19] FoSGamers:
+Make this game below work with the application above and also generate images for the stages and save them for always being used, but ask me first if I want to have the image generated.
+
+Wasteland Adventure
+	1	Boss is a tree like creature that grows “Weedlings” that attract its prey through scent.
+	2	The main characters father was taken by the scent when he was a toddler
+	1	The father pushed him safe into a cryo chamber and turned it on
+	3	To start you pick the character and it’s strength
+	1	Basic, premium, and collector make are 0,+1,+2 for added skill points
+	2	Basic is 6 skill points to distribute
+	1	The higher the skill the better chances you have when rolling for something.
+	2	Strength, Agility, Intelligence, Engineer, Health, Luck
+	3	Skills say what damage you do as a character per item/body part/spell used
+	4	Pack pulls can add extra skill or hit points/criticals
+	4	As they wander through the wasteland they encounter multiple scenarios. 
+	1	a safe where they roll to open 
+	1	Luck helps to give rolls for how easy or hard it is to open a safe. 1-3 rolls
+	2	Easy safe is 1-5, medium 6-15, hard 16-20
+	3	Opening easy safe
+	1	1-15 open, 16-20 safe breaks
+	4	Open medium safe
+	1	1-10 open 11-20 safe breaks
+	5	Open hard safe
+	1	1-5 open 6-20 safe breaks
+	2	rad creature
+	1	Luck helps with size rolls again
+	1	Small Bug is 1-5, medium 6-15, bug 16-20
+	2	Bug
+	1	Flying with pinchers 
+	1	It attacks with pinch for high damage which is 1-5 or body bump for regular damage 6-20
+	2	Hit body is 1-7, hit head is 8-14, hit pinchers 15-16, hit soft body 17-20
+	3	Gatordillo
+	1	Slow, and,strong armor, big bite
+	1	Bite 1-8, tail whip 9-20
+	2	Hit body is 1-7, hit head is 8-15, hit tail 16-18, Miss 19-20
+	4	Feral Ghoul 
+	1	Fast, weak, agile (by accident)
+	1	Bite 1-3, punch/scratch 4-15, kick 16-18, multi-punch 19-20 (becomes regular if missing an arm)
+	2	Hit body is 1-7, hit head is 8-9, hit arm 10-15, hit leg 16-20
+	5	Raider
+	1	Average on everything
+	1	Land hit 1-9, miss 10-16, hard hit 17-20
+	2	Shoot, punch, axe swing, all the same
+	1	They hit body 1-10, limb 11-18, head 19-20
+	3	You hit body 1-6, head 7-10, limb 11-17, miss 18-20
+	3	Trader/shop owner
+	1	Cheap 1-5, regular 6-16, expensive 17-20
+	4	Smitty (blacksmith type)
+	1	Cheap 1-5, regular 6-16, expensive 17-20
+	5	The first boss is the 1st weedling (they think this is the final boss until the end of the fight where the “Control Vine” is cut)
+	6	The second boss is the second weedling but being older it is corrupted too much to help when the “Control Vine” is cut but this makes the weedling slower for a period of time. The weedling/being controlling knows this so protect the vine this fight and all future ones.
+	1	They find their 3rd companion “Brute the Mue” (actual mute with no tongue) being lured into the second “Weedling”
+	7	Third boss protects it’s vine by having armor on it
+	1	The 4th companion is “Doctor Ghoul” (like doctor who)
+	8	The final boss is the “Glowing King Weed. It hides in a burnt out vault that had a direct nuke hit. It grew from the radiation to the strength and size it is now. It has expanded to take over the whole farm area. It’s body is composed of what looks like human pieces mixed into the tree. Eye, ears, noses, random arms and legs.
+
+
+[2024-05-30 10:08:07] ChatGPT:
+To integrate the "Wasteland Adventure" game with the existing application and generate images for the stages, we need to extend our current setup. We'll add functionality to:
+1. Generate images for each stage using DALL-E.
+2. Prompt the user for image generation.
+3. Map game scenarios to the corresponding images and OBS control.
+
+### Step 1: Extend Configuration Management
+
+We'll expand the configuration management to store paths to generated images.
+
+#### Updated Configuration Management
+
+```python
+# config_manager.py
+import json
+import os
+
+CONFIG_FILE = "config.json"
+
+def save_config(config):
+    with open(CONFIG_FILE, "w") as file:
+        json.dump(config, file)
+
+def load_config():
+    if os.path.exists(CONFIG_FILE):
+        with open(CONFIG_FILE, "r") as file:
+            return json.load(file)
+    return {}
+
+def get_config_value(key, prompt):
+    config = load_config()
+    if key not in config:
+        config[key] = input(prompt)
+        save_config(config)
+    return config[key]
+
+def set_config_value(key, value):
+    config = load_config()
+    config[key] = value
+    save_config(config)
+```
+
+### Step 2: Add Image Generation Functionality
+
+We'll use the DALL-E API to generate images and save their paths in the configuration.
+
+#### Image Generation Script
+
+```python
+# image_generator.py
+import openai
+from config_manager import set_config_value, get_config_value
+
+openai.api_key = get_config_value("openai_api_key", "Enter your OpenAI API key: ")
+
+def generate_image(prompt, stage):
+    response = openai.Image.create(
+        prompt=prompt,
+        n=1,
+        size="1024x1024"
+    )
+    image_url = response['data'][0]['url']
+    # Download and save the image
+    image_path = f"images/{stage}.png"
+    os.makedirs(os.path.dirname(image_path), exist_ok=True)
+    with open(image_path, 'wb') as image_file:
+        image_file.write(requests.get(image_url).content)
+    set_config_value(f"image_path_{stage}", image_path)
+    print(f"Image for {stage} generated and saved at {image_path}")
+
+def prompt_for_image_generation(stage, description):
+    generate = input(f"Do you want to generate an image for {stage}? (yes/no): ").strip().lower()
+    if generate == 'yes':
+        generate_image(description, stage)
+```
+
+### Step 3: Update OBS Control Script
+
+We'll integrate the game logic and image paths into the OBS control script.
+
+#### Updated OBS Control Script
+
+```python
+# obs_control.py
+import asyncio
+import websockets
+import json
+from config_manager import get_config_value, prompt_for_image_generation
+
+# Descriptions for image generation
+game_stages = {
+    "boss_1": "A tree-like creature that grows 'Weedlings' that attract its prey through scent.",
+    "character_selection": "Character selection screen with options for Basic, Premium, and Collector.",
+    # Add other stages and descriptions...
+}
+
+# Prompt for image generation
+for stage, description in game_stages.items():
+    prompt_for_image_generation(stage, description)
+
+async def control_obs(action, source_name, file_path):
+    obs_host = get_config_value("obs_host", "Enter OBS WebSocket host (e.g., ws://localhost:4455): ")
+    obs_password = get_config_value("obs_password", "Enter OBS WebSocket password (if any): ")
+
+    async with websockets.connect(obs_host) as websocket:
+        auth_payload = {
+            "op": 1,
+            "d": {
+                "rpcVersion": 1,
+                "authentication": obs_password
+            }
+        }
+        await websocket.send(json.dumps(auth_payload))
+        response = await websocket.recv()
+        print(f"Auth response: {response}")
+
+        request_payload = {
+            "op": 6",
+            "d": {
+                "requestType": action,
+                "requestData": {
+                    "sourceName": source_name,
+                    "filePath": file_path
+                }
+            }
+        }
+        await websocket.send(json.dumps(request_payload))
+        response = await websocket.recv()
+        print(f"OBS response: {response}")
+
+async def handle_chat_messages():
+    chat_host = get_config_value("chat_host", "Enter WebSocket chat host (e.g., ws://localhost:6789): ")
+
+    async with websockets.connect(chat_host) as websocket:
+        async for message in websocket:
+            data = json.loads(message)
+            prompt = data.get("prompt")
+            if prompt in game_stages:
+                image_path = get_config_value(f"image_path_{prompt}", f"Enter path to image for {prompt}: ")
+                await control_obs("SetSourceSettings", "Image Source", image_path)
+
+if __name__ == "__main__":
+    asyncio.run(handle_chat_messages())
+```
+
+### Step 4: Main Script Update
+
+We'll ensure the main script starts everything correctly.
+
+```python
+# main.py
+import subprocess
+import time
+
+# Start the live chat server
+chat_server = subprocess.Popen(["python", "live_chat_server.py"])
+time.sleep(1)  # Give the server time to start
+
+# Start the OBS control script
+obs_control = subprocess.Popen(["python", "obs_control.py"])
+
+# Keep the main script running
+try:
+    while True:
+        time.sleep(1)
+except KeyboardInterrupt:
+    chat_server.terminate()
+    obs_control.terminate()
+```
+
+### Running the Application
+
+1. **Install Dependencies**:
+   ```sh
+   pip install websockets asyncio openai requests
+   ```
+
+2. **Save Scripts**:
+   - `config_manager.py`
+   - `image_generator.py`
+   - `live_chat_server.py`
+   - `obs_control.py`
+   - `main.py`
+
+3. **Run the Main Script**:
+   ```sh
+   python main.py
+   ```
+
+### Summary
+
+1. **Dependencies**: Installed `websockets`, `asyncio`, `openai`, and `requests`.
+2. **Configuration Management**: Updated to manage image paths and OpenAI API key.
+3. **Image Generation**: Added `image_generator.py` to generate and save images.
+4. **OBS Control Script**: Updated to integrate game logic and handle image paths.
+5. **Main Script**: Ensures everything starts automatically.
+
+#### Hotkeys
+
+- **Iterate, Improve, Evolve**: Test for different stages and prompt for image generation.
+- **Question**: Do you need any additional stages or scenarios integrated?
+- **Validate**: Ensure image generation and OBS control work seamlessly.
+
+Let me know if you need further enhancements or modifications!

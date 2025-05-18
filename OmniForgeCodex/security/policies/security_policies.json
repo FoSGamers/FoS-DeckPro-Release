@@ -1,0 +1,27 @@
+{
+  "password": {
+    "min_length": 12,
+    "require_special_chars": true,
+    "require_numbers": true,
+    "require_uppercase": true,
+    "max_age_days": 90
+  },
+  "encryption": {
+    "algorithm": "AES-256-GCM",
+    "key_rotation_days": 30,
+    "min_key_length": 32
+  },
+  "access_control": {
+    "max_failed_attempts": 3,
+    "lockout_duration_minutes": 30,
+    "session_timeout_minutes": 60
+  },
+  "audit": {
+    "retention_days": 365,
+    "log_level": "INFO",
+    "sensitive_operations": [
+      "password_change",
+      "key_rotation"
+    ]
+  }
+}

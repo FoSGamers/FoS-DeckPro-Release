@@ -1,0 +1,13 @@
+{
+    "app_name": "Simple Launcher",
+    "version": "1.0.0",
+    "window": {
+        "width": 800,
+        "height": 600,
+        "title": "Simple Launcher"
+    },
+    "logging": {
+        "level": "DEBUG",
+        "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    }
+} 

@@ -1,0 +1,16 @@
+{
+    "enabled": true,
+    "requires_code": false,
+    "access_level": "basic",
+    "description": "Chat message splitter utility",
+    "features": {
+        "json_processing": true,
+        "size_management": true,
+        "batch_processing": true
+    },
+    "config": {
+        "default_output_dir": "splits",
+        "max_file_size": 1048576,
+        "auto_split": true
+    }
+} 

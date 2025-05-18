@@ -1,0 +1,46 @@
+{
+  "players": [
+    "Stats",
+    "Equipment",
+    "Buffs"
+  ],
+  "enemies": [
+    "Stats",
+    "Equipment",
+    "Buffs",
+    "Inventory"
+  ],
+  "weapons": [
+    "Damage",
+    "Hit Modifier",
+    "Type",
+    "Special Effects"
+  ],
+  "armor": [
+    "Damage Resistance",
+    "Hit Modifier",
+    "Dodge Modifier"
+  ],
+  "items": [
+    "Type",
+    "Hit Modifier",
+    "Properties"
+  ],
+  "locations": [
+    "Glossary"
+  ],
+  "vendors": [
+    "Location",
+    "Inventory"
+  ],
+  "buffs": [
+    "Effect",
+    "Duration"
+  ],
+  "events": [
+    "Dice",
+    "Success Threshold",
+    "Stat Bonuses",
+    "Loot"
+  ]
+}

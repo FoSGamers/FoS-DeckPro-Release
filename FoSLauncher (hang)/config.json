@@ -1,0 +1,66 @@
+{
+    "version": "1.0.0",
+    "global": {
+        "settings": {
+            "theme": "dark",
+            "language": "en",
+            "auto_update": true,
+            "log_level": "INFO"
+        },
+        "security": {
+            "master_code": "FoSGamers2024",
+            "access_codes": {
+                "premium": {
+                    "code": "premium123",
+                    "permissions": ["premium", "basic"]
+                },
+                "basic": {
+                    "code": "basic123",
+                    "permissions": ["basic"]
+                }
+            }
+        }
+    },
+    "modules": {
+        "chatbot_plus": {
+            "enabled": true,
+            "requires_code": true,
+            "access_level": "premium",
+            "description": "Enhanced chat interface with YouTube integration",
+            "features": {
+                "youtube": true,
+                "twitch": false,
+                "x": false,
+                "obs_sync": false
+            },
+            "config": {
+                "youtube": {
+                    "client_id": "YOUR_CLIENT_ID",
+                    "client_secret": "YOUR_CLIENT_SECRET",
+                    "redirect_uri": "http://localhost:8001/oauth2callback"
+                }
+            }
+        },
+        "gui": {
+            "enabled": true,
+            "requires_code": false,
+            "access_level": "none",
+            "description": "Main launcher interface",
+            "features": {
+                "dark_mode": true,
+                "custom_themes": false
+            }
+        },
+        "chatsplitter": {
+            "enabled": true,
+            "requires_code": false,
+            "access_level": "basic",
+            "description": "Chat message splitter utility",
+            "features": {
+                "basic_export": true,
+                "markdown_export": false,
+                "branch_visualization": false
+            }
+        }
+    }
+} 

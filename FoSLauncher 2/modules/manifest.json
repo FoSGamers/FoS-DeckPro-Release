@@ -1,0 +1,32 @@
+[
+  {
+    "Name": "Wasteland Odyssey Engine",
+    "ID": "rpg_engine",
+    "Entry": "modules/rpg_engine/main.py",
+    "Status": "Working"
+  },
+  {
+    "Name": "YouTube Shorts Builder",
+    "ID": "yt_shorts_toolkit",
+    "Entry": "modules/yt_shorts_toolkit/main.py",
+    "Status": "Working"
+  },
+  {
+    "Name": "ChatSplitter App",
+    "ID": "chatsplitter",
+    "Entry": "modules/chatsplitter/main.py",
+    "Status": "Working"
+  },
+  {
+    "Name": "FoSGamers Chatbot+",
+    "ID": "chatbot_plus",
+    "Entry": "modules/chatbot_plus/main.py",
+    "Status": "Working"
+  },
+  {
+    "Name": "Command Manager GUI",
+    "ID": "command_manager_gui",
+    "Entry": "modules/command_manager_gui.py",
+    "Status": "Working"
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "command": "!help",
+    "response": "Available commands: !help, !about, !commands",
+    "category": "utility"
+  },
+  {
+    "command": "!about",
+    "response": "FoSGamers Chatbot+ using FastAPI and WebSockets",
+    "category": "utility"
+  },
+  {
+    "command": "!commands",
+    "response": "Loaded via commands.json or CSV",
+    "category": "utility"
+  }
+]

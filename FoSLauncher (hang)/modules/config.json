@@ -1,0 +1,49 @@
+{
+    "access_codes": {
+        "premium": {
+            "code": "premium123",
+            "permissions": [
+                "premium",
+                "basic"
+            ]
+        },
+        "basic": {
+            "code": "basic123",
+            "permissions": [
+                "basic"
+            ]
+        }
+    },
+    "master_code": "FoSGamers2024",
+    "modules": {
+        "chatbot_plus": {
+            "enabled": true,
+            "requires_code": true,
+            "access_level": "premium",
+            "description": "Enhanced chat interface with YouTube integration"
+        },
+        "chatsplitter": {
+            "enabled": true,
+            "requires_code": false,
+            "access_level": "basic",
+            "description": "Chat message splitter utility"
+        },
+        "command_manager": {
+            "enabled": true,
+            "requires_code": false,
+            "access_level": "basic",
+            "description": "Manage and customize chat commands"
+        }
+    },
+    "youtube": {
+        "client_id": "YOUR_CLIENT_ID",
+        "client_secret": "YOUR_CLIENT_SECRET",
+        "redirect_uri": "http://localhost:8001/oauth2callback"
+    },
+    "settings": {
+        "theme": "dark",
+        "language": "en",
+        "auto_update": true,
+        "log_level": "INFO"
+    }
+}

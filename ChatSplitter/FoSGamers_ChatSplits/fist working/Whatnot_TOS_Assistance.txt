@@ -1,0 +1,254 @@
+Chat: Whatnot_TOS_Assistance
+Started: 2025-03-12 09:34:01
+
+[2025-03-12 09:34:01] FoSGamers:
+This here is for a chat that will help me with the whatnot terms of service and anytime I have a question related to it I can come to you to ask if it is whatever I'm doing is within their terms of service and I will get in trouble or I will not get in trouble.
+
+[2025-03-12 09:34:10] ChatGPT:
+Got it! Anytime you have a question about Whatnot’s Terms of Service or need to verify if something is compliant, just ask, and I’ll check against the relevant guidelines to ensure you won’t run into any issues. What’s your first question?
+
+[2025-03-12 09:34:13] FoSGamers:
+
+Please remember to search the user's documents if an answer to their question is not contained in the above snippets.
+
+
+[2025-03-12 09:34:56] FoSGamers:
+Thoroughly understand WhatNot's Terms of Service, read everything about it, and rules for gambling, games, and that type of thing, and then find what their surprise set, their new thing is there, and thoroughly understand what the surprise set is, how it works, and how I can use it for my games.
+
+[2025-03-12 09:35:04] ChatGPT:
+Understanding Whatnot's policies on gambling, games, and their new "Surprise Sets" feature is crucial for compliant and engaging sales. Here's a comprehensive breakdown:
+
+**Whatnot's Policies on Gambling and Games**
+
+Whatnot strictly prohibits any form of gambling or purchase-based prizes on its platform. This includes activities where buyers pay for a chance to win a prize, such as raffles or lotteries. Sellers are required to comply with all applicable local, state, and federal laws and regulations, including those related to gambling. citeturn0search0
+
+**Prohibited Gambling Activities**
+
+Specific gambling-related items and activities are not permitted on Whatnot, including:
+
+- Lottery tickets
+- Raffle tickets
+- Functioning slot machines
+
+These restrictions are in place to maintain a trustworthy and legal buying experience for all users. citeturn0search2
+
+**Surprise Sets: What They Are and How They Work**
+
+Whatnot has introduced "Surprise Sets" (formerly known as "Mystery Games") as a compliant and engaging sales format. In a Surprise Set, buyers purchase a listing related to a collection of products without knowing the exact item they'll receive until after the purchase. Sellers can include up to 100 specific products of similar types in a Surprise Set. citeturn0search3
+
+**Guidelines for Selling Surprise Sets**
+
+To ensure compliance and transparency when selling Surprise Sets, sellers must adhere to the following guidelines:
+
+- **Randomization and Visibility**:
+  - Distribution of Surprise Products cannot be randomized through physical machines (e.g., vending machines, raffle drums).
+  - All Surprise Products must be opened and shown during the live show.
+  - All Surprise Products must be visible and kept on screen during the show.
+  - Sellers can only sell as many listings for Surprise Products as there are items in the Surprise Set.
+
+- **Detailed Listing Requirements**:
+  - Sellers must provide a checklist of all items in each Surprise Product within each set in the listing description.
+  - The description of each item must include:
+    - Brand/Manufacturer (or indicate if unbranded)
+    - Title/Product Name
+    - Condition
+    - Quantity, if more than one of the items is available
+
+By following these guidelines, sellers can create an engaging experience for buyers while maintaining transparency and trust. citeturn0search1
+
+**Implementing Surprise Sets in Your Games**
+
+To incorporate Surprise Sets into your games while complying with Whatnot's policies:
+
+1. **Design Your Surprise Set**:
+   - Curate a collection of items related to your game (e.g., trading cards, game accessories).
+   - Ensure each item is clearly described with all required details.
+
+2. **Set Up the Surprise Set Feature**:
+   - Create a new show on Whatnot and set the show format to "Surprise Sets."
+   - Within the live show, add your Surprise Set, including all necessary information and product details.
+
+3. **Conduct the Live Show**:
+   - Keep all Surprise Products visible on screen during the show.
+   - Open and reveal each product during the live stream as they are sold.
+   - Avoid using any physical randomization devices during the distribution process.
+
+By integrating Surprise Sets into your games in this manner, you can offer an exciting and compliant experience for your audience on Whatnot. citeturn0search3
+
+**Conclusion**
+
+Adhering to Whatnot's policies on gambling and utilizing the Surprise Sets feature allows you to engage your audience creatively while maintaining compliance. Always ensure transparency in your listings and conduct your sales in accordance with Whatnot's guidelines to provide a trustworthy experience for your buyers. 
+
+[2025-03-12 09:37:16] FoSGamers:
+Are these done as auctions? Because it doesn't have an ability for me to put a price on anything.
+
+[2025-03-12 09:37:23] ChatGPT:
+Yes, Whatnot's "Surprise Sets" are typically sold through auctions. Sellers create a collection of items, and each item within the Surprise Set is auctioned individually. Buyers bid on these items without knowing exactly which specific product they'll receive until after the auction concludes. citeturn0search0
+
+**Setting Up Surprise Sets**
+
+To set up a Surprise Set for auction:
+
+1. **Create a New Show**:
+   - Schedule a new live show and select the "Surprise Sets" format.
+
+2. **Add a Surprise Set**:
+   - Within your live show setup, click the "Add" button in your Live Shop.
+   - Choose "Create a Surprise Set."
+
+3. **Configure Settings**:
+   - Name your Surprise Set and provide a description.
+   - Select a shipping profile.
+   - Decide on randomization settings:
+     - **Auto-Randomize**: Automatically assigns a product to a buyer immediately after purchase.
+     - **Quick Spin**: Provides a faster randomization animation.
+
+4. **Manage Products**:
+   - Enter details for each product in the set, including name, description, and quantity.
+
+5. **Create the Surprise Set**:
+   - Finalize and create your Surprise Set.
+
+6. **Run the Surprise Set During the Live Show**:
+   - Start the auction and pin/run each item.
+   - If "Auto-Randomize" is enabled, products are assigned automatically after each sale. Otherwise, you can randomize manually.
+
+**Pricing in Surprise Sets**
+
+In the Surprise Set format, each item is auctioned, and buyers place bids to win individual items. The final price is determined by the highest bid at the end of each auction. This auction-based approach aligns with Whatnot's guidelines for Surprise Sets. citeturn0search0
+
+**Alternative Fixed-Price Options**
+
+If you prefer to sell items at a fixed price rather than through auctions, you can use the "Buy It Now" option when listing products. This allows buyers to purchase items immediately at the set price without participating in an auction. citeturn0search3
+
+**Compliance with Whatnot Policies**
+
+Ensure that all Surprise Sets comply with Whatnot's Surprise Products Policy, which includes guidelines on product visibility, detailed checklists, and restrictions on certain randomization methods. citeturn0search2
+
+By following these steps and guidelines, you can effectively utilize the Surprise Set feature to engage buyers through auctions on Whatnot. 
+
+[2025-03-12 09:38:40] FoSGamers:
+Put all of that information together in relation to SurpriseSats.
+
+[2025-03-12 09:38:40] ChatGPT:
+### **Whatnot’s Surprise Sets: A Complete Guide for Sellers**
+
+Whatnot’s **Surprise Sets** (formerly **Mystery Games**) offer an interactive way to sell collections of items while ensuring compliance with the platform’s policies. This guide explains **how Surprise Sets work**, **pricing and auctions**, and **how to use them effectively for your games**.
+
+---
+
+## **What Are Surprise Sets?**
+Surprise Sets allow sellers to create a **collection of items** that buyers can purchase without knowing which specific product they will receive until after the sale. This feature **ensures compliance with Whatnot’s policies** by eliminating gambling-like elements while maintaining an engaging buyer experience.
+
+### **Key Features of Surprise Sets:**
+- Sellers **create a set of products** (up to 100 items).
+- Buyers purchase from the Surprise Set and **receive a randomly assigned item**.
+- Every item in the set must be **clearly described** in the listing.
+- **No physical randomization** (e.g., spin wheels, raffle drums) is allowed.
+
+📌 **Why Use Surprise Sets?**
+✔ Compliant with Whatnot’s policies.  
+✔ Creates excitement and engagement.  
+✔ Allows for structured, transparent randomized sales.
+
+---
+
+## **How Pricing Works: Auction vs. Buy Now**
+### **Are Surprise Sets Auctions or Fixed-Price?**
+Surprise Sets are **primarily sold through auctions**, where buyers place bids, and the highest bidder wins an item from the set. However, fixed pricing is possible using **Buy It Now**.
+
+### **Auction-Based Surprise Sets**
+- Items from the Surprise Set are **auctioned one by one**.
+- The highest bidder wins, and their item is revealed after the auction ends.
+- This aligns with Whatnot’s guidelines for randomized sales.
+
+### **Fixed-Price Option**
+- Instead of an auction, sellers can **list Surprise Set items using “Buy It Now.”**
+- Buyers purchase at a set price and are randomly assigned an item.
+
+💡 **Which Option Should You Use?**  
+- Use **Auction Mode** for **high engagement** and unpredictable pricing.  
+- Use **Buy It Now** if you prefer **consistent pricing** for all Surprise Set items.
+
+---
+
+## **How to Set Up a Surprise Set on Whatnot**
+### **1. Create a New Show**
+- Go to **Whatnot’s Live Show Setup** and select **Surprise Set** as the format.
+
+### **2. Add a Surprise Set**
+- In the Live Shop, click **“Add” → “Create a Surprise Set”**.
+
+### **3. Configure Surprise Set Settings**
+- **Name your set** (e.g., “Wasteland Mystery Cards”).
+- **Describe the set and all items included** (Whatnot requires clear descriptions).
+- **Choose a shipping profile** for the set.
+- **Enable randomization settings**:
+  - **Auto-Randomize**: Automatically assigns an item to the buyer after purchase.
+  - **Quick Spin**: Adds an animated reveal effect.
+
+### **4. Manage Product Listings**
+- List all items in the set, **each with a full description** (brand, condition, etc.).
+- Ensure the **total number of items matches the number of listings available**.
+
+### **5. Run the Live Show**
+- **Keep all Surprise Set items visible** on screen at all times.
+- **Reveal each product after purchase**, ensuring transparency.
+- **Follow Whatnot’s Surprise Products Policy** (no physical randomization tools allowed).
+
+---
+
+## **Whatnot’s Compliance Rules for Surprise Sets**
+### **Rules to Follow:**
+✅ **Every item in the set must be clearly listed** (brand, condition, quantity, etc.).  
+✅ **Items must remain visible** on-screen during the live show.  
+✅ **No physical randomization methods** (e.g., spin wheels, mystery boxes drawn from a container).  
+✅ **Buyers must receive an item immediately upon purchase** (no waiting for a later reveal).  
+✅ **No exceeding the number of listed items** (e.g., if there are 50 items, only 50 Surprise Set purchases can be made).
+
+🚫 **What’s NOT Allowed?**
+❌ Raffles, lotteries, or prize wheels to determine winners.  
+❌ Using **off-screen** or hidden selection methods.  
+❌ Selling more Surprise Set entries than available items.
+
+---
+
+## **Using Surprise Sets in Your Games**
+Want to integrate Surprise Sets into your Whatnot live games? Here’s how:
+
+### **1. Themed Surprise Set Breaks**
+- If you’re running an **MTG pack battle or Wasteland Odyssey event**, set up a **Surprise Set containing different card packs**.
+- Each purchase gives a player a **random pack from the set**.
+- Players can then compete with the pack they receive.
+
+### **2. Battle-Based Pack Draws**
+- Assign Surprise Set pulls to players in a **pack battle format**.
+- The item a player receives determines **their starting hand or special ability**.
+
+### **3. RPG-Style Reveal Events**
+- Players purchase Surprise Set items, and the reveal becomes part of the storyline.
+- Example: In **Wasteland Adventure**, each buyer pulls a **randomized “Vault Encounter” item** that affects the game.
+
+🎯 **Best Practices for Using Surprise Sets in Your Games**
+✔ Clearly list all potential items in the Surprise Set.  
+✔ Keep all items visible at all times.  
+✔ Reveal each item immediately after purchase.  
+✔ Use “Buy It Now” if you want to offer set pricing rather than auctions.
+
+---
+
+## **Final Thoughts: Should You Use Surprise Sets?**
+✔ **YES** if you want to **sell randomized products legally** while keeping your show interactive.  
+✔ **YES** if you’re looking for a **new way to create suspense in your Whatnot games**.  
+✔ **NO** if you need to physically randomize pulls (since Whatnot prohibits this).
+
+By setting up your Surprise Sets correctly and following Whatnot’s compliance rules, you can **run engaging live sales and games** while maintaining transparency and trust with your buyers.
+
+---
+
+🔗 **For More Details:**  
+- [Whatnot Surprise Set Policy](https://help.whatnot.com/hc/en-us/articles/34107510260237-Surprise-Products-Policy)  
+- [How to List Products on Whatnot](https://help.whatnot.com/hc/en-us/articles/9779149424269-How-to-list-products-on-Whatnot)  
+- [Whatnot Gambling and Giveaway Rules](https://help.whatnot.com/hc/en-us/articles/360061197472-Whatnot-Community-Guidelines)  
+
+Let me know if you need **custom strategies** for your Surprise Set sales!

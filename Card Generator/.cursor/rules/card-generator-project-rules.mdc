@@ -1,0 +1,48 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+Card Generator Project Rules for Modularity & Upgradability
+1. Directory & Module Structure
+Each major feature or concern must be in its own directory/module (e.g., ai/, cards/, gui/, utils/, config/).
+No circular imports—dependencies should flow in one direction.
+Shared logic (e.g., helpers, constants) goes in utils/ or a dedicated shared module.
+2. Separation of Concerns
+UI code (dialogs, windows, widgets) must not contain business logic or data manipulation.
+Business logic (card generation, approval, export, etc.) must not depend on UI code.
+Data access (JSON/database loading/saving) must be in its own module (utils/json_loader.py, etc.).
+3. Extensibility
+All features must be implemented as pluggable modules—new card types, new export formats, new AI models, etc., should be addable without modifying core logic.
+Use interfaces/abstract base classes for extensible parts (e.g., card generators, exporters).
+Configuration-driven: Use config files or JSON for anything that might change (schema, fonts, templates, etc.).
+4. Robustness & Error Handling
+All file/network operations must have error handling and user feedback.
+Never block the UI thread—use background threads for I/O or long-running tasks.
+Graceful fallback: If a feature fails (e.g., font download), always provide a fallback and clear user feedback.
+5. Upgrade Safety
+No breaking changes: All new features must be backward compatible.
+Feature flags/config switches for experimental or optional features.
+Versioned data formats (e.g., JSON schema versioning).
+6. Testing & Documentation
+Each module must have its own tests (unit or integration).
+README and in-code docstrings must be kept up to date with new features or changes.
+Document all public APIs and extension points.
+7. UI/UX Consistency
+All dialogs/windows must be self-contained and reusable.
+No hardcoded paths or magic values—use config or constants.
+Consistent error and status messaging throughout the app.
+8. Code Quality
+Follow PEP8 and project linting rules.
+Type annotations for all public functions and methods.
+No dead code or commented-out blocks in main branches.
+9. Modular Upgrades
+When adding a new feature, always ask:
+Can this be a new module or plugin?
+Will this break any existing feature?
+Is this discoverable/configurable by the user?
+10. Cursor/AI Assistant Usage
+Always use the smallest possible edit scope (edit only the relevant file/lines).
+Never break existing features when refactoring or adding new code.
+If a refactor is needed, do it in clear, incremental steps, testing after each.
+When in doubt, ask for clarification or propose options before making large changes.

@@ -1,0 +1,23 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+*.db
+*.db-journal
+*.sqlite3
+client_secret.json
+*.log
+*.tmp
+# Data directory (contains secrets!)
+/data/
+# IDE files
+.vscode/
+*.sublime-project
+*.sublime-workspace
+# OS files
+.DS_Store
+# Coverage
+.coverage
+htmlcov/

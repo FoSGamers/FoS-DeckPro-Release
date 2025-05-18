@@ -1,0 +1,64 @@
+Chat: Follow-Up_Discussion_on_6_17
+Started: 2024-06-28 12:29:40
+
+[2024-06-28 12:29:40] FoSGamers:
+Form a response to this email. 
+
+
+Hi Jamey,
+
+ 
+
+I wanted to follow up quickly on our discussion from 6/17. On 6/14, you had sent me an email advising that you felt that you were being stalked by your People Leader(PL). Being I was on FTO on 6/14, I scheduled a call upon my return.
+
+ 
+
+When asked if you could help me understand why you felt you were being stalked by your PL, you stated that you met with your PL and his Leader on 6/5 to discuss prior instances of FTO that had not been coded in Time Management. Specifically, you stated that you had discussed a day from October 2023 that should have been a comp day to which your PL did not make you code FTO for the date in question.
+
+ 
+
+You then shared that you met with someone in Talent the week prior regarding the fact that it had been observed that you were live streaming on YouTube during your working hours which you stated had been approved by your prior manager who is no longer with the company. You had concerns that someone dug into personal life and shared it with the company but unsure of who.  You also shared that you have mentioned the fact that you live stream on YouTube to your team on multiple occasions and that the channel is public.
+
+ 
+
+Lastly, you also shared that you had started to write a resignation letter over the past weekend. 
+
+ 
+
+Throughout the conversation, I asked several times why you felt you were being stalked by your PL to which you explained the above. You stated that you were uncomfortable that your PL looked into you live streaming on YouTube during working hours. As we discussed, concerns are raised to Talent in a variety of different ways, and you also acknowledged that you were making an assumption as to your PL's involvement.  We also discussed that if Talent is made aware of concerns,  we are obligated to review which you understood.
+
+ 
+
+Please let me know if I failed to include anything pertinent that we discussed.
+
+[2024-06-28 12:29:55] ChatGPT:
+# Response Email
+
+---
+
+Subject: Follow-Up on 6/17 Discussion
+
+Hi [Recipient's Name],
+
+Thank you for your email and for following up on our discussion from 6/17.
+
+To recap:
+
+1. On 6/14, I sent an email expressing concerns about feeling stalked by my People Leader (PL). You scheduled a call to discuss this upon your return from FTO.
+2. During our call, I explained that the feeling of being stalked arose after a meeting on 6/5 with my PL and his Leader regarding FTO instances not coded in Time Management, specifically a comp day from October 2023.
+3. I mentioned meeting with someone in Talent the previous week about live streaming on YouTube during working hours, which was previously approved by my former manager. I expressed concerns about someone delving into my personal life and sharing it with the company.
+4. I clarified that my YouTube live streaming activities are public and have been mentioned to my team multiple times.
+5. I also mentioned drafting a resignation letter over the past weekend due to these concerns.
+6. Throughout our conversation, I reiterated feeling uncomfortable with my PL's potential involvement in discovering my live streaming activities, despite acknowledging it might be an assumption. We discussed that Talent reviews concerns raised in various ways, and I understood this obligation.
+
+I believe your summary captures our discussion accurately. If there's anything else to address or any further action needed, please let me know.
+
+Best regards,
+
+Jamey
+
+---
+
+Iterate, Improve, Evolve - Note critiques or edge cases, propose improvements.
+Question - Ask a specific question about the script or functionality.
+Validate - Check for syntax and spacing issues in all scripts.

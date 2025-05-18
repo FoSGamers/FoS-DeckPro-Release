@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FoSBot Whatnot Helper</title>
+    <style>
+        body { font-family: Arial, sans-serif; width: 350px; padding: 15px; }
+        h3 { margin: 0 0 10px; }
+        label { display: block; margin: 10px 0 5px; font-weight: bold; }
+        input, button { width: 100%; padding: 8px; margin-bottom: 10px; box-sizing: border-box; }
+        button { background: #007bff; color: white; border: none; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        #status { font-size: 14px; margin: 10px 0; }
+        #status.success { color: green; }
+        #status.error { color: red; }
+        #modeStatus { font-size: 16px; font-weight: bold; margin: 10px 0; }
+        .instructions { font-size: 12px; margin-bottom: 10px; }
+        .instructions ol { margin: 0; padding-left: 20px; }
+        a { color: #007bff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h3>FoSBot Whatnot Helper</h3>
+    <div id="modeStatus">Setup Mode: Checking...</div>
+    <div id="status">Checking connection...</div>
+    <label><input type="checkbox" id="setupMode"> Turn On Setup Mode</label>
+    <div class="instructions">
+        <p><strong>How to set up:</strong></p>
+        <ol>
+            <li>Start the FoSBot app in Terminal.</li>
+            <li>Open a Whatnot stream page.</li>
+            <li>Check "Turn On Setup Mode" above.</li>
+            <li>Follow the box on the page to click chat parts.</li>
+            <li>Click "Test Setup" when done.</li>
+        </ol>
+    </div>
+    <button id="testButton">Test Setup</button>
+    <p><a href="https://patreon.com/yourvideo" target="_blank">Watch Setup Video</a></p>
+    <script src="popup.js"></script>
+</body>
+</html>

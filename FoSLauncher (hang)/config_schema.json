@@ -1,0 +1,104 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "FoSLauncher Configuration Schema",
+    "type": "object",
+    "properties": {
+        "version": {
+            "type": "string",
+            "description": "Configuration version"
+        },
+        "global": {
+            "type": "object",
+            "properties": {
+                "settings": {
+                    "type": "object",
+                    "properties": {
+                        "theme": {
+                            "type": "string",
+                            "enum": ["dark", "light", "system"]
+                        },
+                        "language": {
+                            "type": "string",
+                            "pattern": "^[a-z]{2}(-[A-Z]{2})?$"
+                        },
+                        "auto_update": {
+                            "type": "boolean"
+                        },
+                        "log_level": {
+                            "type": "string",
+                            "enum": ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
+                        }
+                    },
+                    "required": ["theme", "language", "auto_update", "log_level"]
+                },
+                "security": {
+                    "type": "object",
+                    "properties": {
+                        "master_code": {
+                            "type": "string",
+                            "minLength": 8
+                        },
+                        "access_codes": {
+                            "type": "object",
+                            "patternProperties": {
+                                "^[a-z]+$": {
+                                    "type": "object",
+                                    "properties": {
+                                        "code": {
+                                            "type": "string",
+                                            "minLength": 8
+                                        },
+                                        "permissions": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    },
+                                    "required": ["code", "permissions"]
+                                }
+                            }
+                        }
+                    },
+                    "required": ["master_code", "access_codes"]
+                }
+            },
+            "required": ["settings", "security"]
+        },
+        "modules": {
+            "type": "object",
+            "patternProperties": {
+                "^[a-z_]+$": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean"
+                        },
+                        "requires_code": {
+                            "type": "boolean"
+                        },
+                        "access_level": {
+                            "type": "string",
+                            "enum": ["none", "basic", "premium", "master"]
+                        },
+                        "description": {
+                            "type": "string"
+                        },
+                        "features": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": ["boolean", "object"]
+                            }
+                        },
+                        "config": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "required": ["enabled", "requires_code", "access_level", "description"]
+                }
+            }
+        }
+    },
+    "required": ["version", "global", "modules"]
+} 

@@ -788,7 +788,11 @@ class MainWindow(QMainWindow):
         fixed_input = QLineEdit()
         fixed_input.setPlaceholderText("e.g. 2.00")
         # Option 2: Custom rounding logic
-        round_radio = QRadioButton("Round: .30 or higher rounds up to next dollar, otherwise down")
+        round_radio = QRadioButton("Round: cents >= threshold rounds up, otherwise down")
+        round_threshold_label = QLabel("Rounding threshold (e.g. 0.30):")
+        round_threshold_input = QLineEdit()
+        round_threshold_input.setPlaceholderText("0.30")
+        round_threshold_input.setText("0.30")
         fixed_radio.setChecked(True)
         group = QButtonGroup(dlg)
         group.addButton(fixed_radio)
@@ -796,6 +800,10 @@ class MainWindow(QMainWindow):
         layout.addWidget(fixed_radio)
         layout.addWidget(fixed_input)
         layout.addWidget(round_radio)
+        round_row = QHBoxLayout()
+        round_row.addWidget(round_threshold_label)
+        round_row.addWidget(round_threshold_input)
+        layout.addLayout(round_row)
         btns = QHBoxLayout()
         apply_btn = QPushButton("Apply")
         cancel_btn = QPushButton("Cancel")
@@ -813,11 +821,16 @@ class MainWindow(QMainWindow):
                 for card in all_cards:
                     card["Whatnot price"] = f"${val:.2f}"
             elif round_radio.isChecked():
+                try:
+                    threshold = float(round_threshold_input.text())
+                except Exception:
+                    QMessageBox.warning(dlg, "Invalid Input", "Please enter a valid number for rounding threshold.")
+                    return
                 for card in all_cards:
                     try:
                         price = float(str(card.get("Purchase price", "")).replace("$", "").strip())
                         cents = price - int(price)
-                        if cents >= 0.30:
+                        if cents >= threshold:
                             rounded = math.ceil(price)
                         else:
                             rounded = math.floor(price)

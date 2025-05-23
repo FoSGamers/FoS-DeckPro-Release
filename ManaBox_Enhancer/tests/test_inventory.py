@@ -426,3 +426,60 @@ def test_export_cards_gui_interaction(qtbot, tmp_path):
         assert any(row["Name"] == "ExportMe" for row in rows), "Exported card not found in CSV."
     # Restore QFileDialog
     window.export_cards.__globals__["QFileDialog"].getSaveFileName = orig_getSaveFileName
+
+def test_column_customization_gui_interaction(qtbot):
+    """
+    GUI test: Simulate a user customizing columns (hide, reorder, restore defaults) via the dialog.
+    """
+    from ManaBox_Enhancer.ui.main_window import MainWindow
+    from PySide6.QtWidgets import QDialog, QListWidget, QListWidgetItem, QPushButton
+    window = MainWindow()
+    qtbot.addWidget(window)
+    window.show()
+    # Open column customization dialog
+    window.customize_columns()
+    dialogs = [w for w in window.findChildren(QDialog) if w.isVisible()]
+    assert dialogs, "No column customization dialog found."
+    dlg = dialogs[0]
+    # Find the list widget
+    list_widget = dlg.findChild(QListWidget)
+    assert list_widget is not None, "Column list widget not found."
+    # Hide the first column (uncheck)
+    item = list_widget.item(0)
+    item.setCheckState(0)  # Unchecked
+    # Reorder: move last item to first (simulate drag)
+    last_item = list_widget.takeItem(list_widget.count() - 1)
+    list_widget.insertItem(0, last_item)
+    # Click OK
+    ok_btn = None
+    for w in dlg.findChildren(QPushButton):
+        if w.text().lower() == "ok":
+            ok_btn = w
+            break
+    assert ok_btn is not None, "OK button not found in column customization dialog."
+    qtbot.mouseClick(ok_btn, qtbot.QtCore.Qt.LeftButton)
+    # Verify table: first column is now the one that was last, and the original first column is hidden
+    new_headers = [window.card_table.model.headerData(i, window.card_table.model.Orientation.Horizontal) for i in range(window.card_table.model.columnCount())]
+    assert new_headers[0] == last_item.text(), "Column order did not update."
+    assert not window.card_table.isColumnHidden(0) or new_headers[0] != item.text(), "Hidden column is still visible."
+    # Now restore defaults
+    window.customize_columns()
+    dlg = [w for w in window.findChildren(QDialog) if w.isVisible()][0]
+    restore_btn = None
+    for w in dlg.findChildren(QPushButton):
+        if "restore" in w.text().lower():
+            restore_btn = w
+            break
+    assert restore_btn is not None, "Restore Defaults button not found."
+    qtbot.mouseClick(restore_btn, qtbot.QtCore.Qt.LeftButton)
+    # Click OK to apply
+    ok_btn = None
+    for w in dlg.findChildren(QPushButton):
+        if w.text().lower() == "ok":
+            ok_btn = w
+            break
+    qtbot.mouseClick(ok_btn, qtbot.QtCore.Qt.LeftButton)
+    # Verify table headers match defaults
+    expected_headers = window.default_columns
+    actual_headers = [window.card_table.model.headerData(i, window.card_table.model.Orientation.Horizontal) for i in range(window.card_table.model.columnCount())]
+    assert actual_headers == expected_headers, "Table headers do not match defaults after restore."

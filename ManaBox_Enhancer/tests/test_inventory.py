@@ -265,3 +265,46 @@ def test_add_card_gui_interaction(qtbot):
     assert after_count == before_count + 1, "Card was not added."
     added_card = window.inventory.get_all_cards()[-1]
     assert added_card["Name"] == "Test Card"
+
+def test_edit_card_gui_interaction(qtbot):
+    """
+    GUI test: Simulate a user editing a card via the Edit Card dialog.
+    """
+    from ManaBox_Enhancer.ui.main_window import MainWindow
+    from PySide6.QtWidgets import QDialog, QLineEdit, QPushButton
+    window = MainWindow()
+    qtbot.addWidget(window)
+    window.show()
+    # Ensure at least one card exists
+    all_cards = window.inventory.get_all_cards()
+    if not all_cards:
+        window.inventory.load_cards([{"Name": "EditMe"}])
+        window.card_table.update_cards(window.inventory.get_all_cards())
+    # Select the first card in the table
+    index = window.card_table.model.index(1, 0)  # row 1 (first card), col 0
+    window.card_table.selectRow(1)
+    # Trigger edit (simulate double-click)
+    window.card_table.on_double_click(index)
+    # Find the dialog
+    dialogs = [w for w in window.findChildren(QDialog) if w.isVisible()]
+    assert dialogs, "No Edit Card dialog found."
+    dlg = dialogs[0]
+    # Change the Name field
+    name_field = None
+    for w in dlg.findChildren(QLineEdit):
+        if w.text() == all_cards[0]["Name"]:
+            name_field = w
+            break
+    assert name_field is not None, "Name field not found."
+    qtbot.keyClicks(name_field, "_Edited")
+    # Click Save
+    save_btn = None
+    for w in dlg.findChildren(QPushButton):
+        if w.text().lower() == "save":
+            save_btn = w
+            break
+    assert save_btn is not None, "Save button not found."
+    qtbot.mouseClick(save_btn, qtbot.QtCore.Qt.LeftButton)
+    # Check card edited
+    updated_card = window.inventory.get_all_cards()[0]
+    assert updated_card["Name"].endswith("_Edited"), "Card name was not edited."

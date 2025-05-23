@@ -16,13 +16,10 @@ build/
 *.log
 
 # Virtual environments
+.venv/
+.venv311/
 venv/
-*/venv/
-*/venv*/
-*/.flask_session/
-*/.pytest_cache/
-.env
-.env.*
+ENV/
 
 # Backup and output folders
 backups/
@@ -39,3 +36,18 @@ logs/
 Thumbs.db
 ehthumbs.db
 Icon?
+
+# VSCode
+.vscode/
+
+# PyCharm
+.idea/
+
+# Test output
+htmlcov/
+.coverage
+.cache/
+
+# Misc
+*.bak
+*.swp

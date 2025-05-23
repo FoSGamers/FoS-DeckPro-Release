@@ -1,5 +1,5 @@
-from PySide6.QtWidgets import QTableView, QMenu, QHeaderView, QSizePolicy
-from PySide6.QtCore import QAbstractTableModel, Qt, Signal, QModelIndex
+from PyQt6.QtWidgets import QTableView, QMenu, QHeaderView, QSizePolicy
+from PyQt6.QtCore import QAbstractTableModel, Qt, pyqtSignal, QModelIndex
 
 class CardTableModel(QAbstractTableModel):
     def __init__(self, cards=None, columns=None):
@@ -13,8 +13,8 @@ class CardTableModel(QAbstractTableModel):
     def columnCount(self, parent=None):
         return len(self.columns)
 
-    def data(self, index, role=Qt.DisplayRole):
-        if not index.isValid() or role != Qt.DisplayRole:
+    def data(self, index, role=Qt.ItemDataRole.DisplayRole):
+        if not index.isValid() or role != Qt.ItemDataRole.DisplayRole:
             return None
         if index.row() == 0:
             return ""  # Blank filter row
@@ -22,8 +22,8 @@ class CardTableModel(QAbstractTableModel):
         col = self.columns[index.column()]
         return str(card.get(col, ""))
 
-    def headerData(self, section, orientation, role=Qt.DisplayRole):
-        if role == Qt.DisplayRole and orientation == Qt.Horizontal:
+    def headerData(self, section, orientation, role=Qt.ItemDataRole.DisplayRole):
+        if role == Qt.ItemDataRole.DisplayRole and orientation == Qt.Orientation.Horizontal:
             return self.columns[section]
         return None
 
@@ -33,9 +33,9 @@ class CardTableModel(QAbstractTableModel):
         self.endResetModel()
 
 class CardTableView(QTableView):
-    card_selected = Signal(dict)
-    edit_card_requested = Signal(int)  # row index
-    delete_card_requested = Signal(list)  # list of row indices
+    card_selected = pyqtSignal(dict)
+    edit_card_requested = pyqtSignal(int)  # row index
+    delete_card_requested = pyqtSignal(list)  # list of row indices
 
     def __init__(self, inventory, columns, parent=None):
         super().__init__(parent)
@@ -47,17 +47,17 @@ class CardTableView(QTableView):
         self.columns = columns
         self.cards = []
         self.selectionModel().selectionChanged.connect(self.on_selection_changed)
-        self.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.customContextMenuRequested.connect(self.show_context_menu)
         self.doubleClicked.connect(self.on_double_click)
 
         # Enable both horizontal and vertical scrollbars as needed
-        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        self.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        self.setHorizontalScrollMode(QTableView.ScrollPerPixel)
-        self.setVerticalScrollMode(QTableView.ScrollPerPixel)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        self.setHorizontalScrollMode(QTableView.ScrollMode.ScrollPerPixel)
+        self.setVerticalScrollMode(QTableView.ScrollMode.ScrollPerPixel)
         self.setWordWrap(False)
-        self.setTextElideMode(Qt.ElideNone)
+        self.setTextElideMode(Qt.TextElideMode.ElideNone)
         self.setShowGrid(True)
         self.setAlternatingRowColors(True)
 
@@ -78,7 +78,7 @@ class CardTableView(QTableView):
             self.setColumnWidth(i, self.default_widths.get(col, 100))
 
         # Make columns user-resizable and allow switching to stretch mode
-        self.horizontalHeader().setSectionResizeMode(QHeaderView.Interactive)
+        self.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Interactive)
 
     def update_cards(self, cards):
         self.cards = cards
@@ -113,7 +113,7 @@ class CardTableView(QTableView):
             self.edit_card_requested.emit(index.row() - 1)
 
     def keyPressEvent(self, event):
-        if event.key() == Qt.Key_Delete:
+        if event.key() == Qt.Key.Key_Delete:
             rows = sorted(set(idx.row() - 1 for idx in self.selectedIndexes() if idx.row() > 0))
             if rows:
                 self.delete_card_requested.emit(rows)
@@ -121,7 +121,7 @@ class CardTableView(QTableView):
             super().keyPressEvent(event)
 
     def set_stretch_columns(self, stretch=True):
-        mode = QHeaderView.Stretch if stretch else QHeaderView.Interactive
+        mode = QHeaderView.ResizeMode.Stretch if stretch else QHeaderView.ResizeMode.Interactive
         self.horizontalHeader().setSectionResizeMode(mode)
 
     def reset_column_widths(self):

@@ -1,7 +1,7 @@
-from PySide6.QtWidgets import (
+from PyQt6.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QPushButton, QListWidget, QListWidgetItem, QLabel
 )
-from PySide6.QtCore import Qt
+from PyQt6.QtCore import Qt
 
 class ColumnCustomizationDialog(QDialog):
     """

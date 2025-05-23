@@ -1,1 +1,0 @@
-FoSBot User Validation Guide

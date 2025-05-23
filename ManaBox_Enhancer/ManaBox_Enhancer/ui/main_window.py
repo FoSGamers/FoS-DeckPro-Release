@@ -1,7 +1,8 @@
-from PySide6.QtWidgets import (
-    QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QStatusBar, QMenuBar, QFileDialog, QMessageBox, QSplitter, QSizePolicy, QDialog, QPushButton, QTextEdit, QInputDialog, QAction
+from PyQt6.QtWidgets import (
+    QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QTableWidget, QTableWidgetItem, QHeaderView, QLabel, QStatusBar, QMenuBar, QFileDialog, QMessageBox, QSplitter, QSizePolicy, QDialog, QPushButton, QTextEdit, QInputDialog
 )
-from PySide6.QtCore import Qt
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QAction
 from ui.card_table import CardTableView
 from ui.filter_overlay import FilterOverlay
 from ui.image_preview import ImagePreview
@@ -113,7 +114,7 @@ class MainWindow(QMainWindow):
 
         # Right side: vertical splitter for image preview and card details
         right_splitter = QSplitter()
-        right_splitter.setOrientation(Qt.Vertical)
+        right_splitter.setOrientation(Qt.Orientation.Vertical)
         self.image_preview = ImagePreview()
         self.image_preview.setMinimumHeight(100)
         self.image_preview.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
@@ -284,7 +285,7 @@ class MainWindow(QMainWindow):
     def _do_import_cards(self, filename, selected_filter, merge):
         import csv
         import json
-        from PySide6.QtWidgets import QMessageBox
+        from PyQt6.QtWidgets import QMessageBox
         try:
             self.save_undo_state()
             # Determine file type
@@ -459,7 +460,7 @@ class MainWindow(QMainWindow):
                 self.save_inventory()
 
     def delete_cards(self, rows):
-        from PySide6.QtWidgets import QMessageBox
+        from PyQt6.QtWidgets import QMessageBox
         if not rows:
             return
         confirm = QMessageBox.question(
@@ -493,12 +494,12 @@ class MainWindow(QMainWindow):
             # Versioned backup
             self._save_versioned_backup()
         except Exception as e:
-            from PySide6.QtWidgets import QMessageBox
+            from PyQt6.QtWidgets import QMessageBox
             QMessageBox.critical(self, "Save Failed", f"Failed to save: {e}")
 
     def save_inventory_as(self):
         import json
-        from PySide6.QtWidgets import QFileDialog, QMessageBox
+        from PyQt6.QtWidgets import QFileDialog, QMessageBox
         filename, _ = QFileDialog.getSaveFileName(self, "Save Inventory As", os.getcwd(), "JSON Files (*.json)")
         if not filename:
             return
@@ -530,7 +531,7 @@ class MainWindow(QMainWindow):
             pass
 
     def closeEvent(self, event):
-        from PySide6.QtWidgets import QMessageBox
+        from PyQt6.QtWidgets import QMessageBox
         if self._unsaved_changes:
             reply = QMessageBox.question(
                 self, "Unsaved Changes",
@@ -553,7 +554,7 @@ class MainWindow(QMainWindow):
 
     def restore_from_backup(self):
         import json
-        from PySide6.QtWidgets import QFileDialog, QMessageBox
+        from PyQt6.QtWidgets import QFileDialog, QMessageBox
         backup_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'Backups')
         filename, _ = QFileDialog.getOpenFileName(self, "Restore from Backup", backup_dir, "JSON Files (*.json)")
         if not filename:
@@ -629,7 +630,7 @@ class MainWindow(QMainWindow):
 
     def save_column_preset(self):
         import json
-        from PySide6.QtWidgets import QInputDialog, QMessageBox
+        from PyQt6.QtWidgets import QInputDialog, QMessageBox
         preset_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'column_presets')
         os.makedirs(preset_dir, exist_ok=True)
         name, ok = QInputDialog.getText(self, "Save Column Preset", "Preset name:")
@@ -650,7 +651,7 @@ class MainWindow(QMainWindow):
 
     def load_column_preset(self):
         import json
-        from PySide6.QtWidgets import QFileDialog, QMessageBox
+        from PyQt6.QtWidgets import QFileDialog, QMessageBox
         preset_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'column_presets')
         os.makedirs(preset_dir, exist_ok=True)
         filename, _ = QFileDialog.getOpenFileName(self, "Load Column Preset", preset_dir, "JSON Files (*.json)")

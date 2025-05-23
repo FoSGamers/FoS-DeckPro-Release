@@ -1,7 +1,7 @@
-from PySide6.QtWidgets import (
+from PyQt6.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QComboBox, QScrollArea, QWidget, QMessageBox
 )
-from PySide6.QtCore import Qt
+from PyQt6.QtCore import Qt
 
 class EditCardDialog(QDialog):
     """

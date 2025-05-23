@@ -449,6 +449,17 @@ class MainWindow(QMainWindow):
         card = self.card_table.cards[row]
         dlg = EditCardDialog(card, all_fields=self.columns, parent=self)
         if test_mode:
+            def on_accept():
+                self.save_undo_state()
+                updated_card = dlg.get_card()
+                all_cards = self.inventory.get_all_cards()
+                all_cards[row] = updated_card
+                self.inventory.load_cards(all_cards)
+                self.card_table.update_cards(self.inventory.get_all_cards())
+                self._unsaved_changes = True
+                if self._auto_save:
+                    self.save_inventory()
+            dlg.accepted.connect(on_accept)
             dlg.show()
             return dlg
         if dlg.exec():
@@ -466,6 +477,17 @@ class MainWindow(QMainWindow):
     def add_card(self, test_mode=False):
         dlg = EditCardDialog(card=None, all_fields=self.columns, parent=self)
         if test_mode:
+            def on_accept():
+                self.save_undo_state()
+                new_card = dlg.get_card()
+                all_cards = self.inventory.get_all_cards()
+                all_cards.append(new_card)
+                self.inventory.load_cards(all_cards)
+                self.card_table.update_cards(self.inventory.get_all_cards())
+                self._unsaved_changes = True
+                if self._auto_save:
+                    self.save_inventory()
+            dlg.accepted.connect(on_accept)
             dlg.show()
             return dlg
         if dlg.exec():

@@ -445,9 +445,12 @@ class MainWindow(QMainWindow):
             dlg = UndoSummaryDialog(current_cards, prev_cards, self)
             dlg.exec()
 
-    def edit_card(self, row):
+    def edit_card(self, row, test_mode=False):
         card = self.card_table.cards[row]
         dlg = EditCardDialog(card, all_fields=self.columns, parent=self)
+        if test_mode:
+            dlg.show()
+            return dlg
         if dlg.exec():
             self.save_undo_state()
             updated_card = dlg.get_card()
@@ -460,8 +463,11 @@ class MainWindow(QMainWindow):
             if self._auto_save:
                 self.save_inventory()
 
-    def add_card(self):
+    def add_card(self, test_mode=False):
         dlg = EditCardDialog(card=None, all_fields=self.columns, parent=self)
+        if test_mode:
+            dlg.show()
+            return dlg
         if dlg.exec():
             self.save_undo_state()
             new_card = dlg.get_card()

@@ -308,3 +308,39 @@ def test_edit_card_gui_interaction(qtbot):
     # Check card edited
     updated_card = window.inventory.get_all_cards()[0]
     assert updated_card["Name"].endswith("_Edited"), "Card name was not edited."
+
+def test_delete_card_gui_interaction(qtbot):
+    """
+    GUI test: Simulate a user deleting a card via the Delete key and confirmation dialog.
+    """
+    from ManaBox_Enhancer.ui.main_window import MainWindow
+    from PySide6.QtWidgets import QDialog, QPushButton
+    from PySide6.QtCore import Qt
+    window = MainWindow()
+    qtbot.addWidget(window)
+    window.show()
+    # Ensure at least one card exists
+    all_cards = window.inventory.get_all_cards()
+    if not all_cards:
+        window.inventory.load_cards([{"Name": "DeleteMe"}])
+        window.card_table.update_cards(window.inventory.get_all_cards())
+    before_count = len(window.inventory.get_all_cards())
+    # Select the first card in the table
+    window.card_table.selectRow(1)
+    # Simulate Delete key press
+    qtbot.keyClick(window.card_table, Qt.Key_Delete)
+    # Find the confirmation dialog
+    dialogs = [w for w in window.findChildren(QDialog) if w.isVisible()]
+    assert dialogs, "No confirmation dialog found."
+    dlg = dialogs[0]
+    # Click Yes to confirm
+    yes_btn = None
+    for w in dlg.findChildren(QPushButton):
+        if w.text().lower() in ("yes", "ok"):
+            yes_btn = w
+            break
+    assert yes_btn is not None, "Yes button not found in confirmation dialog."
+    qtbot.mouseClick(yes_btn, Qt.LeftButton)
+    # Check card deleted
+    after_count = len(window.inventory.get_all_cards())
+    assert after_count == before_count - 1, "Card was not deleted."

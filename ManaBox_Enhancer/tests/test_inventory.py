@@ -60,3 +60,29 @@ def test_bulk_remove_and_edit(tmp_path):
     inv.load_cards(cards)
     for card in inv.get_all_cards():
         assert card["Condition"] == "PL"
+
+def test_main_window_gui_interaction(qtbot):
+    """
+    Advanced GUI test: Open the main window, simulate menu interaction, and check UI state.
+    Requires pytest-qt (pip install pytest-qt).
+    """
+    from ManaBox_Enhancer.ui.main_window import MainWindow
+    # Create the main window
+    window = MainWindow()
+    qtbot.addWidget(window)
+    window.show()
+    # Simulate clicking the 'File' menu and 'Add Card...'
+    menubar = window.menuBar()
+    file_menu = menubar.actions()[0].menu()  # 'File' menu
+    add_card_action = None
+    for action in file_menu.actions():
+        if action.text() == 'Add Card...':
+            add_card_action = action
+            break
+    assert add_card_action is not None, "Add Card action not found in File menu."
+    # Trigger the action (would open the Add Card dialog)
+    qtbot.mouseClick(menubar, qtbot.QtCore.Qt.LeftButton)
+    add_card_action.trigger()
+    # The dialog should appear; we can check for its existence
+    # (In a real test, you would interact with the dialog here)
+    assert window.isVisible(), "Main window should remain visible after menu interaction."

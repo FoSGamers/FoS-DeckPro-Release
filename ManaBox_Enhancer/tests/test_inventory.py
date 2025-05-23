@@ -553,3 +553,25 @@ def test_restore_from_backup_gui_interaction(qtbot, tmp_path):
     assert restored, "Restored card not found in inventory."
     # Restore QFileDialog
     window.restore_from_backup.__globals__["QFileDialog"].getOpenFileName = orig_getOpenFileName
+
+def test_auto_save_toggle_gui_interaction(qtbot):
+    """
+    GUI test: Simulate a user toggling Auto-Save in the menu and verify the internal state changes.
+    """
+    from ManaBox_Enhancer.ui.main_window import MainWindow
+    window = MainWindow()
+    qtbot.addWidget(window)
+    window.show()
+    # Find the Auto-Save menu action
+    auto_save_action = window.auto_save_action
+    assert auto_save_action is not None, "Auto-Save action not found."
+    # Initial state should be False
+    assert not window._auto_save, "Auto-Save should be off by default."
+    # Simulate user toggling Auto-Save on
+    auto_save_action.setChecked(True)
+    window.toggle_auto_save()
+    assert window._auto_save, "Auto-Save should be on after toggling."
+    # Simulate user toggling Auto-Save off
+    auto_save_action.setChecked(False)
+    window.toggle_auto_save()
+    assert not window._auto_save, "Auto-Save should be off after toggling again."

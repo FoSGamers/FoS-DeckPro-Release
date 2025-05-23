@@ -609,3 +609,30 @@ def test_save_load_column_preset_gui_interaction(qtbot, tmp_path):
     # Restore QInputDialog and QFileDialog
     window.save_column_preset.__globals__["QInputDialog"].getText = orig_getText
     window.load_column_preset.__globals__["QFileDialog"].getOpenFileName = orig_getOpenFileName
+
+def test_filter_overlay_gui_interaction(qtbot):
+    """
+    GUI test: Simulate a user typing in filter overlay fields and verify the table updates to show only matching cards.
+    """
+    from ManaBox_Enhancer.ui.main_window import MainWindow
+    window = MainWindow()
+    qtbot.addWidget(window)
+    window.show()
+    # Add multiple cards
+    cards = [
+        {"Name": "Alpha", "Set name": "SetA"},
+        {"Name": "Beta", "Set name": "SetB"},
+        {"Name": "Gamma", "Set name": "SetC"}
+    ]
+    window.inventory.load_cards(cards)
+    window.card_table.update_cards(window.inventory.get_all_cards())
+    # Find the filter overlay and the Name filter field
+    name_filter = window.filter_overlay.filters["Name"]
+    # Simulate typing 'Beta' in the Name filter
+    qtbot.keyClicks(name_filter, "Beta")
+    # Trigger filter update
+    window.update_table_filter()
+    # Check that only the 'Beta' card is shown
+    filtered = window.card_table.cards
+    assert len(filtered) == 1, f"Expected 1 card after filtering, got {len(filtered)}"
+    assert filtered[0]["Name"] == "Beta", f"Expected 'Beta', got {filtered[0]['Name']}"

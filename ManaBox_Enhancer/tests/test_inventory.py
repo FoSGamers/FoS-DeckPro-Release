@@ -344,3 +344,43 @@ def test_delete_card_gui_interaction(qtbot):
     # Check card deleted
     after_count = len(window.inventory.get_all_cards())
     assert after_count == before_count - 1, "Card was not deleted."
+
+def test_import_cards_gui_interaction(qtbot, tmp_path):
+    """
+    GUI test: Simulate a user importing cards via the Import dialog (JSON, merge mode).
+    """
+    from ManaBox_Enhancer.ui.main_window import MainWindow
+    from PySide6.QtWidgets import QDialog, QPushButton
+    import json
+    window = MainWindow()
+    qtbot.addWidget(window)
+    window.show()
+    # Prepare a temp JSON file to import
+    import_cards = [
+        {"Name": "Imported Card", "Set name": "Test Set", "Collector number": "123"}
+    ]
+    import_file = tmp_path / "import_cards.json"
+    with open(import_file, "w", encoding="utf-8") as f:
+        json.dump(import_cards, f)
+    # Patch QFileDialog to auto-select the file
+    orig_getOpenFileName = window.open_json_file.__globals__["QFileDialog"].getOpenFileName
+    window.open_json_file.__globals__["QFileDialog"].getOpenFileName = staticmethod(lambda *a, **k: (str(import_file), "JSON Files (*.json)"))
+    # Simulate user clicking Import
+    window.import_cards()
+    # Find the merge/replace dialog
+    dialogs = [w for w in window.findChildren(QDialog) if w.isVisible()]
+    assert dialogs, "No import mode dialog found."
+    dlg = dialogs[0]
+    # Click Yes (merge)
+    yes_btn = None
+    for w in dlg.findChildren(QPushButton):
+        if w.text().lower() in ("yes", "ok"):
+            yes_btn = w
+            break
+    assert yes_btn is not None, "Yes button not found in import mode dialog."
+    qtbot.mouseClick(yes_btn, qtbot.QtCore.Qt.LeftButton)
+    # Check card imported
+    imported = any(card["Name"] == "Imported Card" for card in window.inventory.get_all_cards())
+    assert imported, "Imported card not found in inventory."
+    # Restore QFileDialog
+    window.open_json_file.__globals__["QFileDialog"].getOpenFileName = orig_getOpenFileName

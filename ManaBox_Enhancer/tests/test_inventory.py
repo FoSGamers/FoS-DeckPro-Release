@@ -226,3 +226,42 @@ def test_adjust_whatnot_pricing_gui_interaction(qtbot):
     assert updated_cards[1]["Whatnot price"] == "$2.00"
     assert updated_cards[2]["Whatnot price"] == "$3.00"
     assert updated_cards[3]["Whatnot price"] == "$3.00"
+
+def test_add_card_gui_interaction(qtbot):
+    """
+    GUI test: Simulate a user adding a card via the Add Card dialog.
+    """
+    from ManaBox_Enhancer.ui.main_window import MainWindow
+    from PySide6.QtWidgets import QDialog, QLineEdit, QPushButton
+    window = MainWindow()
+    qtbot.addWidget(window)
+    window.show()
+    # Count cards before
+    before_count = len(window.inventory.get_all_cards())
+    # Trigger Add Card
+    window.add_card()
+    # Find the dialog
+    dialogs = [w for w in window.findChildren(QDialog) if w.isVisible()]
+    assert dialogs, "No Add Card dialog found."
+    dlg = dialogs[0]
+    # Fill in fields
+    name_field = None
+    for w in dlg.findChildren(QLineEdit):
+        if w.placeholderText() == "" or w.objectName() == "":
+            name_field = w
+            break
+    assert name_field is not None, "Name field not found."
+    qtbot.keyClicks(name_field, "Test Card")
+    # Click Save
+    save_btn = None
+    for w in dlg.findChildren(QPushButton):
+        if w.text().lower() == "save":
+            save_btn = w
+            break
+    assert save_btn is not None, "Save button not found."
+    qtbot.mouseClick(save_btn, qtbot.QtCore.Qt.LeftButton)
+    # Check card added
+    after_count = len(window.inventory.get_all_cards())
+    assert after_count == before_count + 1, "Card was not added."
+    added_card = window.inventory.get_all_cards()[-1]
+    assert added_card["Name"] == "Test Card"

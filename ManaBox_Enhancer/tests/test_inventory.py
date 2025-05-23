@@ -575,3 +575,37 @@ def test_auto_save_toggle_gui_interaction(qtbot):
     auto_save_action.setChecked(False)
     window.toggle_auto_save()
     assert not window._auto_save, "Auto-Save should be off after toggling again."
+
+def test_save_load_column_preset_gui_interaction(qtbot, tmp_path):
+    """
+    GUI test: Simulate a user saving and loading a column preset, verifying columns are restored.
+    """
+    from ManaBox_Enhancer.ui.main_window import MainWindow
+    from PySide6.QtWidgets import QDialog, QInputDialog, QFileDialog, QPushButton, QListWidget
+    import os, json
+    window = MainWindow()
+    qtbot.addWidget(window)
+    window.show()
+    # Save a preset
+    preset_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'column_presets')
+    os.makedirs(preset_dir, exist_ok=True)
+    preset_name = "test_preset"
+    preset_file = os.path.join(preset_dir, f"{preset_name}.json")
+    # Patch QInputDialog to auto-enter preset name
+    orig_getText = window.save_column_preset.__globals__["QInputDialog"].getText
+    window.save_column_preset.__globals__["QInputDialog"].getText = staticmethod(lambda *a, **k: (preset_name, True))
+    window.save_column_preset()
+    # Change columns (hide first column)
+    window.visible_columns = window.visible_columns[1:]
+    window.card_table.columns = window.columns
+    window.card_table.model.columns = window.columns
+    window.card_table.update_cards(window.inventory.get_all_cards())
+    # Patch QFileDialog to auto-select the preset file
+    orig_getOpenFileName = window.load_column_preset.__globals__["QFileDialog"].getOpenFileName
+    window.load_column_preset.__globals__["QFileDialog"].getOpenFileName = staticmethod(lambda *a, **k: (preset_file, "JSON Files (*.json)"))
+    window.load_column_preset()
+    # Verify columns restored
+    assert window.visible_columns == window.columns, "Visible columns not restored from preset."
+    # Restore QInputDialog and QFileDialog
+    window.save_column_preset.__globals__["QInputDialog"].getText = orig_getText
+    window.load_column_preset.__globals__["QFileDialog"].getOpenFileName = orig_getOpenFileName

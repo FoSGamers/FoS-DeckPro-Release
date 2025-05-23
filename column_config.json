@@ -1,0 +1,154 @@
+{
+  "columns": [
+    {
+      "id": "Name",
+      "display": "Name",
+      "width": 200,
+      "visible": true
+    },
+    {
+      "id": "Set code",
+      "display": "Set code",
+      "width": 200,
+      "visible": true
+    },
+    {
+      "id": "Set name",
+      "display": "Set name",
+      "width": 200,
+      "visible": true
+    },
+    {
+      "id": "Collector number",
+      "display": "Collector number",
+      "width": 200,
+      "visible": true
+    },
+    {
+      "id": "Foil",
+      "display": "Foil",
+      "width": 200,
+      "visible": true
+    },
+    {
+      "id": "Rarity",
+      "display": "Rarity",
+      "width": 200,
+      "visible": true
+    },
+    {
+      "id": "Language",
+      "display": "Language",
+      "width": 200,
+      "visible": true
+    },
+    {
+      "id": "Quantity",
+      "display": "Quantity",
+      "width": 200,
+      "visible": true
+    },
+    {
+      "id": "Whatnot price",
+      "display": "Whatnot Price",
+      "width": 200,
+      "visible": true
+    },
+    {
+      "id": "Purchase price",
+      "display": "Purchase price",
+      "width": 200,
+      "visible": true
+    },
+    {
+      "id": "Purchase price currency",
+      "display": "Purchase price currency",
+      "width": 200,
+      "visible": true
+    },
+    {
+      "id": "Scryfall ID",
+      "display": "Scryfall ID",
+      "width": 200,
+      "visible": true
+    },
+    {
+      "id": "ManaBox ID",
+      "display": "ManaBox ID",
+      "width": 200,
+      "visible": true
+    },
+    {
+      "id": "Misprint",
+      "display": "Misprint",
+      "width": 200,
+      "visible": true
+    },
+    {
+      "id": "Altered",
+      "display": "Altered",
+      "width": 200,
+      "visible": true
+    },
+    {
+      "id": "Condition",
+      "display": "Condition",
+      "width": 200,
+      "visible": true
+    },
+    {
+      "id": "type_line",
+      "display": "Type",
+      "width": 200,
+      "visible": true
+    },
+    {
+      "id": "mana_cost",
+      "display": "Mana Cost",
+      "width": 200,
+      "visible": true
+    },
+    {
+      "id": "colors",
+      "display": "Colors",
+      "width": 200,
+      "visible": true
+    },
+    {
+      "id": "color_identity",
+      "display": "Color Identity",
+      "width": 200,
+      "visible": true
+    },
+    {
+      "id": "oracle_text",
+      "display": "Oracle Text",
+      "width": 200,
+      "visible": true
+    },
+    {
+      "id": "legal_commander",
+      "display": "Commander Legal",
+      "width": 200,
+      "visible": true
+    },
+    {
+      "id": "legal_pauper",
+      "display": "Pauper Legal",
+      "width": 200,
+      "visible": true
+    },
+    {
+      "id": "cmc",
+      "display": "CMC",
+      "width": 200,
+      "visible": true
+    },
+    {
+      "id": "image_url",
+      "display": "Image URL",
+      "width": 200,
+      "visible": true
+    }
+  ]
+}

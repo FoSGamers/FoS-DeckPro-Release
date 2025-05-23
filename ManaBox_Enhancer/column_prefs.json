@@ -1,0 +1,27 @@
+{
+  "columns": [
+    "Set name",
+    "Set code",
+    "Name",
+    "Collector number",
+    "Rarity",
+    "Condition",
+    "Foil",
+    "Language",
+    "Purchase price",
+    "Whatnot price"
+  ],
+  "visible_columns": [
+    "Set name",
+    "Set code",
+    "Name",
+    "Collector number",
+    "Rarity",
+    "Condition",
+    "Foil",
+    "Language",
+    "Purchase price",
+    "Whatnot price"
+  ],
+  "column_widths": {}
+}

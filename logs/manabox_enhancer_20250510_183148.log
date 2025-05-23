@@ -1,0 +1,1317 @@
+2025-05-10 18:31:48,776 - INFO - Logging initialized. Log file: logs/manabox_enhancer_20250510_183148.log
+2025-05-10 18:31:57,973 - INFO - Attempting to load JSON file: /Users/jgleason/Development/ManaBox_Enhancer/Singles_for_Sale.json
+2025-05-10 18:31:57,975 - DEBUG - Raw JSON data length: 1181636 characters
+2025-05-10 18:31:57,975 - DEBUG - First 100 characters of JSON: [
+  {
+    "Name": "Paradise Plume",
+    "Set code": "TSR",
+    "Set name": "Time Spiral Remastered",
+2025-05-10 18:31:57,982 - INFO - Successfully loaded 1165 cards
+2025-05-10 18:31:57,983 - DEBUG - First card structure: {
+  "Name": "Paradise Plume",
+  "Set code": "TSR",
+  "Set name": "Time Spiral Remastered",
+  "Collector number": "271",
+  "Foil": "normal",
+  "Rarity": "uncommon",
+  "Quantity": 1,
+  "ManaBox ID": 57815,
+  "Scryfall ID": "b794e97e-8b2c-4bde-8028-4348de5aec83",
+  "Purchase price": 0.25,
+  "Misprint": false,
+  "Altered": false,
+  "Condition": "near_mint",
+  "Language": "en",
+  "Purchase price currency": "USD",
+  "type_line": "Artifact",
+  "mana_cost": "{4}",
+  "colors": "",
+  "color_identity": "",
+  "oracle_text": "As this artifact enters, choose a color.\nWhenever a player casts a spell of the chosen color, you may gain 1 life.\n{T}: Add one mana of the chosen color.",
+  "legal_commander": "legal",
+  "legal_pauper": "not_legal",
+  "image_url": "https://cards.scryfall.io/normal/front/b/7/b794e97e-8b2c-4bde-8028-4348de5aec83.jpg?1619399015",
+  "_original_order": 0,
+  "quantity": "",
+  "cmc": 4.0
+}
+2025-05-10 18:31:57,983 - DEBUG - column_config type: <class 'dict'>
+2025-05-10 18:31:57,983 - DEBUG - column_config: {'columns': [{'id': 'Name', 'display': 'Name', 'width': 150}, {'id': 'Set code', 'display': 'Set code', 'width': 100}, {'id': 'Set name', 'display': 'Set name', 'width': 150}, {'id': 'Collector number', 'display': 'Collector number', 'width': 120}, {'id': 'Foil', 'display': 'Foil', 'width': 80}, {'id': 'Rarity', 'display': 'Rarity', 'width': 100}, {'id': 'Quantity', 'display': 'Quantity', 'width': 80}, {'id': 'ManaBox ID', 'display': 'ManaBox ID', 'width': 100}, {'id': 'Scryfall ID', 'display': 'Scryfall ID', 'width': 200}, {'id': 'Purchase price', 'display': 'Purchase price', 'width': 100}, {'id': 'Misprint', 'display': 'Misprint', 'width': 80}, {'id': 'Altered', 'display': 'Altered', 'width': 80}, {'id': 'Condition', 'display': 'Condition', 'width': 100}, {'id': 'Language', 'display': 'Language', 'width': 80}, {'id': 'Purchase price currency', 'display': 'Purchase price currency', 'width': 150}, {'id': 'type_line', 'display': 'Type', 'width': 150}, {'id': 'mana_cost', 'display': 'Mana Cost', 'width': 100}, {'id': 'colors', 'display': 'Colors', 'width': 100}, {'id': 'color_identity', 'display': 'Color Identity', 'width': 120}, {'id': 'oracle_text', 'display': 'Oracle Text', 'width': 200}, {'id': 'legal_commander', 'display': 'Commander Legal', 'width': 120}, {'id': 'legal_pauper', 'display': 'Pauper Legal', 'width': 100}, {'id': 'cmc', 'display': 'CMC', 'width': 80}, {'id': 'image_url', 'display': 'Image URL', 'width': 84}]}
+2025-05-10 18:31:57,983 - DEBUG - visible_cols: [{'id': 'Name', 'display': 'Name', 'width': 150}, {'id': 'Set code', 'display': 'Set code', 'width': 100}, {'id': 'Set name', 'display': 'Set name', 'width': 150}, {'id': 'Collector number', 'display': 'Collector number', 'width': 120}, {'id': 'Foil', 'display': 'Foil', 'width': 80}, {'id': 'Rarity', 'display': 'Rarity', 'width': 100}, {'id': 'Quantity', 'display': 'Quantity', 'width': 80}, {'id': 'ManaBox ID', 'display': 'ManaBox ID', 'width': 100}, {'id': 'Scryfall ID', 'display': 'Scryfall ID', 'width': 200}, {'id': 'Purchase price', 'display': 'Purchase price', 'width': 100}, {'id': 'Misprint', 'display': 'Misprint', 'width': 80}, {'id': 'Altered', 'display': 'Altered', 'width': 80}, {'id': 'Condition', 'display': 'Condition', 'width': 100}, {'id': 'Language', 'display': 'Language', 'width': 80}, {'id': 'Purchase price currency', 'display': 'Purchase price currency', 'width': 150}, {'id': 'type_line', 'display': 'Type', 'width': 150}, {'id': 'mana_cost', 'display': 'Mana Cost', 'width': 100}, {'id': 'colors', 'display': 'Colors', 'width': 100}, {'id': 'color_identity', 'display': 'Color Identity', 'width': 120}, {'id': 'oracle_text', 'display': 'Oracle Text', 'width': 200}, {'id': 'legal_commander', 'display': 'Commander Legal', 'width': 120}, {'id': 'legal_pauper', 'display': 'Pauper Legal', 'width': 100}, {'id': 'cmc', 'display': 'CMC', 'width': 80}, {'id': 'image_url', 'display': 'Image URL', 'width': 84}]
+2025-05-10 18:31:57,983 - DEBUG - col_ids: ['Name', 'Set code', 'Set name', 'Collector number', 'Foil', 'Rarity', 'Quantity', 'ManaBox ID', 'Scryfall ID', 'Purchase price', 'Misprint', 'Altered', 'Condition', 'Language', 'Purchase price currency', 'type_line', 'mana_cost', 'colors', 'color_identity', 'oracle_text', 'legal_commander', 'legal_pauper', 'cmc', 'image_url']
+2025-05-10 18:31:57,983 - DEBUG - Setting heading for col: {'id': 'Name', 'display': 'Name', 'width': 150}
+2025-05-10 18:31:57,983 - DEBUG - Setting heading for col: {'id': 'Set code', 'display': 'Set code', 'width': 100}
+2025-05-10 18:31:57,983 - DEBUG - Setting heading for col: {'id': 'Set name', 'display': 'Set name', 'width': 150}
+2025-05-10 18:31:57,983 - DEBUG - Setting heading for col: {'id': 'Collector number', 'display': 'Collector number', 'width': 120}
+2025-05-10 18:31:57,983 - DEBUG - Setting heading for col: {'id': 'Foil', 'display': 'Foil', 'width': 80}
+2025-05-10 18:31:57,984 - DEBUG - Setting heading for col: {'id': 'Rarity', 'display': 'Rarity', 'width': 100}
+2025-05-10 18:31:57,984 - DEBUG - Setting heading for col: {'id': 'Quantity', 'display': 'Quantity', 'width': 80}
+2025-05-10 18:31:57,984 - DEBUG - Setting heading for col: {'id': 'ManaBox ID', 'display': 'ManaBox ID', 'width': 100}
+2025-05-10 18:31:57,984 - DEBUG - Setting heading for col: {'id': 'Scryfall ID', 'display': 'Scryfall ID', 'width': 200}
+2025-05-10 18:31:57,984 - DEBUG - Setting heading for col: {'id': 'Purchase price', 'display': 'Purchase price', 'width': 100}
+2025-05-10 18:31:57,984 - DEBUG - Setting heading for col: {'id': 'Misprint', 'display': 'Misprint', 'width': 80}
+2025-05-10 18:31:57,984 - DEBUG - Setting heading for col: {'id': 'Altered', 'display': 'Altered', 'width': 80}
+2025-05-10 18:31:57,984 - DEBUG - Setting heading for col: {'id': 'Condition', 'display': 'Condition', 'width': 100}
+2025-05-10 18:31:57,984 - DEBUG - Setting heading for col: {'id': 'Language', 'display': 'Language', 'width': 80}
+2025-05-10 18:31:57,984 - DEBUG - Setting heading for col: {'id': 'Purchase price currency', 'display': 'Purchase price currency', 'width': 150}
+2025-05-10 18:31:57,984 - DEBUG - Setting heading for col: {'id': 'type_line', 'display': 'Type', 'width': 150}
+2025-05-10 18:31:57,984 - DEBUG - Setting heading for col: {'id': 'mana_cost', 'display': 'Mana Cost', 'width': 100}
+2025-05-10 18:31:57,984 - DEBUG - Setting heading for col: {'id': 'colors', 'display': 'Colors', 'width': 100}
+2025-05-10 18:31:57,984 - DEBUG - Setting heading for col: {'id': 'color_identity', 'display': 'Color Identity', 'width': 120}
+2025-05-10 18:31:57,984 - DEBUG - Setting heading for col: {'id': 'oracle_text', 'display': 'Oracle Text', 'width': 200}
+2025-05-10 18:31:57,984 - DEBUG - Setting heading for col: {'id': 'legal_commander', 'display': 'Commander Legal', 'width': 120}
+2025-05-10 18:31:57,984 - DEBUG - Setting heading for col: {'id': 'legal_pauper', 'display': 'Pauper Legal', 'width': 100}
+2025-05-10 18:31:57,984 - DEBUG - Setting heading for col: {'id': 'cmc', 'display': 'CMC', 'width': 80}
+2025-05-10 18:31:57,984 - DEBUG - Setting heading for col: {'id': 'image_url', 'display': 'Image URL', 'width': 84}
+2025-05-10 18:31:57,984 - DEBUG - column_config type: <class 'dict'>
+2025-05-10 18:31:57,984 - DEBUG - column_config: {'columns': [{'id': 'Name', 'display': 'Name', 'width': 150}, {'id': 'Set code', 'display': 'Set code', 'width': 100}, {'id': 'Set name', 'display': 'Set name', 'width': 150}, {'id': 'Collector number', 'display': 'Collector number', 'width': 120}, {'id': 'Foil', 'display': 'Foil', 'width': 80}, {'id': 'Rarity', 'display': 'Rarity', 'width': 100}, {'id': 'Quantity', 'display': 'Quantity', 'width': 80}, {'id': 'ManaBox ID', 'display': 'ManaBox ID', 'width': 100}, {'id': 'Scryfall ID', 'display': 'Scryfall ID', 'width': 200}, {'id': 'Purchase price', 'display': 'Purchase price', 'width': 100}, {'id': 'Misprint', 'display': 'Misprint', 'width': 80}, {'id': 'Altered', 'display': 'Altered', 'width': 80}, {'id': 'Condition', 'display': 'Condition', 'width': 100}, {'id': 'Language', 'display': 'Language', 'width': 80}, {'id': 'Purchase price currency', 'display': 'Purchase price currency', 'width': 150}, {'id': 'type_line', 'display': 'Type', 'width': 150}, {'id': 'mana_cost', 'display': 'Mana Cost', 'width': 100}, {'id': 'colors', 'display': 'Colors', 'width': 100}, {'id': 'color_identity', 'display': 'Color Identity', 'width': 120}, {'id': 'oracle_text', 'display': 'Oracle Text', 'width': 200}, {'id': 'legal_commander', 'display': 'Commander Legal', 'width': 120}, {'id': 'legal_pauper', 'display': 'Pauper Legal', 'width': 100}, {'id': 'cmc', 'display': 'CMC', 'width': 80}, {'id': 'image_url', 'display': 'Image URL', 'width': 84}]}
+2025-05-10 18:31:57,984 - DEBUG - visible_cols: [{'id': 'Name', 'display': 'Name', 'width': 150}, {'id': 'Set code', 'display': 'Set code', 'width': 100}, {'id': 'Set name', 'display': 'Set name', 'width': 150}, {'id': 'Collector number', 'display': 'Collector number', 'width': 120}, {'id': 'Foil', 'display': 'Foil', 'width': 80}, {'id': 'Rarity', 'display': 'Rarity', 'width': 100}, {'id': 'Quantity', 'display': 'Quantity', 'width': 80}, {'id': 'ManaBox ID', 'display': 'ManaBox ID', 'width': 100}, {'id': 'Scryfall ID', 'display': 'Scryfall ID', 'width': 200}, {'id': 'Purchase price', 'display': 'Purchase price', 'width': 100}, {'id': 'Misprint', 'display': 'Misprint', 'width': 80}, {'id': 'Altered', 'display': 'Altered', 'width': 80}, {'id': 'Condition', 'display': 'Condition', 'width': 100}, {'id': 'Language', 'display': 'Language', 'width': 80}, {'id': 'Purchase price currency', 'display': 'Purchase price currency', 'width': 150}, {'id': 'type_line', 'display': 'Type', 'width': 150}, {'id': 'mana_cost', 'display': 'Mana Cost', 'width': 100}, {'id': 'colors', 'display': 'Colors', 'width': 100}, {'id': 'color_identity', 'display': 'Color Identity', 'width': 120}, {'id': 'oracle_text', 'display': 'Oracle Text', 'width': 200}, {'id': 'legal_commander', 'display': 'Commander Legal', 'width': 120}, {'id': 'legal_pauper', 'display': 'Pauper Legal', 'width': 100}, {'id': 'cmc', 'display': 'CMC', 'width': 80}, {'id': 'image_url', 'display': 'Image URL', 'width': 84}]
+2025-05-10 18:31:57,984 - DEBUG - col_ids: ['Name', 'Set code', 'Set name', 'Collector number', 'Foil', 'Rarity', 'Quantity', 'ManaBox ID', 'Scryfall ID', 'Purchase price', 'Misprint', 'Altered', 'Condition', 'Language', 'Purchase price currency', 'type_line', 'mana_cost', 'colors', 'color_identity', 'oracle_text', 'legal_commander', 'legal_pauper', 'cmc', 'image_url']
+2025-05-10 18:31:57,985 - DEBUG - Setting heading for col: {'id': 'Name', 'display': 'Name', 'width': 150}
+2025-05-10 18:31:57,985 - DEBUG - Setting heading for col: {'id': 'Set code', 'display': 'Set code', 'width': 100}
+2025-05-10 18:31:57,985 - DEBUG - Setting heading for col: {'id': 'Set name', 'display': 'Set name', 'width': 150}
+2025-05-10 18:31:57,985 - DEBUG - Setting heading for col: {'id': 'Collector number', 'display': 'Collector number', 'width': 120}
+2025-05-10 18:31:57,985 - DEBUG - Setting heading for col: {'id': 'Foil', 'display': 'Foil', 'width': 80}
+2025-05-10 18:31:57,985 - DEBUG - Setting heading for col: {'id': 'Rarity', 'display': 'Rarity', 'width': 100}
+2025-05-10 18:31:57,985 - DEBUG - Setting heading for col: {'id': 'Quantity', 'display': 'Quantity', 'width': 80}
+2025-05-10 18:31:57,985 - DEBUG - Setting heading for col: {'id': 'ManaBox ID', 'display': 'ManaBox ID', 'width': 100}
+2025-05-10 18:31:57,985 - DEBUG - Setting heading for col: {'id': 'Scryfall ID', 'display': 'Scryfall ID', 'width': 200}
+2025-05-10 18:31:57,985 - DEBUG - Setting heading for col: {'id': 'Purchase price', 'display': 'Purchase price', 'width': 100}
+2025-05-10 18:31:57,985 - DEBUG - Setting heading for col: {'id': 'Misprint', 'display': 'Misprint', 'width': 80}
+2025-05-10 18:31:57,985 - DEBUG - Setting heading for col: {'id': 'Altered', 'display': 'Altered', 'width': 80}
+2025-05-10 18:31:57,985 - DEBUG - Setting heading for col: {'id': 'Condition', 'display': 'Condition', 'width': 100}
+2025-05-10 18:31:57,985 - DEBUG - Setting heading for col: {'id': 'Language', 'display': 'Language', 'width': 80}
+2025-05-10 18:31:57,985 - DEBUG - Setting heading for col: {'id': 'Purchase price currency', 'display': 'Purchase price currency', 'width': 150}
+2025-05-10 18:31:57,985 - DEBUG - Setting heading for col: {'id': 'type_line', 'display': 'Type', 'width': 150}
+2025-05-10 18:31:57,985 - DEBUG - Setting heading for col: {'id': 'mana_cost', 'display': 'Mana Cost', 'width': 100}
+2025-05-10 18:31:57,985 - DEBUG - Setting heading for col: {'id': 'colors', 'display': 'Colors', 'width': 100}
+2025-05-10 18:31:57,985 - DEBUG - Setting heading for col: {'id': 'color_identity', 'display': 'Color Identity', 'width': 120}
+2025-05-10 18:31:57,985 - DEBUG - Setting heading for col: {'id': 'oracle_text', 'display': 'Oracle Text', 'width': 200}
+2025-05-10 18:31:57,985 - DEBUG - Setting heading for col: {'id': 'legal_commander', 'display': 'Commander Legal', 'width': 120}
+2025-05-10 18:31:57,985 - DEBUG - Setting heading for col: {'id': 'legal_pauper', 'display': 'Pauper Legal', 'width': 100}
+2025-05-10 18:31:57,985 - DEBUG - Setting heading for col: {'id': 'cmc', 'display': 'CMC', 'width': 80}
+2025-05-10 18:31:57,985 - DEBUG - Setting heading for col: {'id': 'image_url', 'display': 'Image URL', 'width': 84}
+2025-05-10 18:32:10,923 - INFO - Starting price updates with threshold: 0.3
+2025-05-10 18:32:10,923 - DEBUG - Updated prices for Paradise Plume: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,923 - DEBUG - Updated prices for Mana Tithe: Original=$0.49, Whatnot=$1
+2025-05-10 18:32:10,923 - DEBUG - Updated prices for Goblin Electromancer: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,923 - DEBUG - Updated prices for Draining Whelk: Original=$0.47, Whatnot=$1
+2025-05-10 18:32:10,923 - DEBUG - Updated prices for Chevill, Bane of Monsters: Original=$5.39, Whatnot=$6
+2025-05-10 18:32:10,923 - DEBUG - Updated prices for Kathril, Aspect Warper: Original=$0.69, Whatnot=$1
+2025-05-10 18:32:10,923 - DEBUG - Updated prices for Chandra, Spark Hunter: Original=$23.97, Whatnot=$24
+2025-05-10 18:32:10,923 - DEBUG - Updated prices for Overlord of the Hauntwoods: Original=$46.51, Whatnot=$47
+2025-05-10 18:32:10,923 - DEBUG - Updated prices for Elspeth Tirel: Original=$33.97, Whatnot=$34
+2025-05-10 18:32:10,923 - DEBUG - Updated prices for The Royal Scions: Original=$3.29, Whatnot=$3
+2025-05-10 18:32:10,923 - DEBUG - Updated prices for Liliana of the Dark Realms: Original=$17.23, Whatnot=$17
+2025-05-10 18:32:10,923 - DEBUG - Updated prices for Elspeth Tirel: Original=$33.97, Whatnot=$34
+2025-05-10 18:32:10,923 - DEBUG - Updated prices for The Royal Scions: Original=$3.29, Whatnot=$3
+2025-05-10 18:32:10,923 - DEBUG - Updated prices for Eliminate: Original=$0.39, Whatnot=$1
+2025-05-10 18:32:10,923 - DEBUG - Updated prices for Negate: Original=$2.73, Whatnot=$3
+2025-05-10 18:32:10,923 - DEBUG - Updated prices for Krosan Grip: Original=$3.03, Whatnot=$3
+2025-05-10 18:32:10,923 - DEBUG - Updated prices for Defiant Strike: Original=$0.54, Whatnot=$1
+2025-05-10 18:32:10,923 - DEBUG - Updated prices for Blex, Vexing Pest // Search for Blex: Original=$2.65, Whatnot=$3
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Agonizing Remorse: Original=$0.35, Whatnot=$1
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Abuelo, Ancestral Echo: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Abundant Growth: Original=$0.54, Whatnot=$1
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Academic Probation: Original=$0.38, Whatnot=$1
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Aeon Chronicler: Original=$0.47, Whatnot=$1
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Aetherflux Conduit: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Aether Revolt: Original=$0.45, Whatnot=$1
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Aether Vial: Original=$5.17, Whatnot=$5
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Afterburner Expert: Original=$0.47, Whatnot=$1
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Agonasaur Rex: Original=$0.83, Whatnot=$1
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Akroma, Angel of Fury: Original=$2.95, Whatnot=$3
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Akroma's Memorial: Original=$41.99, Whatnot=$42
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Akroma, Vision of Ixidor: Original=$10.13, Whatnot=$10
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Alela, Cunning Conqueror: Original=$7.75, Whatnot=$8
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Altaïr Ibn-La'Ahad: Original=$5.50, Whatnot=$6
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Angelfire Ignition: Original=$0.43, Whatnot=$1
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Angel's Grace: Original=$7.00, Whatnot=$7
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Angel of Salvation: Original=$0.29, Whatnot=$1
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Archivist of Oghma: Original=$3.59, Whatnot=$4
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Archmage Emeritus: Original=$6.30, Whatnot=$6
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Archmage of Runes: Original=$2.01, Whatnot=$2
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Arch of Orazca: Original=$0.48, Whatnot=$1
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Archmage of Runes: Original=$2.01, Whatnot=$2
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Archway of Innovation: Original=$3.19, Whatnot=$3
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Arena of Glory: Original=$12.91, Whatnot=$13
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Audience with Trostani: Original=$0.62, Whatnot=$1
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Authority of the Consuls: Original=$6.50, Whatnot=$7
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Aven Interrupter: Original=$2.84, Whatnot=$3
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Authority of the Consuls: Original=$6.50, Whatnot=$7
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Horizon Canopy: Original=$7.44, Whatnot=$8
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Ancient Tomb: Original=$190.24, Whatnot=$190
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Balustrade Wurm: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Balustrade Wurm: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Banner of Kinship: Original=$6.20, Whatnot=$6
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Barbed Servitor: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Basalt Monolith: Original=$4.71, Whatnot=$5
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Primal Vigor: Original=$8.78, Whatnot=$9
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Battle for Bretagard: Original=$0.35, Whatnot=$1
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Primal Vigor: Original=$8.78, Whatnot=$9
+2025-05-10 18:32:10,924 - DEBUG - Updated prices for Become Immense: Original=$0.49, Whatnot=$1
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Bribery: Original=$8.28, Whatnot=$8
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Drown in the Loch: Original=$3.07, Whatnot=$3
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Stifle: Original=$8.56, Whatnot=$9
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Delay: Original=$3.57, Whatnot=$4
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Beza, the Bounding Spring: Original=$19.69, Whatnot=$20
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Beza, the Bounding Spring: Original=$19.69, Whatnot=$20
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Birthing Ritual: Original=$5.23, Whatnot=$5
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Blazemire Verge: Original=$10.51, Whatnot=$11
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Blightstep Pathway // Searstep Pathway: Original=$6.70, Whatnot=$7
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Bloodletter of Aclazotz: Original=$30.65, Whatnot=$31
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Blood Pact: Original=$0.24, Whatnot=$1
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Bloodstained Mire: Original=$12.37, Whatnot=$13
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Bonehoard Dracosaur: Original=$11.43, Whatnot=$12
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Bonny Pall, Clearcutter: Original=$2.80, Whatnot=$3
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Boom // Bust: Original=$0.99, Whatnot=$1
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Boompile: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Boosted Sloop: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Boromir, Warden of the Tower: Original=$2.82, Whatnot=$3
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Boros Guildgate: Original=$0.31, Whatnot=$1
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Branching Evolution: Original=$3.00, Whatnot=$3
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Brass's Tunnel-Grinder // Tecutlan, the Searing Rift: Original=$2.25, Whatnot=$2
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Burning-Tree Emissary: Original=$0.32, Whatnot=$1
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Burning-Rune Demon: Original=$4.80, Whatnot=$5
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Call of the Ring: Original=$3.23, Whatnot=$3
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Caduceus, Staff of Hermes: Original=$6.56, Whatnot=$7
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Callous Bloodmage: Original=$0.91, Whatnot=$1
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Captain America, First Avenger: Original=$48.78, Whatnot=$49
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Captain Rex Nebula: Original=$0.26, Whatnot=$1
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Captivating Vampire: Original=$2.71, Whatnot=$3
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Caretaker's Talent: Original=$12.29, Whatnot=$12
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Carrion Cruiser: Original=$0.24, Whatnot=$1
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Carrion Cruiser: Original=$0.24, Whatnot=$1
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Cauldron Familiar: Original=$4.99, Whatnot=$5
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Caves of Koilos: Original=$3.44, Whatnot=$4
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Celebr-8000: Original=$1.62, Whatnot=$2
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Centaur of Attention: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Celebr-8000: Original=$1.62, Whatnot=$2
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Bleachbone Verge: Original=$8.99, Whatnot=$9
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Cathars' Crusade: Original=$5.66, Whatnot=$6
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Centrifuge: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Chain of Vapor: Original=$7.84, Whatnot=$8
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Chaotic Transformation: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,925 - DEBUG - Updated prices for Clara Oswald: Original=$4.21, Whatnot=$4
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Clamorous Ironclad: Original=$0.20, Whatnot=$1
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Clockwork Hydra: Original=$0.21, Whatnot=$1
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Cloudspire Skycycle: Original=$0.24, Whatnot=$1
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Clown Car: Original=$6.03, Whatnot=$6
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Cloudspire Skycycle: Original=$0.24, Whatnot=$1
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Coiling Rebirth: Original=$0.45, Whatnot=$1
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Cold-Eyed Selkie: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Collected Company: Original=$3.61, Whatnot=$4
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Come Back Wrong: Original=$0.39, Whatnot=$1
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Commander's Plate: Original=$33.00, Whatnot=$33
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Command Tower: Original=$1.85, Whatnot=$2
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Commandeer: Original=$0.88, Whatnot=$1
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Commercial District: Original=$9.49, Whatnot=$10
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Common Black Removal: Original=$0.49, Whatnot=$1
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Compy Swarm: Original=$7.40, Whatnot=$8
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Consuming Aberration: Original=$0.26, Whatnot=$1
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Containment Priest: Original=$1.29, Whatnot=$1
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Control of the Court: Original=$18.34, Whatnot=$19
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Corpses of the Lost: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Cosmos Charger: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Counterbalance: Original=$7.58, Whatnot=$8
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Counterspell: Original=$1.58, Whatnot=$2
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Counterspell: Original=$1.58, Whatnot=$2
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Counterspell: Original=$1.58, Whatnot=$2
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Courser of Kruphix: Original=$2.78, Whatnot=$3
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Court of Vantress: Original=$6.32, Whatnot=$7
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Crabomination: Original=$0.31, Whatnot=$1
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Crag Saurian: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Craterhoof Behemoth: Original=$27.54, Whatnot=$28
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Cruelclaw's Heist: Original=$0.46, Whatnot=$1
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Crypt Rats: Original=$0.75, Whatnot=$1
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Cryptolith Fragment // Aurora of Emrakul: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Cryptolith Rite: Original=$3.81, Whatnot=$4
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Crystal Shard: Original=$2.21, Whatnot=$2
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Cultivator Colossus: Original=$7.88, Whatnot=$8
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Curator of Destinies: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Cursed Recording: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Cyberman Patrol: Original=$24.95, Whatnot=$25
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Cybermen Squadron: Original=$11.49, Whatnot=$12
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Cyclone Summoner: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Daretti, Rocketeer Engineer: Original=$0.33, Whatnot=$1
+2025-05-10 18:32:10,926 - DEBUG - Updated prices for Darkstar Augur: Original=$0.89, Whatnot=$1
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Daretti, Rocketeer Engineer: Original=$0.33, Whatnot=$1
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Dauthi Voidwalker: Original=$8.55, Whatnot=$9
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Day's Undoing: Original=$4.74, Whatnot=$5
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Deadeye Navigator: Original=$2.75, Whatnot=$3
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Deadly Cover-Up: Original=$1.00, Whatnot=$1
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Death in Heaven: Original=$5.98, Whatnot=$6
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Debris Beetle: Original=$0.49, Whatnot=$1
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Decimator Beetle: Original=$0.20, Whatnot=$1
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Deepfathom Echo: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Deeproot Historian: Original=$0.41, Whatnot=$1
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Defiler of Vigor: Original=$2.28, Whatnot=$2
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Deification: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Delighted Halfling: Original=$18.49, Whatnot=$19
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Delney, Streetwise Lookout: Original=$30.00, Whatnot=$30
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Deluge of Doom: Original=$0.44, Whatnot=$1
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Demonic Bargain: Original=$0.26, Whatnot=$1
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Demonic Counsel: Original=$1.52, Whatnot=$2
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Derevi, Empyrial Tactician: Original=$4.00, Whatnot=$4
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Desecrate Reality: Original=$2.46, Whatnot=$3
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Diamond Lion: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Dire-Strain Rampage: Original=$2.52, Whatnot=$3
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Disorienting Choice: Original=$0.58, Whatnot=$1
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Disruptor Flute: Original=$0.75, Whatnot=$1
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Dissection Tools: Original=$0.51, Whatnot=$1
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Distended Mindbender: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Distended Mindbender: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Donate: Original=$7.55, Whatnot=$8
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Don't Move: Original=$8.17, Whatnot=$8
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Don't Worry About It: Original=$0.46, Whatnot=$1
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Doomsday Excruciator: Original=$1.44, Whatnot=$2
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Doppelgang: Original=$1.05, Whatnot=$1
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Dramatic Finale: Original=$0.49, Whatnot=$1
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Dread Wanderer: Original=$0.49, Whatnot=$1
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Dreamdew Entrancer: Original=$0.43, Whatnot=$1
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Dune Drifter: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Consider: Original=$16.18, Whatnot=$16
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Curator Beastie: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Echo of Eons: Original=$13.83, Whatnot=$14
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Ecstatic Awakener // Awoken Demon: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Edward Kenway: Original=$17.42, Whatnot=$18
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Eerie Ultimatum: Original=$5.78, Whatnot=$6
+2025-05-10 18:32:10,927 - DEBUG - Updated prices for Eldrazi Linebreaker: Original=$0.81, Whatnot=$1
+2025-05-10 18:32:10,928 - DEBUG - Updated prices for Elspeth Resplendent: Original=$3.25, Whatnot=$3
+2025-05-10 18:32:10,928 - DEBUG - Updated prices for Elvish Reclaimer: Original=$87.56, Whatnot=$88
+2025-05-10 18:32:10,928 - DEBUG - Updated prices for Elvish Reclaimer: Original=$87.56, Whatnot=$88
+2025-05-10 18:32:10,928 - DEBUG - Updated prices for Emrakul, the Promised End: Original=$18.74, Whatnot=$19
+2025-05-10 18:32:10,928 - DEBUG - Updated prices for Enduring Courage: Original=$28.36, Whatnot=$29
+2025-05-10 18:32:10,928 - DEBUG - Updated prices for Enduring Courage: Original=$28.36, Whatnot=$29
+2025-05-10 18:32:10,928 - DEBUG - Updated prices for Enduring Curiosity: Original=$5.69, Whatnot=$6
+2025-05-10 18:32:10,928 - DEBUG - Updated prices for Enduring Innocence: Original=$6.01, Whatnot=$6
+2025-05-10 18:32:10,928 - DEBUG - Updated prices for Enduring Curiosity: Original=$5.69, Whatnot=$6
+2025-05-10 18:32:10,928 - DEBUG - Updated prices for Enduring Innocence: Original=$6.01, Whatnot=$6
+2025-05-10 18:32:10,928 - DEBUG - Updated prices for Enduring Innocence: Original=$6.01, Whatnot=$6
+2025-05-10 18:32:10,928 - DEBUG - Updated prices for Entity Tracker: Original=$1.21, Whatnot=$1
+2025-05-10 18:32:10,928 - DEBUG - Updated prices for Eriette, the Beguiler: Original=$0.39, Whatnot=$1
+2025-05-10 18:32:10,928 - DEBUG - Updated prices for Ertai Resurrected: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,928 - DEBUG - Updated prices for Essence Channeler: Original=$1.01, Whatnot=$1
+2025-05-10 18:32:10,928 - DEBUG - Updated prices for Ethereal Armor: Original=$1.19, Whatnot=$1
+2025-05-10 18:32:10,928 - DEBUG - Updated prices for Evelyn, the Covetous: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,928 - DEBUG - Updated prices for Everflowing Chalice: Original=$2.49, Whatnot=$3
+2025-05-10 18:32:10,928 - DEBUG - Updated prices for Evolved Sleeper: Original=$0.34, Whatnot=$1
+2025-05-10 18:32:10,928 - DEBUG - Updated prices for Exchange of Words: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,928 - DEBUG - Updated prices for Exemplar of Light: Original=$3.24, Whatnot=$3
+2025-05-10 18:32:10,928 - DEBUG - Updated prices for Exemplar of Light: Original=$3.24, Whatnot=$3
+2025-05-10 18:32:10,928 - DEBUG - Updated prices for Explosive Getaway: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,928 - DEBUG - Updated prices for Exquisite Firecraft: Original=$1.17, Whatnot=$1
+2025-05-10 18:32:10,929 - DEBUG - Updated prices for Extinction Event: Original=$0.52, Whatnot=$1
+2025-05-10 18:32:10,929 - DEBUG - Updated prices for Ezio Auditore da Firenze: Original=$6.65, Whatnot=$7
+2025-05-10 18:32:10,929 - DEBUG - Updated prices for Fa'adiyah Seer: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,929 - DEBUG - Updated prices for Fabrication Foundry: Original=$0.35, Whatnot=$1
+2025-05-10 18:32:10,929 - DEBUG - Updated prices for Faithless Looting: Original=$8.79, Whatnot=$9
+2025-05-10 18:32:10,929 - DEBUG - Updated prices for Fanatic of Rhonas: Original=$13.47, Whatnot=$14
+2025-05-10 18:32:10,929 - DEBUG - Updated prices for Falkenrath Gorger: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,929 - DEBUG - Updated prices for Fanatic of Rhonas: Original=$13.47, Whatnot=$14
+2025-05-10 18:32:10,929 - DEBUG - Updated prices for Falkenrath Gorger: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,929 - DEBUG - Updated prices for Yavimaya, Cradle of Growth: Original=$47.25, Whatnot=$47
+2025-05-10 18:32:10,929 - DEBUG - Updated prices for Far Fortune, End Boss: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,929 - DEBUG - Updated prices for Far Out: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,929 - DEBUG - Updated prices for Farsight Ritual: Original=$0.39, Whatnot=$1
+2025-05-10 18:32:10,929 - DEBUG - Updated prices for Fated Retribution: Original=$0.35, Whatnot=$1
+2025-05-10 18:32:10,929 - DEBUG - Updated prices for Feldon's Cane: Original=$0.41, Whatnot=$1
+2025-05-10 18:32:10,929 - DEBUG - Updated prices for Fell the Profane // Fell Mire: Original=$5.66, Whatnot=$6
+2025-05-10 18:32:10,929 - DEBUG - Updated prices for Ferris Wheel: Original=$0.45, Whatnot=$1
+2025-05-10 18:32:10,929 - DEBUG - Updated prices for Final Fortune: Original=$8.10, Whatnot=$8
+2025-05-10 18:32:10,929 - DEBUG - Updated prices for Fireflux Squad: Original=$0.45, Whatnot=$1
+2025-05-10 18:32:10,929 - DEBUG - Updated prices for Firja's Retribution: Original=$0.49, Whatnot=$1
+2025-05-10 18:32:10,929 - DEBUG - Updated prices for Flagstones of Trokair: Original=$4.88, Whatnot=$5
+2025-05-10 18:32:10,929 - DEBUG - Updated prices for Flare of Cultivation: Original=$1.20, Whatnot=$1
+2025-05-10 18:32:10,929 - DEBUG - Updated prices for Flare of Denial: Original=$5.33, Whatnot=$6
+2025-05-10 18:32:10,929 - DEBUG - Updated prices for Flare of Cultivation: Original=$1.20, Whatnot=$1
+2025-05-10 18:32:10,929 - DEBUG - Updated prices for Flare of Denial: Original=$5.33, Whatnot=$6
+2025-05-10 18:32:10,929 - DEBUG - Updated prices for Flare of Malice: Original=$8.26, Whatnot=$8
+2025-05-10 18:32:10,929 - DEBUG - Updated prices for Flawless Maneuver: Original=$17.70, Whatnot=$18
+2025-05-10 18:32:10,929 - DEBUG - Updated prices for Flesh Duplicate: Original=$24.41, Whatnot=$25
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Flickering Ward: Original=$1.89, Whatnot=$2
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Floodfarm Verge: Original=$8.95, Whatnot=$9
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Florian, Voldaren Scion: Original=$0.75, Whatnot=$1
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Form of the Approach of the Second Sun: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Fortify: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Fountainport: Original=$4.99, Whatnot=$5
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Freestrider Lookout: Original=$1.32, Whatnot=$2
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Friarball: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Full Throttle: Original=$2.90, Whatnot=$3
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Funeral Room // Awakening Hall: Original=$4.76, Whatnot=$5
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Funeral Room // Awakening Hall: Original=$4.76, Whatnot=$5
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Fear of Missing Out: Original=$5.50, Whatnot=$6
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Galewind Moose: Original=$0.19, Whatnot=$1
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Gallery of Legends: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Gauntlet of Power: Original=$4.99, Whatnot=$5
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for General Kudro of Drannith: Original=$2.54, Whatnot=$3
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Generous Gift: Original=$0.75, Whatnot=$1
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Get Lost: Original=$5.39, Whatnot=$6
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Get Lost: Original=$5.39, Whatnot=$6
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Get Lost: Original=$5.39, Whatnot=$6
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Ghalta, Primal Hunger: Original=$0.82, Whatnot=$1
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Ghost Vacuum: Original=$4.95, Whatnot=$5
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Ghost Vacuum: Original=$4.95, Whatnot=$5
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Ghost Vacuum: Original=$4.95, Whatnot=$5
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Giada, Font of Hope: Original=$1.00, Whatnot=$1
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Gift Shop: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Gloomlake Verge: Original=$11.57, Whatnot=$12
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Gloomlake Verge: Original=$11.57, Whatnot=$12
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Glorious Protector: Original=$0.82, Whatnot=$1
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Glory: Original=$0.29, Whatnot=$1
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Goblin Engineer: Original=$7.72, Whatnot=$8
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Goddric, Cloaked Reveler: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Goldspan Dragon: Original=$30.00, Whatnot=$30
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Grand Abolisher: Original=$14.82, Whatnot=$15
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Grand Architect: Original=$2.00, Whatnot=$2
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Graveblade Marauder: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Gray Merchant of Asphodel: Original=$8.67, Whatnot=$9
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Gray Merchant of Alphabet: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Graywater's Fixer: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Greater Gargadon: Original=$0.35, Whatnot=$1
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Greatest Show in the Multiverse: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Green Sun's Zenith: Original=$70.48, Whatnot=$71
+2025-05-10 18:32:10,930 - DEBUG - Updated prices for Grinding Station: Original=$9.21, Whatnot=$9
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Griselbrand: Original=$3.21, Whatnot=$3
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Griselbrand: Original=$3.21, Whatnot=$3
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Guardian of Faith: Original=$4.15, Whatnot=$4
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Guardian of New Benalia: Original=$0.27, Whatnot=$1
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Guardian Sunmare: Original=$0.45, Whatnot=$1
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Gumdrop Poisoner // Tempt with Treats: Original=$0.36, Whatnot=$1
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Gurmag Angler: Original=$0.95, Whatnot=$1
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Harald, King of Skemfar: Original=$0.32, Whatnot=$1
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Harbinger of the Seas: Original=$3.59, Whatnot=$4
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Hardy of Myra's Marvels: Original=$0.29, Whatnot=$1
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Haunted House: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Hedron Archive: Original=$0.49, Whatnot=$1
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Hellkite Tyrant: Original=$7.15, Whatnot=$7
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Heroic Intervention: Original=$12.83, Whatnot=$13
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Heroic Intervention: Original=$12.83, Whatnot=$13
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Hired Claw: Original=$2.14, Whatnot=$2
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Hobbit's Sting: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Homunculus Horde: Original=$1.20, Whatnot=$1
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Hopeful Initiate: Original=$0.32, Whatnot=$1
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Huatli, Poet of Unity // Roar of the Fifth People: Original=$0.85, Whatnot=$1
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Hugs, Grisly Guardian: Original=$2.31, Whatnot=$3
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Hulldrifter: Original=$0.24, Whatnot=$1
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Hulking Raptor: Original=$1.93, Whatnot=$2
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Hunted Nightmare: Original=$0.49, Whatnot=$1
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Huntmaster of the Fells // Ravager of the Fells: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Hylda's Crown of Winter: Original=$0.49, Whatnot=$1
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Hylda of the Icy Crown: Original=$8.99, Whatnot=$9
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Ian Malcolm, Chaotician: Original=$6.99, Whatnot=$7
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Illusionist's Bracers: Original=$5.06, Whatnot=$5
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Increasing Vengeance: Original=$4.03, Whatnot=$4
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Indicate: Original=$1.49, Whatnot=$2
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Indulgent Aristocrat: Original=$3.04, Whatnot=$3
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Inferno Project: Original=$0.43, Whatnot=$1
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Ingenious Mastery: Original=$0.70, Whatnot=$1
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Infested Thrinax: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Innkeeper's Talent: Original=$17.30, Whatnot=$18
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Inquisition of Kozilek: Original=$0.75, Whatnot=$1
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Inspiring Overseer: Original=$6.98, Whatnot=$7
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Inspiring Refrain: Original=$1.00, Whatnot=$1
+2025-05-10 18:32:10,931 - DEBUG - Updated prices for Inspiring Vantage: Original=$3.43, Whatnot=$4
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Intangible Virtue: Original=$0.42, Whatnot=$1
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Inti, Seneschal of the Sun: Original=$1.99, Whatnot=$2
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Into the Pit: Original=$1.07, Whatnot=$1
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Inventors' Fair: Original=$17.00, Whatnot=$17
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Invert Polarity: Original=$1.31, Whatnot=$2
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Iridescent Vinelasher: Original=$1.98, Whatnot=$2
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Giada, Font of Hope: Original=$1.00, Whatnot=$1
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Herald of Eternal Dawn: Original=$2.05, Whatnot=$2
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Jacked Rabbit: Original=$5.00, Whatnot=$5
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Jacob Frye: Original=$0.34, Whatnot=$1
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Jadzi, Oracle of Arcavios // Journey to the Oracle: Original=$0.68, Whatnot=$1
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Jaya Ballard, Task Mage: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Jeska, Thrice Reborn: Original=$8.59, Whatnot=$9
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Jolted Awake: Original=$0.24, Whatnot=$1
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Jyoti, Moag Ancient: Original=$0.66, Whatnot=$1
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Kaito, Bane of Nightmares: Original=$20.68, Whatnot=$21
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Karn, the Great Creator: Original=$9.49, Whatnot=$10
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Karplusan Forest: Original=$1.62, Whatnot=$2
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Keen-Eyed Curator: Original=$1.36, Whatnot=$2
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Keen Sense: Original=$5.66, Whatnot=$6
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Kellan, Daring Traveler // Journey On: Original=$0.39, Whatnot=$1
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Kellan, Planar Trailblazer: Original=$0.39, Whatnot=$1
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Kellan, Planar Trailblazer: Original=$0.39, Whatnot=$1
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Kellan, the Fae-Blooded // Birthright Boon: Original=$5.77, Whatnot=$6
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Kellan, Planar Trailblazer: Original=$0.39, Whatnot=$1
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Kher Keep: Original=$0.41, Whatnot=$1
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for King Narfi's Betrayal: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Kiora, the Rising Tide: Original=$3.64, Whatnot=$4
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Kitsa, Otterball Elite: Original=$10.10, Whatnot=$10
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Knife and Death: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Kodama's Reach: Original=$1.50, Whatnot=$2
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Kolodin, Triumph Caster: Original=$0.49, Whatnot=$1
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Kolvori, God of Kinship // The Ringhart Crest: Original=$0.49, Whatnot=$1
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Koma, Cosmos Serpent: Original=$24.04, Whatnot=$24
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Kozilek's Command: Original=$10.88, Whatnot=$11
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Kozilek's Command: Original=$10.88, Whatnot=$11
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Krark-Clan Ironworks: Original=$88.00, Whatnot=$88
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Krark-Clan Ironworks: Original=$88.00, Whatnot=$88
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Krenko, Mob Boss: Original=$4.07, Whatnot=$4
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Krenko, Baron of Tin Street: Original=$0.29, Whatnot=$1
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Krenko, Mob Boss: Original=$4.07, Whatnot=$4
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Kutzil's Flanker: Original=$0.81, Whatnot=$1
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Laelia, the Blade Reforged: Original=$1.68, Whatnot=$2
+2025-05-10 18:32:10,932 - DEBUG - Updated prices for Laughing Jasper Flint: Original=$1.03, Whatnot=$1
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Lava Spike: Original=$1.92, Whatnot=$2
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Legacy Weapon: Original=$0.52, Whatnot=$1
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Leveler: Original=$4.08, Whatnot=$4
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Leyline of Mutation: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Leyline of the Void: Original=$0.52, Whatnot=$1
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Leyline of the Void: Original=$0.52, Whatnot=$1
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Leyline of the Void: Original=$0.52, Whatnot=$1
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Liesa, Forgotten Archangel: Original=$0.90, Whatnot=$1
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Life and Limb: Original=$0.99, Whatnot=$1
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Lifecraft Engine: Original=$0.32, Whatnot=$1
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Life Finds a Way: Original=$8.07, Whatnot=$8
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Life from the Loam: Original=$10.26, Whatnot=$10
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Liliana, Dreadhorde General: Original=$19.97, Whatnot=$20
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Liliana of the Veil: Original=$10.20, Whatnot=$10
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Llanowar Elves: Original=$3.00, Whatnot=$3
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Llanowar Loamspeaker: Original=$0.33, Whatnot=$1
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Llanowar Visionary: Original=$0.74, Whatnot=$1
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Log Flume: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Lórien Revealed: Original=$11.25, Whatnot=$11
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Lost Jitte: Original=$7.75, Whatnot=$8
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Lotho, Corrupt Shirriff: Original=$24.43, Whatnot=$25
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Lotus Bloom: Original=$4.24, Whatnot=$4
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Loyal Warhound: Original=$0.55, Whatnot=$1
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Lumra, Bellow of the Woods: Original=$13.80, Whatnot=$14
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Lunar Insight: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Lunar Insight: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Liesa, Forgotten Archangel: Original=$0.90, Whatnot=$1
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Magus of the Moon: Original=$5.83, Whatnot=$6
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Magus of the Moon: Original=$5.83, Whatnot=$6
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Malcolm, Alluring Scoundrel: Original=$0.83, Whatnot=$1
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Malcolm, Alluring Scoundrel: Original=$0.83, Whatnot=$1
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Malcolm, Alluring Scoundrel: Original=$0.83, Whatnot=$1
+2025-05-10 18:32:10,933 - DEBUG - Updated prices for Mana Crypt: Original=$375.00, Whatnot=$375
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Mana Reflection: Original=$3.77, Whatnot=$4
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Mana Short: Original=$1.00, Whatnot=$1
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Mangara of Corondor: Original=$0.35, Whatnot=$1
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Manifold Mouse: Original=$3.99, Whatnot=$4
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for March of the World Ooze: Original=$2.65, Whatnot=$3
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Marina Vendrell: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Masterwork of Ingenuity: Original=$5.47, Whatnot=$6
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Mausoleum Wanderer: Original=$0.97, Whatnot=$1
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Mavinda, Students' Advocate: Original=$0.89, Whatnot=$1
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Mausoleum Wanderer: Original=$0.97, Whatnot=$1
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Merry, Esquire of Rohan: Original=$0.47, Whatnot=$1
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Metamorphosis Fanatic: Original=$9.90, Whatnot=$10
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Minas Tirith: Original=$13.96, Whatnot=$14
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Mindbreak Trap: Original=$12.71, Whatnot=$13
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Mindspring Merfolk: Original=$0.41, Whatnot=$1
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Mind Stone: Original=$1.50, Whatnot=$2
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Mirri's Guile: Original=$12.20, Whatnot=$12
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Mirri the Cursed: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Mirror Room // Fractured Realm: Original=$3.00, Whatnot=$3
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Mirror Room // Fractured Realm: Original=$3.00, Whatnot=$3
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Mishra's Bauble: Original=$1.75, Whatnot=$2
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Mobile Clone: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Mockingbird: Original=$4.53, Whatnot=$5
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Monk Class: Original=$0.49, Whatnot=$1
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Muraganda Raceway: Original=$1.10, Whatnot=$1
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Mythos of Illuna: Original=$0.34, Whatnot=$1
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Nadu, Winged Wisdom: Original=$0.56, Whatnot=$1
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Nanogene Conversion: Original=$6.99, Whatnot=$7
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Nanogene Conversion: Original=$6.99, Whatnot=$7
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Natural Order: Original=$10.95, Whatnot=$11
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Nature's Claim: Original=$4.45, Whatnot=$5
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for New Master of Arms: Original=$0.35, Whatnot=$1
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Nexus of Becoming: Original=$5.00, Whatnot=$5
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Ninja of the Deep Hours: Original=$3.81, Whatnot=$4
+2025-05-10 18:32:10,934 - DEBUG - Updated prices for Noble Hierarch: Original=$8.56, Whatnot=$9
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Nuka-Cola Vending Machine: Original=$12.81, Whatnot=$13
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Null Elemental Blast: Original=$0.39, Whatnot=$1
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Nut Collector: Original=$3.12, Whatnot=$3
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Ob Nixilis, the Adversary: Original=$3.75, Whatnot=$4
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Ob Nixilis, the Adversary: Original=$3.75, Whatnot=$4
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Odric, Lunarch Marshal: Original=$0.42, Whatnot=$1
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Ognis, the Dragon's Lash: Original=$0.36, Whatnot=$1
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Oildeep Gearhulk: Original=$5.67, Whatnot=$6
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Omniclown Colossus // Pie-roclasm: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Omnivorous Flytrap: Original=$0.35, Whatnot=$1
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Omniclown Colossus // Pie-roclasm: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for On Wings of Gold: Original=$0.77, Whatnot=$1
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Opening Ceremony: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Open the Way: Original=$6.31, Whatnot=$7
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Orb of Origin: Original=$0.33, Whatnot=$1
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Orim's Chant: Original=$13.49, Whatnot=$14
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Osteomancer Adept: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Overcharged Amalgam: Original=$0.27, Whatnot=$1
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Overgrown Farmland: Original=$2.88, Whatnot=$3
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Overlord of the Hauntwoods: Original=$46.51, Whatnot=$47
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Overlord of the Balemurk: Original=$25.25, Whatnot=$25
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Overlord of the Balemurk: Original=$25.25, Whatnot=$25
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Preordain: Original=$19.99, Whatnot=$20
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Pact of the Titan: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Palani's Hatcher: Original=$1.00, Whatnot=$1
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Paleontologist's Pick-Axe // Dinosaur Headdress: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Sylvan Paradise: Original=$27.22, Whatnot=$27
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Pawpatch Recruit: Original=$2.84, Whatnot=$3
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Path to the Festival: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Path of Peril: Original=$2.25, Whatnot=$2
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Pathbreaker Ibex: Original=$11.38, Whatnot=$12
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Pashalik Mons: Original=$1.45, Whatnot=$2
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Past in Flames: Original=$2.24, Whatnot=$2
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Pearl Medallion: Original=$3.80, Whatnot=$4
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Perilous Snare: Original=$0.35, Whatnot=$1
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Perilous Snare: Original=$0.35, Whatnot=$1
+2025-05-10 18:32:10,935 - DEBUG - Updated prices for Phlage, Titan of Fire's Fury: Original=$16.17, Whatnot=$16
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Phytohydra: Original=$0.45, Whatnot=$1
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Pia Nalaar, Chief Mechanic: Original=$0.27, Whatnot=$1
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Pillage the Bog: Original=$0.99, Whatnot=$1
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Pillar Tombs of Aku: Original=$1.04, Whatnot=$1
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Pip-Boy 3000: Original=$10.95, Whatnot=$11
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Plains: Original=$0.48, Whatnot=$1
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Plargg, Dean of Chaos // Augusta, Dean of Order: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Poetic Ingenuity: Original=$0.42, Whatnot=$1
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Poison-Tip Archer: Original=$2.05, Whatnot=$2
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Pollywog Prodigy: Original=$14.71, Whatnot=$15
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Ponder: Original=$12.01, Whatnot=$12
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Precursor Golem: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Preposterous Proportions: Original=$0.87, Whatnot=$1
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Preposterous Proportions: Original=$0.87, Whatnot=$1
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Price of Glory: Original=$13.91, Whatnot=$14
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Prime Speaker Zegana: Original=$3.56, Whatnot=$4
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Prized Amalgam: Original=$0.99, Whatnot=$1
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Psychic Corrosion: Original=$15.79, Whatnot=$16
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Psychotic Episode: Original=$0.35, Whatnot=$1
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Pugnacious Hammerskull: Original=$0.52, Whatnot=$1
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Puresight Merrow: Original=$0.35, Whatnot=$1
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Push Your Luck: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Pyre Zombie: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Queen's Bay Paladin: Original=$0.39, Whatnot=$1
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Quilled Greatwurm: Original=$7.96, Whatnot=$8
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Quilled Greatwurm: Original=$7.96, Whatnot=$8
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Radiant Scrollwielder: Original=$0.49, Whatnot=$1
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Radha, Heir to Keld: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Raise the Past: Original=$2.40, Whatnot=$3
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Rakdos, Patron of Chaos: Original=$7.00, Whatnot=$7
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Rally the Peasants: Original=$0.32, Whatnot=$1
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Ral, Monsoon Mage // Ral, Leyline Prodigy: Original=$5.95, Whatnot=$6
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Rampaging Aetherhood: Original=$0.33, Whatnot=$1
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Rangers' Aetherhive: Original=$0.23, Whatnot=$1
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Rangers' Refueler: Original=$0.23, Whatnot=$1
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Ravenous Chupacabra: Original=$4.98, Whatnot=$5
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Ravenous Tyrannosaurus: Original=$33.88, Whatnot=$34
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Reaper from the Abyss: Original=$1.16, Whatnot=$1
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Reckless Crew: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Reclamation Sage: Original=$0.55, Whatnot=$1
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Redshift, Rocketeer Chief: Original=$0.29, Whatnot=$1
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Regal Behemoth: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,936 - DEBUG - Updated prices for Regal Behemoth: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Regal Imperiosaur: Original=$0.69, Whatnot=$1
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Regal Imperiosaur: Original=$0.69, Whatnot=$1
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Reiterate: Original=$4.97, Whatnot=$5
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Relic of Legends: Original=$2.96, Whatnot=$3
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Relic of Progenitus: Original=$7.32, Whatnot=$8
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Reluctant Role Model: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Remand: Original=$1.30, Whatnot=$2
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Renewed Solidarity: Original=$6.00, Whatnot=$6
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Repeal: Original=$0.49, Whatnot=$1
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Replication Technique: Original=$0.94, Whatnot=$1
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Resplendent Angel: Original=$3.70, Whatnot=$4
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Rest in Peace: Original=$34.51, Whatnot=$35
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Restless Prairie: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Restoration Angel: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Ride Down: Original=$0.20, Whatnot=$1
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Riku of Many Paths: Original=$0.47, Whatnot=$1
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Rite of the Dragoncaller: Original=$6.97, Whatnot=$7
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Rivaz of the Claw: Original=$2.47, Whatnot=$3
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Roaring Furnace // Steaming Sauna: Original=$0.35, Whatnot=$1
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Rolling Hamsphere: Original=$1.10, Whatnot=$1
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Rootpath Purifier: Original=$2.76, Whatnot=$3
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Roshan, Hidden Magister: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Rot Hulk: Original=$3.80, Whatnot=$4
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Rottenmouth Viper: Original=$13.75, Whatnot=$14
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Rowan, Scion of War: Original=$0.48, Whatnot=$1
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Rune-Scarred Demon: Original=$0.99, Whatnot=$1
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Reckless Fireweaver: Original=$12.95, Whatnot=$13
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Sphinx of the Second Sun: Original=$7.79, Whatnot=$8
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Salvation Swan: Original=$0.41, Whatnot=$1
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Sanguine Evangelist: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Sapphire Medallion: Original=$5.00, Whatnot=$5
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Saproling Symbiosis: Original=$2.00, Whatnot=$2
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Sarkhan, Fireblood: Original=$1.93, Whatnot=$2
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Savage Order: Original=$26.53, Whatnot=$27
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Savior of Ollenbock: Original=$0.55, Whatnot=$1
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Scavenging Ooze: Original=$0.26, Whatnot=$1
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Scion of Calamity: Original=$2.46, Whatnot=$3
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Scrawling Crawler: Original=$8.40, Whatnot=$9
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Scrawling Crawler: Original=$8.40, Whatnot=$9
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Screaming Nemesis: Original=$21.72, Whatnot=$22
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Tarmogoyf: Original=$8.56, Whatnot=$9
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Searslicer Goblin: Original=$1.38, Whatnot=$2
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Season of Gathering: Original=$6.23, Whatnot=$6
+2025-05-10 18:32:10,937 - DEBUG - Updated prices for Second Harvest: Original=$1.11, Whatnot=$1
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Secure the Wastes: Original=$2.99, Whatnot=$3
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Sedgemoor Witch: Original=$0.94, Whatnot=$1
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Selvala, Heart of the Wilds: Original=$6.54, Whatnot=$7
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Sengir Nosferatu: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Sentinel of Lost Lore: Original=$0.45, Whatnot=$1
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Sentinel of the Nameless City: Original=$1.73, Whatnot=$2
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Senu, Keen-Eyed Protector: Original=$1.58, Whatnot=$2
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Serpent of Yawning Depths: Original=$10.71, Whatnot=$11
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Serra Avenger: Original=$0.66, Whatnot=$1
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Shadowborn Demon: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Shaile, Dean of Radiance // Embrose, Dean of Shadow: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Sharp-Eyed Rookie: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Show and Tell: Original=$11.44, Whatnot=$12
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Showdown of the Skalds: Original=$1.40, Whatnot=$2
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Sigarda's Splendor: Original=$0.52, Whatnot=$1
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Silent Clearing: Original=$8.85, Whatnot=$9
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Silent Hallcreeper: Original=$1.84, Whatnot=$2
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Silver Scrutiny: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Simulacrum Synthesizer: Original=$40.08, Whatnot=$40
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Siphon Insight: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Skeleton Crew: Original=$0.86, Whatnot=$1
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Skittering Cicada: Original=$6.98, Whatnot=$7
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Skybox Ferry: Original=$0.24, Whatnot=$1
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Skyclave Apparition: Original=$0.99, Whatnot=$1
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Skyseer's Chariot: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Slagstorm: Original=$0.26, Whatnot=$1
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Skyseer's Chariot: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Slaughter Pact: Original=$1.48, Whatnot=$2
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Slaughter Specialist: Original=$3.98, Whatnot=$4
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Slimefoot, the Stowaway: Original=$0.44, Whatnot=$1
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Snakeskin Veil: Original=$0.21, Whatnot=$1
+2025-05-10 18:32:10,938 - DEBUG - Updated prices for Snow-Covered Island: Original=$4.99, Whatnot=$5
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Snow-Covered Plains: Original=$3.88, Whatnot=$4
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Snuff Out: Original=$9.99, Whatnot=$10
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Sole Performer: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Soratami Savant: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Sorin, Imperious Bloodlord: Original=$8.00, Whatnot=$8
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Sorin, Imperious Bloodlord: Original=$8.00, Whatnot=$8
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Soul-Guide Gryff: Original=$0.33, Whatnot=$1
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Souls of the Lost: Original=$0.49, Whatnot=$1
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Soulstone Sanctuary: Original=$2.90, Whatnot=$3
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Souvenir T-Shirt: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Sowing Mycospawn: Original=$16.99, Whatnot=$17
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Spectator Seating: Original=$13.03, Whatnot=$13
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Spectator Seating: Original=$13.03, Whatnot=$13
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Spectator Seating: Original=$13.03, Whatnot=$13
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Spectral Shepherd: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Spell Queller: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Spell Queller: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Spell Queller: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Sphere of Annihilation: Original=$0.29, Whatnot=$1
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Sphinx of Clear Skies: Original=$0.43, Whatnot=$1
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Sphinx of Forgotten Lore: Original=$0.75, Whatnot=$1
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Sphinx of Forgotten Lore: Original=$0.75, Whatnot=$1
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Sphinx's Revelation: Original=$0.36, Whatnot=$1
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Spinner of Souls: Original=$0.79, Whatnot=$1
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Spinner of Souls: Original=$0.79, Whatnot=$1
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Spinner of Souls: Original=$0.79, Whatnot=$1
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Spiteful Banditry: Original=$14.95, Whatnot=$15
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Split Up: Original=$2.25, Whatnot=$2
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Squee, Dubious Monarch: Original=$0.62, Whatnot=$1
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Standard Procedure: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Starlight Spectacular: Original=$0.68, Whatnot=$1
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Starving Revenant: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,939 - DEBUG - Updated prices for Starving Revenant: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Static Orb: Original=$25.02, Whatnot=$25
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Step Between Worlds: Original=$0.35, Whatnot=$1
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Stifle: Original=$8.56, Whatnot=$9
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Stitch in Time: Original=$1.35, Whatnot=$2
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Stoic Sphinx: Original=$0.27, Whatnot=$1
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Storm, Force of Nature: Original=$49.99, Whatnot=$50
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Storm-Kiln Artist: Original=$1.33, Whatnot=$2
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Storybook Ride: Original=$0.49, Whatnot=$1
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Stronghold Arena: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Subterranean Schooner: Original=$0.63, Whatnot=$1
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Sundown Pass: Original=$5.26, Whatnot=$5
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Sunfrill Imitator: Original=$1.88, Whatnot=$2
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Svyelun of Sea and Sky: Original=$0.66, Whatnot=$1
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Swiftfoot Boots: Original=$1.44, Whatnot=$2
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Shifting Woodland: Original=$6.58, Whatnot=$7
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Soulstone Sanctuary: Original=$2.90, Whatnot=$3
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Teferi's Ageless Insight: Original=$14.69, Whatnot=$15
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Talisman of Conviction: Original=$7.75, Whatnot=$8
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Talon Gates of Madara: Original=$25.07, Whatnot=$25
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Tamiyo, Inquisitive Student // Tamiyo, Seasoned Scholar: Original=$35.53, Whatnot=$36
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Tamiyo, Inquisitive Student // Tamiyo, Seasoned Scholar: Original=$35.53, Whatnot=$36
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for TARDIS: Original=$35.00, Whatnot=$35
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Tchotchke Elemental: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Teachings of the Archaics: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Teferi's Protection: Original=$61.67, Whatnot=$62
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Temple Garden: Original=$26.99, Whatnot=$27
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Temporal Isolation: Original=$0.19, Whatnot=$1
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Temporal Manipulation: Original=$6.46, Whatnot=$7
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Tendrils of Agony: Original=$0.54, Whatnot=$1
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Teremko Griffin: Original=$0.22, Whatnot=$1
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Terror Tide: Original=$0.43, Whatnot=$1
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Terry Pin, Turboturtle: Original=$0.67, Whatnot=$1
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Tezzeret's Gambit: Original=$0.48, Whatnot=$1
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for The Belligerent: Original=$0.45, Whatnot=$1
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for The Black Gate: Original=$16.43, Whatnot=$17
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for The Everflowing Well // The Myriad Pools: Original=$0.45, Whatnot=$1
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for The Haunt of Hightower: Original=$2.46, Whatnot=$3
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for The Infamous Cruelclaw: Original=$4.96, Whatnot=$5
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for The Jolly Balloon Man: Original=$0.75, Whatnot=$1
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for The Last Ride: Original=$0.67, Whatnot=$1
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for Thelon of Havenwood: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,940 - DEBUG - Updated prices for The Meathook Massacre: Original=$21.50, Whatnot=$22
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for The Meathook Massacre: Original=$21.50, Whatnot=$22
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for The Necrobloom: Original=$0.48, Whatnot=$1
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for The Phasing of Zhalfir: Original=$0.35, Whatnot=$1
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for The Speed Demon: Original=$3.85, Whatnot=$4
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for The Tale of Tamiyo: Original=$0.44, Whatnot=$1
+2025-05-10 18:32:10,941 - ERROR - Error updating price for The Twelfth Doctor: cannot convert float NaN to integer
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for The Wandering Rescuer: Original=$1.99, Whatnot=$2
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for The War Doctor: Original=$13.85, Whatnot=$14
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Thieving Skydiver: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Thing in the Ice // Awoken Horror: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Think Twice: Original=$0.29, Whatnot=$1
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Thopter Fabricator: Original=$0.52, Whatnot=$1
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Thornspire Verge: Original=$9.05, Whatnot=$9
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Thornspire Verge: Original=$9.05, Whatnot=$9
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Thorn Mammoth: Original=$0.98, Whatnot=$1
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Thoughtseize: Original=$7.21, Whatnot=$7
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Thousand-Year Storm: Original=$0.75, Whatnot=$1
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Thraben Inspector: Original=$0.36, Whatnot=$1
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Thousand-Year Storm: Original=$0.75, Whatnot=$1
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Thran Portal: Original=$1.07, Whatnot=$1
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Three Tree City: Original=$25.68, Whatnot=$26
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Through the Breach: Original=$0.81, Whatnot=$1
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Thundering Broodwagon: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Thundertrap Trainer: Original=$4.15, Whatnot=$4
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Thundertrap Trainer: Original=$4.15, Whatnot=$4
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Tinybones, Bauble Burglar: Original=$0.67, Whatnot=$1
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Tishana's Tidebinder: Original=$3.93, Whatnot=$4
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Tomik, Distinguished Advokist: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Torens, Fist of the Angels: Original=$0.37, Whatnot=$1
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Tourach, Dread Cantor: Original=$0.73, Whatnot=$1
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Toxic Deluge: Original=$6.94, Whatnot=$7
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Training Grounds: Original=$5.90, Whatnot=$6
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Transcendent Master: Original=$0.74, Whatnot=$1
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Traverse the Ulvenwald: Original=$0.44, Whatnot=$1
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Treasure Cruise: Original=$1.00, Whatnot=$1
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Treasure Map // Treasure Cove: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Tribute to the World Tree: Original=$15.00, Whatnot=$15
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Trinisphere: Original=$23.91, Whatnot=$24
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Triskelion: Original=$2.45, Whatnot=$3
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Triton Shorestalker: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Truss, Chief Engineer: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Twinflame Tyrant: Original=$32.01, Whatnot=$32
+2025-05-10 18:32:10,941 - DEBUG - Updated prices for Twinflame Tyrant: Original=$32.01, Whatnot=$32
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Twitching Doll: Original=$0.99, Whatnot=$1
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Ugin's Labyrinth: Original=$35.36, Whatnot=$36
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Under the Skin: Original=$0.22, Whatnot=$1
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Unholy Annex // Ritual Chamber: Original=$3.05, Whatnot=$3
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Unholy Annex // Ritual Chamber: Original=$3.05, Whatnot=$3
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Unstable Amulet: Original=$0.44, Whatnot=$1
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Unstoppable Slasher: Original=$3.56, Whatnot=$4
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Unstoppable Slasher: Original=$3.56, Whatnot=$4
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Unstoppable Slasher: Original=$3.56, Whatnot=$4
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Up the Beanstalk: Original=$5.25, Whatnot=$5
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Urza's Blueprints: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Urza, Lord High Artificer: Original=$15.79, Whatnot=$16
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Urza's Saga: Original=$39.99, Whatnot=$40
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Urza's Workshop: Original=$15.24, Whatnot=$15
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Valgavoth's Lair: Original=$2.39, Whatnot=$3
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Valgavoth, Terror Eater: Original=$23.69, Whatnot=$24
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Valley Floodcaller: Original=$14.55, Whatnot=$15
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Vandalblast: Original=$3.00, Whatnot=$3
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Vanquish the Horde: Original=$2.40, Whatnot=$3
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Vanquish the Horde: Original=$2.40, Whatnot=$3
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Velukan Dragon: Original=$1.15, Whatnot=$1
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Vexing Bauble: Original=$1.64, Whatnot=$2
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Viridian Shaman: Original=$0.57, Whatnot=$1
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Visions of Beyond: Original=$17.88, Whatnot=$18
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Vodalian Hexcatcher: Original=$2.38, Whatnot=$3
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Vodalian Mindsinger: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Volatile Stormdrake: Original=$5.00, Whatnot=$5
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Voldaren Bloodcaster // Bloodbat Summoner: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Vorpal Sword: Original=$2.00, Whatnot=$2
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Wakening Sun's Avatar: Original=$0.48, Whatnot=$1
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Walk-In Closet // Forgotten Cellar: Original=$6.43, Whatnot=$7
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Walk-In Closet // Forgotten Cellar: Original=$6.43, Whatnot=$7
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Walking Skyscraper: Original=$0.17, Whatnot=$1
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Walk the Aeons: Original=$1.99, Whatnot=$2
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Waltz of Rage: Original=$0.49, Whatnot=$1
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Warren Soultrader: Original=$9.13, Whatnot=$9
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Warrior: Original=$1.00, Whatnot=$1
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Watermarket: Original=$0.39, Whatnot=$1
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Wastewood Verge: Original=$6.95, Whatnot=$7
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Waxen Shapethief: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Webstrike Elite: Original=$0.36, Whatnot=$1
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Waxen Shapethief: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Welding Jar: Original=$0.95, Whatnot=$1
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Welding Jar: Original=$0.95, Whatnot=$1
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Westvale Abbey // Ormendahl, Profane Prince: Original=$0.92, Whatnot=$1
+2025-05-10 18:32:10,942 - DEBUG - Updated prices for Willow Geist: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Winds of Change: Original=$8.99, Whatnot=$9
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Wish: Original=$0.70, Whatnot=$1
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Wishing Well: Original=$0.31, Whatnot=$1
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Witch Enchanter // Witch-Blessed Meadow: Original=$4.46, Whatnot=$5
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Witching Well: Original=$0.20, Whatnot=$1
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Witch's Oven: Original=$4.99, Whatnot=$5
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Witherbloom Apprentice: Original=$0.35, Whatnot=$1
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Winter, Misanthropic Guide: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Wolverine, Best There Is: Original=$45.00, Whatnot=$45
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Worn Powerstone: Original=$1.41, Whatnot=$2
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Wrathful Raptors: Original=$3.44, Whatnot=$4
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Wrath of the Skies: Original=$4.38, Whatnot=$5
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Wrath of the Skies: Original=$4.38, Whatnot=$5
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Xanathar, Guild Kingpin: Original=$2.66, Whatnot=$3
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Yavimaya Coast: Original=$0.58, Whatnot=$1
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Yeva, Nature's Herald: Original=$1.02, Whatnot=$1
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Ygra, Eater of All: Original=$10.85, Whatnot=$11
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Young Pyromancer: Original=$1.00, Whatnot=$1
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Young Wolf: Original=$2.00, Whatnot=$2
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Zahur, Glory's Past: Original=$0.75, Whatnot=$1
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Zur, Eternal Schemer: Original=$9.14, Whatnot=$9
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Thieving Varmint: Original=$0.42, Whatnot=$1
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Surrak, Elusive Hunter: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Zurgo Stormrender: Original=$8.31, Whatnot=$9
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Warden of the Grove: Original=$1.81, Whatnot=$2
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Dirgur Island Dragon // Skimming Strike: Original=$0.20, Whatnot=$1
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Windcrag Siege: Original=$3.27, Whatnot=$3
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Breaching Dragonstorm: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Rebellious Strike: Original=$0.20, Whatnot=$1
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Jungle Hollow: Original=$0.19, Whatnot=$1
+2025-05-10 18:32:10,943 - DEBUG - Updated prices for Twin Bolt: Original=$0.17, Whatnot=$1
+2025-05-10 18:32:10,944 - DEBUG - Updated prices for Snakeskin Veil: Original=$0.21, Whatnot=$1
+2025-05-10 18:32:10,944 - DEBUG - Updated prices for Dalkovan Packbeasts: Original=$0.28, Whatnot=$1
+2025-05-10 18:32:10,944 - DEBUG - Updated prices for Hardened Tactician: Original=$0.51, Whatnot=$1
+2025-05-10 18:32:10,944 - DEBUG - Updated prices for Lie in Wait: Original=$0.20, Whatnot=$1
+2025-05-10 18:32:10,944 - DEBUG - Updated prices for Rediscover the Way: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,944 - DEBUG - Updated prices for Cori Mountain Monastery: Original=$1.00, Whatnot=$1
+2025-05-10 18:32:10,944 - DEBUG - Updated prices for Molten Exhale: Original=$0.20, Whatnot=$1
+2025-05-10 18:32:10,944 - DEBUG - Updated prices for Cruel Truths: Original=$0.20, Whatnot=$1
+2025-05-10 18:32:10,944 - DEBUG - Updated prices for Temur Devotee: Original=$0.20, Whatnot=$1
+2025-05-10 18:32:10,944 - DEBUG - Updated prices for Sagu Wildling // Roost Seek: Original=$0.22, Whatnot=$1
+2025-05-10 18:32:10,944 - DEBUG - Updated prices for Will of the Abzan: Original=$6.99, Whatnot=$7
+2025-05-10 18:32:10,944 - DEBUG - Updated prices for Boulderborn Dragon: Original=$0.20, Whatnot=$1
+2025-05-10 18:32:10,944 - DEBUG - Updated prices for Mammoth Bellow: Original=$0.22, Whatnot=$1
+2025-05-10 18:32:10,944 - DEBUG - Updated prices for Veteran Ice Climber: Original=$0.20, Whatnot=$1
+2025-05-10 18:32:10,944 - DEBUG - Updated prices for Breaching Dragonstorm: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,944 - DEBUG - Updated prices for Temur Tawnyback: Original=$0.18, Whatnot=$1
+2025-05-10 18:32:10,944 - DEBUG - Updated prices for New Way Forward: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,944 - DEBUG - Updated prices for Lotuslight Dancers: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,944 - DEBUG - Updated prices for Stillness in Motion: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,944 - DEBUG - Updated prices for Whirlwing Stormbrood // Dynamic Soar: Original=$0.26, Whatnot=$1
+2025-05-10 18:32:10,944 - DEBUG - Updated prices for Defibrillating Current: Original=$0.20, Whatnot=$1
+2025-05-10 18:32:10,944 - DEBUG - Updated prices for Wingblade Disciple: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,944 - DEBUG - Updated prices for Channeled Dragonfire: Original=$0.21, Whatnot=$1
+2025-05-10 18:32:10,944 - DEBUG - Updated prices for Rescue Leopard: Original=$0.20, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Evolving Wilds: Original=$0.22, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Dragonback Lancer: Original=$0.19, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Aggressive Negotiations: Original=$0.18, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Plains: Original=$0.48, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Tip the Scales: Original=$0.55, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Frostcliff Siege: Original=$2.78, Whatnot=$3
+2025-05-10 18:32:10,945 - ERROR - Error updating price for Clarion Conqueror // Clarion Conqueror: could not convert string to float: ''
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Frostcliff Siege: Original=$2.78, Whatnot=$3
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Kishla Skimmer: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Synchronized Charge: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Kishla Trawlers: Original=$0.20, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Dusyut Earthcarver: Original=$0.18, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Wingspan Stride: Original=$0.19, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Poised Practitioner: Original=$0.15, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Scoured Barrens: Original=$0.20, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Dirgur Island Dragon // Skimming Strike: Original=$0.20, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Rot-Curse Rakshasa: Original=$5.05, Whatnot=$5
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Voice of Victory: Original=$11.99, Whatnot=$12
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Protector of the Wastes: Original=$0.98, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Severance Priest: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Feral Deathgorger // Dusk Sight: Original=$0.20, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Iceridge Serpent: Original=$0.18, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Dragon's Prey: Original=$0.19, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Underfoot Underdogs: Original=$0.19, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Spectral Denial: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Heritage Reclamation: Original=$0.34, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Alchemist's Assistant: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Mardu Monument: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Feral Deathgorger // Dusk Sight: Original=$0.20, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Teval's Judgment: Original=$6.41, Whatnot=$7
+2025-05-10 18:32:10,945 - ERROR - Error updating price for Marang River Regent // Coil and Catch // Marang River Regent: could not convert string to float: ''
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Wild Ride: Original=$0.20, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Loxodon Battle Priest: Original=$0.20, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Disruptive Stormbrood // Petty Revenge: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Teeming Dragonstorm: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Salt Road Skirmish: Original=$0.21, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Jade-Cast Sentinel: Original=$0.20, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Arashin Sunshield: Original=$0.15, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Dirgur Island Dragon // Skimming Strike: Original=$0.20, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Temur Battlecrier: Original=$1.20, Whatnot=$1
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Disciple of Freyalise // Garden of Freyalise: Original=$1.90, Whatnot=$2
+2025-05-10 18:32:10,945 - DEBUG - Updated prices for Ambling Stormshell: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Diviner of Mist: Original=$0.69, Whatnot=$1
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Ureni, the Song Unending: Original=$5.04, Whatnot=$5
+2025-05-10 18:32:10,946 - ERROR - Error updating price for Bloomvine Regent // Claim Territory // Bloomvine Regent: could not convert string to float: ''
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Magmatic Hellkite: Original=$0.90, Whatnot=$1
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Surrak, Elusive Hunter: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Surrak, Elusive Hunter: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Will of the Jeskai: Original=$4.63, Whatnot=$5
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Cori-Steel Cutter: Original=$15.00, Whatnot=$15
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Eshki Dragonclaw: Original=$0.27, Whatnot=$1
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Rot-Curse Rakshasa: Original=$5.05, Whatnot=$5
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Anafenza, Unyielding Lineage: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for New Way Forward: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Revival of the Ancestors: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Roar of Endless Song: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Teval, Arbiter of Virtue: Original=$1.75, Whatnot=$2
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for United Battlefront: Original=$0.84, Whatnot=$1
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Sinkhole Surveyor: Original=$0.39, Whatnot=$1
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Rot-Curse Rakshasa: Original=$5.05, Whatnot=$5
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Rot-Curse Rakshasa: Original=$5.05, Whatnot=$5
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Yathan Roadwatcher: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for United Battlefront: Original=$0.84, Whatnot=$1
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Perennation: Original=$1.15, Whatnot=$1
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Within Range: Original=$1.90, Whatnot=$2
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Reunion of the House: Original=$0.47, Whatnot=$1
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Sage of the Skies: Original=$0.78, Whatnot=$1
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Infantry Shield: Original=$7.18, Whatnot=$7
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Narset, Jeskai Waymaster: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Sage of the Skies: Original=$0.78, Whatnot=$1
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Revival of the Ancestors: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Redoubled Stormsinger: Original=$3.24, Whatnot=$3
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Mardu Siegebreaker: Original=$1.80, Whatnot=$2
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Windcrag Siege: Original=$3.27, Whatnot=$3
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Skirmish Rhino: Original=$6.62, Whatnot=$7
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Ram Through: Original=$1.65, Whatnot=$2
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Gemrazer: Original=$1.67, Whatnot=$2
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Brightglass Gearhulk: Original=$6.59, Whatnot=$7
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Tergrid, God of Fright // Tergrid's Lantern: Original=$11.60, Whatnot=$12
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for March of Otherworldly Light: Original=$1.00, Whatnot=$1
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Autonomous Assembler: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Graven Lore: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for White Sun's Twilight: Original=$1.48, Whatnot=$2
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Phyrexian Dragon Engine: Original=$1.42, Whatnot=$2
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Swiftfoot Boots: Original=$1.44, Whatnot=$2
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Tameshi, Reality Architect: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,946 - DEBUG - Updated prices for Tocasia, Dig Site Mentor: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Keening Stone: Original=$0.39, Whatnot=$1
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Venser, Corpse Puppet: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Bloated Contaminator: Original=$2.53, Whatnot=$3
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Ms. Bumbleflower: Original=$1.25, Whatnot=$1
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Karn, Scion of Urza: Original=$5.28, Whatnot=$5
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Voldaren Epicure: Original=$1.20, Whatnot=$1
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Ornery Tumblewagg: Original=$0.51, Whatnot=$1
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Vanishing Verse: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Savvy Trader: Original=$1.00, Whatnot=$1
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Bruse Tarl, Roving Rancher: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Decimate: Original=$1.49, Whatnot=$2
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Yuma, Proud Protector: Original=$0.47, Whatnot=$1
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Pariah: Original=$0.38, Whatnot=$1
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Uglúk of the White Hand: Original=$0.39, Whatnot=$1
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Cryptic Coat: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Emergent Ultimatum: Original=$2.53, Whatnot=$3
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Fblthp, Lost on the Range: Original=$0.34, Whatnot=$1
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Mishra's Foundry: Original=$0.75, Whatnot=$1
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Gimli, Counter of Kills: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Hinata, Dawn-Crowned: Original=$0.75, Whatnot=$1
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Dragon's Rage Channeler: Original=$3.00, Whatnot=$3
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Trenchpost: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Peregrin Took: Original=$2.03, Whatnot=$2
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Dredge the Mire: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Find // Finality: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Stolen Strategy: Original=$0.49, Whatnot=$1
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Anguished Unmaking: Original=$2.56, Whatnot=$3
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Archangel Elspeth: Original=$9.38, Whatnot=$10
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Path to Exile: Original=$2.06, Whatnot=$2
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Consign to Memory: Original=$9.17, Whatnot=$9
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Consign to Memory: Original=$9.17, Whatnot=$9
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Hatchery Sliver: Original=$2.90, Whatnot=$3
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Zariel, Archduke of Avernus: Original=$5.17, Whatnot=$5
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Insidious Roots: Original=$4.26, Whatnot=$4
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Samwise the Stouthearted: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Decimate: Original=$1.49, Whatnot=$2
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Imodane, the Pyrohammer: Original=$0.29, Whatnot=$1
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Leeches: Original=$3.98, Whatnot=$4
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Cliffgate: Original=$1.72, Whatnot=$2
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Narset of the Ancient Way: Original=$0.79, Whatnot=$1
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Ogre Slumlord: Original=$2.15, Whatnot=$2
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Invasion of Shandalar // Leyline Surge: Original=$2.13, Whatnot=$2
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Merchant Scroll: Original=$17.38, Whatnot=$18
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Armory Paladin: Original=$0.90, Whatnot=$1
+2025-05-10 18:32:10,947 - DEBUG - Updated prices for Mystic Forge: Original=$2.84, Whatnot=$3
+2025-05-10 18:32:10,948 - DEBUG - Updated prices for Divine Visitation: Original=$5.21, Whatnot=$5
+2025-05-10 18:32:10,948 - DEBUG - Updated prices for Young Wolf: Original=$2.00, Whatnot=$2
+2025-05-10 18:32:10,948 - DEBUG - Updated prices for Temple of the False God: Original=$1.23, Whatnot=$1
+2025-05-10 18:32:10,948 - DEBUG - Updated prices for Star Whale: Original=$4.96, Whatnot=$5
+2025-05-10 18:32:10,948 - DEBUG - Updated prices for Command the Chaff: Original=$1.59, Whatnot=$2
+2025-05-10 18:32:10,948 - DEBUG - Updated prices for Vivien, Monsters' Advocate: Original=$3.53, Whatnot=$4
+2025-05-10 18:32:10,948 - DEBUG - Updated prices for Flubs, the Fool: Original=$4.87, Whatnot=$5
+2025-05-10 18:32:10,948 - DEBUG - Updated prices for Coppercoat Vanguard: Original=$0.35, Whatnot=$1
+2025-05-10 18:32:10,948 - DEBUG - Updated prices for Jirina, Dauntless General: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,948 - DEBUG - Updated prices for Noxious Revival: Original=$4.34, Whatnot=$5
+2025-05-10 18:32:10,948 - DEBUG - Updated prices for Meren of Clan Nel Toth: Original=$10.30, Whatnot=$11
+2025-05-10 18:32:10,948 - ERROR - Error updating price for Command Tower // Command Tower: could not convert string to float: ''
+2025-05-10 18:32:10,948 - DEBUG - Updated prices for Fluros of Myra's Marvels: Original=$0.35, Whatnot=$1
+2025-05-10 18:32:10,948 - DEBUG - Updated prices for Vorthos, Steward of Myth: Original=$0.45, Whatnot=$1
+2025-05-10 18:32:10,948 - DEBUG - Updated prices for Phabine, Boss's Confidant: Original=$0.49, Whatnot=$1
+2025-05-10 18:32:10,948 - DEBUG - Updated prices for Mythos of Nethroi: Original=$0.85, Whatnot=$1
+2025-05-10 18:32:10,948 - DEBUG - Updated prices for Kykar, Wind's Fury: Original=$5.43, Whatnot=$6
+2025-05-10 18:32:10,948 - DEBUG - Updated prices for Lock and Load: Original=$0.47, Whatnot=$1
+2025-05-10 18:32:10,948 - DEBUG - Updated prices for Lila, Hospitality Hostess: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,948 - DEBUG - Updated prices for Hardy of Myra's Marvels: Original=$0.29, Whatnot=$1
+2025-05-10 18:32:10,948 - DEBUG - Updated prices for Greatest Show in the Multiverse: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,948 - DEBUG - Updated prices for Witch Enchanter // Witch-Blessed Meadow: Original=$4.46, Whatnot=$5
+2025-05-10 18:32:10,948 - DEBUG - Updated prices for Traveler's Amulet: Original=$0.20, Whatnot=$1
+2025-05-10 18:32:10,948 - DEBUG - Updated prices for Sanctum Weaver: Original=$3.26, Whatnot=$3
+2025-05-10 18:32:10,948 - DEBUG - Updated prices for Gaea's Will: Original=$0.29, Whatnot=$1
+2025-05-10 18:32:10,948 - DEBUG - Updated prices for Yusri, Fortune's Flame: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,948 - DEBUG - Updated prices for Calibrated Blast: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,948 - DEBUG - Updated prices for Persist: Original=$2.23, Whatnot=$2
+2025-05-10 18:32:10,948 - DEBUG - Updated prices for Sanctifier en-Vec: Original=$0.49, Whatnot=$1
+2025-05-10 18:32:10,949 - DEBUG - Updated prices for Thought Monitor: Original=$1.00, Whatnot=$1
+2025-05-10 18:32:10,949 - DEBUG - Updated prices for Vindicate: Original=$1.19, Whatnot=$1
+2025-05-10 18:32:10,949 - DEBUG - Updated prices for Chef's Kiss: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,949 - DEBUG - Updated prices for D00-DL, Caricaturist: Original=$0.42, Whatnot=$1
+2025-05-10 18:32:10,949 - DEBUG - Updated prices for Vivien's Talent: Original=$0.35, Whatnot=$1
+2025-05-10 18:32:10,949 - DEBUG - Updated prices for Inspired Ultimatum: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,949 - DEBUG - Updated prices for Tolsimir, Midnight's Light: Original=$0.33, Whatnot=$1
+2025-05-10 18:32:10,949 - DEBUG - Updated prices for Path of the Enigma: Original=$0.35, Whatnot=$1
+2025-05-10 18:32:10,949 - DEBUG - Updated prices for Moira and Teshar: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,949 - DEBUG - Updated prices for Realmbreaker, the Invasion Tree: Original=$0.75, Whatnot=$1
+2025-05-10 18:32:10,949 - DEBUG - Updated prices for Kami of Whispered Hopes: Original=$3.00, Whatnot=$3
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Ignacio of Myra's Marvels: Original=$0.43, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Borborygmos and Fblthp: Original=$0.49, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Gyruda, Doom of Depths: Original=$0.49, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Zimone and Dina: Original=$1.09, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Doorkeeper Thrull: Original=$1.01, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Jermane, Pride of the Circus: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Giant Killer // Chop Down: Original=$2.09, Whatnot=$2
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Queue of Beetles: Original=$1.02, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Clavileño, First of the Blessed: Original=$3.71, Whatnot=$4
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Quintorius, Loremaster: Original=$0.29, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Invasion of Alara // Awaken the Maelstrom: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Reflections of Littjara: Original=$1.48, Whatnot=$2
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Alela, Artful Provocateur: Original=$1.16, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Satoru Umezawa: Original=$0.60, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Sauron, the Necromancer: Original=$9.23, Whatnot=$9
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Shakedown Heavy: Original=$0.45, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Nesting Dragon: Original=$0.59, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Francisco, Fowl Marauder: Original=$1.00, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Wake the Dragon: Original=$1.88, Whatnot=$2
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Faramir, Prince of Ithilien: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Rushed Rebirth: Original=$0.49, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Proft's Eidetic Memory: Original=$5.26, Whatnot=$5
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Analyze the Pollen: Original=$1.00, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Izoni, Center of the Web: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Hide in Plain Sight: Original=$0.34, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for From the Rubble: Original=$0.32, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Cindervines: Original=$0.52, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Inquisition of Kozilek: Original=$0.75, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Treacherous Greed: Original=$0.33, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Coveted Falcon: Original=$0.33, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Counterpoint: Original=$0.44, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Mirko, Obsessive Theorist: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Elrond, Master of Healing: Original=$1.06, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Urza's Fun House: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Tomik, Distinguished Advokist: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Sméagol, Helpful Guide: Original=$7.64, Whatnot=$8
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Elvish Harbinger: Original=$3.00, Whatnot=$3
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Voldaren Thrillseeker: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Mirrorhall Mimic // Ghastly Mimicry: Original=$1.16, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Imperious Mindbreaker: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Follow the Bodies: Original=$0.33, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Homicide Investigator: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Labyrinth of Skophos: Original=$0.35, Whatnot=$1
+2025-05-10 18:32:10,950 - DEBUG - Updated prices for Ransom Note: Original=$0.33, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Forensic Gadgeteer: Original=$1.65, Whatnot=$2
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Shivan Dragon: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Transcendent Message: Original=$0.32, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Wolfcaller's Howl: Original=$2.62, Whatnot=$3
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for In Search of Greatness: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Earnest Fellowship: Original=$2.12, Whatnot=$2
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Complete the Circuit: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Zephyr Singer: Original=$0.34, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Zirda, the Dawnwaker: Original=$0.78, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Fabrication Foundry: Original=$0.35, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Invasion of Kaldheim // Pyre of the World Tree: Original=$0.47, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Heliod, the Radiant Dawn // Heliod, the Warped Eclipse: Original=$1.01, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Officious Interrogation: Original=$0.33, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Doppelgang: Original=$1.05, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Kasla, the Broken Halo: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Titans' Nest: Original=$1.75, Whatnot=$2
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Judith, Carnage Connoisseur: Original=$0.35, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Deadly Cover-Up: Original=$1.00, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Barbed Servitor: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Invasion of Fiora // Marchesa, Resolute Monarch: Original=$0.59, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Devil K. Nevil: Original=$0.30, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Bloated Processor: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Dusk Legion Duelist: Original=$0.92, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Ezrim, Agency Chief: Original=$0.37, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Axebane Ferox: Original=$0.35, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Claire D'Loon, Joy Sculptor: Original=$0.29, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Insidious Roots: Original=$4.26, Whatnot=$4
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Spectral Arcanist: Original=$0.45, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Unshakable Tail: Original=$0.46, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Kylox's Voltstrider: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Corpses of the Lost: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Printlifter Ooze: Original=$0.52, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Magus of the Future: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Zephyr Singer: Original=$0.34, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Anzrag's Rampage: Original=$0.45, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Evolved Spinoderm: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Glissa's Retriever: Original=$0.49, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Dredge the Mire: Original=$0.40, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Offspring's Revenge: Original=$0.47, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Pyrotechnic Performer: Original=$0.39, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Amphibian Downpour: Original=$2.52, Whatnot=$3
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Alpha Deathclaw: Original=$2.20, Whatnot=$2
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Seachrome Coast: Original=$4.35, Whatnot=$5
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Hew the Entwood: Original=$0.99, Whatnot=$1
+2025-05-10 18:32:10,951 - DEBUG - Updated prices for Darksteel Mutation: Original=$1.88, Whatnot=$2
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Counterspell: Original=$1.58, Whatnot=$2
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Isildur's Fateful Strike: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Aragorn, Company Leader: Original=$2.52, Whatnot=$3
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Orcish Siegemaster: Original=$6.11, Whatnot=$6
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Phial of Galadriel: Original=$1.15, Whatnot=$1
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Legolas, Counter of Kills: Original=$0.35, Whatnot=$1
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Elrond, Lord of Rivendell: Original=$0.33, Whatnot=$1
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Homicide Investigator: Original=$0.25, Whatnot=$1
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Thran Spider: Original=$0.56, Whatnot=$1
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Smirking Spelljacker: Original=$0.60, Whatnot=$1
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Repudiate // Replicate: Original=$0.49, Whatnot=$1
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Bedevil: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Trostani, Three Whispers: Original=$0.55, Whatnot=$1
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Gilraen, Dúnedain Protector: Original=$2.34, Whatnot=$3
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Chromatic Lantern: Original=$2.76, Whatnot=$3
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Connive // Concoct: Original=$0.43, Whatnot=$1
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Boggart Trawler // Boggart Bog: Original=$1.72, Whatnot=$2
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Breath Weapon: Original=$2.01, Whatnot=$2
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Breath Weapon: Original=$2.01, Whatnot=$2
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Bucknard's Everfull Purse: Original=$1.24, Whatnot=$1
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Buried Alive: Original=$2.07, Whatnot=$2
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Collective Resistance: Original=$1.60, Whatnot=$2
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Corrupted Conviction: Original=$1.03, Whatnot=$1
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Decanter of Endless Water: Original=$3.22, Whatnot=$3
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Elas il-Kor, Sadistic Pilgrim: Original=$2.15, Whatnot=$2
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Entish Restoration: Original=$5.19, Whatnot=$5
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Envoy of the Ancestors: Original=$0.63, Whatnot=$1
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Evolution Witness: Original=$1.22, Whatnot=$1
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Experimental Confectioner: Original=$3.87, Whatnot=$4
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Explore: Original=$2.52, Whatnot=$3
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Fatal Push: Original=$1.50, Whatnot=$2
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Fatal Push: Original=$1.50, Whatnot=$2
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Fiery Inscription: Original=$2.25, Whatnot=$2
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Fellwar Stone: Original=$1.12, Whatnot=$1
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Grab the Prize: Original=$1.18, Whatnot=$1
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Harmony of Nature: Original=$0.45, Whatnot=$1
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Hazel's Brewmaster: Original=$6.34, Whatnot=$7
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Heartfire Hero: Original=$1.73, Whatnot=$2
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Invasion of Arcavios // Invocation of the Founders: Original=$0.58, Whatnot=$1
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Invasion of Segovia // Caetus, Sea Tyrant of Segovia: Original=$0.97, Whatnot=$1
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for It That Heralds the End: Original=$1.66, Whatnot=$2
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Kodama's Reach: Original=$1.50, Whatnot=$2
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Legion Leadership // Legion Stronghold: Original=$2.88, Whatnot=$3
+2025-05-10 18:32:10,952 - DEBUG - Updated prices for Liliana's Caress: Original=$5.57, Whatnot=$6
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Mahadi, Emporium Master: Original=$2.12, Whatnot=$2
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Malevolent Rumble: Original=$2.85, Whatnot=$3
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Marionette Apprentice: Original=$1.75, Whatnot=$2
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Marionette Apprentice: Original=$1.75, Whatnot=$2
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Marionette Apprentice: Original=$1.75, Whatnot=$2
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Merrow Harbinger: Original=$2.60, Whatnot=$3
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Molten Gatekeeper: Original=$2.05, Whatnot=$2
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Monstrous Rage: Original=$2.89, Whatnot=$3
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Nowhere to Run: Original=$1.42, Whatnot=$2
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Oubliette: Original=$2.20, Whatnot=$2
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Overprotect: Original=$1.70, Whatnot=$2
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Persistent Petitioners: Original=$1.46, Whatnot=$2
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Pinnacle Monk // Mystic Peak: Original=$3.84, Whatnot=$4
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Pinnacle Monk // Mystic Peak: Original=$3.84, Whatnot=$4
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Planar Genesis: Original=$3.33, Whatnot=$4
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Primal Order: Original=$2.18, Whatnot=$2
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Propaganda: Original=$1.94, Whatnot=$2
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Rain of Filth: Original=$2.03, Whatnot=$2
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Reprieve: Original=$3.89, Whatnot=$4
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Rising of the Day: Original=$2.00, Whatnot=$2
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Rosie Cotton of South Lane: Original=$2.81, Whatnot=$3
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Search for Tomorrow: Original=$1.39, Whatnot=$2
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Selesnya Signet: Original=$1.44, Whatnot=$2
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Sink into Stupor // Soporific Springs: Original=$9.67, Whatnot=$10
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Spelunking: Original=$3.51, Whatnot=$4
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Sink into Stupor // Soporific Springs: Original=$9.67, Whatnot=$10
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Stern Scolding: Original=$3.75, Whatnot=$4
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Storm-Kiln Artist: Original=$1.33, Whatnot=$2
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Strike It Rich: Original=$1.27, Whatnot=$1
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Storm-Kiln Artist: Original=$1.33, Whatnot=$2
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Sundering Eruption // Volcanic Fissure: Original=$2.00, Whatnot=$2
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Swiftfoot Boots: Original=$1.44, Whatnot=$2
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Tempt with Discovery: Original=$5.20, Whatnot=$5
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for The Balrog, Durin's Bane: Original=$3.00, Whatnot=$3
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Thraben Charm: Original=$0.96, Whatnot=$1
+2025-05-10 18:32:10,953 - DEBUG - Updated prices for Untimely Malfunction: Original=$6.25, Whatnot=$6
+2025-05-10 18:32:10,954 - DEBUG - Updated prices for Untimely Malfunction: Original=$6.25, Whatnot=$6
+2025-05-10 18:32:10,954 - DEBUG - Updated prices for Utopia Sprawl: Original=$1.75, Whatnot=$2
+2025-05-10 18:32:10,954 - DEBUG - Updated prices for Waterlogged Teachings // Inundated Archive: Original=$1.62, Whatnot=$2
+2025-05-10 18:32:10,954 - DEBUG - Updated prices for Wrenn's Resolve: Original=$2.08, Whatnot=$2
+2025-05-10 18:32:10,954 - DEBUG - Updated prices for Ajani's Pridemate: Original=$0.49, Whatnot=$1
+2025-05-10 18:32:10,954 - DEBUG - Updated prices for An-Zerrin Ruins: Original=$2.30, Whatnot=$2
+2025-05-10 18:32:10,954 - DEBUG - Updated prices for Fury Sliver: Original=$0.39, Whatnot=$1
+2025-05-10 18:32:10,954 - DEBUG - Updated prices for Laboratory Maniac: Original=$1.30, Whatnot=$2
+2025-05-10 18:32:10,954 - DEBUG - Updated prices for Patchwork Automaton: Original=$0.29, Whatnot=$1
+2025-05-10 18:32:10,954 - DEBUG - Updated prices for Path to Exile: Original=$2.06, Whatnot=$2
+2025-05-10 18:32:10,954 - DEBUG - Updated prices for Tarmogoyf Nest: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,954 - DEBUG - Updated prices for Vandalblast: Original=$3.00, Whatnot=$3
+2025-05-10 18:32:10,954 - DEBUG - Updated prices for Village Rites: Original=$1.56, Whatnot=$2
+2025-05-10 18:32:10,954 - DEBUG - Updated prices for Wayward Swordtooth: Original=$2.47, Whatnot=$3
+2025-05-10 18:32:10,954 - DEBUG - Updated prices for Lumbering Worldwagon: Original=$0.50, Whatnot=$1
+2025-05-10 18:32:10,954 - DEBUG - Updated prices for Temur Battlecrier: Original=$1.20, Whatnot=$1
+2025-05-10 18:32:10,954 - DEBUG - Updated prices for Sinkhole Surveyor: Original=$0.39, Whatnot=$1
+2025-05-10 18:32:10,954 - DEBUG - column_config type: <class 'dict'>
+2025-05-10 18:32:10,954 - DEBUG - column_config: {'columns': [{'id': 'Name', 'display': 'Name', 'width': 150}, {'id': 'Set code', 'display': 'Set code', 'width': 100}, {'id': 'Set name', 'display': 'Set name', 'width': 150}, {'id': 'Collector number', 'display': 'Collector number', 'width': 120}, {'id': 'Foil', 'display': 'Foil', 'width': 80}, {'id': 'Rarity', 'display': 'Rarity', 'width': 100}, {'id': 'Quantity', 'display': 'Quantity', 'width': 80}, {'id': 'ManaBox ID', 'display': 'ManaBox ID', 'width': 100}, {'id': 'Scryfall ID', 'display': 'Scryfall ID', 'width': 200}, {'id': 'Purchase price', 'display': 'Purchase price', 'width': 100}, {'id': 'Whatnot price', 'display': 'Whatnot Price', 'width': 100, 'visible': True}, {'id': 'Misprint', 'display': 'Misprint', 'width': 80}, {'id': 'Altered', 'display': 'Altered', 'width': 80}, {'id': 'Condition', 'display': 'Condition', 'width': 100}, {'id': 'Language', 'display': 'Language', 'width': 80}, {'id': 'Purchase price currency', 'display': 'Purchase price currency', 'width': 150}, {'id': 'type_line', 'display': 'Type', 'width': 150}, {'id': 'mana_cost', 'display': 'Mana Cost', 'width': 100}, {'id': 'colors', 'display': 'Colors', 'width': 100}, {'id': 'color_identity', 'display': 'Color Identity', 'width': 120}, {'id': 'oracle_text', 'display': 'Oracle Text', 'width': 200}, {'id': 'legal_commander', 'display': 'Commander Legal', 'width': 120}, {'id': 'legal_pauper', 'display': 'Pauper Legal', 'width': 100}, {'id': 'cmc', 'display': 'CMC', 'width': 80}, {'id': 'image_url', 'display': 'Image URL', 'width': 84}]}
+2025-05-10 18:32:10,955 - DEBUG - visible_cols: [{'id': 'Name', 'display': 'Name', 'width': 150}, {'id': 'Set code', 'display': 'Set code', 'width': 100}, {'id': 'Set name', 'display': 'Set name', 'width': 150}, {'id': 'Collector number', 'display': 'Collector number', 'width': 120}, {'id': 'Foil', 'display': 'Foil', 'width': 80}, {'id': 'Rarity', 'display': 'Rarity', 'width': 100}, {'id': 'Quantity', 'display': 'Quantity', 'width': 80}, {'id': 'ManaBox ID', 'display': 'ManaBox ID', 'width': 100}, {'id': 'Scryfall ID', 'display': 'Scryfall ID', 'width': 200}, {'id': 'Purchase price', 'display': 'Purchase price', 'width': 100}, {'id': 'Whatnot price', 'display': 'Whatnot Price', 'width': 100, 'visible': True}, {'id': 'Misprint', 'display': 'Misprint', 'width': 80}, {'id': 'Altered', 'display': 'Altered', 'width': 80}, {'id': 'Condition', 'display': 'Condition', 'width': 100}, {'id': 'Language', 'display': 'Language', 'width': 80}, {'id': 'Purchase price currency', 'display': 'Purchase price currency', 'width': 150}, {'id': 'type_line', 'display': 'Type', 'width': 150}, {'id': 'mana_cost', 'display': 'Mana Cost', 'width': 100}, {'id': 'colors', 'display': 'Colors', 'width': 100}, {'id': 'color_identity', 'display': 'Color Identity', 'width': 120}, {'id': 'oracle_text', 'display': 'Oracle Text', 'width': 200}, {'id': 'legal_commander', 'display': 'Commander Legal', 'width': 120}, {'id': 'legal_pauper', 'display': 'Pauper Legal', 'width': 100}, {'id': 'cmc', 'display': 'CMC', 'width': 80}, {'id': 'image_url', 'display': 'Image URL', 'width': 84}]
+2025-05-10 18:32:10,955 - DEBUG - col_ids: ['Name', 'Set code', 'Set name', 'Collector number', 'Foil', 'Rarity', 'Quantity', 'ManaBox ID', 'Scryfall ID', 'Purchase price', 'Whatnot price', 'Misprint', 'Altered', 'Condition', 'Language', 'Purchase price currency', 'type_line', 'mana_cost', 'colors', 'color_identity', 'oracle_text', 'legal_commander', 'legal_pauper', 'cmc', 'image_url']
+2025-05-10 18:32:10,955 - DEBUG - Setting heading for col: {'id': 'Name', 'display': 'Name', 'width': 150}
+2025-05-10 18:32:10,955 - DEBUG - Setting heading for col: {'id': 'Set code', 'display': 'Set code', 'width': 100}
+2025-05-10 18:32:10,955 - DEBUG - Setting heading for col: {'id': 'Set name', 'display': 'Set name', 'width': 150}
+2025-05-10 18:32:10,955 - DEBUG - Setting heading for col: {'id': 'Collector number', 'display': 'Collector number', 'width': 120}
+2025-05-10 18:32:10,955 - DEBUG - Setting heading for col: {'id': 'Foil', 'display': 'Foil', 'width': 80}
+2025-05-10 18:32:10,955 - DEBUG - Setting heading for col: {'id': 'Rarity', 'display': 'Rarity', 'width': 100}
+2025-05-10 18:32:10,955 - DEBUG - Setting heading for col: {'id': 'Quantity', 'display': 'Quantity', 'width': 80}
+2025-05-10 18:32:10,955 - DEBUG - Setting heading for col: {'id': 'ManaBox ID', 'display': 'ManaBox ID', 'width': 100}
+2025-05-10 18:32:10,955 - DEBUG - Setting heading for col: {'id': 'Scryfall ID', 'display': 'Scryfall ID', 'width': 200}
+2025-05-10 18:32:10,955 - DEBUG - Setting heading for col: {'id': 'Purchase price', 'display': 'Purchase price', 'width': 100}
+2025-05-10 18:32:10,955 - DEBUG - Setting heading for col: {'id': 'Whatnot price', 'display': 'Whatnot Price', 'width': 100, 'visible': True}
+2025-05-10 18:32:10,955 - DEBUG - Setting heading for col: {'id': 'Misprint', 'display': 'Misprint', 'width': 80}
+2025-05-10 18:32:10,955 - DEBUG - Setting heading for col: {'id': 'Altered', 'display': 'Altered', 'width': 80}
+2025-05-10 18:32:10,955 - DEBUG - Setting heading for col: {'id': 'Condition', 'display': 'Condition', 'width': 100}
+2025-05-10 18:32:10,955 - DEBUG - Setting heading for col: {'id': 'Language', 'display': 'Language', 'width': 80}
+2025-05-10 18:32:10,955 - DEBUG - Setting heading for col: {'id': 'Purchase price currency', 'display': 'Purchase price currency', 'width': 150}
+2025-05-10 18:32:10,955 - DEBUG - Setting heading for col: {'id': 'type_line', 'display': 'Type', 'width': 150}
+2025-05-10 18:32:10,955 - DEBUG - Setting heading for col: {'id': 'mana_cost', 'display': 'Mana Cost', 'width': 100}
+2025-05-10 18:32:10,955 - DEBUG - Setting heading for col: {'id': 'colors', 'display': 'Colors', 'width': 100}
+2025-05-10 18:32:10,955 - DEBUG - Setting heading for col: {'id': 'color_identity', 'display': 'Color Identity', 'width': 120}
+2025-05-10 18:32:10,955 - DEBUG - Setting heading for col: {'id': 'oracle_text', 'display': 'Oracle Text', 'width': 200}
+2025-05-10 18:32:10,955 - DEBUG - Setting heading for col: {'id': 'legal_commander', 'display': 'Commander Legal', 'width': 120}
+2025-05-10 18:32:10,955 - DEBUG - Setting heading for col: {'id': 'legal_pauper', 'display': 'Pauper Legal', 'width': 100}
+2025-05-10 18:32:10,955 - DEBUG - Setting heading for col: {'id': 'cmc', 'display': 'CMC', 'width': 80}
+2025-05-10 18:32:10,955 - DEBUG - Setting heading for col: {'id': 'image_url', 'display': 'Image URL', 'width': 84}
+2025-05-10 18:32:10,956 - DEBUG - column_config type: <class 'dict'>
+2025-05-10 18:32:10,956 - DEBUG - column_config: {'columns': [{'id': 'Name', 'display': 'Name', 'width': 150}, {'id': 'Set code', 'display': 'Set code', 'width': 100}, {'id': 'Set name', 'display': 'Set name', 'width': 150}, {'id': 'Collector number', 'display': 'Collector number', 'width': 120}, {'id': 'Foil', 'display': 'Foil', 'width': 80}, {'id': 'Rarity', 'display': 'Rarity', 'width': 100}, {'id': 'Quantity', 'display': 'Quantity', 'width': 80}, {'id': 'ManaBox ID', 'display': 'ManaBox ID', 'width': 100}, {'id': 'Scryfall ID', 'display': 'Scryfall ID', 'width': 200}, {'id': 'Purchase price', 'display': 'Purchase price', 'width': 100}, {'id': 'Whatnot price', 'display': 'Whatnot Price', 'width': 100, 'visible': True}, {'id': 'Misprint', 'display': 'Misprint', 'width': 80}, {'id': 'Altered', 'display': 'Altered', 'width': 80}, {'id': 'Condition', 'display': 'Condition', 'width': 100}, {'id': 'Language', 'display': 'Language', 'width': 80}, {'id': 'Purchase price currency', 'display': 'Purchase price currency', 'width': 150}, {'id': 'type_line', 'display': 'Type', 'width': 150}, {'id': 'mana_cost', 'display': 'Mana Cost', 'width': 100}, {'id': 'colors', 'display': 'Colors', 'width': 100}, {'id': 'color_identity', 'display': 'Color Identity', 'width': 120}, {'id': 'oracle_text', 'display': 'Oracle Text', 'width': 200}, {'id': 'legal_commander', 'display': 'Commander Legal', 'width': 120}, {'id': 'legal_pauper', 'display': 'Pauper Legal', 'width': 100}, {'id': 'cmc', 'display': 'CMC', 'width': 80}, {'id': 'image_url', 'display': 'Image URL', 'width': 84}]}
+2025-05-10 18:32:10,956 - DEBUG - visible_cols: [{'id': 'Name', 'display': 'Name', 'width': 150}, {'id': 'Set code', 'display': 'Set code', 'width': 100}, {'id': 'Set name', 'display': 'Set name', 'width': 150}, {'id': 'Collector number', 'display': 'Collector number', 'width': 120}, {'id': 'Foil', 'display': 'Foil', 'width': 80}, {'id': 'Rarity', 'display': 'Rarity', 'width': 100}, {'id': 'Quantity', 'display': 'Quantity', 'width': 80}, {'id': 'ManaBox ID', 'display': 'ManaBox ID', 'width': 100}, {'id': 'Scryfall ID', 'display': 'Scryfall ID', 'width': 200}, {'id': 'Purchase price', 'display': 'Purchase price', 'width': 100}, {'id': 'Whatnot price', 'display': 'Whatnot Price', 'width': 100, 'visible': True}, {'id': 'Misprint', 'display': 'Misprint', 'width': 80}, {'id': 'Altered', 'display': 'Altered', 'width': 80}, {'id': 'Condition', 'display': 'Condition', 'width': 100}, {'id': 'Language', 'display': 'Language', 'width': 80}, {'id': 'Purchase price currency', 'display': 'Purchase price currency', 'width': 150}, {'id': 'type_line', 'display': 'Type', 'width': 150}, {'id': 'mana_cost', 'display': 'Mana Cost', 'width': 100}, {'id': 'colors', 'display': 'Colors', 'width': 100}, {'id': 'color_identity', 'display': 'Color Identity', 'width': 120}, {'id': 'oracle_text', 'display': 'Oracle Text', 'width': 200}, {'id': 'legal_commander', 'display': 'Commander Legal', 'width': 120}, {'id': 'legal_pauper', 'display': 'Pauper Legal', 'width': 100}, {'id': 'cmc', 'display': 'CMC', 'width': 80}, {'id': 'image_url', 'display': 'Image URL', 'width': 84}]
+2025-05-10 18:32:10,956 - DEBUG - col_ids: ['Name', 'Set code', 'Set name', 'Collector number', 'Foil', 'Rarity', 'Quantity', 'ManaBox ID', 'Scryfall ID', 'Purchase price', 'Whatnot price', 'Misprint', 'Altered', 'Condition', 'Language', 'Purchase price currency', 'type_line', 'mana_cost', 'colors', 'color_identity', 'oracle_text', 'legal_commander', 'legal_pauper', 'cmc', 'image_url']
+2025-05-10 18:32:10,956 - DEBUG - Setting heading for col: {'id': 'Name', 'display': 'Name', 'width': 150}
+2025-05-10 18:32:10,956 - DEBUG - Setting heading for col: {'id': 'Set code', 'display': 'Set code', 'width': 100}
+2025-05-10 18:32:10,956 - DEBUG - Setting heading for col: {'id': 'Set name', 'display': 'Set name', 'width': 150}
+2025-05-10 18:32:10,956 - DEBUG - Setting heading for col: {'id': 'Collector number', 'display': 'Collector number', 'width': 120}
+2025-05-10 18:32:10,956 - DEBUG - Setting heading for col: {'id': 'Foil', 'display': 'Foil', 'width': 80}
+2025-05-10 18:32:10,956 - DEBUG - Setting heading for col: {'id': 'Rarity', 'display': 'Rarity', 'width': 100}
+2025-05-10 18:32:10,956 - DEBUG - Setting heading for col: {'id': 'Quantity', 'display': 'Quantity', 'width': 80}
+2025-05-10 18:32:10,956 - DEBUG - Setting heading for col: {'id': 'ManaBox ID', 'display': 'ManaBox ID', 'width': 100}
+2025-05-10 18:32:10,956 - DEBUG - Setting heading for col: {'id': 'Scryfall ID', 'display': 'Scryfall ID', 'width': 200}
+2025-05-10 18:32:10,956 - DEBUG - Setting heading for col: {'id': 'Purchase price', 'display': 'Purchase price', 'width': 100}
+2025-05-10 18:32:10,956 - DEBUG - Setting heading for col: {'id': 'Whatnot price', 'display': 'Whatnot Price', 'width': 100, 'visible': True}
+2025-05-10 18:32:10,956 - DEBUG - Setting heading for col: {'id': 'Misprint', 'display': 'Misprint', 'width': 80}
+2025-05-10 18:32:10,956 - DEBUG - Setting heading for col: {'id': 'Altered', 'display': 'Altered', 'width': 80}
+2025-05-10 18:32:10,956 - DEBUG - Setting heading for col: {'id': 'Condition', 'display': 'Condition', 'width': 100}
+2025-05-10 18:32:10,956 - DEBUG - Setting heading for col: {'id': 'Language', 'display': 'Language', 'width': 80}
+2025-05-10 18:32:10,956 - DEBUG - Setting heading for col: {'id': 'Purchase price currency', 'display': 'Purchase price currency', 'width': 150}
+2025-05-10 18:32:10,956 - DEBUG - Setting heading for col: {'id': 'type_line', 'display': 'Type', 'width': 150}
+2025-05-10 18:32:10,956 - DEBUG - Setting heading for col: {'id': 'mana_cost', 'display': 'Mana Cost', 'width': 100}
+2025-05-10 18:32:10,956 - DEBUG - Setting heading for col: {'id': 'colors', 'display': 'Colors', 'width': 100}
+2025-05-10 18:32:10,957 - DEBUG - Setting heading for col: {'id': 'color_identity', 'display': 'Color Identity', 'width': 120}
+2025-05-10 18:32:10,957 - DEBUG - Setting heading for col: {'id': 'oracle_text', 'display': 'Oracle Text', 'width': 200}
+2025-05-10 18:32:10,957 - DEBUG - Setting heading for col: {'id': 'legal_commander', 'display': 'Commander Legal', 'width': 120}
+2025-05-10 18:32:10,957 - DEBUG - Setting heading for col: {'id': 'legal_pauper', 'display': 'Pauper Legal', 'width': 100}
+2025-05-10 18:32:10,957 - DEBUG - Setting heading for col: {'id': 'cmc', 'display': 'CMC', 'width': 80}
+2025-05-10 18:32:10,957 - DEBUG - Setting heading for col: {'id': 'image_url', 'display': 'Image URL', 'width': 84}

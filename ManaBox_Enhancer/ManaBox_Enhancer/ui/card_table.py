@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QTableView, QMenu
+from PySide6.QtWidgets import QTableView, QMenu, QHeaderView, QSizePolicy
 from PySide6.QtCore import QAbstractTableModel, Qt, Signal, QModelIndex
 
 class CardTableModel(QAbstractTableModel):
@@ -42,6 +42,7 @@ class CardTableView(QTableView):
         self.model = CardTableModel([], columns)
         self.setModel(self.model)
         self.setMinimumHeight(300)
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.inventory = inventory
         self.columns = columns
         self.cards = []
@@ -61,7 +62,7 @@ class CardTableView(QTableView):
         self.setAlternatingRowColors(True)
 
         # Set default column widths for clarity
-        default_widths = {
+        self.default_widths = {
             "Name": 180,
             "Set name": 140,
             "Set code": 80,
@@ -74,7 +75,10 @@ class CardTableView(QTableView):
             "Whatnot price": 100
         }
         for i, col in enumerate(self.columns):
-            self.setColumnWidth(i, default_widths.get(col, 100))
+            self.setColumnWidth(i, self.default_widths.get(col, 100))
+
+        # Make columns user-resizable and allow switching to stretch mode
+        self.horizontalHeader().setSectionResizeMode(QHeaderView.Interactive)
 
     def update_cards(self, cards):
         self.cards = cards
@@ -115,3 +119,11 @@ class CardTableView(QTableView):
                 self.delete_card_requested.emit(rows)
         else:
             super().keyPressEvent(event)
+
+    def set_stretch_columns(self, stretch=True):
+        mode = QHeaderView.Stretch if stretch else QHeaderView.Interactive
+        self.horizontalHeader().setSectionResizeMode(mode)
+
+    def reset_column_widths(self):
+        for i, col in enumerate(self.columns):
+            self.setColumnWidth(i, self.default_widths.get(col, 100))

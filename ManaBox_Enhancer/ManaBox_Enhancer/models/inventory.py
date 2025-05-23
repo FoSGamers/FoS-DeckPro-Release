@@ -16,3 +16,9 @@ class CardInventory:
                     return False
             return True
         return [card for card in self.cards if matches(card)]
+
+    def remove_cards(self, cards_to_remove):
+        """Remove all cards in cards_to_remove from the inventory."""
+        # Remove by identity or dict equality
+        new_cards = [c for c in self.cards if c not in cards_to_remove]
+        self.cards = new_cards

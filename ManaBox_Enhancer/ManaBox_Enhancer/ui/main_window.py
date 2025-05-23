@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import (
-    QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QStatusBar, QMenuBar, QFileDialog, QMessageBox, QSplitter, QSizePolicy, QDialog, QPushButton, QTextEdit, QInputDialog
+    QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QStatusBar, QMenuBar, QFileDialog, QMessageBox, QSplitter, QSizePolicy, QDialog, QPushButton, QTextEdit, QInputDialog, QAction
 )
 from PySide6.QtCore import Qt
 from ui.card_table import CardTableView
@@ -17,6 +17,7 @@ import copy
 from ui.dialogs.edit_card import EditCardDialog
 import datetime
 from ui.dialogs.column_customization import ColumnCustomizationDialog
+from ui.dialogs.bulk_edit_remove import BulkEditRemoveDialog
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -68,6 +69,11 @@ class MainWindow(QMainWindow):
         self.undo_action = file_menu.addAction("Undo Last Import/Change")
         self.undo_action.setEnabled(False)
         self.undo_action.triggered.connect(self.undo_last_change)
+        export_whatnot_action = file_menu.addAction("Export to Whatnot...")
+        export_whatnot_action.triggered.connect(self.export_to_whatnot)
+        edit_menu = menubar.addMenu("Edit")
+        bulk_edit_remove_action = edit_menu.addAction("Bulk Edit/Remove...")
+        bulk_edit_remove_action.triggered.connect(self.bulk_edit_remove_dialog)
         self._undo_stack = []  # Multi-level undo stack
         self._current_json_file = None
         self._unsaved_changes = False
@@ -86,8 +92,9 @@ class MainWindow(QMainWindow):
         table_container = QWidget()
         table_container_layout = QVBoxLayout()
         table_container_layout.setContentsMargins(0, 0, 0, 0)
+        table_container.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.card_table = CardTableView(self.inventory, self.columns)
-        # Prevent user-driven column reordering (unless you want to support it)
+        self.card_table.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.card_table.horizontalHeader().setSectionsMovable(False)
         # Restore column widths if available
         if hasattr(self, 'column_widths') and self.column_widths:
@@ -169,6 +176,19 @@ class MainWindow(QMainWindow):
         # Connect edit and delete signals
         self.card_table.edit_card_requested.connect(self.edit_card)
         self.card_table.delete_card_requested.connect(self.delete_cards)
+
+        # Add menu actions for column width reset/stretch
+        view_menu = menubar.addMenu("View")
+        reset_widths_action = QAction("Reset Column Widths", self)
+        reset_widths_action.triggered.connect(self.card_table.reset_column_widths)
+        view_menu.addAction(reset_widths_action)
+        stretch_columns_action = QAction("Stretch Columns to Fit", self)
+        stretch_columns_action.setCheckable(True)
+        stretch_columns_action.setChecked(False)
+        def toggle_stretch():
+            self.card_table.set_stretch_columns(stretch_columns_action.isChecked())
+        stretch_columns_action.triggered.connect(toggle_stretch)
+        view_menu.addAction(stretch_columns_action)
 
     def update_table_filter(self):
         filters = {col: self.filter_overlay.filters[col].text() for col in self.columns}
@@ -665,3 +685,78 @@ class MainWindow(QMainWindow):
             visual = header.visualIndex(model_cols.index(col))
             if visual != logical:
                 header.moveSection(visual, logical)
+
+    def export_to_whatnot(self):
+        filtered_cards = self.card_table.cards
+        if not filtered_cards:
+            QMessageBox.information(self, "Export to Whatnot", "No cards to export.")
+            return
+        # Whatnot template columns (from sample)
+        whatnot_columns = [
+            "Category", "Sub Category", "Title", "Description", "Quantity", "Type", "Price", "Shipping Profile", "Offerable", "Hazmat", "Condition", "Cost Per Item", "SKU", "Image URL 1", "Image URL 2", "Image URL 3", "Image URL 4", "Image URL 5", "Image URL 6", "Image URL 7", "Image URL 8"
+        ]
+        filename, _ = QFileDialog.getSaveFileName(self, "Export to Whatnot", os.getcwd(), "CSV Files (*.csv)")
+        if not filename:
+            return
+        try:
+            with open(filename, "w", newline='', encoding="utf-8") as f:
+                writer = csv.DictWriter(f, fieldnames=whatnot_columns)
+                writer.writeheader()
+                for card in filtered_cards:
+                    row = {col: "" for col in whatnot_columns}
+                    # Map fields
+                    row["Category"] = "Trading Cards"
+                    row["Sub Category"] = "Magic: The Gathering"
+                    row["Title"] = card.get("Name", "")
+                    # Description: Name - Set name (Collector number)
+                    name = card.get("Name", "")
+                    set_name = card.get("Set name", "")
+                    collector = card.get("Collector number", "")
+                    row["Description"] = f"{name} - {set_name} ({collector})" if collector else f"{name} - {set_name}"
+                    row["Quantity"] = card.get("Quantity", "1")
+                    row["Type"] = card.get("Type", "")
+                    row["Price"] = card.get("Whatnot price", "")
+                    row["Shipping Profile"] = card.get("Shipping Profile", "")
+                    row["Offerable"] = card.get("Offerable", "Yes")
+                    row["Hazmat"] = card.get("Hazmat", "No")
+                    row["Condition"] = card.get("Condition", "")
+                    row["Cost Per Item"] = card.get("Purchase price", "")
+                    row["SKU"] = card.get("SKU", "")
+                    # Image URLs (up to 8)
+                    for i in range(1, 9):
+                        key = f"Image URL {i}"
+                        img_key = key if key in card else None
+                        if img_key and card.get(img_key):
+                            row[key] = card[img_key]
+                        elif i == 1:
+                            # Try Scryfall image if available
+                            row[key] = card.get("Scryfall image", "")
+                    writer.writerow(row)
+            self.statusBar().showMessage(f"Exported {len(filtered_cards)} cards to Whatnot CSV: {os.path.basename(filename)}")
+        except Exception as e:
+            QMessageBox.critical(self, "Export Failed", f"Failed to export to Whatnot: {e}")
+
+    def bulk_edit_remove_dialog(self):
+        dlg = BulkEditRemoveDialog(self.card_table.cards, self.columns, parent=self)
+        if dlg.exec():
+            action, field, value = dlg.get_result()
+            self.save_undo_state()
+            if action == "remove":
+                # Remove all filtered cards
+                self.inventory.remove_cards(self.card_table.cards)
+                self.card_table.update_cards(self.inventory.get_all_cards())
+                self._unsaved_changes = True
+                if self._auto_save:
+                    self.save_inventory()
+            elif action == "edit":
+                # Bulk edit field for all filtered cards
+                all_cards = self.inventory.get_all_cards()
+                filtered = self.card_table.cards
+                for card in all_cards:
+                    if card in filtered:
+                        card[field] = value
+                self.inventory.load_cards(all_cards)
+                self.card_table.update_cards(self.inventory.get_all_cards())
+                self._unsaved_changes = True
+                if self._auto_save:
+                    self.save_inventory()

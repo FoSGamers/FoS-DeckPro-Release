@@ -483,3 +483,43 @@ def test_column_customization_gui_interaction(qtbot):
     expected_headers = window.default_columns
     actual_headers = [window.card_table.model.headerData(i, window.card_table.model.Orientation.Horizontal) for i in range(window.card_table.model.columnCount())]
     assert actual_headers == expected_headers, "Table headers do not match defaults after restore."
+
+def test_undo_last_change_gui_interaction(qtbot):
+    """
+    GUI test: Simulate a user making a change, triggering Undo, confirming, and verifying the change is reverted.
+    """
+    from ManaBox_Enhancer.ui.main_window import MainWindow
+    from PySide6.QtWidgets import QDialog, QPushButton
+    window = MainWindow()
+    qtbot.addWidget(window)
+    window.show()
+    # Ensure at least one card exists
+    all_cards = window.inventory.get_all_cards()
+    if not all_cards:
+        window.inventory.load_cards([{"Name": "UndoMe"}])
+        window.card_table.update_cards(window.inventory.get_all_cards())
+    # Make a change: edit the card name
+    window.inventory.get_all_cards()[0]["Name"] = "ChangedName"
+    window.card_table.update_cards(window.inventory.get_all_cards())
+    # Save undo state
+    window.save_undo_state()
+    # Change again
+    window.inventory.get_all_cards()[0]["Name"] = "ChangedAgain"
+    window.card_table.update_cards(window.inventory.get_all_cards())
+    # Trigger Undo
+    window.undo_last_change()
+    # Find the Undo summary dialog
+    dialogs = [w for w in window.findChildren(QDialog) if w.isVisible()]
+    assert dialogs, "No Undo summary dialog found."
+    dlg = dialogs[0]
+    # Click Close (or View Changes then Close)
+    close_btn = None
+    for w in dlg.findChildren(QPushButton):
+        if w.text().lower() == "close":
+            close_btn = w
+            break
+    assert close_btn is not None, "Close button not found in Undo summary dialog."
+    qtbot.mouseClick(close_btn, qtbot.QtCore.Qt.LeftButton)
+    # Verify card name reverted
+    reverted_name = window.inventory.get_all_cards()[0]["Name"]
+    assert reverted_name == "ChangedName", f"Undo did not revert the change, got {reverted_name}"

@@ -176,3 +176,53 @@ def test_adjust_whatnot_pricing_rounding(qtbot):
     assert all_cards[1]["Whatnot price"] == "$2.00"  # 1.30 rounds up
     assert all_cards[2]["Whatnot price"] == "$3.00"  # 2.50 rounds up
     assert all_cards[3]["Whatnot price"] == "$3.00"  # 3.10 rounds down
+
+def test_adjust_whatnot_pricing_gui_interaction(qtbot):
+    """
+    GUI test: Simulate a user opening the Whatnot pricing dialog, entering a custom threshold, selecting rounding, and applying it.
+    """
+    from ManaBox_Enhancer.ui.main_window import MainWindow
+    from PySide6.QtWidgets import QDialog, QLineEdit, QRadioButton, QPushButton
+    import math
+    window = MainWindow()
+    qtbot.addWidget(window)
+    window.show()
+    # Set up test cards
+    all_cards = [
+        {"Purchase price": "$1.29", "Whatnot price": ""},
+        {"Purchase price": "$1.30", "Whatnot price": ""},
+        {"Purchase price": "$2.50", "Whatnot price": ""},
+        {"Purchase price": "$3.10", "Whatnot price": ""},
+    ]
+    window.inventory.load_cards(all_cards)
+    # Open the dialog
+    qtbot.waitExposed(window)
+    window.adjust_whatnot_pricing_dialog()
+    # Find the dialog (should be the active modal QDialog)
+    dialogs = [w for w in window.findChildren(QDialog) if w.isVisible()]
+    assert dialogs, "No dialog found."
+    dlg = dialogs[0]
+    # Find widgets
+    round_radio = None
+    threshold_input = None
+    apply_btn = None
+    for w in dlg.findChildren(QRadioButton):
+        if "Round" in w.text():
+            round_radio = w
+    for w in dlg.findChildren(QLineEdit):
+        if w.placeholderText() == "0.30":
+            threshold_input = w
+    for w in dlg.findChildren(QPushButton):
+        if w.text() == "Apply":
+            apply_btn = w
+    assert round_radio and threshold_input and apply_btn, "Dialog widgets not found."
+    # Simulate user interaction
+    qtbot.mouseClick(round_radio, qtbot.QtCore.Qt.LeftButton)
+    qtbot.keyClicks(threshold_input, "0.30")
+    qtbot.mouseClick(apply_btn, qtbot.QtCore.Qt.LeftButton)
+    # Check results
+    updated_cards = window.inventory.get_all_cards()
+    assert updated_cards[0]["Whatnot price"] == "$1.00"
+    assert updated_cards[1]["Whatnot price"] == "$2.00"
+    assert updated_cards[2]["Whatnot price"] == "$3.00"
+    assert updated_cards[3]["Whatnot price"] == "$3.00"

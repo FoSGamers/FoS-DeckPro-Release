@@ -1,5 +1,5 @@
-from PySide6.QtWidgets import QWidget, QLineEdit
-from PySide6.QtCore import Qt, QRect, QEvent
+from PyQt6.QtWidgets import QWidget, QLineEdit
+from PyQt6.QtCore import Qt, QRect, QEvent
 
 class FilterOverlay(QWidget):
     HEIGHT = 28

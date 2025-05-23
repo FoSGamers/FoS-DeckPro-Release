@@ -1,6 +1,6 @@
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QGridLayout, QLabel, QGroupBox, QTextEdit, QHBoxLayout, QScrollArea
-from PySide6.QtGui import QFont
-from PySide6.QtCore import Qt
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QGridLayout, QLabel, QGroupBox, QTextEdit, QHBoxLayout, QScrollArea
+from PyQt6.QtGui import QFont
+from PyQt6.QtCore import Qt
 
 # Map JSON keys to human-friendly names
 FRIENDLY_NAMES = {
@@ -46,8 +46,8 @@ class CardDetails(QWidget):
         # Add a scroll area for the details content
         self.scroll_area = QScrollArea(self)
         self.scroll_area.setWidgetResizable(True)
-        self.scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        self.scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        self.scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.vlayout.addWidget(self.scroll_area)
 
         # The widget that will actually hold the details

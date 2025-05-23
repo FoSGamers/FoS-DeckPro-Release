@@ -1,1 +1,0 @@
-FoSBot Simplified Summary

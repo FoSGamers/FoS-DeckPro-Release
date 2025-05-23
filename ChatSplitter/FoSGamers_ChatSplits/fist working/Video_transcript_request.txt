@@ -1,8 +1,0 @@
-Chat: Video_transcript_request
-Started: 2025-03-26 10:51:38
-
-[2025-03-26 10:51:39] FoSGamers:
-Get the video transcripts from channel https://youtube.com/@fosgamers?si=IOaMwfhbFBA93Ha_
-
-[2025-03-26 10:51:39] ChatGPT:
-I can only retrieve transcripts for individual videos, not entire channels. Please provide a specific video URL or video ID from the @fosgamers channel, and I’ll get the full transcript for you.

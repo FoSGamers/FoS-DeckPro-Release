@@ -1,9 +1,9 @@
-from PySide6.QtWidgets import (
+from PyQt6.QtWidgets import (
     QDialog, QVBoxLayout, QHBoxLayout, QPushButton,
     QListWidget, QListWidgetItem, QCheckBox, QLabel,
     QWidget, QScrollArea
 )
-from PySide6.QtCore import Qt, Signal
+from PyQt6.QtCore import Qt, Signal
 
 class ColumnItem(QWidget):
     """Widget for each column in the list, with a checkbox and label."""

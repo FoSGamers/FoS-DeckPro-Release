@@ -384,3 +384,45 @@ def test_import_cards_gui_interaction(qtbot, tmp_path):
     assert imported, "Imported card not found in inventory."
     # Restore QFileDialog
     window.open_json_file.__globals__["QFileDialog"].getOpenFileName = orig_getOpenFileName
+
+def test_export_cards_gui_interaction(qtbot, tmp_path):
+    """
+    GUI test: Simulate a user exporting cards via the Export dialog (CSV, column selection).
+    """
+    from ManaBox_Enhancer.ui.main_window import MainWindow
+    from PySide6.QtWidgets import QDialog, QPushButton, QListWidget, QListWidgetItem
+    import csv
+    window = MainWindow()
+    qtbot.addWidget(window)
+    window.show()
+    # Ensure at least one card exists
+    all_cards = window.inventory.get_all_cards()
+    if not all_cards:
+        window.inventory.load_cards([{"Name": "ExportMe", "Set name": "SetX", "Collector number": "42"}])
+        window.card_table.update_cards(window.inventory.get_all_cards())
+    # Prepare a temp CSV file for export
+    export_file = tmp_path / "export_cards.csv"
+    # Patch QFileDialog to auto-select the file
+    orig_getSaveFileName = window.export_cards.__globals__["QFileDialog"].getSaveFileName
+    window.export_cards.__globals__["QFileDialog"].getSaveFileName = staticmethod(lambda *a, **k: (str(export_file), "CSV Files (*.csv)"))
+    # Simulate user clicking Export
+    window.export_cards()
+    # Find the column selection dialog
+    dialogs = [w for w in window.findChildren(QDialog) if w.isVisible()]
+    assert dialogs, "No export columns dialog found."
+    dlg = dialogs[0]
+    # Select all columns (simulate user clicking OK)
+    ok_btn = None
+    for w in dlg.findChildren(QPushButton):
+        if w.text().lower() == "ok":
+            ok_btn = w
+            break
+    assert ok_btn is not None, "OK button not found in export columns dialog."
+    qtbot.mouseClick(ok_btn, qtbot.QtCore.Qt.LeftButton)
+    # Check exported file
+    with open(export_file, newline='', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        rows = list(reader)
+        assert any(row["Name"] == "ExportMe" for row in rows), "Exported card not found in CSV."
+    # Restore QFileDialog
+    window.export_cards.__globals__["QFileDialog"].getSaveFileName = orig_getSaveFileName

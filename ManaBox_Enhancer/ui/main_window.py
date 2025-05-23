@@ -782,27 +782,20 @@ class MainWindow(QMainWindow):
         dlg = QDialog(self)
         dlg.setWindowTitle("Adjust Whatnot Pricing")
         layout = QVBoxLayout(dlg)
-        layout.addWidget(QLabel("Choose adjustment method for Whatnot price (applies to all filtered cards):"))
+        layout.addWidget(QLabel("Choose adjustment method for Whatnot price (applies to ALL cards):"))
         # Option 1: Set fixed price
         fixed_radio = QRadioButton("Set all to fixed price:")
         fixed_input = QLineEdit()
         fixed_input.setPlaceholderText("e.g. 2.00")
-        # Option 2: Round up to nearest dollar
-        round_radio = QRadioButton("Round up to nearest dollar")
-        # Option 3: Percentage markup (future)
-        # markup_radio = QRadioButton("Apply percentage markup:")
-        # markup_input = QLineEdit()
-        # markup_input.setPlaceholderText("e.g. 10 for 10%")
+        # Option 2: Custom rounding logic
+        round_radio = QRadioButton("Round: .30 or higher rounds up to next dollar, otherwise down")
         fixed_radio.setChecked(True)
         group = QButtonGroup(dlg)
         group.addButton(fixed_radio)
         group.addButton(round_radio)
-        # group.addButton(markup_radio)
         layout.addWidget(fixed_radio)
         layout.addWidget(fixed_input)
         layout.addWidget(round_radio)
-        # layout.addWidget(markup_radio)
-        # layout.addWidget(markup_input)
         btns = QHBoxLayout()
         apply_btn = QPushButton("Apply")
         cancel_btn = QPushButton("Cancel")
@@ -810,35 +803,27 @@ class MainWindow(QMainWindow):
         btns.addWidget(cancel_btn)
         layout.addLayout(btns)
         def apply():
-            filtered = self.card_table.cards
+            all_cards = self.inventory.get_all_cards()
             if fixed_radio.isChecked():
                 try:
                     val = float(fixed_input.text())
                 except Exception:
                     QMessageBox.warning(dlg, "Invalid Input", "Please enter a valid number for fixed price.")
                     return
-                for card in filtered:
+                for card in all_cards:
                     card["Whatnot price"] = f"${val:.2f}"
             elif round_radio.isChecked():
-                for card in filtered:
+                for card in all_cards:
                     try:
                         price = float(str(card.get("Purchase price", "")).replace("$", "").strip())
-                        card["Whatnot price"] = f"${math.ceil(price):.2f}"
+                        cents = price - int(price)
+                        if cents >= 0.30:
+                            rounded = math.ceil(price)
+                        else:
+                            rounded = math.floor(price)
+                        card["Whatnot price"] = f"${rounded:.2f}"
                     except Exception:
                         card["Whatnot price"] = ""
-            # elif markup_radio.isChecked():
-            #     try:
-            #         percent = float(markup_input.text())
-            #     except Exception:
-            #         QMessageBox.warning(dlg, "Invalid Input", "Please enter a valid percentage.")
-            #         return
-            #     for card in filtered:
-            #         try:
-            #             price = float(str(card.get("Purchase price", "")).replace("$", "").strip())
-            #             new_price = price * (1 + percent / 100)
-            #             card["Whatnot price"] = f"${new_price:.2f}"
-            #         except Exception:
-            #             card["Whatnot price"] = ""
             self.card_table.update_cards(self.inventory.get_all_cards())
             dlg.accept()
         apply_btn.clicked.connect(apply)

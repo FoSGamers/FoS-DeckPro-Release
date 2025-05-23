@@ -523,3 +523,33 @@ def test_undo_last_change_gui_interaction(qtbot):
     # Verify card name reverted
     reverted_name = window.inventory.get_all_cards()[0]["Name"]
     assert reverted_name == "ChangedName", f"Undo did not revert the change, got {reverted_name}"
+
+def test_restore_from_backup_gui_interaction(qtbot, tmp_path):
+    """
+    GUI test: Simulate a user restoring from backup via the dialog and verify inventory is restored.
+    """
+    from ManaBox_Enhancer.ui.main_window import MainWindow
+    from PySide6.QtWidgets import QDialog, QPushButton
+    import json, os
+    window = MainWindow()
+    qtbot.addWidget(window)
+    window.show()
+    # Prepare a backup file
+    backup_cards = [
+        {"Name": "Restored Card", "Set name": "BackupSet", "Collector number": "999"}
+    ]
+    backup_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'Backups')
+    os.makedirs(backup_dir, exist_ok=True)
+    backup_file = os.path.join(backup_dir, "test_backup.json")
+    with open(backup_file, "w", encoding="utf-8") as f:
+        json.dump(backup_cards, f)
+    # Patch QFileDialog to auto-select the backup file
+    orig_getOpenFileName = window.restore_from_backup.__globals__["QFileDialog"].getOpenFileName
+    window.restore_from_backup.__globals__["QFileDialog"].getOpenFileName = staticmethod(lambda *a, **k: (backup_file, "JSON Files (*.json)"))
+    # Simulate user clicking Restore from Backup
+    window.restore_from_backup()
+    # Check inventory restored
+    restored = any(card["Name"] == "Restored Card" for card in window.inventory.get_all_cards())
+    assert restored, "Restored card not found in inventory."
+    # Restore QFileDialog
+    window.restore_from_backup.__globals__["QFileDialog"].getOpenFileName = orig_getOpenFileName

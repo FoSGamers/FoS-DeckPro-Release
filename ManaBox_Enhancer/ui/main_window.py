@@ -31,7 +31,15 @@ class MainWindow(QMainWindow):
             "Name", "Set name", "Set code", "Collector number", "Rarity",
             "Condition", "Foil", "Language", "Purchase price", "Whatnot price"
         ]
-        self.columns, self.visible_columns = self.load_column_prefs()
+        try:
+            self.columns, self.visible_columns = self.load_column_prefs()
+            # Fallback: if columns are missing or misaligned, reset to defaults
+            if not self.columns or len(self.columns) != len(self.default_columns):
+                self.columns = self.default_columns.copy()
+                self.visible_columns = self.default_columns.copy()
+        except Exception:
+            self.columns = self.default_columns.copy()
+            self.visible_columns = self.default_columns.copy()
         self.inventory = CardInventory()
         # Load sample data for now
         sample_cards = [
@@ -41,7 +49,7 @@ class MainWindow(QMainWindow):
         self.inventory.load_cards(sample_cards)
 
         # Menu bar and File > Open
-        menubar = QMenuBar(self)
+        menubar = self.menuBar()  # Use native menu bar for macOS robustness
         file_menu = menubar.addMenu("File")
         open_action = file_menu.addAction("Open JSON...")
         open_action.triggered.connect(self.open_json_file)
@@ -79,7 +87,7 @@ class MainWindow(QMainWindow):
         self._current_json_file = None
         self._unsaved_changes = False
         self._auto_save = False
-        self.setMenuBar(menubar)
+        # self.setMenuBar(menubar)  # Not needed with self.menuBar()
 
         # Central widget and main layout
         central = QWidget()

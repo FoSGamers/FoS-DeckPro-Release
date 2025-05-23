@@ -86,3 +86,36 @@ def test_main_window_gui_interaction(qtbot):
     # The dialog should appear; we can check for its existence
     # (In a real test, you would interact with the dialog here)
     assert window.isVisible(), "Main window should remain visible after menu interaction."
+
+def test_menu_bar_and_actions_present(qtbot):
+    """
+    Regression test: Ensure the menu bar and at least one menu/action are present in the main window.
+    """
+    from ManaBox_Enhancer.ui.main_window import MainWindow
+    window = MainWindow()
+    qtbot.addWidget(window)
+    window.show()
+    menubar = window.menuBar()
+    assert menubar is not None, "Menu bar should be present."
+    menus = [action.text() for action in menubar.actions()]
+    assert "File" in menus, "File menu should be present."
+    file_menu = menubar.actions()[0].menu()
+    file_actions = [action.text() for action in file_menu.actions()]
+    assert "Open JSON..." in file_actions, "Open JSON action should be present."
+    assert "Add Card..." in file_actions, "Add Card action should be present."
+
+
+def test_table_headers_match_defaults(qtbot):
+    """
+    Regression test: Ensure the table headers match the expected default columns.
+    """
+    from ManaBox_Enhancer.ui.main_window import MainWindow
+    window = MainWindow()
+    qtbot.addWidget(window)
+    window.show()
+    expected_headers = [
+        "Name", "Set name", "Set code", "Collector number", "Rarity",
+        "Condition", "Foil", "Language", "Purchase price", "Whatnot price"
+    ]
+    actual_headers = [window.card_table.model.headerData(i, window.card_table.model.Orientation.Horizontal) for i in range(window.card_table.model.columnCount())]
+    assert actual_headers == expected_headers, f"Table headers do not match expected columns.\nExpected: {expected_headers}\nActual: {actual_headers}"

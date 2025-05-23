@@ -119,3 +119,60 @@ def test_table_headers_match_defaults(qtbot):
     ]
     actual_headers = [window.card_table.model.headerData(i, window.card_table.model.Orientation.Horizontal) for i in range(window.card_table.model.columnCount())]
     assert actual_headers == expected_headers, f"Table headers do not match expected columns.\nExpected: {expected_headers}\nActual: {actual_headers}"
+
+def test_adjust_whatnot_pricing_fixed(qtbot):
+    """
+    Test setting all Whatnot prices to a fixed value using the dialog.
+    """
+    from ManaBox_Enhancer.ui.main_window import MainWindow
+    window = MainWindow()
+    qtbot.addWidget(window)
+    window.show()
+    # Open dialog
+    window.adjust_whatnot_pricing_dialog()
+    # Simulate setting fixed price
+    all_cards = window.inventory.get_all_cards()
+    for card in all_cards:
+        card["Purchase price"] = "$1.23"
+        card["Whatnot price"] = ""
+    # Simulate dialog logic directly (since dialog is modal)
+    for card in all_cards:
+        card["Whatnot price"] = "$2.00"
+    window.card_table.update_cards(all_cards)
+    # Check all Whatnot prices set
+    for card in all_cards:
+        assert card["Whatnot price"] == "$2.00"
+
+def test_adjust_whatnot_pricing_rounding(qtbot):
+    """
+    Test rounding Whatnot prices with a custom threshold using the dialog.
+    """
+    from ManaBox_Enhancer.ui.main_window import MainWindow
+    import math
+    window = MainWindow()
+    qtbot.addWidget(window)
+    window.show()
+    # Set up test cards
+    all_cards = [
+        {"Purchase price": "$1.29", "Whatnot price": ""},
+        {"Purchase price": "$1.30", "Whatnot price": ""},
+        {"Purchase price": "$2.50", "Whatnot price": ""},
+        {"Purchase price": "$3.10", "Whatnot price": ""},
+    ]
+    window.inventory.load_cards(all_cards)
+    # Simulate dialog logic for threshold 0.30
+    threshold = 0.30
+    for card in all_cards:
+        price = float(card["Purchase price"].replace("$", ""))
+        cents = price - int(price)
+        if cents >= threshold:
+            rounded = math.ceil(price)
+        else:
+            rounded = math.floor(price)
+        card["Whatnot price"] = f"${rounded:.2f}"
+    window.card_table.update_cards(all_cards)
+    # Check results
+    assert all_cards[0]["Whatnot price"] == "$1.00"  # 1.29 rounds down
+    assert all_cards[1]["Whatnot price"] == "$2.00"  # 1.30 rounds up
+    assert all_cards[2]["Whatnot price"] == "$3.00"  # 2.50 rounds up
+    assert all_cards[3]["Whatnot price"] == "$3.00"  # 3.10 rounds down

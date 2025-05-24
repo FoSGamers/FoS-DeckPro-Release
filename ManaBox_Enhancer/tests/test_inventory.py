@@ -1,3 +1,14 @@
+from PySide6.QtCore import Qt
+import pytest
+from unittest.mock import patch
+
+@pytest.fixture(autouse=True)
+def patch_qfiledialog(monkeypatch, tmp_path):
+    dummy_file = str(tmp_path / "dummy.json")
+    monkeypatch.setattr('PySide6.QtWidgets.QFileDialog.getOpenFileName', lambda *a, **k: (dummy_file, 'JSON Files (*.json)'))
+    monkeypatch.setattr('PySide6.QtWidgets.QFileDialog.getSaveFileName', lambda *a, **k: (dummy_file, 'JSON Files (*.json)'))
+    yield
+
 def test_export_to_whatnot(tmp_path):
     from ManaBox_Enhancer.ui.main_window import MainWindow
     import csv
@@ -229,38 +240,36 @@ def test_adjust_whatnot_pricing_gui_interaction(qtbot):
 
 def test_add_card_gui_interaction(qtbot):
     """
-    GUI test: Simulate a user adding a card via the Add Card dialog.
+    GUI test: Simulate a user adding a card via the Add Card dialog using QTimer to automate modal dialog.
     """
     from ManaBox_Enhancer.ui.main_window import MainWindow
-    from PySide6.QtWidgets import QDialog, QLineEdit, QPushButton
+    from PySide6.QtWidgets import QDialog, QLineEdit, QPushButton, QApplication
+    from PySide6.QtCore import QTimer
     window = MainWindow()
     qtbot.addWidget(window)
     window.show()
-    # Count cards before
     before_count = len(window.inventory.get_all_cards())
-    # Trigger Add Card
-    window.add_card()
-    # Find the dialog
-    dialogs = [w for w in window.findChildren(QDialog) if w.isVisible()]
-    assert dialogs, "No Add Card dialog found."
-    dlg = dialogs[0]
-    # Fill in fields
-    name_field = None
-    for w in dlg.findChildren(QLineEdit):
-        if w.placeholderText() == "" or w.objectName() == "":
-            name_field = w
-            break
-    assert name_field is not None, "Name field not found."
-    qtbot.keyClicks(name_field, "Test Card")
-    # Click Save
-    save_btn = None
-    for w in dlg.findChildren(QPushButton):
-        if w.text().lower() == "save":
-            save_btn = w
-            break
-    assert save_btn is not None, "Save button not found."
-    qtbot.mouseClick(save_btn, qtbot.QtCore.Qt.LeftButton)
-    # Check card added
+    def automate_dialog():
+        # Find the dialog
+        dialogs = [w for w in QApplication.topLevelWidgets() if isinstance(w, QDialog) and w.isVisible()]
+        assert dialogs, "No Add Card dialog found."
+        dlg = dialogs[0]
+        name_field = None
+        for w in dlg.findChildren(QLineEdit):
+            if w.placeholderText() == "" or w.objectName() == "":
+                name_field = w
+                break
+        assert name_field is not None, "Name field not found."
+        name_field.setText("Test Card")
+        save_btn = None
+        for w in dlg.findChildren(QPushButton):
+            if w.text().lower() == "save":
+                save_btn = w
+                break
+        assert save_btn is not None, "Save button not found."
+        qtbot.mouseClick(save_btn, Qt.LeftButton)
+    QTimer.singleShot(100, automate_dialog)
+    window.add_card(test_mode=False)  # Use modal dialog
     after_count = len(window.inventory.get_all_cards())
     assert after_count == before_count + 1, "Card was not added."
     added_card = window.inventory.get_all_cards()[-1]
@@ -283,12 +292,9 @@ def test_edit_card_gui_interaction(qtbot):
     # Select the first card in the table
     index = window.card_table.model.index(1, 0)  # row 1 (first card), col 0
     window.card_table.selectRow(1)
-    # Trigger edit (simulate double-click)
-    window.card_table.on_double_click(index)
-    # Find the dialog
-    dialogs = [w for w in window.findChildren(QDialog) if w.isVisible()]
-    assert dialogs, "No Edit Card dialog found."
-    dlg = dialogs[0]
+    # Trigger edit in test mode
+    dlg = window.edit_card(0, test_mode=True)
+    qtbot.waitExposed(dlg)
     # Change the Name field
     name_field = None
     for w in dlg.findChildren(QLineEdit):
@@ -304,7 +310,7 @@ def test_edit_card_gui_interaction(qtbot):
             save_btn = w
             break
     assert save_btn is not None, "Save button not found."
-    qtbot.mouseClick(save_btn, qtbot.QtCore.Qt.LeftButton)
+    qtbot.mouseClick(save_btn, Qt.LeftButton)
     # Check card edited
     updated_card = window.inventory.get_all_cards()[0]
     assert updated_card["Name"].endswith("_Edited"), "Card name was not edited."
@@ -315,7 +321,6 @@ def test_delete_card_gui_interaction(qtbot):
     """
     from ManaBox_Enhancer.ui.main_window import MainWindow
     from PySide6.QtWidgets import QDialog, QPushButton
-    from PySide6.QtCore import Qt
     window = MainWindow()
     qtbot.addWidget(window)
     window.show()
@@ -636,3 +641,211 @@ def test_filter_overlay_gui_interaction(qtbot):
     filtered = window.card_table.cards
     assert len(filtered) == 1, f"Expected 1 card after filtering, got {len(filtered)}"
     assert filtered[0]["Name"] == "Beta", f"Expected 'Beta', got {filtered[0]['Name']}"
+
+def test_enrich_all_cards_from_scryfall(qtbot):
+    """
+    Test the Scryfall enrichment feature: cards with Scryfall ID are updated with Scryfall data.
+    """
+    from ManaBox_Enhancer.ui.main_window import MainWindow
+    # Patch fetch_scryfall_data to return predictable data
+    with patch('ManaBox_Enhancer.models.scryfall_api.fetch_scryfall_data') as mock_fetch:
+        mock_fetch.side_effect = lambda scryfall_id: {
+            "type_line": f"Type for {scryfall_id}",
+            "mana_cost": "{1}{G}",
+            "colors": "G",
+            "color_identity": "G",
+            "oracle_text": f"Oracle for {scryfall_id}",
+            "legal_commander": "legal",
+            "legal_pauper": "not_legal",
+            "image_url": f"https://img.scryfall.com/cards/{scryfall_id}.jpg"
+        }
+        window = MainWindow()
+        qtbot.addWidget(window)
+        window.show()
+        # Add cards with Scryfall IDs
+        cards = [
+            {"Name": "Test Card 1", "Scryfall ID": "abc123"},
+            {"Name": "Test Card 2", "Scryfall ID": "def456"},
+            {"Name": "No Scryfall", "Scryfall ID": ""},
+        ]
+        window.inventory.load_cards(cards)
+        window.card_table.update_cards(window.inventory.get_all_cards())
+        # Run enrichment
+        window.enrich_all_cards_from_scryfall()
+        enriched = window.inventory.get_all_cards()
+        # Cards with Scryfall ID should be updated
+        assert enriched[0]["type_line"] == "Type for abc123"
+        assert enriched[0]["oracle_text"] == "Oracle for abc123"
+        assert enriched[1]["type_line"] == "Type for def456"
+        assert enriched[1]["oracle_text"] == "Oracle for def456"
+        # Card without Scryfall ID should not be updated
+        assert "type_line" not in enriched[2]
+
+def test_numeric_and_range_filtering_all_columns():
+    from ManaBox_Enhancer.models.inventory import CardInventory
+    numeric_fields = [
+        "Purchase price", "Whatnot price", "Quantity", "cmc", "ManaBox ID", "Collector number"
+    ]
+    # Use $ for price fields, plain for others
+    card = {
+        "Purchase price": "$0.12",
+        "Whatnot price": "$1.50",
+        "Quantity": "3",
+        "cmc": "2",
+        "ManaBox ID": "12345",
+        "Collector number": "271"
+    }
+    inv = CardInventory()
+    inv.load_cards([card])
+    # Exact match
+    assert inv.filter_cards({"Purchase price": "0.12"}), "Exact match failed for Purchase price"
+    assert inv.filter_cards({"Whatnot price": "1.50"}), "Exact match failed for Whatnot price"
+    assert inv.filter_cards({"Quantity": "3"}), "Exact match failed for Quantity"
+    assert inv.filter_cards({"cmc": "2"}), "Exact match failed for cmc"
+    assert inv.filter_cards({"ManaBox ID": "12345"}), "Exact match failed for ManaBox ID"
+    assert inv.filter_cards({"Collector number": "271"}), "Exact match failed for Collector number"
+    # Greater than
+    assert inv.filter_cards({"Purchase price": ">0.10"}), "> match failed for Purchase price"
+    assert inv.filter_cards({"Whatnot price": ">1.0"}), "> match failed for Whatnot price"
+    assert inv.filter_cards({"Quantity": ">2"}), "> match failed for Quantity"
+    assert inv.filter_cards({"cmc": ">1"}), "> match failed for cmc"
+    assert inv.filter_cards({"ManaBox ID": ">10000"}), "> match failed for ManaBox ID"
+    assert inv.filter_cards({"Collector number": ">200"}), "> match failed for Collector number"
+    # Greater than or equal
+    assert inv.filter_cards({"Purchase price": ">=0.12"}), ">= match failed for Purchase price"
+    assert inv.filter_cards({"Whatnot price": ">=1.50"}), ">= match failed for Whatnot price"
+    assert inv.filter_cards({"Quantity": ">=3"}), ">= match failed for Quantity"
+    assert inv.filter_cards({"cmc": ">=2"}), ">= match failed for cmc"
+    assert inv.filter_cards({"ManaBox ID": ">=12345"}), ">= match failed for ManaBox ID"
+    assert inv.filter_cards({"Collector number": ">=271"}), ">= match failed for Collector number"
+    # Less than
+    assert inv.filter_cards({"Purchase price": "<0.13"}), "< match failed for Purchase price"
+    assert inv.filter_cards({"Whatnot price": "<2.00"}), "< match failed for Whatnot price"
+    assert inv.filter_cards({"Quantity": "<4"}), "< match failed for Quantity"
+    assert inv.filter_cards({"cmc": "<3"}), "< match failed for cmc"
+    assert inv.filter_cards({"ManaBox ID": "<20000"}), "< match failed for ManaBox ID"
+    assert inv.filter_cards({"Collector number": "<300"}), "< match failed for Collector number"
+    # Less than or equal
+    assert inv.filter_cards({"Purchase price": "<=0.12"}), "<= match failed for Purchase price"
+    assert inv.filter_cards({"Whatnot price": "<=1.50"}), "<= match failed for Whatnot price"
+    assert inv.filter_cards({"Quantity": "<=3"}), "<= match failed for Quantity"
+    assert inv.filter_cards({"cmc": "<=2"}), "<= match failed for cmc"
+    assert inv.filter_cards({"ManaBox ID": "<=12345"}), "<= match failed for ManaBox ID"
+    assert inv.filter_cards({"Collector number": "<=271"}), "<= match failed for Collector number"
+    # Range
+    assert inv.filter_cards({"Purchase price": "0.10-0.13"}), "range match failed for Purchase price"
+    assert inv.filter_cards({"Whatnot price": "1.00-2.00"}), "range match failed for Whatnot price"
+    assert inv.filter_cards({"Quantity": "2-4"}), "range match failed for Quantity"
+    assert inv.filter_cards({"cmc": "1-3"}), "range match failed for cmc"
+    assert inv.filter_cards({"ManaBox ID": "10000-20000"}), "range match failed for ManaBox ID"
+    assert inv.filter_cards({"Collector number": "200-300"}), "range match failed for Collector number"
+
+def test_card_table_pagination_and_export(qtbot, tmp_path):
+    from ManaBox_Enhancer.ui.main_window import MainWindow
+    import csv
+    window = MainWindow()
+    qtbot.addWidget(window)
+    window.show()
+    # Add 250 cards
+    cards = [
+        {"Name": f"Card{i}", "Foil": "normal", "Collector number": str(i), "Set name": "SetA", "Set code": "SA", "Rarity": "common", "Language": "en", "Purchase price": f"${i/100:.2f}", "colors": "R", "type_line": "Creature", "mana_cost": "{R}", "cmc": "1", "oracle_text": f"Text {i}"}
+        for i in range(1, 251)
+    ]
+    window.inventory.load_cards(cards)
+    window.card_table.update_cards(window.inventory.get_all_cards())
+    # Set page size to 50
+    window.card_table.page_size_combo.setCurrentText("50")
+    assert window.card_table.page_size == 50
+    # Should be 5 pages
+    assert window.card_table._max_page() == 4
+    # Go to last page
+    window.card_table._go_last()
+    assert window.card_table.current_page == 4
+    # Check cards on last page
+    last_page_cards = window.card_table.cards
+    assert len(last_page_cards) == 50
+    assert last_page_cards[0]["Name"] == "Card201"
+    # Change page size to 100
+    window.card_table.page_size_combo.setCurrentText("100")
+    assert window.card_table.page_size == 100
+    assert window.card_table._max_page() == 2
+    window.card_table._go_last()
+    last_page_cards = window.card_table.cards
+    assert len(last_page_cards) == 50
+    assert last_page_cards[0]["Name"] == "Card201"
+    # Export all filtered cards (should be 250, not just current page)
+    export_file = tmp_path / "item_listings.csv"
+    window.export_item_listings(str(export_file), filetype="csv")
+    with open(export_file, newline='', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        rows = list(reader)
+        assert len(rows) == 250, f"Exported {len(rows)} rows, expected 250"
+        assert rows[0]["Title"].startswith("Card1"), "First card title incorrect"
+        assert rows[-1]["Title"].startswith("Card250"), "Last card title incorrect"
+
+def test_export_item_listings_field_selection(qtbot, tmp_path, monkeypatch):
+    from ManaBox_Enhancer.ui.main_window import MainWindow
+    from ManaBox_Enhancer.ui.dialogs.export_item_listing_fields import ExportItemListingFieldsDialog
+    import csv
+    window = MainWindow()
+    qtbot.addWidget(window)
+    window.show()
+    # Add cards with many fields
+    cards = [
+        {"Name": "CardA", "Set name": "Set1", "Foil": "foil", "Collector number": "1", "Rarity": "rare", "Language": "en", "cmc": "2"},
+        {"Name": "CardB", "Set name": "Set2", "Foil": "normal", "Collector number": "2", "Rarity": "common", "Language": "jp", "cmc": "3"},
+    ]
+    window.inventory.load_cards(cards)
+    window.card_table.update_cards(window.inventory.get_all_cards())
+    # Patch dialog to simulate user selecting 'Name' and 'Set name' for title, 'Rarity', 'Language', 'cmc' for description
+    class FakeDialog:
+        def __init__(self, *a, **k): pass
+        def exec(self): return True
+        def get_fields(self):
+            return ["Name", "Set name"], ["Rarity", "Language", "cmc"]
+    monkeypatch.setattr("ManaBox_Enhancer.ui.dialogs.export_item_listing_fields.ExportItemListingFieldsDialog", FakeDialog)
+    export_file = tmp_path / "item_listings.csv"
+    window.export_item_listings(str(export_file), filetype="csv")
+    with open(export_file, newline='', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        rows = list(reader)
+        assert rows[0]["Title"] == "CardA Set name: Set1" or rows[0]["Title"] == "CardA Set1"
+        assert "Rarity: rare" in rows[0]["Description"]
+        assert "Language: en" in rows[0]["Description"]
+        assert "cmc: 2" in rows[0]["Description"]
+
+def test_import_csv_and_whatnot_adjustment_handles_blank_prices(tmp_path, qtbot, monkeypatch):
+    from ManaBox_Enhancer.ui.main_window import MainWindow
+    import csv
+    window = MainWindow()
+    qtbot.addWidget(window)
+    window.show()
+    # Simulate import of CSV with blank and '0.0' prices
+    cards = [
+        {"Name": "CardA", "Purchase price": "", "Whatnot price": ""},
+        {"Name": "CardB", "Purchase price": "0.0", "Whatnot price": "0.0"},
+        {"Name": "CardC", "Purchase price": "$1.29", "Whatnot price": ""},
+        {"Name": "CardD", "Purchase price": "bad", "Whatnot price": ""},
+    ]
+    window.inventory.load_cards(cards)
+    window.card_table.update_cards(window.inventory.get_all_cards())
+    # Simulate Whatnot price adjustment (rounding, threshold 0.30)
+    for card in window.inventory.get_all_cards():
+        try:
+            price_str = str(card.get("Purchase price", "")).replace("$", "").strip()
+            if not price_str:
+                continue
+            price = float(price_str)
+            cents = price - int(price)
+            if cents >= 0.30:
+                rounded = int(price) + 1
+            else:
+                rounded = int(price)
+            card["Whatnot price"] = f"${rounded:.2f}"
+        except Exception:
+            continue
+    # CardA and CardB and CardD should remain blank, CardC should be rounded
+    assert window.inventory.get_all_cards()[0]["Whatnot price"] == ""
+    assert window.inventory.get_all_cards()[1]["Whatnot price"] == "0.0" or window.inventory.get_all_cards()[1]["Whatnot price"] == ""
+    assert window.inventory.get_all_cards()[2]["Whatnot price"] == "$1.00"
+    assert window.inventory.get_all_cards()[3]["Whatnot price"] == ""

@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import (
-    QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QStatusBar, QMenuBar, QFileDialog, QMessageBox, QSplitter, QSizePolicy, QDialog, QPushButton, QTextEdit, QInputDialog, QRadioButton, QButtonGroup, QLineEdit
+    QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QStatusBar, QMenuBar, QFileDialog, QMessageBox, QSplitter, QSizePolicy, QDialog, QPushButton, QTextEdit, QInputDialog, QRadioButton, QButtonGroup, QLineEdit, QProgressDialog
 )
 from PySide6.QtGui import QAction
 from PySide6.QtCore import Qt
@@ -19,6 +19,9 @@ from ui.dialogs.edit_card import EditCardDialog
 import datetime
 from ui.dialogs.column_customization import ColumnCustomizationDialog
 from ui.dialogs.bulk_edit_remove import BulkEditRemoveDialog
+from models.scryfall_api import fetch_scryfall_data
+import time
+from ui.dialogs.export_item_listing_fields import ExportItemListingFieldsDialog
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -80,6 +83,8 @@ class MainWindow(QMainWindow):
         self.undo_action.triggered.connect(self.undo_last_change)
         export_whatnot_action = file_menu.addAction("Export to Whatnot...")
         export_whatnot_action.triggered.connect(self.export_to_whatnot)
+        export_item_listings_action = file_menu.addAction("Export Item Listings...")
+        export_item_listings_action.triggered.connect(self.export_item_listings_dialog)
         edit_menu = menubar.addMenu("Edit")
         bulk_edit_remove_action = edit_menu.addAction("Bulk Edit/Remove...")
         bulk_edit_remove_action.triggered.connect(self.bulk_edit_remove_dialog)
@@ -112,6 +117,8 @@ class MainWindow(QMainWindow):
                     self.card_table.setColumnWidth(i, self.column_widths[col])
         self.card_table.horizontalHeader().sectionResized.connect(self.save_column_widths)
         table_container_layout.addWidget(self.card_table)
+        # Add pagination widget below the table
+        table_container_layout.addWidget(self.card_table.pagination_widget)
         table_container.setLayout(table_container_layout)
         left_layout.addWidget(table_container)
         # Create and show the filter overlay as a child of the table's viewport
@@ -204,11 +211,24 @@ class MainWindow(QMainWindow):
         adjust_whatnot_action = QAction("Adjust Whatnot Pricing...", self)
         adjust_whatnot_action.triggered.connect(self.adjust_whatnot_pricing_dialog)
         tools_menu.addAction(adjust_whatnot_action)
+        # Add Scryfall enrichment action
+        enrich_action = QAction("Enrich All Cards from Scryfall...", self)
+        enrich_action.triggered.connect(self.enrich_all_cards_from_scryfall)
+        tools_menu.addAction(enrich_action)
 
     def update_table_filter(self):
         filters = {col: self.filter_overlay.filters[col].text() for col in self.columns}
+        # Debug: print all card values for each filter
+        for col, value in filters.items():
+            if value:
+                print(f"DEBUG: Filtering on column '{col}' with value '{value}'")
+                print(f"DEBUG: All values for '{col}': {[str(card.get(col, '')) for card in self.inventory.get_all_cards()]}")
+        if self.inventory.get_all_cards():
+            print(f"DEBUG: Keys in first card: {list(self.inventory.get_all_cards()[0].keys())}")
         filtered = self.inventory.filter_cards(filters)
+        print(f"Filter: {filters} -> {len(filtered)} cards")  # DEBUG
         self.card_table.update_cards(filtered)
+        self.card_table.repaint()  # Force repaint
         # Hide columns not in visible_columns
         for i, col in enumerate(self.columns):
             self.card_table.setColumnHidden(i, col not in self.visible_columns)
@@ -325,9 +345,18 @@ class MainWindow(QMainWindow):
                         card = {}
                         for csv_col, app_field in mapping.items():
                             if app_field:
-                                card[app_field] = row.get(csv_col, "")
+                                val = row.get(csv_col, "")
+                                # For price fields, keep as string, never set to '0.0'
+                                if app_field in ("Purchase price", "Whatnot price"):
+                                    if val is None or val.strip() == "" or val.strip() == "0.0":
+                                        val = ""
+                                card[app_field] = val
                         if card:
                             new_cards.append(card)
+                    # DEBUG: Print first 5 imported cards and their 'Purchase price'
+                    print("DEBUG: First 5 imported cards after CSV import:")
+                    for c in new_cards[:5]:
+                        print({k: c.get(k, None) for k in ("Name", "Purchase price")})
             else:
                 with open(filename, 'r', encoding='utf-8') as f:
                     new_cards = json.load(f)
@@ -352,7 +381,10 @@ class MainWindow(QMainWindow):
                 for new_card in new_cards:
                     k = card_key(new_card)
                     if k in existing_map:
-                        existing_map[k].update(new_card)
+                        # Only update fields where new_card has a non-empty value
+                        for field, value in new_card.items():
+                            if value not in (None, ""):
+                                existing_map[k][field] = value
                         updated += 1
                     else:
                         existing.append(new_card)
@@ -730,14 +762,26 @@ class MainWindow(QMainWindow):
                 header.moveSection(visual, logical)
 
     def export_to_whatnot(self):
-        filtered_cards = self.card_table.cards
-        if not filtered_cards:
+        all_cards = self.inventory.get_all_cards()
+        if not all_cards:
             QMessageBox.information(self, "Export to Whatnot", "No cards to export.")
             return
-        # Whatnot template columns (from sample)
         whatnot_columns = [
             "Category", "Sub Category", "Title", "Description", "Quantity", "Type", "Price", "Shipping Profile", "Offerable", "Hazmat", "Condition", "Cost Per Item", "SKU", "Image URL 1", "Image URL 2", "Image URL 3", "Image URL 4", "Image URL 5", "Image URL 6", "Image URL 7", "Image URL 8"
         ]
+        all_fields = set()
+        for card in all_cards:
+            all_fields.update(card.keys())
+        all_fields = sorted(all_fields)
+        from ui.dialogs.export_item_listing_fields import ExportItemListingFieldsDialog
+        dlg = ExportItemListingFieldsDialog(all_fields, self)
+        if not dlg.exec():
+            return
+        title_fields, desc_fields = dlg.get_fields()
+        if not title_fields:
+            title_fields = ["Name", "Foil"] if "Name" in all_fields else all_fields[:1]
+        if not desc_fields:
+            desc_fields = [f for f in all_fields if f not in ("Name", "Foil", "Purchase price")]
         filename, _ = QFileDialog.getSaveFileName(self, "Export to Whatnot", os.getcwd(), "CSV Files (*.csv)")
         if not filename:
             return
@@ -745,37 +789,41 @@ class MainWindow(QMainWindow):
             with open(filename, "w", newline='', encoding="utf-8") as f:
                 writer = csv.DictWriter(f, fieldnames=whatnot_columns)
                 writer.writeheader()
-                for card in filtered_cards:
+                for card in all_cards:
                     row = {col: "" for col in whatnot_columns}
-                    # Map fields
                     row["Category"] = "Trading Cards"
                     row["Sub Category"] = "Magic: The Gathering"
-                    row["Title"] = card.get("Name", "")
-                    # Description: Name - Set name (Collector number)
-                    name = card.get("Name", "")
-                    set_name = card.get("Set name", "")
-                    collector = card.get("Collector number", "")
-                    row["Description"] = f"{name} - {set_name} ({collector})" if collector else f"{name} - {set_name}"
+                    # Build Title and Description using selected fields
+                    title = " ".join(str(card.get(f, "")) for f in title_fields if f in card)
+                    desc_lines = [f"{f}: {card.get(f, '')}" for f in desc_fields if f in card]
+                    desc = "\n".join(desc_lines)
+                    row["Title"] = title.strip()
+                    row["Description"] = desc
                     row["Quantity"] = card.get("Quantity", "1")
                     row["Type"] = card.get("Type", "")
-                    row["Price"] = card.get("Whatnot price", "")
+                    # Whatnot price logic
+                    price_val = str(card.get("Whatnot price", "")).strip()
+                    if price_val == "0" or price_val == 0:
+                        row["Price"] = "1"
+                    elif price_val == "":
+                        row["Price"] = ""
+                    else:
+                        row["Price"] = price_val
                     row["Shipping Profile"] = card.get("Shipping Profile", "")
-                    row["Offerable"] = card.get("Offerable", "Yes")
+                    row["Offerable"] = "No"
                     row["Hazmat"] = card.get("Hazmat", "No")
                     row["Condition"] = card.get("Condition", "")
                     row["Cost Per Item"] = card.get("Purchase price", "")
                     row["SKU"] = card.get("SKU", "")
-                    # Image URLs (up to 8)
-                    for i in range(1, 9):
+                    # Image URLs (Image URL 1 = Scryfall image_url)
+                    row["Image URL 1"] = card.get("image_url", "")
+                    for i in range(2, 9):
                         key = f"Image URL {i}"
                         img_key = key if key in card else None
                         if img_key and card.get(img_key):
                             row[key] = card[img_key]
-                        elif i == 1:
-                            # Try Scryfall image if available
-                            row[key] = card.get("Scryfall image", "")
                     writer.writerow(row)
-            self.statusBar().showMessage(f"Exported {len(filtered_cards)} cards to Whatnot CSV: {os.path.basename(filename)}")
+            self.statusBar().showMessage(f"Exported {len(all_cards)} cards to Whatnot CSV: {os.path.basename(filename)}")
         except Exception as e:
             QMessageBox.critical(self, "Export Failed", f"Failed to export to Whatnot: {e}")
 
@@ -810,9 +858,9 @@ class MainWindow(QMainWindow):
         dlg = QDialog(self)
         dlg.setWindowTitle("Adjust Whatnot Pricing")
         layout = QVBoxLayout(dlg)
-        layout.addWidget(QLabel("Choose adjustment method for Whatnot price (applies to ALL cards):"))
+        layout.addWidget(QLabel("Choose adjustment method for Whatnot price (applies to FILTERED cards only):"))
         # Option 1: Set fixed price
-        fixed_radio = QRadioButton("Set all to fixed price:")
+        fixed_radio = QRadioButton("Set filtered to fixed price:")
         fixed_input = QLineEdit()
         fixed_input.setPlaceholderText("e.g. 2.00")
         # Option 2: Custom rounding logic
@@ -839,34 +887,173 @@ class MainWindow(QMainWindow):
         btns.addWidget(cancel_btn)
         layout.addLayout(btns)
         def apply():
+            # Use all cards in the inventory, not just filtered
             all_cards = self.inventory.get_all_cards()
-            if fixed_radio.isChecked():
-                try:
-                    val = float(fixed_input.text())
-                except Exception:
-                    QMessageBox.warning(dlg, "Invalid Input", "Please enter a valid number for fixed price.")
-                    return
-                for card in all_cards:
-                    card["Whatnot price"] = f"${val:.2f}"
-            elif round_radio.isChecked():
-                try:
-                    threshold = float(round_threshold_input.text())
-                except Exception:
-                    QMessageBox.warning(dlg, "Invalid Input", "Please enter a valid number for rounding threshold.")
-                    return
-                for card in all_cards:
+            def card_key(card):
+                return (
+                    card.get("Name", "").strip().lower(),
+                    card.get("Set code", "").strip().lower(),
+                    card.get("Collector number", "").strip().lower(),
+                )
+            inventory_map = {card_key(card): card for card in all_cards}
+            for inv_card in all_cards:
+                price_str = str(inv_card.get("Purchase price", "")).replace("$", "").strip()
+                if fixed_radio.isChecked():
                     try:
-                        price = float(str(card.get("Purchase price", "")).replace("$", "").strip())
+                        val = float(fixed_input.text())
+                        inv_card["Whatnot price"] = str(int(round(val)))
+                        print(f"DEBUG: {inv_card.get('Name', '')} | Purchase price: {price_str} | Whatnot price set to: {inv_card['Whatnot price']}")
+                    except Exception:
+                        print(f"WARNING: {inv_card.get('Name', '')} | Purchase price: {price_str} | Could not parse fixed price input.")
+                        QMessageBox.warning(dlg, "Invalid Input", "Please enter a valid number for fixed price.")
+                        return
+                elif round_radio.isChecked():
+                    try:
+                        threshold = float(round_threshold_input.text())
+                    except Exception:
+                        print(f"WARNING: {inv_card.get('Name', '')} | Purchase price: {price_str} | Could not parse rounding threshold.")
+                        QMessageBox.warning(dlg, "Invalid Input", "Please enter a valid number for rounding threshold.")
+                        return
+                    try:
+                        price = float(price_str)
                         cents = price - int(price)
                         if cents >= threshold:
                             rounded = math.ceil(price)
                         else:
                             rounded = math.floor(price)
-                        card["Whatnot price"] = f"${rounded:.2f}"
+                        inv_card["Whatnot price"] = str(int(rounded))
+                        print(f"DEBUG: {inv_card.get('Name', '')} | Purchase price: {price_str} | Whatnot price set to: {inv_card['Whatnot price']}")
                     except Exception:
-                        card["Whatnot price"] = ""
+                        print(f"WARNING: {inv_card.get('Name', '')} | Purchase price: {price_str} | Could not parse for rounding, skipped.")
+                        continue
             self.card_table.update_cards(self.inventory.get_all_cards())
             dlg.accept()
         apply_btn.clicked.connect(apply)
         cancel_btn.clicked.connect(dlg.reject)
         dlg.exec()
+
+    def enrich_all_cards_from_scryfall(self):
+        from PySide6.QtWidgets import QMessageBox, QProgressDialog
+        from models.scryfall_api import fetch_scryfall_data
+        import time
+        cards = self.inventory.get_all_cards()
+        if not cards:
+            QMessageBox.information(self, "Scryfall Enrichment", "No cards to enrich.")
+            return
+        progress = QProgressDialog("Enriching cards from Scryfall...", "Cancel", 0, len(cards), self)
+        progress.setWindowTitle("Scryfall Enrichment")
+        progress.setWindowModality(Qt.WindowModal)
+        updated = 0
+        for i, card in enumerate(cards):
+            progress.setValue(i)
+            if progress.wasCanceled():
+                break
+            scryfall_id = card.get("Scryfall ID", "")
+            if scryfall_id:
+                data = fetch_scryfall_data(scryfall_id)
+                card.update(data)
+                updated += 1
+            time.sleep(0.1)  # To avoid Scryfall rate limits
+        progress.setValue(len(cards))
+        self.inventory.load_cards(cards)
+        self.card_table.update_cards(self.inventory.get_all_cards())
+        QMessageBox.information(self, "Scryfall Enrichment", f"Enriched {updated} cards from Scryfall.")
+
+    def export_item_listings_dialog(self):
+        from PySide6.QtWidgets import QFileDialog, QMessageBox
+        formats = ["CSV (*.csv)", "Text (*.txt)"]
+        filename, selected_filter = QFileDialog.getSaveFileName(self, "Export Item Listings", os.getcwd(), ";;".join(formats))
+        if not filename:
+            return
+        if selected_filter.startswith("CSV") or filename.lower().endswith(".csv"):
+            self.export_item_listings(filename, filetype="csv")
+        else:
+            self.export_item_listings(filename, filetype="txt")
+
+    def export_item_listings(self, filename, filetype="csv"):
+        from PySide6.QtWidgets import QDialog, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QTextEdit, QMessageBox
+        import csv
+        from ui.dialogs.export_item_listing_fields import ExportItemListingFieldsDialog
+        # Use all filtered cards
+        cards = self.inventory.filter_cards({col: self.filter_overlay.filters[col].text() for col in self.columns})
+        if not cards:
+            QMessageBox.information(self, "Export Item Listings", "No cards to export.")
+            return
+        # Gather all available fields
+        all_fields = set()
+        for card in cards:
+            all_fields.update(card.keys())
+        all_fields = sorted(all_fields)
+        # Ask user for Title/Description fields and order
+        dlg = ExportItemListingFieldsDialog(all_fields, self)
+        if not dlg.exec():
+            return
+        title_fields, desc_fields = dlg.get_fields()
+        if not title_fields:
+            title_fields = ["Name", "Foil"] if "Name" in all_fields else all_fields[:1]
+        if not desc_fields:
+            desc_fields = [f for f in all_fields if f not in ("Name", "Foil", "Purchase price")]  # Remove purchase price by default
+        # Build listings: title, description
+        def make_listing(card):
+            title = " ".join(str(card.get(f, "")) for f in title_fields if f in card)
+            desc_lines = [f"{f}: {card.get(f, '')}" for f in desc_fields if f in card]
+            desc = "\n".join(desc_lines)
+            return title.strip(), desc
+        listings = [make_listing(card) for card in cards]
+        # Preview dialog with pagination
+        class ListingPreviewDialog(QDialog):
+            def __init__(self, listings, parent=None):
+                super().__init__(parent)
+                self.setWindowTitle("Preview Item Listings")
+                self.listings = listings
+                self.idx = 0
+                self.layout = QVBoxLayout(self)
+                self.title_label = QLabel()
+                self.desc_text = QTextEdit()
+                self.desc_text.setReadOnly(True)
+                self.layout.addWidget(self.title_label)
+                self.layout.addWidget(self.desc_text)
+                btns = QHBoxLayout()
+                self.prev_btn = QPushButton("Previous")
+                self.next_btn = QPushButton("Next")
+                self.export_btn = QPushButton("Export All")
+                self.cancel_btn = QPushButton("Cancel")
+                btns.addWidget(self.prev_btn)
+                btns.addWidget(self.next_btn)
+                btns.addWidget(self.export_btn)
+                btns.addWidget(self.cancel_btn)
+                self.layout.addLayout(btns)
+                self.prev_btn.clicked.connect(self.prev)
+                self.next_btn.clicked.connect(self.next)
+                self.export_btn.clicked.connect(self.accept)
+                self.cancel_btn.clicked.connect(self.reject)
+                self.update_view()
+            def update_view(self):
+                title, desc = self.listings[self.idx]
+                self.title_label.setText(f"<b>{title}</b>  <span style='font-size:10pt;'>(Listing {self.idx+1} of {len(self.listings)})</span>")
+                self.desc_text.setPlainText(desc)
+                self.prev_btn.setEnabled(self.idx > 0)
+                self.next_btn.setEnabled(self.idx < len(self.listings)-1)
+            def prev(self):
+                if self.idx > 0:
+                    self.idx -= 1
+                    self.update_view()
+            def next(self):
+                if self.idx < len(self.listings)-1:
+                    self.idx += 1
+                    self.update_view()
+        dlg = ListingPreviewDialog(listings, self)
+        if not dlg.exec():
+            return
+        # Export all listings
+        if filetype == "csv":
+            with open(filename, "w", newline='', encoding="utf-8") as f:
+                writer = csv.writer(f)
+                writer.writerow(["Title", "Description"])
+                for title, desc in listings:
+                    writer.writerow([title, desc])
+        else:
+            with open(filename, "w", encoding="utf-8") as f:
+                for i, (title, desc) in enumerate(listings, 1):
+                    f.write(f"Listing {i}: {title}\n{desc}\n\n")
+        self.statusBar().showMessage(f"Exported {len(listings)} item listings to {filename}")

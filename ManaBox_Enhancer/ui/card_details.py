@@ -57,6 +57,8 @@ class CardDetails(QWidget):
         self.scroll_area.setWidget(self.details_widget)
 
     def show_card_details(self, card):
+        # DEBUG: Print the full card dict
+        print("DEBUG: Card details for preview:", card)
         # Clear previous widgets and layouts from the details layout
         while self.details_layout.count():
             item = self.details_layout.takeAt(0)

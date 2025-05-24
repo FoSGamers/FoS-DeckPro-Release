@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QTableView, QMenu, QHeaderView, QSizePolicy
+from PySide6.QtWidgets import QTableView, QMenu, QHeaderView, QSizePolicy, QWidget, QHBoxLayout, QPushButton, QLabel, QComboBox
 from PySide6.QtCore import QAbstractTableModel, Qt, Signal, QModelIndex
 
 class CardTableModel(QAbstractTableModel):
@@ -37,21 +37,26 @@ class CardTableView(QTableView):
     edit_card_requested = Signal(int)  # row index
     delete_card_requested = Signal(list)  # list of row indices
 
-    def __init__(self, inventory, columns, parent=None):
+    def __init__(self, inventory, columns=None, parent=None):
         super().__init__(parent)
-        self.model = CardTableModel([], columns)
-        self.setModel(self.model)
-        self.setMinimumHeight(300)
-        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        print("DEBUG: CardTableView __init__ called")
         self.inventory = inventory
-        self.columns = columns
-        self.cards = []
-        self.selectionModel().selectionChanged.connect(self.on_selection_changed)
+        self.columns = columns if columns is not None else ["Name", "Set", "Collector Number"]
+        self.model = CardTableModel([], self.columns)
+        self.setModel(self.model)
+        self.setSelectionBehavior(QTableView.SelectRows)
+        self.setSelectionMode(QTableView.SingleSelection)
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.show_context_menu)
         self.doubleClicked.connect(self.on_double_click)
-
-        # Enable both horizontal and vertical scrollbars as needed
+        self.default_widths = {col: 100 for col in self.columns}
+        # Pagination
+        self.page_size = 100
+        self.current_page = 0
+        self.filtered_cards = []
+        self.pagination_widget = self._create_pagination_widget()
+        # Scrollbars always as needed
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.setHorizontalScrollMode(QTableView.ScrollPerPixel)
@@ -60,29 +65,91 @@ class CardTableView(QTableView):
         self.setTextElideMode(Qt.ElideNone)
         self.setShowGrid(True)
         self.setAlternatingRowColors(True)
+        # Ensure selectionChanged is connected
+        self.selectionModel().selectionChanged.connect(self.on_selection_changed)
 
         # Set default column widths for clarity
-        self.default_widths = {
-            "Name": 180,
-            "Set name": 140,
-            "Set code": 80,
-            "Collector number": 90,
-            "Rarity": 80,
-            "Condition": 90,
-            "Foil": 60,
-            "Language": 80,
-            "Purchase price": 100,
-            "Whatnot price": 100
-        }
         for i, col in enumerate(self.columns):
             self.setColumnWidth(i, self.default_widths.get(col, 100))
 
         # Make columns user-resizable and allow switching to stretch mode
         self.horizontalHeader().setSectionResizeMode(QHeaderView.Interactive)
 
+    def _create_pagination_widget(self):
+        widget = QWidget()
+        layout = QHBoxLayout(widget)
+        self.page_label = QLabel()
+        self.page_size_combo = QComboBox()
+        self.page_size_combo.addItems([str(x) for x in [50, 100, 250, 500, 1000]])
+        self.page_size_combo.setCurrentText(str(self.page_size))
+        self.page_size_combo.currentTextChanged.connect(self._on_page_size_changed)
+        self.first_btn = QPushButton("First")
+        self.prev_btn = QPushButton("Prev")
+        self.next_btn = QPushButton("Next")
+        self.last_btn = QPushButton("Last")
+        self.first_btn.clicked.connect(self._go_first)
+        self.prev_btn.clicked.connect(self._go_prev)
+        self.next_btn.clicked.connect(self._go_next)
+        self.last_btn.clicked.connect(self._go_last)
+        layout.addWidget(QLabel("Page size:"))
+        layout.addWidget(self.page_size_combo)
+        layout.addWidget(self.first_btn)
+        layout.addWidget(self.prev_btn)
+        layout.addWidget(self.page_label)
+        layout.addWidget(self.next_btn)
+        layout.addWidget(self.last_btn)
+        layout.addStretch()
+        return widget
+
+    def _on_page_size_changed(self, val):
+        self.page_size = int(val)
+        self.current_page = 0
+        self._update_pagination()
+
+    def _go_first(self):
+        self.current_page = 0
+        self._update_pagination()
+
+    def _go_prev(self):
+        if self.current_page > 0:
+            self.current_page -= 1
+            self._update_pagination()
+
+    def _go_next(self):
+        if self.current_page < self._max_page():
+            self.current_page += 1
+            self._update_pagination()
+
+    def _go_last(self):
+        self.current_page = self._max_page()
+        self._update_pagination()
+
+    def _max_page(self):
+        if not self.filtered_cards:
+            return 0
+        return max(0, (len(self.filtered_cards) - 1) // self.page_size)
+
+    def _update_pagination(self):
+        total = len(self.filtered_cards)
+        max_page = self._max_page()
+        print(f"DEBUG: CardTableView _update_pagination: page {self.current_page+1}/{max_page+1}, total {total}")
+        start = self.current_page * self.page_size
+        end = start + self.page_size
+        page_cards = self.filtered_cards[start:end]
+        self.model.set_cards(page_cards)
+        self.cards = page_cards
+        print(f"DEBUG: CardTableView _update_pagination: self.cards now has {len(self.cards)} cards")
+        self.viewport().update()
+        self.first_btn.setEnabled(self.current_page > 0)
+        self.prev_btn.setEnabled(self.current_page > 0)
+        self.next_btn.setEnabled(self.current_page < max_page)
+        self.last_btn.setEnabled(self.current_page < max_page)
+
     def update_cards(self, cards):
-        self.cards = cards
-        self.model.set_cards(cards)
+        print(f"DEBUG: CardTableView update_cards called with {len(cards)} cards")
+        self.filtered_cards = cards
+        self.current_page = 0
+        self._update_pagination()
 
     def on_selection_changed(self, selected, deselected):
         indexes = self.selectedIndexes()
@@ -91,6 +158,7 @@ class CardTableView(QTableView):
             if row == 0:
                 return  # Ignore blank filter row
             if 0 < row <= len(self.cards):
+                print("DEBUG: CardTableView emitting card_selected:", self.cards[row - 1])
                 self.card_selected.emit(self.cards[row - 1])
 
     def show_context_menu(self, pos):

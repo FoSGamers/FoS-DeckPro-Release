@@ -7,6 +7,7 @@ from tkinter import filedialog, messagebox, ttk
 from typing import List, Dict
 import subprocess
 import os
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QLabel, QPushButton
 
 # === CORE MODULE ===
 def load_inventory(json_path: str) -> List[Dict]:
@@ -117,3 +118,18 @@ if __name__ == '__main__':
     root = tk.Tk()
     app = DeckForgeApp(root)
     root.mainloop()
+
+def launch_deckforge_ai(inventory, parent=None):
+    """
+    Entry point for launching DeckForge AI from FoS-DeckPro.
+    inventory: list of dicts (enriched card data)
+    parent: parent widget (optional)
+    """
+    dlg = QDialog(parent)
+    dlg.setWindowTitle("DeckForge AI Deck Builder (Preview)")
+    layout = QVBoxLayout(dlg)
+    layout.addWidget(QLabel(f"DeckForge AI is integrated!\nInventory size: {len(inventory)} cards."))
+    close_btn = QPushButton("Close")
+    close_btn.clicked.connect(dlg.accept)
+    layout.addWidget(close_btn)
+    dlg.exec()

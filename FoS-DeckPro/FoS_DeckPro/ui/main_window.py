@@ -72,6 +72,8 @@ class MainWindow(QMainWindow):
         self.undo_action.triggered.connect(self.undo_last_change)
         export_whatnot_action = file_menu.addAction("Export to Whatnot...")
         export_whatnot_action.triggered.connect(self.export_to_whatnot)
+        deckforge_action = file_menu.addAction("DeckForge AI Deck Builder")
+        deckforge_action.triggered.connect(self.open_deckforge_ai)
         edit_menu = menubar.addMenu("Edit")
         bulk_edit_remove_action = edit_menu.addAction("Bulk Edit/Remove...")
         bulk_edit_remove_action.triggered.connect(self.bulk_edit_remove_dialog)
@@ -761,3 +763,15 @@ class MainWindow(QMainWindow):
                 self._unsaved_changes = True
                 if self._auto_save:
                     self.save_inventory()
+
+    def open_deckforge_ai(self):
+        # Import DeckForge AI launcher
+        try:
+            from deckforge_ai.deckforge_gui_app import launch_deckforge_ai
+        except ImportError:
+            QMessageBox.critical(self, "DeckForge AI Not Found", "The DeckForge AI module could not be loaded. Please ensure it is installed and available.")
+            return
+        # Pass the current inventory as a list of dicts
+        inventory = self.inventory.get_all_cards()
+        # Launch DeckForge AI (should accept inventory and parent)
+        launch_deckforge_ai(inventory, parent=self)

@@ -1,4 +1,4 @@
-name: Run ManaBox_Enhancer Tests
+name: Run FoS-DeckPro Tests
 
 on:
   push:
@@ -25,7 +25,7 @@ jobs:
         if [ -f "EnhanceModularExporter/requirements.txt" ]; then pip install -r EnhanceModularExporter/requirements.txt; fi
     - name: Run tests with coverage
       run: |
-        pytest --cov=ManaBox_Enhancer --cov-report=xml --cov-report=term-missing ManaBox_Enhancer/tests --maxfail=3 --disable-warnings -v
+        pytest --cov=FoS_DeckPro --cov-report=xml --cov-report=term-missing FoS_DeckPro/tests --maxfail=3 --disable-warnings -v
     - name: Upload coverage report
       uses: actions/upload-artifact@v4
       with:

@@ -46,11 +46,11 @@ ManaBox Enhancer is a modular, extensible tool for managing and enhancing card i
 
 ```sh
 # Always run with the project root on PYTHONPATH:
-PYTHONPATH=$PYTHONPATH:$(pwd) pytest ManaBox_Enhancer/tests --maxfail=3 --disable-warnings -v
+PYTHONPATH=$PYTHONPATH:$(pwd) pytest FoS_DeckPro/tests --maxfail=3 --disable-warnings -v
 ```
 
 - For GUI tests, ensure you have a display environment or use Xvfb:
 
 ```sh
-xvfb-run -a pytest ManaBox_Enhancer/tests --maxfail=3 --disable-warnings -v
+xvfb-run -a pytest FoS_DeckPro/tests --maxfail=3 --disable-warnings -v
 ```

@@ -1,6 +1,7 @@
 import json
 import os
 from models.card import CARD_FIELDS
+from datetime import datetime
 
 class ManaBoxEnhancerGUI:
     def setup_gui(self):
@@ -78,3 +79,4 @@ class ManaBoxEnhancerGUI:
         # Update the grid/table with filtered
         self.update_card_grid(filtered)
 # ... existing code ... 
+log_filename = f"logs/fos_deckpro_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log" 

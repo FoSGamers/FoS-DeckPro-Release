@@ -27,7 +27,10 @@
     "legal_pauper",
     "mana_cost",
     "oracle_text",
-    "type_line"
+    "type_line",
+    "_original_order",
+    "cmc",
+    "quantity"
   ],
   "check_order_title": {
     "Name": 1,
@@ -70,7 +73,10 @@
     "legal_pauper",
     "mana_cost",
     "oracle_text",
-    "type_line"
+    "type_line",
+    "_original_order",
+    "cmc",
+    "quantity"
   ],
   "check_order_desc": {
     "Collector number": 3,

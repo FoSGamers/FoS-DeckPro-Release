@@ -22,6 +22,9 @@ from ui.dialogs.bulk_edit_remove import BulkEditRemoveDialog
 from models.scryfall_api import fetch_scryfall_data
 import time
 from ui.dialogs.export_item_listing_fields import ExportItemListingFieldsDialog
+import pandas as pd
+import re
+from ui.dialogs.break_builder import BreakBuilderDialog
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -215,6 +218,14 @@ class MainWindow(QMainWindow):
         enrich_action = QAction("Enrich All Cards from Scryfall...", self)
         enrich_action.triggered.connect(self.enrich_all_cards_from_scryfall)
         tools_menu.addAction(enrich_action)
+        # Add Break/Autobox Builder action
+        break_builder_action = QAction("Open Break/Autobox Builder", self)
+        break_builder_action.triggered.connect(self.open_break_builder)
+        tools_menu.addAction(break_builder_action)
+        # Add Scryfall ID to Inventory action
+        add_scryfall_action = QAction("Add Card by Scryfall ID", self)
+        add_scryfall_action.triggered.connect(self.add_card_by_scryfall_id)
+        tools_menu.addAction(add_scryfall_action)
 
     def update_table_filter(self):
         filters = {col: self.filter_overlay.filters[col].text() for col in self.columns}
@@ -762,18 +773,35 @@ class MainWindow(QMainWindow):
                 header.moveSection(visual, logical)
 
     def export_to_whatnot(self):
+        import csv
+        import os
+        from PySide6.QtWidgets import QMessageBox
+        from ui.dialogs.export_item_listing_fields import ExportItemListingFieldsDialog
         all_cards = self.inventory.get_all_cards()
         if not all_cards:
             QMessageBox.information(self, "Export to Whatnot", "No cards to export.")
             return
-        whatnot_columns = [
-            "Category", "Sub Category", "Title", "Description", "Quantity", "Type", "Price", "Shipping Profile", "Offerable", "Hazmat", "Condition", "Cost Per Item", "SKU", "Image URL 1", "Image URL 2", "Image URL 3", "Image URL 4", "Image URL 5", "Image URL 6", "Image URL 7", "Image URL 8"
-        ]
+        # Read Whatnot template for columns and defaults
+        template_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../Whatnot Card Inventory - Template (3).csv')
+        with open(template_path, newline='', encoding='utf-8') as f:
+            reader = csv.reader(f)
+            columns = next(reader)
+            defaults = next(reader)
+        # Static columns and their default values
+        static_defaults = {
+            "Category": "Trading Card Games",
+            "Sub Category": "Magic: The Gathering",
+            "Type": "Buy it Now",
+            "Shipping Profile": "0-1 oz",
+            "Offerable": "No",
+            "Hazmat": "Not Hazmat",
+            "Condition": "Near Mint",
+        }
+        # Ask user for Title/Description fields and order
         all_fields = set()
         for card in all_cards:
             all_fields.update(card.keys())
         all_fields = sorted(all_fields)
-        from ui.dialogs.export_item_listing_fields import ExportItemListingFieldsDialog
         dlg = ExportItemListingFieldsDialog(all_fields, self)
         if not dlg.exec():
             return
@@ -782,50 +810,56 @@ class MainWindow(QMainWindow):
             title_fields = ["Name", "Foil"] if "Name" in all_fields else all_fields[:1]
         if not desc_fields:
             desc_fields = [f for f in all_fields if f not in ("Name", "Foil", "Purchase price")]
-        filename, _ = QFileDialog.getSaveFileName(self, "Export to Whatnot", os.getcwd(), "CSV Files (*.csv)")
-        if not filename:
+        # Build export rows
+        export_rows = []
+        for card in all_cards:
+            row = list(defaults)  # start with template defaults
+            # Fill static columns
+            for col, val in static_defaults.items():
+                if col in columns:
+                    row[columns.index(col)] = val
+            # Title: join selected fields
+            title = " ".join(str(card.get(f, "")) for f in title_fields if f in card)
+            if "Title" in columns:
+                row[columns.index("Title")] = title.strip()
+            # Description: join selected fields as lines
+            desc = "\n".join(f"{f}: {card.get(f, '')}" for f in desc_fields if f in card)
+            if "Description" in columns:
+                row[columns.index("Description")] = desc.strip()
+            # Quantity
+            if "Quantity" in columns:
+                row[columns.index("Quantity")] = str(card.get("Quantity", ""))
+            # Price
+            if "Price" in columns:
+                # Whatnot price minimum rule: 0 always exports as 1 (see README)
+                price_val = card.get("Whatnot price", "")
+                if str(price_val).strip() in ("0", "0.0"):
+                    row[columns.index("Price")] = "1"
+                else:
+                    row[columns.index("Price")] = str(price_val)
+            # Cost Per Item
+            if "Cost Per Item" in columns:
+                row[columns.index("Cost Per Item")] = str(card.get("Purchase price", ""))
+            # Image URL 1
+            if "Image URL 1" in columns:
+                row[columns.index("Image URL 1")] = card.get("image_url", card.get("Image URL 1", ""))
+            # Fill other columns with card data if present (but don't overwrite above)
+            for i, col in enumerate(columns):
+                if col in static_defaults or col in ("Title", "Description", "Quantity", "Price", "Cost Per Item", "Image URL 1"):
+                    continue
+                value = card.get(col, None)
+                if value is not None and value != '':
+                    row[i] = str(value)
+            export_rows.append(row)
+        # Save to CSV
+        out_path, _ = self.get_export_path('whatnot')
+        if not out_path:
             return
-        try:
-            with open(filename, "w", newline='', encoding="utf-8") as f:
-                writer = csv.DictWriter(f, fieldnames=whatnot_columns)
-                writer.writeheader()
-                for card in all_cards:
-                    row = {col: "" for col in whatnot_columns}
-                    row["Category"] = "Trading Cards"
-                    row["Sub Category"] = "Magic: The Gathering"
-                    # Build Title and Description using selected fields
-                    title = " ".join(str(card.get(f, "")) for f in title_fields if f in card)
-                    desc_lines = [f"{f}: {card.get(f, '')}" for f in desc_fields if f in card]
-                    desc = "\n".join(desc_lines)
-                    row["Title"] = title.strip()
-                    row["Description"] = desc
-                    row["Quantity"] = card.get("Quantity", "1")
-                    row["Type"] = card.get("Type", "")
-                    # Whatnot price logic
-                    price_val = str(card.get("Whatnot price", "")).strip()
-                    if price_val == "0" or price_val == 0:
-                        row["Price"] = "1"
-                    elif price_val == "":
-                        row["Price"] = ""
-                    else:
-                        row["Price"] = price_val
-                    row["Shipping Profile"] = card.get("Shipping Profile", "")
-                    row["Offerable"] = "No"
-                    row["Hazmat"] = card.get("Hazmat", "No")
-                    row["Condition"] = card.get("Condition", "")
-                    row["Cost Per Item"] = card.get("Purchase price", "")
-                    row["SKU"] = card.get("SKU", "")
-                    # Image URLs (Image URL 1 = Scryfall image_url)
-                    row["Image URL 1"] = card.get("image_url", "")
-                    for i in range(2, 9):
-                        key = f"Image URL {i}"
-                        img_key = key if key in card else None
-                        if img_key and card.get(img_key):
-                            row[key] = card[img_key]
-                    writer.writerow(row)
-            self.statusBar().showMessage(f"Exported {len(all_cards)} cards to Whatnot CSV: {os.path.basename(filename)}")
-        except Exception as e:
-            QMessageBox.critical(self, "Export Failed", f"Failed to export to Whatnot: {e}")
+        with open(out_path, 'w', newline='', encoding='utf-8') as f:
+            writer = csv.writer(f)
+            writer.writerow(columns)
+            writer.writerows(export_rows)
+        QMessageBox.information(self, "Export to Whatnot", f"Exported {len(export_rows)} cards to {out_path}.")
 
     def bulk_edit_remove_dialog(self):
         dlg = BulkEditRemoveDialog(self.card_table.cards, self.columns, parent=self)
@@ -1057,3 +1091,30 @@ class MainWindow(QMainWindow):
                 for i, (title, desc) in enumerate(listings, 1):
                     f.write(f"Listing {i}: {title}\n{desc}\n\n")
         self.statusBar().showMessage(f"Exported {len(listings)} item listings to {filename}")
+
+    def get_export_path(self, kind):
+        from PySide6.QtWidgets import QFileDialog
+        default_name = f"{kind}_export.csv"
+        filename, _ = QFileDialog.getSaveFileName(self, f"Export to {kind.title()}", os.getcwd(), "CSV Files (*.csv)", options=QFileDialog.Options())
+        if not filename:
+            return None, None
+        return filename, None
+
+    def open_break_builder(self):
+        dlg = BreakBuilderDialog(self.inventory, self)
+        dlg.exec()
+        self.card_table.update_cards(self.inventory.get_all_cards())
+
+    def add_card_by_scryfall_id(self):
+        from PySide6.QtWidgets import QInputDialog, QMessageBox
+        from models.scryfall_api import fetch_scryfall_data
+        scry_id, ok = QInputDialog.getText(self, "Add by Scryfall ID", "Enter Scryfall ID:")
+        if not ok or not scry_id.strip():
+            return
+        data = fetch_scryfall_data(scry_id.strip())
+        if not data:
+            QMessageBox.warning(self, "Not Found", "No card found for that Scryfall ID.")
+            return
+        self.inventory.get_all_cards().append(data)
+        self.card_table.update_cards(self.inventory.get_all_cards())
+        QMessageBox.information(self, "Added", f"Card '{data.get('Name', '')}' added to inventory.")

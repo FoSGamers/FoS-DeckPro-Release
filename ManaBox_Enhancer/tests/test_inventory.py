@@ -1,6 +1,11 @@
 from PySide6.QtCore import Qt
 import pytest
 from unittest.mock import patch
+import os
+import tempfile
+import json
+from ManaBox_Enhancer.ui.dialogs.export_item_listing_fields import ExportItemListingFieldsDialog
+from PySide6.QtWidgets import QApplication
 
 @pytest.fixture(autouse=True)
 def patch_qfiledialog(monkeypatch, tmp_path):
@@ -849,3 +854,272 @@ def test_import_csv_and_whatnot_adjustment_handles_blank_prices(tmp_path, qtbot,
     assert window.inventory.get_all_cards()[1]["Whatnot price"] == "0.0" or window.inventory.get_all_cards()[1]["Whatnot price"] == ""
     assert window.inventory.get_all_cards()[2]["Whatnot price"] == "$1.00"
     assert window.inventory.get_all_cards()[3]["Whatnot price"] == ""
+
+@pytest.mark.parametrize("fields", [["A", "B", "C", "D"]])
+def test_export_item_listing_fields_check_order(qtbot, tmp_path, fields):
+    # Remove prefs file if exists
+    prefs_file = os.path.join(os.path.dirname(__file__), '..', 'export_item_listing_fields_prefs.json')
+    if os.path.exists(prefs_file):
+        os.remove(prefs_file)
+    dlg = ExportItemListingFieldsDialog(fields)
+    qtbot.addWidget(dlg)
+    dlg.show()
+    # Check C, then A, then D
+    for i in range(dlg.title_list.count()):
+        item = dlg.title_list.item(i)
+        if item.text() in ("C", "A", "D"):
+            item.setCheckState(Qt.Checked)
+    # Uncheck A, then check B
+    for i in range(dlg.title_list.count()):
+        item = dlg.title_list.item(i)
+        if item.text() == "A":
+            item.setCheckState(Qt.Unchecked)
+    for i in range(dlg.title_list.count()):
+        item = dlg.title_list.item(i)
+        if item.text() == "B":
+            item.setCheckState(Qt.Checked)
+    # Now checked order should be: C, D, B (A was unchecked)
+    title_fields, _ = dlg.get_fields()
+    assert title_fields == ["C", "D", "B"], f"Check order incorrect: {title_fields}"
+
+    # Save as default, close and reopen dialog, check order persists
+    dlg.save_as_default()
+    dlg.close()
+    dlg2 = ExportItemListingFieldsDialog(fields)
+    qtbot.addWidget(dlg2)
+    dlg2.show()
+    title_fields2, _ = dlg2.get_fields()
+    assert title_fields2 == ["C", "D", "B"], f"Check order not persisted: {title_fields2}"
+
+    # Drag-and-drop: move B to top visually, but check order should remain
+    b_idx = None
+    for i in range(dlg2.title_list.count()):
+        if dlg2.title_list.item(i).text() == "B":
+            b_idx = i
+            break
+    if b_idx is not None:
+        item = dlg2.title_list.takeItem(b_idx)
+        dlg2.title_list.insertItem(0, item)
+    # Order in get_fields should still be C, D, B
+    title_fields3, _ = dlg2.get_fields()
+    assert title_fields3 == ["C", "D", "B"], f"Check order changed after drag: {title_fields3}"
+
+    # Reset to default: all unchecked
+    dlg2.reset_to_default()
+    title_fields4, _ = dlg2.get_fields()
+    assert title_fields4 == [], f"Reset to default did not clear: {title_fields4}"
+
+    # Check all, save as default, close and reopen, all should be checked in order
+    for i in range(dlg2.title_list.count()):
+        dlg2.title_list.item(i).setCheckState(Qt.Checked)
+    dlg2.save_as_default()
+    dlg2.close()
+    dlg3 = ExportItemListingFieldsDialog(fields)
+    qtbot.addWidget(dlg3)
+    dlg3.show()
+    title_fields5, _ = dlg3.get_fields()
+    assert title_fields5 == fields, f"All fields not checked after save/load: {title_fields5}"
+
+def test_export_to_whatnot_template_defaults_match_template(qtbot, tmp_path, monkeypatch):
+    import csv
+    import os
+    from ManaBox_Enhancer.ui.main_window import MainWindow
+    # Read template columns and defaults
+    template_path = os.path.join(os.path.dirname(__file__), '../../Whatnot Card Inventory - Template (3).csv')
+    with open(template_path, newline='', encoding='utf-8') as f:
+        reader = csv.reader(f)
+        columns = next(reader)
+        defaults = next(reader)
+    # Setup MainWindow and inventory
+    mw = MainWindow()
+    test_card = {columns[0]: 'Trading Card Games', columns[1]: 'Magic: The Gathering', columns[2]: 'Test Card (Foil)', columns[4]: '2', columns[6]: '123'}
+    mw.inventory.cards = [test_card]
+    # Patch get_export_path to use tmp_path
+    out_path = tmp_path / 'export.csv'
+    monkeypatch.setattr(mw, 'get_export_path', lambda kind: (str(out_path), None))
+    # Run export
+    mw.export_to_whatnot()
+    # Read output
+    with open(out_path, newline='', encoding='utf-8') as f:
+        reader = csv.reader(f)
+        out_columns = next(reader)
+        out_row = next(reader)
+    assert out_columns == columns
+    # Only the fields set in test_card should differ, all others should match template defaults
+    for i, col in enumerate(columns):
+        if col in test_card:
+            assert out_row[i] == test_card[col]
+        else:
+            assert out_row[i] == defaults[i]
+
+def test_whatnot_export_price_minimum_rule(qtbot, tmp_path, monkeypatch):
+    """
+    Test that Whatnot price of 0 always exports as 1 (see README Whatnot Export Rules).
+    """
+    import csv
+    import os
+    from ManaBox_Enhancer.ui.main_window import MainWindow
+    # Setup MainWindow and inventory
+    mw = MainWindow()
+    # Patch get_export_path to use a temp file
+    out_csv = tmp_path / "whatnot_export.csv"
+    monkeypatch.setattr(mw, "get_export_path", lambda kind: (str(out_csv), None))
+    # Patch dialog to auto-select fields
+    monkeypatch.setattr("ManaBox_Enhancer.ui.dialogs.export_item_listing_fields.ExportItemListingFieldsDialog.exec", lambda self: True)
+    monkeypatch.setattr("ManaBox_Enhancer.ui.dialogs.export_item_listing_fields.ExportItemListingFieldsDialog.get_fields", lambda self: (["Name"], ["Set name"]))
+    # Add a card with Whatnot price 0
+    card = {
+        "Name": "Test Card",
+        "Set name": "Test Set",
+        "Whatnot price": 0,
+        "Quantity": 2,
+        "Purchase price": 0.5,
+    }
+    mw.inventory.load_cards([card])
+    mw.export_to_whatnot()
+    # Read exported CSV
+    with open(out_csv, newline='', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        rows = list(reader)
+    assert rows[0]["Price"] == "1", f"Expected Price to be '1', got {rows[0]['Price']}"
+
+def test_break_builder_inventory_search_and_add(qtbot):
+    from ManaBox_Enhancer.ui.dialogs.break_builder import BreakBuilderDialog
+    class DummyInventory:
+        def __init__(self):
+            self.cards = [
+                {"Name": "Alpha", "Set name": "SetA"},
+                {"Name": "Beta", "Set name": "SetB"},
+                {"Name": "Gamma", "Set name": "SetC"},
+            ]
+        def get_all_cards(self):
+            return self.cards
+        def remove_card(self, card):
+            self.cards.remove(card)
+        def add_card(self, card):
+            self.cards.append(card)
+    inv = DummyInventory()
+    dlg = BreakBuilderDialog(inv)
+    qtbot.addWidget(dlg)
+    dlg.show()
+    # Search for 'Alpha'
+    dlg.search_box.setText("Alpha")
+    qtbot.wait(100)
+    assert dlg.inv_list.count() == 1
+    # Select and add to break
+    dlg.inv_list.setCurrentRow(0)
+    qtbot.mouseClick(dlg.add_selected_btn, Qt.LeftButton)
+    assert dlg.break_list.count() == 1
+    assert dlg.break_items[0]["Name"] == "Alpha"
+
+def test_break_builder_add_by_scryfall_id(qtbot):
+    from ManaBox_Enhancer.ui.dialogs.break_builder import BreakBuilderDialog
+    with patch('models.scryfall_api.fetch_scryfall_data') as mock_fetch:
+        mock_fetch.return_value = {"Name": "ScryCard", "Set name": "ScrySet"}
+        class DummyInventory:
+            def get_all_cards(self): return []
+            def remove_card(self, card): pass
+            def add_card(self, card): pass
+        inv = DummyInventory()
+        dlg = BreakBuilderDialog(inv)
+        qtbot.addWidget(dlg)
+        dlg.show()
+        # Simulate add by Scryfall ID
+        with patch('PySide6.QtWidgets.QInputDialog.getText', return_value=("scryid", True)):
+            dlg.add_by_scryfall_id()
+        assert any(card["Name"] == "ScryCard" for card in dlg.break_items)
+
+def test_break_builder_random_selection(qtbot):
+    from ManaBox_Enhancer.ui.dialogs.break_builder import BreakBuilderDialog
+    class DummyInventory:
+        def __init__(self):
+            self.cards = [{"Name": f"Card{i}", "Set name": "SetX"} for i in range(10)]
+        def get_all_cards(self): return self.cards
+        def remove_card(self, card): self.cards.remove(card)
+        def add_card(self, card): self.cards.append(card)
+    inv = DummyInventory()
+    dlg = BreakBuilderDialog(inv)
+    qtbot.addWidget(dlg)
+    dlg.show()
+    dlg.search_box.setText("")
+    qtbot.wait(100)
+    dlg.rand_count_input.setText("3")
+    qtbot.mouseClick(dlg.rand_select_btn, Qt.LeftButton)
+    assert len(dlg.break_items) == 3
+    # All selected cards are from inventory
+    for card in dlg.break_items:
+        assert card["Name"].startswith("Card")
+
+def test_break_builder_export_and_remove(qtbot, tmp_path):
+    from ManaBox_Enhancer.ui.dialogs.break_builder import BreakBuilderDialog
+    import os
+    class DummyInventory:
+        def __init__(self):
+            self.cards = [{"Name": "ExportMe", "Set name": "SetY"}]
+        def get_all_cards(self): return self.cards
+        def remove_card(self, card): self.cards.remove(card)
+        def add_card(self, card): self.cards.append(card)
+    inv = DummyInventory()
+    dlg = BreakBuilderDialog(inv)
+    qtbot.addWidget(dlg)
+    dlg.show()
+    # Add card to break list
+    dlg.break_items.append(inv.cards[0].copy())
+    dlg.update_break_list()
+    # Patch QFileDialog to auto-select a file
+    export_file = tmp_path / "break_list.csv"
+    with patch('PySide6.QtWidgets.QFileDialog.getSaveFileName', return_value=(str(export_file), "CSV Files (*.csv)")):
+        # Patch QMessageBox.question to always say Yes to remove
+        with patch('PySide6.QtWidgets.QMessageBox.question', return_value=QMessageBox.Yes):
+            dlg.export_break_list()
+    # File should exist
+    assert os.path.exists(export_file)
+    # Card should be removed from inventory
+    assert not inv.cards
+    # Re-import
+    dlg.reimport_removed()
+    assert inv.cards
+
+def test_break_builder_edit_duplicate_remove(qtbot):
+    from ManaBox_Enhancer.ui.dialogs.break_builder import BreakBuilderDialog
+    class DummyInventory:
+        def __init__(self):
+            self.cards = [{"Name": "EditMe", "Set name": "SetZ"}]
+        def get_all_cards(self): return self.cards
+        def remove_card(self, card): self.cards.remove(card)
+        def add_card(self, card): self.cards.append(card)
+    inv = DummyInventory()
+    dlg = BreakBuilderDialog(inv)
+    qtbot.addWidget(dlg)
+    dlg.show()
+    # Add card to break list
+    dlg.break_items.append(inv.cards[0].copy())
+    dlg.update_break_list()
+    # Duplicate
+    dlg.break_list.setCurrentRow(0)
+    qtbot.mouseClick(dlg.duplicate_btn, Qt.LeftButton)
+    assert dlg.break_list.count() == 2
+    # Remove
+    dlg.break_list.setCurrentRow(0)
+    qtbot.mouseClick(dlg.remove_btn, Qt.LeftButton)
+    assert dlg.break_list.count() == 1
+    # Edit (simulate dialog accept)
+    with patch('ui.dialogs.edit_card.EditCardDialog.exec', return_value=True), \
+         patch('ui.dialogs.edit_card.EditCardDialog.get_card', return_value={"Name": "Edited", "Set name": "SetZ"}):
+        dlg.edit_break_item(dlg.break_list.item(0))
+    assert dlg.break_items[0]["Name"] == "Edited"
+
+def test_mainwindow_add_card_by_scryfall_id(qtbot, monkeypatch):
+    from ManaBox_Enhancer.ui.main_window import MainWindow
+    # Mock Scryfall API
+    monkeypatch.setattr('models.scryfall_api.fetch_scryfall_data', lambda scry_id: {"Name": "TestScry", "Set name": "ScrySet"})
+    # Mock QInputDialog
+    monkeypatch.setattr('PySide6.QtWidgets.QInputDialog.getText', lambda *a, **k: ("scryid", True))
+    window = MainWindow()
+    qtbot.addWidget(window)
+    window.show()
+    before = len(window.inventory.get_all_cards())
+    window.add_card_by_scryfall_id()
+    after = len(window.inventory.get_all_cards())
+    assert after == before + 1
+    assert any(card["Name"] == "TestScry" for card in window.inventory.get_all_cards())

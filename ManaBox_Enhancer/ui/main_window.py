@@ -25,6 +25,7 @@ from ui.dialogs.export_item_listing_fields import ExportItemListingFieldsDialog
 import pandas as pd
 import re
 from ui.dialogs.break_builder import BreakBuilderDialog
+from models.card import CARD_FIELDS
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -32,14 +33,11 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("ManaBox Enhancer (PySide6)")
         self.setMinimumSize(1200, 700)
 
-        # Expanded columns for display and filtering
-        self.default_columns = [
-            "Name", "Set name", "Set code", "Collector number", "Rarity",
-            "Condition", "Foil", "Language", "Purchase price", "Whatnot price"
-        ]
+        # Use all Scryfall/card fields as columns
+        self.default_columns = list(CARD_FIELDS)
         try:
             self.columns, self.visible_columns = self.load_column_prefs()
-            # Fallback: if columns are missing or misaligned, reset to defaults
+            # Fallback: if columns are missing or misaligned, reset to all fields
             if not self.columns or len(self.columns) != len(self.default_columns):
                 self.columns = self.default_columns.copy()
                 self.visible_columns = self.default_columns.copy()

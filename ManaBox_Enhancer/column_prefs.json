@@ -23,5 +23,16 @@
     "Purchase price",
     "Whatnot price"
   ],
-  "column_widths": {}
+  "column_widths": {
+    "Set name": 100,
+    "Set code": 100,
+    "Name": 174,
+    "Collector number": 100,
+    "Rarity": 100,
+    "Condition": 100,
+    "Foil": 100,
+    "Language": 100,
+    "Purchase price": 100,
+    "Whatnot price": 100
+  }
 }

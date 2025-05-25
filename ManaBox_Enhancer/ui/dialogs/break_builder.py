@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QLineEdit, QListWidget, QListWidgetItem, QTabWidget, QTableWidget, QTableWidgetItem, QComboBox, QMessageBox, QCheckBox, QFileDialog, QInputDialog, QWidget, QFormLayout
+from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QLineEdit, QListWidget, QListWidgetItem, QTabWidget, QTableWidget, QTableWidgetItem, QComboBox, QMessageBox, QCheckBox, QFileDialog, QInputDialog, QWidget, QFormLayout, QGroupBox, QGridLayout, QSplitter, QScrollArea, QTextEdit, QDialogButtonBox
 from PySide6.QtCore import Qt
 from models.scryfall_api import fetch_scryfall_data
 import random
@@ -21,31 +21,73 @@ class BreakBuilderDialog(QDialog):
         self.inv_tab = QWidget()
         inv_layout = QVBoxLayout(self.inv_tab)
         inv_layout.addWidget(QLabel("Filter and select cards from inventory:"))
-        # Dynamic filter row
+        
+        # --- Improved Main Layout with Splitter ---
+        main_splitter = QSplitter()
+        main_splitter.setOrientation(Qt.Horizontal)
+        # Left: Filters (in a scroll area)
+        filter_widget = QWidget()
+        filter_vbox = QVBoxLayout(filter_widget)
+        filter_vbox.addWidget(QLabel("Card Filters"))
+        filter_group = QGroupBox()
+        filter_grid = QGridLayout()
         self.filter_fields = self._get_all_inventory_fields()
         self.filter_inputs = {}
-        filter_form = QFormLayout()
-        for field in self.filter_fields:
-            le = QLineEdit()
-            le.setPlaceholderText(f"Filter {field}")
-            le.textChanged.connect(self.update_inventory_list)
-            self.filter_inputs[field] = le
-            filter_form.addRow(QLabel(field+":"), le)
-        inv_layout.addLayout(filter_form)
+        self.numeric_fields = {f for f in self.filter_fields if any(x in f.lower() for x in ["price", "quantity", "number", "count"])}
+        col_count = 1  # One column for better vertical scrolling
+        for idx, field in enumerate(self.filter_fields):
+            row = idx
+            if field in self.numeric_fields:
+                min_le = QLineEdit()
+                min_le.setPlaceholderText(f"Min {field}")
+                min_le.textChanged.connect(self.update_inventory_list)
+                max_le = QLineEdit()
+                max_le.setPlaceholderText(f"Max {field}")
+                max_le.textChanged.connect(self.update_inventory_list)
+                self.filter_inputs[field] = (min_le, max_le)
+                filter_grid.addWidget(QLabel(field+":"), row, 0)
+                filter_grid.addWidget(min_le, row, 1)
+                filter_grid.addWidget(QLabel("to"), row, 2)
+                filter_grid.addWidget(max_le, row, 3)
+            else:
+                le = QLineEdit()
+                le.setPlaceholderText(f"Filter {field} (comma=OR)")
+                le.textChanged.connect(self.update_inventory_list)
+                self.filter_inputs[field] = le
+                filter_grid.addWidget(QLabel(field+":"), row, 0)
+                filter_grid.addWidget(le, row, 1, 1, 3)
+        filter_group.setLayout(filter_grid)
+        filter_vbox.addWidget(filter_group)
+        filter_vbox.addStretch()
+        filter_scroll = QScrollArea()
+        filter_scroll.setWidgetResizable(True)
+        filter_scroll.setWidget(filter_widget)
+        main_splitter.addWidget(filter_scroll)
+        # Right: Card list and action buttons
+        right_widget = QWidget()
+        right_vbox = QVBoxLayout(right_widget)
+        right_vbox.addWidget(QLabel("Filtered Cards:"))
         self.inv_list = QListWidget()
-        inv_layout.addWidget(self.inv_list)
+        self.inv_list.setMinimumHeight(200)
+        right_vbox.addWidget(self.inv_list, stretch=1)
+        btn_row = QHBoxLayout()
         self.add_selected_btn = QPushButton("Add Selected to Break List")
         self.add_selected_btn.clicked.connect(self.add_selected_to_break)
-        inv_layout.addWidget(self.add_selected_btn)
-        # Random selection controls
-        rand_row = QHBoxLayout()
+        btn_row.addWidget(self.add_selected_btn)
         self.rand_count_input = QLineEdit()
         self.rand_count_input.setPlaceholderText("Number to randomly select")
+        self.rand_count_input.setMaximumWidth(150)
+        btn_row.addWidget(self.rand_count_input)
         self.rand_select_btn = QPushButton("Randomly Select from Filtered")
         self.rand_select_btn.clicked.connect(self.randomly_select_from_filtered)
-        rand_row.addWidget(self.rand_count_input)
-        rand_row.addWidget(self.rand_select_btn)
-        inv_layout.addLayout(rand_row)
+        btn_row.addWidget(self.rand_select_btn)
+        btn_row.addStretch()
+        right_vbox.addLayout(btn_row)
+        main_splitter.addWidget(right_widget)
+        main_splitter.setSizes([300, 600])
+        inv_layout.addWidget(main_splitter)
+        # --- End Improved Main Layout ---
+        
         self.tabs.addTab(self.inv_tab, "Inventory")
         # Tab 2: Break List
         self.break_tab = QWidget()
@@ -55,6 +97,10 @@ class BreakBuilderDialog(QDialog):
         self.break_list.setDragDropMode(QListWidget.InternalMove)
         self.break_list.itemDoubleClicked.connect(self.edit_break_item)
         break_layout.addWidget(self.break_list)
+        # --- Summary Section ---
+        self.summary_label = QLabel()
+        break_layout.addWidget(self.summary_label)
+        # --- End Summary Section ---
         btn_row = QHBoxLayout()
         self.remove_btn = QPushButton("Remove Selected")
         self.remove_btn.clicked.connect(self.remove_selected_from_break)
@@ -98,15 +144,50 @@ class BreakBuilderDialog(QDialog):
         return sorted(fields)
     def update_inventory_list(self):
         self.inv_list.clear()
-        # AND all filters
-        filters = {field: le.text().strip().lower() for field, le in self.filter_inputs.items() if le.text().strip()}
+        filters = {}
+        for field, widget in self.filter_inputs.items():
+            if isinstance(widget, tuple):
+                min_val = widget[0].text().strip()
+                max_val = widget[1].text().strip()
+                if min_val or max_val:
+                    filters[field] = (min_val, max_val)
+            else:
+                val = widget.text().strip()
+                if val:
+                    filters[field] = val
         self.filtered_cards = []
         for card in self.inventory.get_all_cards():
             match = True
             for field, val in filters.items():
-                if val not in str(card.get(field, "")).lower():
-                    match = False
-                    break
+                if isinstance(val, tuple):
+                    # Numeric range filter
+                    min_val, max_val = val
+                    try:
+                        card_val = float(card.get(field, 0))
+                    except Exception:
+                        match = False
+                        break
+                    if min_val:
+                        try:
+                            if card_val < float(min_val):
+                                match = False
+                                break
+                        except Exception:
+                            pass
+                    if max_val:
+                        try:
+                            if card_val > float(max_val):
+                                match = False
+                                break
+                        except Exception:
+                            pass
+                else:
+                    # OR filter for comma-separated values
+                    or_values = [v.strip().lower() for v in val.split(",") if v.strip()]
+                    card_val = str(card.get(field, "")).lower()
+                    if not any(ov in card_val for ov in or_values):
+                        match = False
+                        break
             if match:
                 item = QListWidgetItem(f"{card.get('Name', '')} [{card.get('Set name', '')}]")
                 item.setData(Qt.UserRole, card)
@@ -129,9 +210,10 @@ class BreakBuilderDialog(QDialog):
             return
         selected = random.sample(self.filtered_cards, n)
         self.break_items.extend([card.copy() for card in selected])
-        # Show the selected cards to the user
+        # Show the selected cards to the user in a scrollable dialog
         names = [f"{c.get('Name', '')} [{c.get('Set name', '')}]" for c in selected]
-        QMessageBox.information(self, "Randomly Selected", "Selected cards:\n" + "\n".join(names))
+        dlg = ScrollableListDialog("Randomly Selected", names, self)
+        dlg.exec()
         self.update_break_list()
         self.update_preview()
     def update_break_list(self):
@@ -140,6 +222,29 @@ class BreakBuilderDialog(QDialog):
             item = QListWidgetItem(f"{card.get('Name', '')} [{card.get('Set name', '')}]" )
             item.setData(Qt.UserRole, card)
             self.break_list.addItem(item)
+        # --- Update Summary ---
+        purchase_prices = []
+        whatnot_prices = []
+        for card in self.break_items:
+            try:
+                price = float(str(card.get('Purchase price', '')).replace('$','').replace(',',''))
+                purchase_prices.append(price)
+            except Exception:
+                pass
+            try:
+                wprice = float(str(card.get('Whatnot price', '')).replace('$','').replace(',',''))
+                whatnot_prices.append(wprice)
+            except Exception:
+                pass
+        total_purchase = sum(purchase_prices)
+        avg_purchase = (sum(purchase_prices)/len(purchase_prices)) if purchase_prices else 0
+        total_whatnot = sum(whatnot_prices)
+        avg_whatnot = (sum(whatnot_prices)/len(whatnot_prices)) if whatnot_prices else 0
+        self.summary_label.setText(
+            f"<b>Totals:</b> Purchase price: ${total_purchase:.2f} (avg: ${avg_purchase:.2f}) | "
+            f"Whatnot price: ${total_whatnot:.2f} (avg: ${avg_whatnot:.2f})"
+        )
+        # --- End Update Summary ---
     def remove_selected_from_break(self):
         for item in self.break_list.selectedItems():
             idx = self.break_list.row(item)
@@ -217,4 +322,22 @@ class BreakBuilderDialog(QDialog):
         for card in self.removed_from_inventory:
             self.inventory.add_card(card)
         self.removed_from_inventory = []
-        QMessageBox.information(self, "Re-imported", "Removed cards re-imported to inventory.") 
+        QMessageBox.information(self, "Re-imported", "Removed cards re-imported to inventory.")
+
+class ScrollableListDialog(QDialog):
+    def __init__(self, title, items, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle(title)
+        self.setMinimumWidth(400)
+        self.setMaximumHeight(600)
+        layout = QVBoxLayout(self)
+        label = QLabel("Selected cards:")
+        layout.addWidget(label)
+        text = QTextEdit()
+        text.setReadOnly(True)
+        text.setPlainText("\n".join(items))
+        text.setMinimumHeight(300)
+        layout.addWidget(text)
+        buttons = QDialogButtonBox(QDialogButtonBox.Ok)
+        buttons.accepted.connect(self.accept)
+        layout.addWidget(buttons) 

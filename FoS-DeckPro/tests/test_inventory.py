@@ -4,8 +4,11 @@ from unittest.mock import patch
 import os
 import tempfile
 import json
-from ManaBox_Enhancer.ui.dialogs.export_item_listing_fields import ExportItemListingFieldsDialog
+from FoS_DeckPro.ui.dialogs.export_item_listing_fields import ExportItemListingFieldsDialog
 from PySide6.QtWidgets import QApplication
+from FoS_DeckPro.ui.main_window import MainWindow
+from FoS_DeckPro.models.inventory import CardInventory
+from FoS_DeckPro.ui.dialogs.bulk_edit_remove import BulkEditRemoveDialog
 
 @pytest.fixture(autouse=True)
 def patch_qfiledialog(monkeypatch, tmp_path):
@@ -15,7 +18,6 @@ def patch_qfiledialog(monkeypatch, tmp_path):
     yield
 
 def test_export_to_whatnot(tmp_path):
-    from ManaBox_Enhancer.ui.main_window import MainWindow
     import csv
     mw = MainWindow()
     # Sample card
@@ -51,8 +53,8 @@ def test_export_to_whatnot(tmp_path):
         assert row["Image URL 1"] == "https://img.scryfall.com/cards/large/front/2/7/271.jpg"
 
 def test_bulk_remove_and_edit(tmp_path):
-    from ManaBox_Enhancer.models.inventory import CardInventory
-    from ManaBox_Enhancer.ui.dialogs.bulk_edit_remove import BulkEditRemoveDialog
+    from FoS_DeckPro.models.inventory import CardInventory
+    from FoS_DeckPro.ui.dialogs.bulk_edit_remove import BulkEditRemoveDialog
     # Setup inventory
     cards = [
         {"Name": "A", "Set name": "Set1", "Collector number": "1", "Condition": "NM"},
@@ -82,7 +84,6 @@ def test_main_window_gui_interaction(qtbot):
     Advanced GUI test: Open the main window, simulate menu interaction, and check UI state.
     Requires pytest-qt (pip install pytest-qt).
     """
-    from ManaBox_Enhancer.ui.main_window import MainWindow
     # Create the main window
     window = MainWindow()
     qtbot.addWidget(window)
@@ -107,7 +108,6 @@ def test_menu_bar_and_actions_present(qtbot):
     """
     Regression test: Ensure the menu bar and at least one menu/action are present in the main window.
     """
-    from ManaBox_Enhancer.ui.main_window import MainWindow
     window = MainWindow()
     qtbot.addWidget(window)
     window.show()
@@ -125,7 +125,6 @@ def test_table_headers_match_defaults(qtbot):
     """
     Regression test: Ensure the table headers match the expected default columns.
     """
-    from ManaBox_Enhancer.ui.main_window import MainWindow
     window = MainWindow()
     qtbot.addWidget(window)
     window.show()
@@ -140,7 +139,6 @@ def test_adjust_whatnot_pricing_fixed(qtbot):
     """
     Test setting all Whatnot prices to a fixed value using the dialog.
     """
-    from ManaBox_Enhancer.ui.main_window import MainWindow
     window = MainWindow()
     qtbot.addWidget(window)
     window.show()
@@ -163,7 +161,6 @@ def test_adjust_whatnot_pricing_rounding(qtbot):
     """
     Test rounding Whatnot prices with a custom threshold using the dialog.
     """
-    from ManaBox_Enhancer.ui.main_window import MainWindow
     import math
     window = MainWindow()
     qtbot.addWidget(window)
@@ -197,7 +194,6 @@ def test_adjust_whatnot_pricing_gui_interaction(qtbot):
     """
     GUI test: Simulate a user opening the Whatnot pricing dialog, entering a custom threshold, selecting rounding, and applying it.
     """
-    from ManaBox_Enhancer.ui.main_window import MainWindow
     from PySide6.QtWidgets import QDialog, QLineEdit, QRadioButton, QPushButton
     import math
     window = MainWindow()
@@ -247,7 +243,6 @@ def test_add_card_gui_interaction(qtbot):
     """
     GUI test: Simulate a user adding a card via the Add Card dialog using QTimer to automate modal dialog.
     """
-    from ManaBox_Enhancer.ui.main_window import MainWindow
     from PySide6.QtWidgets import QDialog, QLineEdit, QPushButton, QApplication
     from PySide6.QtCore import QTimer
     window = MainWindow()
@@ -284,7 +279,6 @@ def test_edit_card_gui_interaction(qtbot):
     """
     GUI test: Simulate a user editing a card via the Edit Card dialog.
     """
-    from ManaBox_Enhancer.ui.main_window import MainWindow
     from PySide6.QtWidgets import QDialog, QLineEdit, QPushButton
     window = MainWindow()
     qtbot.addWidget(window)
@@ -324,7 +318,6 @@ def test_delete_card_gui_interaction(qtbot):
     """
     GUI test: Simulate a user deleting a card via the Delete key and confirmation dialog.
     """
-    from ManaBox_Enhancer.ui.main_window import MainWindow
     from PySide6.QtWidgets import QDialog, QPushButton
     window = MainWindow()
     qtbot.addWidget(window)
@@ -359,7 +352,6 @@ def test_import_cards_gui_interaction(qtbot, tmp_path):
     """
     GUI test: Simulate a user importing cards via the Import dialog (JSON, merge mode).
     """
-    from ManaBox_Enhancer.ui.main_window import MainWindow
     from PySide6.QtWidgets import QDialog, QPushButton
     import json
     window = MainWindow()
@@ -399,7 +391,6 @@ def test_export_cards_gui_interaction(qtbot, tmp_path):
     """
     GUI test: Simulate a user exporting cards via the Export dialog (CSV, column selection).
     """
-    from ManaBox_Enhancer.ui.main_window import MainWindow
     from PySide6.QtWidgets import QDialog, QPushButton, QListWidget, QListWidgetItem
     import csv
     window = MainWindow()
@@ -441,7 +432,6 @@ def test_column_customization_gui_interaction(qtbot):
     """
     GUI test: Simulate a user customizing columns (hide, reorder, restore defaults) via the dialog.
     """
-    from ManaBox_Enhancer.ui.main_window import MainWindow
     from PySide6.QtWidgets import QDialog, QListWidget, QListWidgetItem, QPushButton
     window = MainWindow()
     qtbot.addWidget(window)
@@ -498,7 +488,6 @@ def test_undo_last_change_gui_interaction(qtbot):
     """
     GUI test: Simulate a user making a change, triggering Undo, confirming, and verifying the change is reverted.
     """
-    from ManaBox_Enhancer.ui.main_window import MainWindow
     from PySide6.QtWidgets import QDialog, QPushButton
     window = MainWindow()
     qtbot.addWidget(window)
@@ -538,7 +527,6 @@ def test_restore_from_backup_gui_interaction(qtbot, tmp_path):
     """
     GUI test: Simulate a user restoring from backup via the dialog and verify inventory is restored.
     """
-    from ManaBox_Enhancer.ui.main_window import MainWindow
     from PySide6.QtWidgets import QDialog, QPushButton
     import json, os
     window = MainWindow()
@@ -568,7 +556,6 @@ def test_auto_save_toggle_gui_interaction(qtbot):
     """
     GUI test: Simulate a user toggling Auto-Save in the menu and verify the internal state changes.
     """
-    from ManaBox_Enhancer.ui.main_window import MainWindow
     window = MainWindow()
     qtbot.addWidget(window)
     window.show()
@@ -590,7 +577,6 @@ def test_save_load_column_preset_gui_interaction(qtbot, tmp_path):
     """
     GUI test: Simulate a user saving and loading a column preset, verifying columns are restored.
     """
-    from ManaBox_Enhancer.ui.main_window import MainWindow
     from PySide6.QtWidgets import QDialog, QInputDialog, QFileDialog, QPushButton, QListWidget
     import os, json
     window = MainWindow()
@@ -624,7 +610,6 @@ def test_filter_overlay_gui_interaction(qtbot):
     """
     GUI test: Simulate a user typing in filter overlay fields and verify the table updates to show only matching cards.
     """
-    from ManaBox_Enhancer.ui.main_window import MainWindow
     window = MainWindow()
     qtbot.addWidget(window)
     window.show()
@@ -651,9 +636,8 @@ def test_enrich_all_cards_from_scryfall(qtbot):
     """
     Test the Scryfall enrichment feature: cards with Scryfall ID are updated with Scryfall data.
     """
-    from ManaBox_Enhancer.ui.main_window import MainWindow
     # Patch fetch_scryfall_data to return predictable data
-    with patch('ManaBox_Enhancer.models.scryfall_api.fetch_scryfall_data') as mock_fetch:
+    with patch('FoS_DeckPro.models.scryfall_api.fetch_scryfall_data') as mock_fetch:
         mock_fetch.side_effect = lambda scryfall_id: {
             "type_line": f"Type for {scryfall_id}",
             "mana_cost": "{1}{G}",
@@ -687,7 +671,6 @@ def test_enrich_all_cards_from_scryfall(qtbot):
         assert "type_line" not in enriched[2]
 
 def test_numeric_and_range_filtering_all_columns():
-    from ManaBox_Enhancer.models.inventory import CardInventory
     numeric_fields = [
         "Purchase price", "Whatnot price", "Quantity", "cmc", "ManaBox ID", "Collector number"
     ]
@@ -746,7 +729,6 @@ def test_numeric_and_range_filtering_all_columns():
     assert inv.filter_cards({"Collector number": "200-300"}), "range match failed for Collector number"
 
 def test_card_table_pagination_and_export(qtbot, tmp_path):
-    from ManaBox_Enhancer.ui.main_window import MainWindow
     import csv
     window = MainWindow()
     qtbot.addWidget(window)
@@ -789,8 +771,7 @@ def test_card_table_pagination_and_export(qtbot, tmp_path):
         assert rows[-1]["Title"].startswith("Card250"), "Last card title incorrect"
 
 def test_export_item_listings_field_selection(qtbot, tmp_path, monkeypatch):
-    from ManaBox_Enhancer.ui.main_window import MainWindow
-    from ManaBox_Enhancer.ui.dialogs.export_item_listing_fields import ExportItemListingFieldsDialog
+    from FoS_DeckPro.ui.dialogs.export_item_listing_fields import ExportItemListingFieldsDialog
     import csv
     window = MainWindow()
     qtbot.addWidget(window)
@@ -808,7 +789,7 @@ def test_export_item_listings_field_selection(qtbot, tmp_path, monkeypatch):
         def exec(self): return True
         def get_fields(self):
             return ["Name", "Set name"], ["Rarity", "Language", "cmc"]
-    monkeypatch.setattr("ManaBox_Enhancer.ui.dialogs.export_item_listing_fields.ExportItemListingFieldsDialog", FakeDialog)
+    monkeypatch.setattr("FoS_DeckPro.ui.dialogs.export_item_listing_fields.ExportItemListingFieldsDialog", FakeDialog)
     export_file = tmp_path / "item_listings.csv"
     window.export_item_listings(str(export_file), filetype="csv")
     with open(export_file, newline='', encoding='utf-8') as f:
@@ -820,7 +801,6 @@ def test_export_item_listings_field_selection(qtbot, tmp_path, monkeypatch):
         assert "cmc: 2" in rows[0]["Description"]
 
 def test_import_csv_and_whatnot_adjustment_handles_blank_prices(tmp_path, qtbot, monkeypatch):
-    from ManaBox_Enhancer.ui.main_window import MainWindow
     import csv
     window = MainWindow()
     qtbot.addWidget(window)
@@ -923,7 +903,6 @@ def test_export_item_listing_fields_check_order(qtbot, tmp_path, fields):
 def test_export_to_whatnot_template_defaults_match_template(qtbot, tmp_path, monkeypatch):
     import csv
     import os
-    from ManaBox_Enhancer.ui.main_window import MainWindow
     # Read template columns and defaults
     template_path = os.path.join(os.path.dirname(__file__), '../../Whatnot Card Inventory - Template (3).csv')
     with open(template_path, newline='', encoding='utf-8') as f:
@@ -958,15 +937,15 @@ def test_whatnot_export_price_minimum_rule(qtbot, tmp_path, monkeypatch):
     """
     import csv
     import os
-    from ManaBox_Enhancer.ui.main_window import MainWindow
+    from FoS_DeckPro.ui.main_window import MainWindow
     # Setup MainWindow and inventory
     mw = MainWindow()
     # Patch get_export_path to use a temp file
     out_csv = tmp_path / "whatnot_export.csv"
     monkeypatch.setattr(mw, "get_export_path", lambda kind: (str(out_csv), None))
     # Patch dialog to auto-select fields
-    monkeypatch.setattr("ManaBox_Enhancer.ui.dialogs.export_item_listing_fields.ExportItemListingFieldsDialog.exec", lambda self: True)
-    monkeypatch.setattr("ManaBox_Enhancer.ui.dialogs.export_item_listing_fields.ExportItemListingFieldsDialog.get_fields", lambda self: (["Name"], ["Set name"]))
+    monkeypatch.setattr("FoS_DeckPro.ui.dialogs.export_item_listing_fields.ExportItemListingFieldsDialog.exec", lambda self: True)
+    monkeypatch.setattr("FoS_DeckPro.ui.dialogs.export_item_listing_fields.ExportItemListingFieldsDialog.get_fields", lambda self: (["Name"], ["Set name"]))
     # Add a card with Whatnot price 0
     card = {
         "Name": "Test Card",
@@ -984,7 +963,7 @@ def test_whatnot_export_price_minimum_rule(qtbot, tmp_path, monkeypatch):
     assert rows[0]["Price"] == "1", f"Expected Price to be '1', got {rows[0]['Price']}"
 
 def test_break_builder_inventory_search_and_add(qtbot):
-    from ManaBox_Enhancer.ui.dialogs.break_builder import BreakBuilderDialog
+    from FoS_DeckPro.ui.dialogs.break_builder import BreakBuilderDialog
     class DummyInventory:
         def __init__(self):
             self.cards = [
@@ -1013,8 +992,8 @@ def test_break_builder_inventory_search_and_add(qtbot):
     assert dlg.break_items[0]["Name"] == "Alpha"
 
 def test_break_builder_add_by_scryfall_id(qtbot):
-    from ManaBox_Enhancer.ui.dialogs.break_builder import BreakBuilderDialog
-    with patch('models.scryfall_api.fetch_scryfall_data') as mock_fetch:
+    from FoS_DeckPro.ui.dialogs.break_builder import BreakBuilderDialog
+    with patch('FoS_DeckPro.models.scryfall_api.fetch_scryfall_data') as mock_fetch:
         mock_fetch.return_value = {"Name": "ScryCard", "Set name": "ScrySet"}
         class DummyInventory:
             def get_all_cards(self): return []
@@ -1030,7 +1009,7 @@ def test_break_builder_add_by_scryfall_id(qtbot):
         assert any(card["Name"] == "ScryCard" for card in dlg.break_items)
 
 def test_break_builder_random_selection(qtbot):
-    from ManaBox_Enhancer.ui.dialogs.break_builder import BreakBuilderDialog
+    from FoS_DeckPro.ui.dialogs.break_builder import BreakBuilderDialog
     class DummyInventory:
         def __init__(self):
             self.cards = [{"Name": f"Card{i}", "Set name": "SetX"} for i in range(10)]
@@ -1051,7 +1030,7 @@ def test_break_builder_random_selection(qtbot):
         assert card["Name"].startswith("Card")
 
 def test_break_builder_export_and_remove(qtbot, tmp_path):
-    from ManaBox_Enhancer.ui.dialogs.break_builder import BreakBuilderDialog
+    from FoS_DeckPro.ui.dialogs.break_builder import BreakBuilderDialog
     import os
     class DummyInventory:
         def __init__(self):
@@ -1081,7 +1060,7 @@ def test_break_builder_export_and_remove(qtbot, tmp_path):
     assert inv.cards
 
 def test_break_builder_edit_duplicate_remove(qtbot):
-    from ManaBox_Enhancer.ui.dialogs.break_builder import BreakBuilderDialog
+    from FoS_DeckPro.ui.dialogs.break_builder import BreakBuilderDialog
     class DummyInventory:
         def __init__(self):
             self.cards = [{"Name": "EditMe", "Set name": "SetZ"}]
@@ -1104,15 +1083,15 @@ def test_break_builder_edit_duplicate_remove(qtbot):
     qtbot.mouseClick(dlg.remove_btn, Qt.LeftButton)
     assert dlg.break_list.count() == 1
     # Edit (simulate dialog accept)
-    with patch('ui.dialogs.edit_card.EditCardDialog.exec', return_value=True), \
-         patch('ui.dialogs.edit_card.EditCardDialog.get_card', return_value={"Name": "Edited", "Set name": "SetZ"}):
+    with patch('FoS_DeckPro.ui.dialogs.edit_card.EditCardDialog.exec', return_value=True), \
+         patch('FoS_DeckPro.ui.dialogs.edit_card.EditCardDialog.get_card', return_value={"Name": "Edited", "Set name": "SetZ"}):
         dlg.edit_break_item(dlg.break_list.item(0))
     assert dlg.break_items[0]["Name"] == "Edited"
 
 def test_mainwindow_add_card_by_scryfall_id(qtbot, monkeypatch):
-    from ManaBox_Enhancer.ui.main_window import MainWindow
+    from FoS_DeckPro.ui.main_window import MainWindow
     # Mock Scryfall API
-    monkeypatch.setattr('models.scryfall_api.fetch_scryfall_data', lambda scry_id: {"Name": "TestScry", "Set name": "ScrySet"})
+    monkeypatch.setattr('FoS_DeckPro.models.scryfall_api.fetch_scryfall_data', lambda scry_id: {"Name": "TestScry", "Set name": "ScrySet"})
     # Mock QInputDialog
     monkeypatch.setattr('PySide6.QtWidgets.QInputDialog.getText', lambda *a, **k: ("scryid", True))
     window = MainWindow()
@@ -1125,7 +1104,7 @@ def test_mainwindow_add_card_by_scryfall_id(qtbot, monkeypatch):
     assert any(card["Name"] == "TestScry" for card in window.inventory.get_all_cards())
 
 def test_break_builder_advanced_filtering_and_random(qtbot):
-    from ManaBox_Enhancer.ui.dialogs.break_builder import BreakBuilderDialog
+    from FoS_DeckPro.ui.dialogs.break_builder import BreakBuilderDialog
     class DummyInventory:
         def __init__(self):
             self.cards = [

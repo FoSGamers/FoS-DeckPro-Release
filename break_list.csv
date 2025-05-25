@@ -1,92 +1,4 @@
 Title,Description
-Warrior - Normal,"• Collector Number: 1752
-• Set Code: SLD
-• Set Name: Secret Lair Drop
-• Foil: normal
-• Rarity: common
-• Type Line: Token Creature — Warrior
-• Color Identity: W
-• Colors: W
-• Mana Cost: (none)
-• Oracle Text: (none)
-• Language: en"
-Wrathful Raptors - Normal,"• Collector Number: 56
-• Set Code: LCC
-• Set Name: The Lost Caverns of Ixalan Commander
-• Foil: normal
-• Rarity: rare
-• Type Line: Creature — Dinosaur
-• Color Identity: R
-• Colors: R
-• Mana Cost: {4}{R}
-• Oracle Text: Trample Whenever a Dinosaur you control is dealt damage, it deals that much damage to any target that isn't a Dinosaur.
-• Language: en"
-Flare Of Malice - Foil,"• Collector Number: 331
-• Set Code: MH3
-• Set Name: Modern Horizons 3
-• Foil: foil
-• Rarity: rare
-• Type Line: Instant
-• Color Identity: B
-• Colors: B
-• Mana Cost: {2}{B}{B}
-• Oracle Text: You may sacrifice a nontoken black creature rather than pay this spell's mana cost. Each opponent sacrifices a creature or planeswalker with the greatest mana value among creatures and planeswalkers they control.
-• Language: en"
-Brightglass Gearhulk - Normal,"• Collector Number: 348
-• Set Code: DFT
-• Set Name: Aetherdrift
-• Foil: normal
-• Rarity: mythic
-• Type Line: Artifact Creature — Construct
-• Color Identity: G, W
-• Colors: G, W
-• Mana Cost: {G}{G}{W}{W}
-• Oracle Text: First strike, trample When this creature enters, you may search your library for up to two artifact, creature, and/or enchantment cards with mana value 1 or less, reveal them, put them into your hand, then shuffle.
-• Language: en"
-Storm-Kiln Artist - Normal,"• Collector Number: 115
-• Set Code: STX
-• Set Name: Strixhaven: School of Mages
-• Foil: normal
-• Rarity: uncommon
-• Type Line: Creature — Dwarf Shaman
-• Color Identity: R
-• Colors: R
-• Mana Cost: {3}{R}
-• Oracle Text: This creature gets +1/+0 for each artifact you control. Magecraft — Whenever you cast or copy an instant or sorcery spell, create a Treasure token.
-• Language: en"
-Snow-Covered Plains - Normal,"• Collector Number: 116
-• Set Code: MB2
-• Set Name: Mystery Booster 2
-• Foil: normal
-• Rarity: common
-• Type Line: Basic Snow Land — Plains
-• Color Identity: W
-• Colors: (none)
-• Mana Cost: (none)
-• Oracle Text: ({T}: Add {W}.)
-• Language: en"
-"Giada, Font Of Hope - Normal","• Collector Number: 141
-• Set Code: FDN
-• Set Name: Foundations
-• Foil: normal
-• Rarity: rare
-• Type Line: Legendary Creature — Angel
-• Color Identity: W
-• Colors: W
-• Mana Cost: {1}{W}
-• Oracle Text: Flying, vigilance Each other Angel you control enters with an additional +1/+1 counter on it for each Angel you already control. {T}: Add {W}. Spend this mana only to cast an Angel spell.
-• Language: en"
-Mockingbird - Foil,"• Collector Number: 61
-• Set Code: BLB
-• Set Name: Bloomburrow
-• Foil: foil
-• Rarity: rare
-• Type Line: Creature — Bird Bard
-• Color Identity: U
-• Colors: U
-• Mana Cost: {X}{U}
-• Oracle Text: Flying You may have this creature enter as a copy of any creature on the battlefield with mana value less than or equal to the amount of mana spent to cast this creature, except it's a Bird in addition to its other types and it has flying.
-• Language: en"
 Magus Of The Moon - Normal,"• Collector Number: 175
 • Set Code: TSR
 • Set Name: Time Spiral Remastered
@@ -98,467 +10,16 @@ Magus Of The Moon - Normal,"• Collector Number: 175
 • Mana Cost: {2}{R}
 • Oracle Text: Nonbasic lands are Mountains.
 • Language: en"
-Death In Heaven - Foil,"• Collector Number: 671
-• Set Code: WHO
-• Set Name: Doctor Who
-• Foil: foil
-• Rarity: rare
-• Type Line: Enchantment — Saga
-• Color Identity: B
-• Colors: B
-• Mana Cost: {3}{B}
-• Oracle Text: (As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.) I, II — Target player mills two cards, then exiles their graveyard. III — Put all creature cards exiled with this enchantment onto the battlefield face down under your control. They're 2/2 Cyberman artifact creatures.
-• Language: en"
-Counterspell - Normal,"• Collector Number: 630
-• Set Code: CMM
-• Set Name: Commander Masters
-• Foil: normal
-• Rarity: common
-• Type Line: Instant
-• Color Identity: U
-• Colors: U
-• Mana Cost: {U}{U}
-• Oracle Text: Counter target spell.
-• Language: en"
-Angel'S Grace - Normal,"• Collector Number: 4
-• Set Code: TSR
-• Set Name: Time Spiral Remastered
-• Foil: normal
-• Rarity: rare
-• Type Line: Instant
-• Color Identity: W
-• Colors: W
-• Mana Cost: {W}
-• Oracle Text: Split second (As long as this spell is on the stack, players can't cast spells or activate abilities that aren't mana abilities.) You can't lose the game this turn and your opponents can't win the game this turn. Until end of turn, damage that would reduce your life total to less than 1 reduces it to 1 instead.
-• Language: en"
-Tempt With Discovery - Foil,"• Collector Number: 532
-• Set Code: LTC
-• Set Name: Tales of Middle-earth Commander
-• Foil: foil
-• Rarity: uncommon
-• Type Line: Sorcery
-• Color Identity: G
-• Colors: G
-• Mana Cost: {3}{G}
-• Oracle Text: Tempting offer — Search your library for a land card and put it onto the battlefield. Each opponent may search their library for a land card and put it onto the battlefield. For each opponent who searches a library this way, search your library for a land card and put it onto the battlefield. Then each player who searched a library this way shuffles.
-• Language: en"
-Soulstone Sanctuary - Normal,"• Collector Number: 133
-• Set Code: FDN
-• Set Name: Foundations
-• Foil: normal
-• Rarity: rare
-• Type Line: Land
-• Color Identity: (none)
-• Colors: (none)
-• Mana Cost: (none)
-• Oracle Text: {T}: Add {C}. {4}: This land becomes a 3/3 creature with vigilance and all creature types. It's still a land.
-• Language: en"
-"Derevi, Empyrial Tactician - Foil","• Collector Number: 87
-• Set Code: BLC
-• Set Name: Bloomburrow Commander
-• Foil: foil
-• Rarity: rare
-• Type Line: Legendary Creature — Bird Wizard
-• Color Identity: G, U, W
-• Colors: G, U, W
-• Mana Cost: {G}{W}{U}
-• Oracle Text: Flying When Derevi enters and whenever a creature you control deals combat damage to a player, you may tap or untap target permanent. {1}{G}{W}{U}: Put Derevi onto the battlefield from the command zone.
-• Language: en"
-Manifold Mouse - Normal,"• Collector Number: 318
-• Set Code: BLB
-• Set Name: Bloomburrow
-• Foil: normal
-• Rarity: rare
-• Type Line: Creature — Mouse Soldier
-• Color Identity: R
-• Colors: R
-• Mana Cost: {1}{R}
-• Oracle Text: Offspring {2} (You may pay an additional {2} as you cast this spell. If you do, when this creature enters, create a 1/1 token copy of it.) At the beginning of combat on your turn, target Mouse you control gains your choice of double strike or trample until end of turn.
-• Language: en"
-Up The Beanstalk - Foil,"• Collector Number: 195
-• Set Code: WOE
-• Set Name: Wilds of Eldraine
-• Foil: foil
-• Rarity: uncommon
-• Type Line: Enchantment
-• Color Identity: G
-• Colors: G
-• Mana Cost: {1}{G}
-• Oracle Text: When this enchantment enters and whenever you cast a spell with mana value 5 or greater, draw a card.
-• Language: en"
-Flare Of Denial - Normal,"• Collector Number: 62
+Invert Polarity - Normal,"• Collector Number: 459
 • Set Code: MH3
 • Set Name: Modern Horizons 3
 • Foil: normal
 • Rarity: rare
 • Type Line: Instant
-• Color Identity: U
-• Colors: U
-• Mana Cost: {1}{U}{U}
-• Oracle Text: You may sacrifice a nontoken blue creature rather than pay this spell's mana cost. Counter target spell.
-• Language: en"
-"Sauron, The Necromancer - Normal","• Collector Number: 557
-• Set Code: LTR
-• Set Name: The Lord of the Rings: Tales of Middle-earth
-• Foil: normal
-• Rarity: rare
-• Type Line: Legendary Creature — Avatar Horror
-• Color Identity: B
-• Colors: B
-• Mana Cost: {3}{B}{B}
-• Oracle Text: Menace Whenever Sauron attacks, exile target creature card from your graveyard. Create a tapped and attacking token that's a copy of that card, except it's a 3/3 black Wraith with menace. At the beginning of the next end step, exile that token unless Sauron is your Ring-bearer.
-• Language: en"
-Untimely Malfunction - Foil,"• Collector Number: 161
-• Set Code: DSK
-• Set Name: Duskmourn: House of Horror
-• Foil: foil
-• Rarity: uncommon
-• Type Line: Instant
-• Color Identity: R
-• Colors: R
-• Mana Cost: {1}{R}
-• Oracle Text: Choose one — • Destroy target artifact. • Change the target of target spell or ability with a single target. • One or two target creatures can't block this turn.
-• Language: en"
-Windcrag Siege - Foil,"• Collector Number: 235
-• Set Code: TDM
-• Set Name: Tarkir: Dragonstorm
-• Foil: foil
-• Rarity: rare
-• Type Line: Enchantment
-• Color Identity: R, W
-• Colors: R, W
-• Mana Cost: {1}{R}{W}
-• Oracle Text: As this enchantment enters, choose Mardu or Jeskai. • Mardu — If a creature attacking causes a triggered ability of a permanent you control to trigger, that ability triggers an additional time. • Jeskai — At the beginning of your upkeep, create a 1/1 red Goblin creature token. It gains lifelink and haste until end of turn.
-• Language: en"
-Swiftfoot Boots - Normal,"• Collector Number: 339
-• Set Code: CLB
-• Set Name: Commander Legends: Battle for Baldur's Gate
-• Foil: normal
-• Rarity: uncommon
-• Type Line: Artifact — Equipment
-• Color Identity: (none)
-• Colors: (none)
-• Mana Cost: {2}
-• Oracle Text: Equipped creature has hexproof and haste. (It can't be the target of spells or abilities your opponents control. It can attack and {T} no matter when it came under your control.) Equip {1} ({1}: Attach to target creature you control. Equip only as a sorcery.)
-• Language: en"
-Liliana'S Caress - Normal,"• Collector Number: M11-103
-• Set Code: PLST
-• Set Name: The List
-• Foil: normal
-• Rarity: uncommon
-• Type Line: Enchantment
-• Color Identity: B
-• Colors: B
-• Mana Cost: {1}{B}
-• Oracle Text: Whenever an opponent discards a card, that player loses 2 life.
-• Language: en"
-Nanogene Conversion - Foil,"• Collector Number: 49
-• Set Code: WHO
-• Set Name: Doctor Who
-• Foil: foil
-• Rarity: rare
-• Type Line: Sorcery
-• Color Identity: U
-• Colors: U
-• Mana Cost: {3}{U}
-• Oracle Text: Choose target creature you control. Each other creature becomes a copy of that creature until end of turn, except it isn't legendary.
-• Language: en"
-Nanogene Conversion - Foil,"• Collector Number: 49
-• Set Code: WHO
-• Set Name: Doctor Who
-• Foil: foil
-• Rarity: rare
-• Type Line: Sorcery
-• Color Identity: U
-• Colors: U
-• Mana Cost: {3}{U}
-• Oracle Text: Choose target creature you control. Each other creature becomes a copy of that creature until end of turn, except it isn't legendary.
-• Language: en"
-Rolling Hamsphere - Normal,"• Collector Number: 71
-• Set Code: BLC
-• Set Name: Bloomburrow Commander
-• Foil: normal
-• Rarity: rare
-• Type Line: Artifact — Vehicle
-• Color Identity: (none)
-• Colors: (none)
-• Mana Cost: {7}
-• Oracle Text: This Vehicle gets +1/+1 for each Hamster you control. Whenever this Vehicle attacks, create three 1/1 red Hamster creature tokens, then it deals X damage to any target, where X is the number of Hamsters you control. Crew 3
-• Language: en"
-Corrupted Conviction - Foil,"• Collector Number: 98
-• Set Code: MOM
-• Set Name: March of the Machine
-• Foil: foil
-• Rarity: common
-• Type Line: Instant
-• Color Identity: B
-• Colors: B
-• Mana Cost: {B}
-• Oracle Text: As an additional cost to cast this spell, sacrifice a creature. Draw two cards.
-• Language: en"
-Jacked Rabbit - Normal,"• Collector Number: 45
-• Set Code: BLC
-• Set Name: Bloomburrow Commander
-• Foil: normal
-• Rarity: rare
-• Type Line: Creature — Rabbit Warrior
-• Color Identity: W
-• Colors: W
-• Mana Cost: {X}{1}{W}
-• Oracle Text: Ravenous (This creature enters with X +1/+1 counters on it. If X is 5 or more, draw a card when it enters.) Whenever this creature attacks, create a number of 1/1 white Rabbit creature tokens equal to this creature's power.
-• Language: en"
-Spelunking - Foil,"• Collector Number: 213
-• Set Code: LCI
-• Set Name: The Lost Caverns of Ixalan
-• Foil: foil
-• Rarity: uncommon
-• Type Line: Enchantment
-• Color Identity: G
-• Colors: G
-• Mana Cost: {2}{G}
-• Oracle Text: When this enchantment enters, draw a card, then you may put a land card from your hand onto the battlefield. If you put a Cave onto the battlefield this way, you gain 4 life. Lands you control enter untapped.
-• Language: en"
-Doorkeeper Thrull - Normal,"• Collector Number: 338
-• Set Code: MKM
-• Set Name: Murders at Karlov Manor
-• Foil: normal
-• Rarity: rare
-• Type Line: Creature — Thrull
-• Color Identity: W
-• Colors: W
-• Mana Cost: {1}{W}
-• Oracle Text: Flash Flying Artifacts and creatures entering don't cause abilities to trigger.
-• Language: en"
-Ghost Vacuum - Normal,"• Collector Number: 326
-• Set Code: DSK
-• Set Name: Duskmourn: House of Horror
-• Foil: normal
-• Rarity: rare
-• Type Line: Artifact
-• Color Identity: (none)
-• Colors: (none)
-• Mana Cost: {1}
-• Oracle Text: {T}: Exile target card from a graveyard. {6}, {T}, Sacrifice this artifact: Put each creature card exiled with this artifact onto the battlefield under your control with a flying counter on it. Each of them is a 1/1 Spirit in addition to its other types. Activate only as a sorcery.
-• Language: en"
-Vanquish The Horde - Normal,"• Collector Number: 302
-• Set Code: INR
-• Set Name: Innistrad Remastered
-• Foil: normal
-• Rarity: rare
-• Type Line: Sorcery
-• Color Identity: W
-• Colors: W
-• Mana Cost: {6}{W}{W}
-• Oracle Text: This spell costs {1} less to cast for each creature on the battlefield. Destroy all creatures.
-• Language: en"
-Sunfrill Imitator - Normal,"• Collector Number: 62
-• Set Code: LCC
-• Set Name: The Lost Caverns of Ixalan Commander
-• Foil: normal
-• Rarity: rare
-• Type Line: Creature — Dinosaur
-• Color Identity: G
-• Colors: G
-• Mana Cost: {2}{G}
-• Oracle Text: Whenever this creature attacks, you may have it become a copy of another target Dinosaur you control, except its name is Sunfrill Imitator and it has this ability.
-• Language: en"
-Teval'S Judgment - Normal,"• Collector Number: 68
-• Set Code: TDC
-• Set Name: Tarkir: Dragonstorm Commander
-• Foil: normal
-• Rarity: rare
-• Type Line: Enchantment
-• Color Identity: B
-• Colors: B
-• Mana Cost: {2}{B}
-• Oracle Text: Whenever one or more cards leave your graveyard, choose one that hasn't been chosen this turn — • Draw a card. • Create a Treasure token. • Create a 2/2 black Zombie Druid creature token.
-• Language: en"
-Triskelion - Normal,"• Collector Number: 354
-• Set Code: 4ED
-• Set Name: Fourth Edition
-• Foil: normal
-• Rarity: rare
-• Type Line: Artifact Creature — Construct
-• Color Identity: (none)
-• Colors: (none)
-• Mana Cost: {6}
-• Oracle Text: This creature enters with three +1/+1 counters on it. Remove a +1/+1 counter from this creature: It deals 1 damage to any target.
-• Language: en"
-"Gilraen, Dúnedain Protector - Foil","• Collector Number: 415
-• Set Code: LTC
-• Set Name: Tales of Middle-earth Commander
-• Foil: foil
-• Rarity: rare
-• Type Line: Legendary Creature — Human Noble
-• Color Identity: W
-• Colors: W
-• Mana Cost: {2}{W}
-• Oracle Text: {2}, {T}: Exile another target creature you control. You may return that card to the battlefield under its owner's control. If you don't, at the beginning of the next end step, return that card to the battlefield under its owner's control with a vigilance counter and a lifelink counter on it.
-• Language: en"
-Prime Speaker Zegana - Foil,"• Collector Number: 439
-• Set Code: RVR
-• Set Name: Ravnica Remastered
-• Foil: foil
-• Rarity: rare
-• Type Line: Legendary Creature — Merfolk Wizard
-• Color Identity: G, U
-• Colors: G, U
-• Mana Cost: {2}{G}{G}{U}{U}
-• Oracle Text: Prime Speaker Zegana enters with X +1/+1 counters on it, where X is the greatest power among other creatures you control. When Prime Speaker Zegana enters, draw cards equal to its power.
-• Language: en"
-Branching Evolution - Normal,"• Collector Number: 285
-• Set Code: MH3
-• Set Name: Modern Horizons 3
-• Foil: normal
-• Rarity: rare
-• Type Line: Enchantment
-• Color Identity: G
-• Colors: G
-• Mana Cost: {2}{G}
-• Oracle Text: If one or more +1/+1 counters would be put on a creature you control, twice that many +1/+1 counters are put on that creature instead.
-• Language: en"
-Reprieve - Foil,"• Collector Number: 477
-• Set Code: LTR
-• Set Name: The Lord of the Rings: Tales of Middle-earth
-• Foil: foil
-• Rarity: uncommon
-• Type Line: Instant
-• Color Identity: W
-• Colors: W
-• Mana Cost: {1}{W}
-• Oracle Text: Return target spell to its owner's hand. Draw a card.
-• Language: en"
-Wolfcaller'S Howl - Normal,"• Collector Number: C14-52
-• Set Code: PLST
-• Set Name: The List
-• Foil: normal
-• Rarity: rare
-• Type Line: Enchantment
-• Color Identity: G
-• Colors: G
-• Mana Cost: {3}{G}
-• Oracle Text: At the beginning of your upkeep, create X 2/2 green Wolf creature tokens, where X is the number of your opponents with four or more cards in hand.
-• Language: en"
-Giant Killer // Chop Down - Normal,"• Collector Number: ELD-14
-• Set Code: PLST
-• Set Name: The List
-• Foil: normal
-• Rarity: rare
-• Type Line: Creature — Human Peasant // Instant — Adventure
-• Color Identity: W
-• Colors: W
-• Mana Cost: {W} // {2}{W}
-• Oracle Text: (none)
-• Language: en"
-Infantry Shield - Normal,"• Collector Number: 75
-• Set Code: TDC
-• Set Name: Tarkir: Dragonstorm Commander
-• Foil: normal
-• Rarity: rare
-• Type Line: Artifact — Equipment
-• Color Identity: R
-• Colors: R
-• Mana Cost: {2}{R}
-• Oracle Text: Equipped creature has menace and mobilize X, where X is its power. (Whenever it attacks, create X tapped and attacking 1/1 red Warrior creature tokens. Sacrifice them at the beginning of the next end step.) Equip {2}
-• Language: en"
-Ghost Vacuum - Normal,"• Collector Number: 326
-• Set Code: DSK
-• Set Name: Duskmourn: House of Horror
-• Foil: normal
-• Rarity: rare
-• Type Line: Artifact
-• Color Identity: (none)
-• Colors: (none)
-• Mana Cost: {1}
-• Oracle Text: {T}: Exile target card from a graveyard. {6}, {T}, Sacrifice this artifact: Put each creature card exiled with this artifact onto the battlefield under your control with a flying counter on it. Each of them is a 1/1 Spirit in addition to its other types. Activate only as a sorcery.
-• Language: en"
-Everflowing Chalice - Normal,"• Collector Number: 394
-• Set Code: TSR
-• Set Name: Time Spiral Remastered
-• Foil: normal
-• Rarity: special
-• Type Line: Artifact
-• Color Identity: (none)
-• Colors: (none)
-• Mana Cost: {0}
-• Oracle Text: Multikicker {2} (You may pay an additional {2} any number of times as you cast this spell.) This artifact enters with a charge counter on it for each time it was kicked. {T}: Add {C} for each charge counter on this artifact.
-• Language: en"
-Marionette Apprentice - Normal,"• Collector Number: 410
-• Set Code: MH3
-• Set Name: Modern Horizons 3
-• Foil: normal
-• Rarity: uncommon
-• Type Line: Creature — Human Artificer
-• Color Identity: B
-• Colors: B
-• Mana Cost: {1}{B}
-• Oracle Text: Fabricate 1 (When this creature enters, put a +1/+1 counter on it or create a 1/1 colorless Servo artifact creature token.) Whenever another creature or artifact you control is put into a graveyard from the battlefield, each opponent loses 1 life.
-• Language: en"
-Temporal Manipulation - Normal,"• Collector Number: 174
-• Set Code: MB2
-• Set Name: Mystery Booster 2
-• Foil: normal
-• Rarity: mythic
-• Type Line: Sorcery
-• Color Identity: U
-• Colors: U
-• Mana Cost: {3}{U}{U}
-• Oracle Text: Take an extra turn after this one.
-• Language: en"
-Witch'S Oven - Foil,"• Collector Number: 1762
-• Set Code: SLD
-• Set Name: Secret Lair Drop
-• Foil: foil
-• Rarity: rare
-• Type Line: Artifact
-• Color Identity: (none)
-• Colors: (none)
-• Mana Cost: {1}
-• Oracle Text: {T}, Sacrifice a creature: Create a Food token. If the sacrificed creature's toughness was 4 or greater, create two Food tokens instead. (They're artifacts with ""{2}, {T}, Sacrifice this token: You gain 3 life."")
-• Language: en"
-Sapphire Medallion - Foil,"• Collector Number: 407
-• Set Code: CMM
-• Set Name: Commander Masters
-• Foil: foil
-• Rarity: rare
-• Type Line: Artifact
-• Color Identity: (none)
-• Colors: (none)
-• Mana Cost: {2}
-• Oracle Text: Blue spells you cast cost {1} less to cast.
-• Language: en"
-Enduring Innocence - Normal,"• Collector Number: 368
-• Set Code: DSK
-• Set Name: Duskmourn: House of Horror
-• Foil: normal
-• Rarity: rare
-• Type Line: Enchantment Creature — Sheep Glimmer
-• Color Identity: W
-• Colors: W
-• Mana Cost: {1}{W}{W}
-• Oracle Text: Lifelink Whenever one or more other creatures you control with power 2 or less enter, draw a card. This ability triggers only once each turn. When Enduring Innocence dies, if it was a creature, return it to the battlefield under its owner's control. It's an enchantment. (It's not a creature.)
-• Language: en"
-Celebr-8000 - Foil,"• Collector Number: 185
-• Set Code: UNF
-• Set Name: Unfinity
-• Foil: foil
-• Rarity: rare
-• Type Line: Artifact Creature — Clown Robot
-• Color Identity: (none)
-• Colors: (none)
-• Mana Cost: {5}
-• Oracle Text: At the beginning of combat on your turn, roll two six-sided dice. For each result of 1, this creature gets +1/+1 until end of turn. For each other result, it gains the indicated ability until end of turn. If you rolled doubles, it also gains double strike until end of turn. • 2 — menace • 3 — vigilance • 4 — lifelink • 5 — flying • 6 — indestructible
-• Language: en"
-Village Rites - Foil,"• Collector Number: 392
-• Set Code: INR
-• Set Name: Innistrad Remastered
-• Foil: foil
-• Rarity: common
-• Type Line: Instant
-• Color Identity: B
-• Colors: B
-• Mana Cost: {B}
-• Oracle Text: As an additional cost to cast this spell, sacrifice a creature. Draw two cards.
+• Color Identity: R, U
+• Colors: R, U
+• Mana Cost: {U}{U}{R}
+• Oracle Text: Choose target spell, then flip a coin. If you win the flip, gain control of that spell and you may choose new targets for it. If you lose the flip, counter that spell.
 • Language: en"
 Rain Of Filth - Normal,"• Collector Number: USG-151
 • Set Code: PLST
@@ -571,456 +32,16 @@ Rain Of Filth - Normal,"• Collector Number: USG-151
 • Mana Cost: {B}
 • Oracle Text: Until end of turn, lands you control gain ""Sacrifice this land: Add {B}.""
 • Language: en"
-"Aragorn, Company Leader - Foil","• Collector Number: 808
-• Set Code: LTR
-• Set Name: The Lord of the Rings: Tales of Middle-earth
-• Foil: foil
-• Rarity: rare
-• Type Line: Legendary Creature — Human Ranger
-• Color Identity: G, W
-• Colors: G, W
-• Mana Cost: {1}{G}{W}
-• Oracle Text: Whenever the Ring tempts you, if you chose a creature other than Aragorn as your Ring-bearer, put your choice of a counter from among first strike, vigilance, deathtouch, and lifelink on Aragorn. Whenever you put one or more counters on Aragorn, put one of each of those kinds of counters on up to one other target creature.
-• Language: en"
-Counterspell - Normal,"• Collector Number: 630
-• Set Code: CMM
-• Set Name: Commander Masters
-• Foil: normal
-• Rarity: common
-• Type Line: Instant
-• Color Identity: U
-• Colors: U
-• Mana Cost: {U}{U}
-• Oracle Text: Counter target spell.
-• Language: en"
-Persistent Petitioners - Foil,"• Collector Number: 53
-• Set Code: RVR
-• Set Name: Ravnica Remastered
-• Foil: foil
-• Rarity: common
-• Type Line: Creature — Human Advisor
-• Color Identity: U
-• Colors: U
-• Mana Cost: {1}{U}
-• Oracle Text: {1}, {T}: Target player mills a card. (They put the top card of their library into their graveyard.) Tap four untapped Advisors you control: Target player mills twelve cards. A deck can have any number of cards named Persistent Petitioners.
-• Language: en"
-Relic Of Legends - Normal,"• Collector Number: 236
-• Set Code: DMU
-• Set Name: Dominaria United
-• Foil: normal
-• Rarity: uncommon
-• Type Line: Artifact
-• Color Identity: (none)
-• Colors: (none)
-• Mana Cost: {3}
-• Oracle Text: {T}: Add one mana of any color. Tap an untapped legendary creature you control: Add one mana of any color.
-• Language: en"
-Enduring Innocence - Normal,"• Collector Number: 368
-• Set Code: DSK
-• Set Name: Duskmourn: House of Horror
+Don'T Move - Normal,"• Collector Number: 1
+• Set Code: REX
+• Set Name: Jurassic World Collection
 • Foil: normal
 • Rarity: rare
-• Type Line: Enchantment Creature — Sheep Glimmer
+• Type Line: Sorcery
 • Color Identity: W
 • Colors: W
-• Mana Cost: {1}{W}{W}
-• Oracle Text: Lifelink Whenever one or more other creatures you control with power 2 or less enter, draw a card. This ability triggers only once each turn. When Enduring Innocence dies, if it was a creature, return it to the battlefield under its owner's control. It's an enchantment. (It's not a creature.)
-• Language: en"
-Illusionist'S Bracers - Foil,"• Collector Number: 260
-• Set Code: RVR
-• Set Name: Ravnica Remastered
-• Foil: foil
-• Rarity: rare
-• Type Line: Artifact — Equipment
-• Color Identity: (none)
-• Colors: (none)
-• Mana Cost: {2}
-• Oracle Text: Whenever an ability of equipped creature is activated, if it isn't a mana ability, copy that ability. You may choose new targets for the copy. Equip {3}
-• Language: en"
-Bloated Contaminator - Foil,"• Collector Number: 159
-• Set Code: ONE
-• Set Name: Phyrexia: All Will Be One
-• Foil: foil
-• Rarity: rare
-• Type Line: Creature — Phyrexian Beast
-• Color Identity: G
-• Colors: G
-• Mana Cost: {2}{G}
-• Oracle Text: Trample Toxic 1 (Players dealt combat damage by this creature also get a poison counter.) Whenever this creature deals combat damage to a player, proliferate. (Choose any number of permanents and/or players, then give each another counter of each kind already there.)
-• Language: en"
-Lost Jitte - Foil,"• Collector Number: 88
-• Set Code: BIG
-• Set Name: The Big Score
-• Foil: foil
-• Rarity: mythic
-• Type Line: Legendary Artifact — Equipment
-• Color Identity: (none)
-• Colors: (none)
-• Mana Cost: {1}
-• Oracle Text: Whenever equipped creature deals combat damage, put a charge counter on Lost Jitte. Remove a charge counter from Lost Jitte: Choose one — • Untap target land. • Target creature can't block this turn. • Put a +1/+1 counter on equipped creature. Equip {1}
-• Language: en"
-Griselbrand - Normal,"• Collector Number: 381
-• Set Code: INR
-• Set Name: Innistrad Remastered
-• Foil: normal
-• Rarity: mythic
-• Type Line: Legendary Creature — Demon
-• Color Identity: B
-• Colors: B
-• Mana Cost: {4}{B}{B}{B}{B}
-• Oracle Text: Flying, lifelink Pay 7 life: Draw seven cards.
-• Language: en"
-Counterbalance - Normal,"• Collector Number: 157
-• Set Code: MB2
-• Set Name: Mystery Booster 2
-• Foil: normal
-• Rarity: uncommon
-• Type Line: Enchantment
-• Color Identity: U
-• Colors: U
-• Mana Cost: {U}{U}
-• Oracle Text: Whenever an opponent casts a spell, you may reveal the top card of your library. If you do, counter that spell if it has the same mana value as the revealed card.
-• Language: en"
-Unstoppable Slasher - Foil,"• Collector Number: 119
-• Set Code: DSK
-• Set Name: Duskmourn: House of Horror
-• Foil: foil
-• Rarity: rare
-• Type Line: Creature — Zombie Assassin
-• Color Identity: B
-• Colors: B
-• Mana Cost: {2}{B}
-• Oracle Text: Deathtouch Whenever this creature deals combat damage to a player, they lose half their life, rounded up. When this creature dies, if it had no counters on it, return it to the battlefield tapped under its owner's control with two stun counters on it.
-• Language: en"
-Emergent Ultimatum - Normal,"• Collector Number: 333
-• Set Code: IKO
-• Set Name: Ikoria: Lair of Behemoths
-• Foil: normal
-• Rarity: rare
-• Type Line: Sorcery
-• Color Identity: B, G, U
-• Colors: B, G, U
-• Mana Cost: {B}{B}{G}{G}{G}{U}{U}
-• Oracle Text: Search your library for up to three monocolored cards with different names and exile them. An opponent chooses one of those cards. Shuffle that card into your library. You may cast the other cards without paying their mana costs. Exile Emergent Ultimatum.
-• Language: ja"
-Grab The Prize - Foil,"• Collector Number: 138
-• Set Code: DSK
-• Set Name: Duskmourn: House of Horror
-• Foil: foil
-• Rarity: common
-• Type Line: Sorcery
-• Color Identity: R
-• Colors: R
-• Mana Cost: {1}{R}
-• Oracle Text: As an additional cost to cast this spell, discard a card. Draw two cards. If the discarded card wasn't a land card, Grab the Prize deals 2 damage to each opponent.
-• Language: en"
-Final Fortune - Normal,"• Collector Number: 190
-• Set Code: MB2
-• Set Name: Mystery Booster 2
-• Foil: normal
-• Rarity: rare
-• Type Line: Instant
-• Color Identity: R
-• Colors: R
-• Mana Cost: {R}{R}
-• Oracle Text: Take an extra turn after this one. At the beginning of that turn's end step, you lose the game.
-• Language: en"
-Consign To Memory - Foil,"• Collector Number: 54
-• Set Code: MH3
-• Set Name: Modern Horizons 3
-• Foil: foil
-• Rarity: uncommon
-• Type Line: Instant
-• Color Identity: U
-• Colors: U
-• Mana Cost: {U}
-• Oracle Text: Replicate {1} (When you cast this spell, copy it for each time you paid its replicate cost. You may choose new targets for the copies.) Counter target triggered ability or colorless spell.
-• Language: en"
-Witch Enchanter // Witch-Blessed Meadow - Normal,"• Collector Number: 239
-• Set Code: MH3
-• Set Name: Modern Horizons 3
-• Foil: normal
-• Rarity: uncommon
-• Type Line: Creature — Human Warlock // Land
-• Color Identity: W
-• Colors: (none)
-• Mana Cost: (none)
-• Oracle Text: (none)
-• Language: en"
-"Sarkhan, Fireblood - Normal","• Collector Number: 60
-• Set Code: MB2
-• Set Name: Mystery Booster 2
-• Foil: normal
-• Rarity: mythic
-• Type Line: Legendary Planeswalker — Sarkhan
-• Color Identity: R
-• Colors: R
-• Mana Cost: {1}{R}{R}
-• Oracle Text: +1: You may discard a card. If you do, draw a card. +1: Add two mana in any combination of colors. Spend this mana only to cast Dragon spells. −7: Create four 5/5 red Dragon creature tokens with flying.
-• Language: en"
-Homunculus Horde - Normal,"• Collector Number: 454
-• Set Code: FDN
-• Set Name: Foundations
-• Foil: normal
-• Rarity: rare
-• Type Line: Creature — Homunculus
-• Color Identity: U
-• Colors: U
-• Mana Cost: {3}{U}
-• Oracle Text: Whenever you draw your second card each turn, create a token that's a copy of this creature.
-• Language: en"
-"Clavileño, First Of The Blessed - Normal","• Collector Number: 18
-• Set Code: LCC
-• Set Name: The Lost Caverns of Ixalan Commander
-• Foil: normal
-• Rarity: mythic
-• Type Line: Legendary Creature — Vampire Cleric
-• Color Identity: B, W
-• Colors: B, W
-• Mana Cost: {1}{W}{B}
-• Oracle Text: Whenever you attack, target attacking Vampire that isn't a Demon becomes a Demon in addition to its other types. It gains ""When this creature dies, draw a card and create a tapped 4/3 white and black Vampire Demon creature token with flying.""
-• Language: en"
-Velukan Dragon - Normal,"• Collector Number: 145
-• Set Code: MB2
-• Set Name: Mystery Booster 2
-• Foil: normal
-• Rarity: rare
-• Type Line: Creature — Dragon
-• Color Identity: R
-• Colors: R
-• Mana Cost: {5}{R}{R}
-• Oracle Text: Flying Whenever this creature attacks or blocks, roll a six-sided die. This creature gets +X/+0 until end of turn, where X is the result minus 1.
-• Language: en"
-Leveler - Normal,"• Collector Number: 397
-• Set Code: TSR
-• Set Name: Time Spiral Remastered
-• Foil: normal
-• Rarity: special
-• Type Line: Artifact Creature — Juggernaut
-• Color Identity: (none)
-• Colors: (none)
-• Mana Cost: {5}
-• Oracle Text: When this creature enters, exile all cards from your library.
-• Language: en"
-Phyrexian Dragon Engine - Normal,"• Collector Number: 163a
-• Set Code: BRO
-• Set Name: The Brothers' War
-• Foil: normal
-• Rarity: rare
-• Type Line: Artifact Creature — Phyrexian Dragon
-• Color Identity: R
-• Colors: (none)
-• Mana Cost: {3}
-• Oracle Text: Double strike When this creature enters from your graveyard, you may discard your hand. If you do, draw three cards. Unearth {3}{R}{R} (Melds with Mishra, Claimed by Gix.)
-• Language: en"
-Mirror Room // Fractured Realm - Foil,"• Collector Number: 67
-• Set Code: DSK
-• Set Name: Duskmourn: House of Horror
-• Foil: foil
-• Rarity: mythic
-• Type Line: Enchantment — Room // Enchantment — Room
-• Color Identity: U
-• Colors: U
-• Mana Cost: {2}{U} // {5}{U}{U}
-• Oracle Text: (none)
-• Language: en"
-Perennation - Normal,"• Collector Number: 368
-• Set Code: TDM
-• Set Name: Tarkir: Dragonstorm
-• Foil: normal
-• Rarity: mythic
-• Type Line: Sorcery
-• Color Identity: B, G, W
-• Colors: B, G, W
-• Mana Cost: {3}{W}{B}{G}
-• Oracle Text: Return target permanent card from your graveyard to the battlefield with a hexproof counter and an indestructible counter on it.
-• Language: en"
-Decimate - Foil,"• Collector Number: 444
-• Set Code: DMR
-• Set Name: Dominaria Remastered
-• Foil: foil
-• Rarity: rare
-• Type Line: Sorcery
-• Color Identity: G, R
-• Colors: G, R
-• Mana Cost: {2}{R}{G}
-• Oracle Text: Destroy target artifact, target creature, target enchantment, and target land. (You can't cast this spell unless you have legal choices for all its targets.)
-• Language: en"
-Forensic Gadgeteer - Normal,"• Collector Number: 342
-• Set Code: MKM
-• Set Name: Murders at Karlov Manor
-• Foil: normal
-• Rarity: rare
-• Type Line: Creature — Vedalken Artificer Detective
-• Color Identity: U
-• Colors: U
-• Mana Cost: {2}{U}
-• Oracle Text: Whenever you cast an artifact spell, investigate. (Create a Clue token. It's an artifact with ""{2}, Sacrifice this token: Draw a card."") Activated abilities of artifacts you control cost {1} less to activate. This effect can't reduce the mana in that cost to less than one mana.
-• Language: en"
-Elvish Harbinger - Normal,"• Collector Number: 527
-• Set Code: LTC
-• Set Name: Tales of Middle-earth Commander
-• Foil: normal
-• Rarity: uncommon
-• Type Line: Creature — Elf Druid
-• Color Identity: G
-• Colors: G
-• Mana Cost: {2}{G}
-• Oracle Text: When this creature enters, you may search your library for an Elf card, reveal it, then shuffle and put that card on top. {T}: Add one mana of any color.
-• Language: en"
-Frostcliff Siege - Normal,"• Collector Number: 385
-• Set Code: TDM
-• Set Name: Tarkir: Dragonstorm
-• Foil: normal
-• Rarity: rare
-• Type Line: Enchantment
-• Color Identity: R, U
-• Colors: R, U
-• Mana Cost: {1}{U}{R}
-• Oracle Text: As this enchantment enters, choose Jeskai or Temur. • Jeskai — Whenever one or more creatures you control deal combat damage to a player, draw a card. • Temur — Creatures you control get +1/+0 and have trample and haste.
-• Language: en"
-Past In Flames - Normal,"• Collector Number: 350
-• Set Code: TSR
-• Set Name: Time Spiral Remastered
-• Foil: normal
-• Rarity: special
-• Type Line: Sorcery
-• Color Identity: R
-• Colors: R
-• Mana Cost: {3}{R}
-• Oracle Text: Each instant and sorcery card in your graveyard gains flashback until end of turn. The flashback cost is equal to its mana cost. Flashback {4}{R} (You may cast this card from your graveyard for its flashback cost. Then exile it.)
-• Language: en"
-Enduring Curiosity - Normal,"• Collector Number: 371
-• Set Code: DSK
-• Set Name: Duskmourn: House of Horror
-• Foil: normal
-• Rarity: rare
-• Type Line: Enchantment Creature — Cat Glimmer
-• Color Identity: U
-• Colors: U
-• Mana Cost: {2}{U}{U}
-• Oracle Text: Flash Whenever a creature you control deals combat damage to a player, draw a card. When Enduring Curiosity dies, if it was a creature, return it to the battlefield under its owner's control. It's an enchantment. (It's not a creature.)
-• Language: en"
-Basalt Monolith - Normal,"• Collector Number: 217
-• Set Code: MB2
-• Set Name: Mystery Booster 2
-• Foil: normal
-• Rarity: uncommon
-• Type Line: Artifact
-• Color Identity: (none)
-• Colors: (none)
-• Mana Cost: {3}
-• Oracle Text: This artifact doesn't untap during your untap step. {T}: Add {C}{C}{C}. {3}: Untap this artifact.
-• Language: en"
-Indicate - Normal,"• Collector Number: 501
-• Set Code: MB2
-• Set Name: Mystery Booster 2
-• Foil: normal
-• Rarity: rare
-• Type Line: Sorcery
-• Color Identity: (none)
-• Colors: (none)
-• Mana Cost: {0}
-• Oracle Text: Target permanent.
-• Language: en"
-Containment Priest - Normal,"• Collector Number: 292
-• Set Code: TSR
-• Set Name: Time Spiral Remastered
-• Foil: normal
-• Rarity: special
-• Type Line: Creature — Human Cleric
-• Color Identity: W
-• Colors: W
-• Mana Cost: {1}{W}
-• Oracle Text: Flash If a nontoken creature would enter and it wasn't cast, exile it instead.
-• Language: en"
-Vorpal Sword - Normal,"• Collector Number: 124
-• Set Code: AFR
-• Set Name: Adventures in the Forgotten Realms
-• Foil: normal
-• Rarity: rare
-• Type Line: Artifact — Equipment
-• Color Identity: B
-• Colors: B
-• Mana Cost: {B}
-• Oracle Text: Equipped creature gets +2/+0 and has deathtouch. {5}{B}{B}{B}: Until end of turn, this Equipment gains ""Whenever equipped creature deals combat damage to a player, that player loses the game."" Equip {B}{B}
-• Language: en"
-Hatchery Sliver - Normal,"• Collector Number: 771
-• Set Code: CMM
-• Set Name: Commander Masters
-• Foil: normal
-• Rarity: rare
-• Type Line: Creature — Sliver
-• Color Identity: G
-• Colors: G
-• Mana Cost: {1}{G}
-• Oracle Text: Replicate {1}{G} (When you cast this spell, copy it for each time you paid its replicate cost.) Each Sliver spell you cast has replicate. The replicate cost is equal to its mana cost. (A copy of a permanent spell becomes a token.)
-• Language: en"
-Sundering Eruption // Volcanic Fissure - Normal,"• Collector Number: 248
-• Set Code: MH3
-• Set Name: Modern Horizons 3
-• Foil: normal
-• Rarity: uncommon
-• Type Line: Sorcery // Land
-• Color Identity: R
-• Colors: (none)
-• Mana Cost: (none)
-• Oracle Text: (none)
-• Language: en"
-Ninja Of The Deep Hours - Normal,"• Collector Number: 313
-• Set Code: TSR
-• Set Name: Time Spiral Remastered
-• Foil: normal
-• Rarity: special
-• Type Line: Creature — Human Ninja
-• Color Identity: U
-• Colors: U
-• Mana Cost: {3}{U}
-• Oracle Text: Ninjutsu {1}{U} ({1}{U}, Return an unblocked attacker you control to hand: Put this card onto the battlefield from your hand tapped and attacking.) Whenever this creature deals combat damage to a player, you may draw a card.
-• Language: en"
-Voldaren Epicure - Foil,"• Collector Number: 405
-• Set Code: INR
-• Set Name: Innistrad Remastered
-• Foil: foil
-• Rarity: common
-• Type Line: Creature — Vampire
-• Color Identity: R
-• Colors: R
-• Mana Cost: {R}
-• Oracle Text: When this creature enters, it deals 1 damage to each opponent. Create a Blood token. (It's an artifact with ""{1}, {T}, Discard a card, Sacrifice this token: Draw a card."")
-• Language: en"
-Enduring Innocence - Normal,"• Collector Number: 368
-• Set Code: DSK
-• Set Name: Duskmourn: House of Horror
-• Foil: normal
-• Rarity: rare
-• Type Line: Enchantment Creature — Sheep Glimmer
-• Color Identity: W
-• Colors: W
-• Mana Cost: {1}{W}{W}
-• Oracle Text: Lifelink Whenever one or more other creatures you control with power 2 or less enter, draw a card. This ability triggers only once each turn. When Enduring Innocence dies, if it was a creature, return it to the battlefield under its owner's control. It's an enchantment. (It's not a creature.)
-• Language: en"
-Reaper From The Abyss - Normal,"• Collector Number: 458
-• Set Code: J22
-• Set Name: Jumpstart 2022
-• Foil: normal
-• Rarity: mythic
-• Type Line: Creature — Demon
-• Color Identity: B
-• Colors: B
-• Mana Cost: {3}{B}{B}{B}
-• Oracle Text: Flying Morbid — At the beginning of each end step, if a creature died this turn, destroy target non-Demon creature.
-• Language: en"
-"Jeska, Thrice Reborn - Normal","• Collector Number: 186
-• Set Code: CMR
-• Set Name: Commander Legends
-• Foil: normal
-• Rarity: mythic
-• Type Line: Legendary Planeswalker — Jeska
-• Color Identity: R
-• Colors: R
-• Mana Cost: {2}{R}
-• Oracle Text: Jeska enters with a loyalty counter on her for each time you've cast a commander from the command zone this game. 0: Choose target creature. Until your next turn, if that creature would deal combat damage to one of your opponents, it deals triple that damage to that player instead. −X: Jeska deals X damage to each of up to three targets. Jeska, Thrice Reborn can be your commander. Partner
+• Mana Cost: {3}{W}{W}
+• Oracle Text: Destroy all tapped creatures. Until your next turn, whenever a creature becomes tapped, destroy it.
 • Language: en"
 Pawpatch Recruit - Foil,"• Collector Number: 363
 • Set Code: BLB
@@ -1033,38 +54,610 @@ Pawpatch Recruit - Foil,"• Collector Number: 363
 • Mana Cost: {G}
 • Oracle Text: Offspring {2} (You may pay an additional {2} as you cast this spell. If you do, when this creature enters, create a 1/1 token copy of it.) Trample Whenever a creature you control becomes the target of a spell or ability an opponent controls, put a +1/+1 counter on target creature you control other than that creature.
 • Language: en"
-Inspiring Vantage - Normal,"• Collector Number: 269
-• Set Code: OTJ
-• Set Name: Outlaws of Thunder Junction
+Angel'S Grace - Normal,"• Collector Number: 4
+• Set Code: TSR
+• Set Name: Time Spiral Remastered
+• Foil: normal
+• Rarity: rare
+• Type Line: Instant
+• Color Identity: W
+• Colors: W
+• Mana Cost: {W}
+• Oracle Text: Split second (As long as this spell is on the stack, players can't cast spells or activate abilities that aren't mana abilities.) You can't lose the game this turn and your opponents can't win the game this turn. Until end of turn, damage that would reduce your life total to less than 1 reduces it to 1 instead.
+• Language: en"
+Containment Priest - Normal,"• Collector Number: 292
+• Set Code: TSR
+• Set Name: Time Spiral Remastered
+• Foil: normal
+• Rarity: special
+• Type Line: Creature — Human Cleric
+• Color Identity: W
+• Colors: W
+• Mana Cost: {1}{W}
+• Oracle Text: Flash If a nontoken creature would enter and it wasn't cast, exile it instead.
+• Language: en"
+Archmage Of Runes - Normal,"• Collector Number: 30
+• Set Code: FDN
+• Set Name: Foundations
+• Foil: normal
+• Rarity: rare
+• Type Line: Creature — Giant Wizard
+• Color Identity: U
+• Colors: U
+• Mana Cost: {3}{U}{U}
+• Oracle Text: Instant and sorcery spells you cast cost {1} less to cast. Whenever you cast an instant or sorcery spell, draw a card.
+• Language: en"
+Masterwork Of Ingenuity - Foil,"• Collector Number: 863
+• Set Code: SLD
+• Set Name: Secret Lair Drop
+• Foil: foil
+• Rarity: rare
+• Type Line: Artifact — Equipment
+• Color Identity: (none)
+• Colors: (none)
+• Mana Cost: {1}
+• Oracle Text: You may have this Equipment enter as a copy of any Equipment on the battlefield.
+• Language: en"
+Rolling Hamsphere - Normal,"• Collector Number: 71
+• Set Code: BLC
+• Set Name: Bloomburrow Commander
+• Foil: normal
+• Rarity: rare
+• Type Line: Artifact — Vehicle
+• Color Identity: (none)
+• Colors: (none)
+• Mana Cost: {7}
+• Oracle Text: This Vehicle gets +1/+1 for each Hamster you control. Whenever this Vehicle attacks, create three 1/1 red Hamster creature tokens, then it deals X damage to any target, where X is the number of Hamsters you control. Crew 3
+• Language: en"
+Floodfarm Verge - Normal,"• Collector Number: 259
+• Set Code: DSK
+• Set Name: Duskmourn: House of Horror
 • Foil: normal
 • Rarity: rare
 • Type Line: Land
-• Color Identity: R, W
+• Color Identity: U, W
 • Colors: (none)
 • Mana Cost: (none)
-• Oracle Text: This land enters tapped unless you control two or fewer other lands. {T}: Add {R} or {W}.
+• Oracle Text: {T}: Add {W}. {T}: Add {U}. Activate only if you control a Plains or an Island.
 • Language: en"
-Untimely Malfunction - Foil,"• Collector Number: 161
-• Set Code: DSK
-• Set Name: Duskmourn: House of Horror
+Consign To Memory - Foil,"• Collector Number: 54
+• Set Code: MH3
+• Set Name: Modern Horizons 3
 • Foil: foil
 • Rarity: uncommon
 • Type Line: Instant
-• Color Identity: R
-• Colors: R
-• Mana Cost: {1}{R}
-• Oracle Text: Choose one — • Destroy target artifact. • Change the target of target spell or ability with a single target. • One or two target creatures can't block this turn.
+• Color Identity: U
+• Colors: U
+• Mana Cost: {U}
+• Oracle Text: Replicate {1} (When you cast this spell, copy it for each time you paid its replicate cost. You may choose new targets for the copies.) Counter target triggered ability or colorless spell.
 • Language: en"
-Sentinel Of The Nameless City - Normal,"• Collector Number: 383
-• Set Code: LCI
-• Set Name: The Lost Caverns of Ixalan
+Inspiring Refrain - Normal,"• Collector Number: 354
+• Set Code: C21
+• Set Name: Commander 2021
 • Foil: normal
 • Rarity: rare
-• Type Line: Creature — Merfolk Warrior Scout
+• Type Line: Sorcery
+• Color Identity: U
+• Colors: U
+• Mana Cost: {4}{U}{U}
+• Oracle Text: Draw two cards. Exile Inspiring Refrain with three time counters on it. Suspend 3—{2}{U} (Rather than cast this card from your hand, you may pay {2}{U} and exile it with three time counters on it. At the beginning of your upkeep, remove a time counter. When the last is removed, you may cast it without paying its mana cost.)
+• Language: en"
+Branching Evolution - Normal,"• Collector Number: 285
+• Set Code: MH3
+• Set Name: Modern Horizons 3
+• Foil: normal
+• Rarity: rare
+• Type Line: Enchantment
 • Color Identity: G
 • Colors: G
 • Mana Cost: {2}{G}
-• Oracle Text: Vigilance Whenever this creature enters or attacks, create a Map token. (It's an artifact with ""{1}, {T}, Sacrifice this token: Target creature you control explores. Activate only as a sorcery."")
+• Oracle Text: If one or more +1/+1 counters would be put on a creature you control, twice that many +1/+1 counters are put on that creature instead.
+• Language: en"
+Witch Enchanter // Witch-Blessed Meadow - Normal,"• Collector Number: 239
+• Set Code: MH3
+• Set Name: Modern Horizons 3
+• Foil: normal
+• Rarity: uncommon
+• Type Line: Creature — Human Warlock // Land
+• Color Identity: W
+• Colors: (none)
+• Mana Cost: (none)
+• Oracle Text: (none)
+• Language: en"
+White Sun'S Twilight - Normal,"• Collector Number: 38
+• Set Code: ONE
+• Set Name: Phyrexia: All Will Be One
+• Foil: normal
+• Rarity: rare
+• Type Line: Sorcery
+• Color Identity: W
+• Colors: W
+• Mana Cost: {X}{W}{W}
+• Oracle Text: You gain X life. Create X 1/1 colorless Phyrexian Mite artifact creature tokens with toxic 1 and ""This token can't block."" If X is 5 or more, destroy all other creatures. (Players dealt combat damage by a creature with toxic 1 also get a poison counter.)
+• Language: en"
+Triskelion - Normal,"• Collector Number: 354
+• Set Code: 4ED
+• Set Name: Fourth Edition
+• Foil: normal
+• Rarity: rare
+• Type Line: Artifact Creature — Construct
+• Color Identity: (none)
+• Colors: (none)
+• Mana Cost: {6}
+• Oracle Text: This creature enters with three +1/+1 counters on it. Remove a +1/+1 counter from this creature: It deals 1 damage to any target.
+• Language: en"
+"Clavileño, First Of The Blessed - Normal","• Collector Number: 18
+• Set Code: LCC
+• Set Name: The Lost Caverns of Ixalan Commander
+• Foil: normal
+• Rarity: mythic
+• Type Line: Legendary Creature — Vampire Cleric
+• Color Identity: B, W
+• Colors: B, W
+• Mana Cost: {1}{W}{B}
+• Oracle Text: Whenever you attack, target attacking Vampire that isn't a Demon becomes a Demon in addition to its other types. It gains ""When this creature dies, draw a card and create a tapped 4/3 white and black Vampire Demon creature token with flying.""
+• Language: en"
+Raise The Past - Foil,"• Collector Number: 447
+• Set Code: FDN
+• Set Name: Foundations
+• Foil: foil
+• Rarity: rare
+• Type Line: Sorcery
+• Color Identity: W
+• Colors: W
+• Mana Cost: {2}{W}{W}
+• Oracle Text: Return all creature cards with mana value 2 or less from your graveyard to the battlefield.
+• Language: en"
+Sapphire Medallion - Foil,"• Collector Number: 407
+• Set Code: CMM
+• Set Name: Commander Masters
+• Foil: foil
+• Rarity: rare
+• Type Line: Artifact
+• Color Identity: (none)
+• Colors: (none)
+• Mana Cost: {2}
+• Oracle Text: Blue spells you cast cost {1} less to cast.
+• Language: en"
+Overprotect - Normal,"• Collector Number: 185
+• Set Code: BLB
+• Set Name: Bloomburrow
+• Foil: normal
+• Rarity: uncommon
+• Type Line: Instant
+• Color Identity: G
+• Colors: G
+• Mana Cost: {1}{G}
+• Oracle Text: Target creature you control gets +3/+3 and gains trample, hexproof, and indestructible until end of turn.
+• Language: en"
+Witch Enchanter // Witch-Blessed Meadow - Normal,"• Collector Number: 239
+• Set Code: MH3
+• Set Name: Modern Horizons 3
+• Foil: normal
+• Rarity: uncommon
+• Type Line: Creature — Human Warlock // Land
+• Color Identity: W
+• Colors: (none)
+• Mana Cost: (none)
+• Oracle Text: (none)
+• Language: en"
+Kodama'S Reach - Normal,"• Collector Number: 300
+• Set Code: CMM
+• Set Name: Commander Masters
+• Foil: normal
+• Rarity: common
+• Type Line: Sorcery — Arcane
+• Color Identity: G
+• Colors: G
+• Mana Cost: {2}{G}
+• Oracle Text: Search your library for up to two basic land cards, reveal those cards, put one onto the battlefield tapped and the other into your hand, then shuffle.
+• Language: en"
+Fear Of Missing Out - Normal,"• Collector Number: 316
+• Set Code: DSK
+• Set Name: Duskmourn: House of Horror
+• Foil: normal
+• Rarity: rare
+• Type Line: Enchantment Creature — Nightmare
+• Color Identity: R
+• Colors: R
+• Mana Cost: {1}{R}
+• Oracle Text: When this creature enters, discard a card, then draw a card. Delirium — Whenever this creature attacks for the first time each turn, if there are four or more card types among cards in your graveyard, untap target creature. After this phase, there is an additional combat phase.
+• Language: en"
+Call Of The Ring - Normal,"• Collector Number: 79
+• Set Code: LTR
+• Set Name: The Lord of the Rings: Tales of Middle-earth
+• Foil: normal
+• Rarity: rare
+• Type Line: Enchantment
+• Color Identity: B
+• Colors: B
+• Mana Cost: {1}{B}
+• Oracle Text: At the beginning of your upkeep, the Ring tempts you. Whenever you choose a creature as your Ring-bearer, you may pay 2 life. If you do, draw a card.
+• Language: en"
+Marionette Apprentice - Normal,"• Collector Number: 410
+• Set Code: MH3
+• Set Name: Modern Horizons 3
+• Foil: normal
+• Rarity: uncommon
+• Type Line: Creature — Human Artificer
+• Color Identity: B
+• Colors: B
+• Mana Cost: {1}{B}
+• Oracle Text: Fabricate 1 (When this creature enters, put a +1/+1 counter on it or create a 1/1 colorless Servo artifact creature token.) Whenever another creature or artifact you control is put into a graveyard from the battlefield, each opponent loses 1 life.
+• Language: en"
+Metamorphosis Fanatic - Normal,"• Collector Number: 51
+• Set Code: DSC
+• Set Name: Duskmourn: House of Horror Commander
+• Foil: normal
+• Rarity: rare
+• Type Line: Creature — Human Cleric
+• Color Identity: B
+• Colors: B
+• Mana Cost: {4}{B}{B}
+• Oracle Text: Lifelink When this creature enters, return up to one target creature card from your graveyard to the battlefield with a lifelink counter on it. Miracle {1}{B} (You may cast this card for its miracle cost when you draw it if it's the first card you drew this turn.)
+• Language: en"
+Bleachbone Verge - Normal,"• Collector Number: 371
+• Set Code: DFT
+• Set Name: Aetherdrift
+• Foil: normal
+• Rarity: rare
+• Type Line: Land
+• Color Identity: B, W
+• Colors: (none)
+• Mana Cost: (none)
+• Oracle Text: {T}: Add {B}. {T}: Add {W}. Activate only if you control a Plains or a Swamp.
+• Language: en"
+Hellkite Tyrant - Normal,"• Collector Number: 333
+• Set Code: RVR
+• Set Name: Ravnica Remastered
+• Foil: normal
+• Rarity: rare
+• Type Line: Creature — Dragon
+• Color Identity: R
+• Colors: R
+• Mana Cost: {4}{R}{R}
+• Oracle Text: Flying, trample Whenever Hellkite Tyrant deals combat damage to a player, gain control of all artifacts that player controls. At the beginning of your upkeep, if you control twenty or more artifacts, you win the game.
+• Language: en"
+Consign To Memory - Foil,"• Collector Number: 54
+• Set Code: MH3
+• Set Name: Modern Horizons 3
+• Foil: foil
+• Rarity: uncommon
+• Type Line: Instant
+• Color Identity: U
+• Colors: U
+• Mana Cost: {U}
+• Oracle Text: Replicate {1} (When you cast this spell, copy it for each time you paid its replicate cost. You may choose new targets for the copies.) Counter target triggered ability or colorless spell.
+• Language: en"
+Command Tower - Normal,"• Collector Number: 26
+• Set Code: REX
+• Set Name: Jurassic World Collection
+• Foil: normal
+• Rarity: common
+• Type Line: (none)
+• Color Identity: (none)
+• Colors: (none)
+• Mana Cost: (none)
+• Oracle Text: (none)
+• Language: en"
+Vindicate - Normal,"• Collector Number: 294
+• Set Code: MH2
+• Set Name: Modern Horizons 2
+• Foil: normal
+• Rarity: rare
+• Type Line: Sorcery
+• Color Identity: B, W
+• Colors: B, W
+• Mana Cost: {1}{W}{B}
+• Oracle Text: Destroy target permanent.
+• Language: en"
+Perennation - Normal,"• Collector Number: 368
+• Set Code: TDM
+• Set Name: Tarkir: Dragonstorm
+• Foil: normal
+• Rarity: mythic
+• Type Line: Sorcery
+• Color Identity: B, G, W
+• Colors: B, G, W
+• Mana Cost: {3}{W}{B}{G}
+• Oracle Text: Return target permanent card from your graveyard to the battlefield with a hexproof counter and an indestructible counter on it.
+• Language: en"
+Enduring Innocence - Normal,"• Collector Number: 368
+• Set Code: DSK
+• Set Name: Duskmourn: House of Horror
+• Foil: normal
+• Rarity: rare
+• Type Line: Enchantment Creature — Sheep Glimmer
+• Color Identity: W
+• Colors: W
+• Mana Cost: {1}{W}{W}
+• Oracle Text: Lifelink Whenever one or more other creatures you control with power 2 or less enter, draw a card. This ability triggers only once each turn. When Enduring Innocence dies, if it was a creature, return it to the battlefield under its owner's control. It's an enchantment. (It's not a creature.)
+• Language: en"
+"Gilraen, Dúnedain Protector - Foil","• Collector Number: 415
+• Set Code: LTC
+• Set Name: Tales of Middle-earth Commander
+• Foil: foil
+• Rarity: rare
+• Type Line: Legendary Creature — Human Noble
+• Color Identity: W
+• Colors: W
+• Mana Cost: {2}{W}
+• Oracle Text: {2}, {T}: Exile another target creature you control. You may return that card to the battlefield under its owner's control. If you don't, at the beginning of the next end step, return that card to the battlefield under its owner's control with a vigilance counter and a lifelink counter on it.
+• Language: en"
+Celebr-8000 - Foil,"• Collector Number: 185
+• Set Code: UNF
+• Set Name: Unfinity
+• Foil: foil
+• Rarity: rare
+• Type Line: Artifact Creature — Clown Robot
+• Color Identity: (none)
+• Colors: (none)
+• Mana Cost: {5}
+• Oracle Text: At the beginning of combat on your turn, roll two six-sided dice. For each result of 1, this creature gets +1/+1 until end of turn. For each other result, it gains the indicated ability until end of turn. If you rolled doubles, it also gains double strike until end of turn. • 2 — menace • 3 — vigilance • 4 — lifelink • 5 — flying • 6 — indestructible
+• Language: en"
+Final Fortune - Normal,"• Collector Number: 190
+• Set Code: MB2
+• Set Name: Mystery Booster 2
+• Foil: normal
+• Rarity: rare
+• Type Line: Instant
+• Color Identity: R
+• Colors: R
+• Mana Cost: {R}{R}
+• Oracle Text: Take an extra turn after this one. At the beginning of that turn's end step, you lose the game.
+• Language: en"
+Ezio Auditore Da Firenze - Foil,"• Collector Number: 25
+• Set Code: ACR
+• Set Name: Assassin's Creed
+• Foil: foil
+• Rarity: mythic
+• Type Line: Legendary Creature — Human Assassin
+• Color Identity: B, G, R, U, W
+• Colors: B
+• Mana Cost: {1}{B}
+• Oracle Text: Menace Assassin spells you cast have freerunning {B}{B}. (You may cast a spell for its freerunning cost if you dealt combat damage to a player this turn with an Assassin or commander.) Whenever Ezio deals combat damage to a player, you may pay {W}{U}{B}{R}{G} if that player has 10 or less life. When you do, that player loses the game.
+• Language: en"
+Nexus Of Becoming - Foil,"• Collector Number: 90
+• Set Code: BIG
+• Set Name: The Big Score
+• Foil: foil
+• Rarity: mythic
+• Type Line: Artifact
+• Color Identity: (none)
+• Colors: (none)
+• Mana Cost: {6}
+• Oracle Text: At the beginning of combat on your turn, draw a card. Then you may exile an artifact or creature card from your hand. If you do, create a token that's a copy of the exiled card, except it's a 3/3 Golem artifact creature in addition to its other types.
+• Language: en"
+Authority Of The Consuls - Foil,"• Collector Number: 137
+• Set Code: FDN
+• Set Name: Foundations
+• Foil: foil
+• Rarity: rare
+• Type Line: Enchantment
+• Color Identity: W
+• Colors: W
+• Mana Cost: {W}
+• Oracle Text: Creatures your opponents control enter tapped. Whenever a creature an opponent controls enters, you gain 1 life.
+• Language: en"
+Silent Clearing - Normal,"• Collector Number: 115
+• Set Code: ACR
+• Set Name: Assassin's Creed
+• Foil: normal
+• Rarity: rare
+• Type Line: Land
+• Color Identity: B, W
+• Colors: (none)
+• Mana Cost: (none)
+• Oracle Text: {T}, Pay 1 life: Add {W} or {B}. {1}, {T}, Sacrifice this land: Draw a card.
+• Language: en"
+Ghost Vacuum - Normal,"• Collector Number: 326
+• Set Code: DSK
+• Set Name: Duskmourn: House of Horror
+• Foil: normal
+• Rarity: rare
+• Type Line: Artifact
+• Color Identity: (none)
+• Colors: (none)
+• Mana Cost: {1}
+• Oracle Text: {T}: Exile target card from a graveyard. {6}, {T}, Sacrifice this artifact: Put each creature card exiled with this artifact onto the battlefield under your control with a flying counter on it. Each of them is a 1/1 Spirit in addition to its other types. Activate only as a sorcery.
+• Language: en"
+Mishra'S Bauble - Normal,"• Collector Number: 97
+• Set Code: MB2
+• Set Name: Mystery Booster 2
+• Foil: normal
+• Rarity: uncommon
+• Type Line: Artifact
+• Color Identity: (none)
+• Colors: (none)
+• Mana Cost: {0}
+• Oracle Text: {T}, Sacrifice this artifact: Look at the top card of target player's library. Draw a card at the beginning of the next turn's upkeep.
+• Language: en"
+Vandalblast - Normal,"• Collector Number: 267
+• Set Code: CMM
+• Set Name: Commander Masters
+• Foil: normal
+• Rarity: uncommon
+• Type Line: Sorcery
+• Color Identity: R
+• Colors: R
+• Mana Cost: {R}
+• Oracle Text: Destroy target artifact you don't control. Overload {4}{R} (You may cast this spell for its overload cost. If you do, change ""target"" in its text to ""each."")
+• Language: en"
+Slaughter Pact - Normal,"• Collector Number: 138
+• Set Code: TSR
+• Set Name: Time Spiral Remastered
+• Foil: normal
+• Rarity: rare
+• Type Line: Instant
+• Color Identity: B
+• Colors: B
+• Mana Cost: {0}
+• Oracle Text: Destroy target nonblack creature. At the beginning of your next upkeep, pay {2}{B}. If you don't, you lose the game.
+• Language: en"
+Vanquish The Horde - Normal,"• Collector Number: 302
+• Set Code: INR
+• Set Name: Innistrad Remastered
+• Foil: normal
+• Rarity: rare
+• Type Line: Sorcery
+• Color Identity: W
+• Colors: W
+• Mana Cost: {6}{W}{W}
+• Oracle Text: This spell costs {1} less to cast for each creature on the battlefield. Destroy all creatures.
+• Language: en"
+Commercial District - Foil,"• Collector Number: 259
+• Set Code: MKM
+• Set Name: Murders at Karlov Manor
+• Foil: foil
+• Rarity: rare
+• Type Line: Land — Mountain Forest
+• Color Identity: G, R
+• Colors: (none)
+• Mana Cost: (none)
+• Oracle Text: ({T}: Add {R} or {G}.) This land enters tapped. When this land enters, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)
+• Language: en"
+Eerie Ultimatum - Foil,"• Collector Number: 184
+• Set Code: IKO
+• Set Name: Ikoria: Lair of Behemoths
+• Foil: foil
+• Rarity: rare
+• Type Line: Sorcery
+• Color Identity: B, G, W
+• Colors: B, G, W
+• Mana Cost: {W}{W}{B}{B}{B}{G}{G}
+• Oracle Text: Return any number of permanent cards with different names from your graveyard to the battlefield.
+• Language: en"
+Resplendent Angel - Normal,"• Collector Number: 334
+• Set Code: LCI
+• Set Name: The Lost Caverns of Ixalan
+• Foil: normal
+• Rarity: mythic
+• Type Line: Creature — Angel
+• Color Identity: W
+• Colors: W
+• Mana Cost: {1}{W}{W}
+• Oracle Text: Flying At the beginning of each end step, if you gained 5 or more life this turn, create a 4/4 white Angel creature token with flying and vigilance. {3}{W}{W}{W}: Until end of turn, this creature gets +2/+2 and gains lifelink.
+• Language: en"
+Muraganda Raceway - Normal,"• Collector Number: 396
+• Set Code: DFT
+• Set Name: Aetherdrift
+• Foil: normal
+• Rarity: rare
+• Type Line: Land
+• Color Identity: (none)
+• Colors: (none)
+• Mana Cost: (none)
+• Oracle Text: Start your engines! (If you have no speed, it starts at 1. It increases once on each of your turns when an opponent loses life. Max speed is 4.) {T}: Add {C}. Max speed — {T}: Add {C}{C}.
+• Language: en"
+Star Whale - Foil,"• Collector Number: 55
+• Set Code: WHO
+• Set Name: Doctor Who
+• Foil: foil
+• Rarity: uncommon
+• Type Line: Creature — Alien Whale
+• Color Identity: U
+• Colors: U
+• Mana Cost: {6}{U}{U}
+• Oracle Text: Flying, vigilance Other creatures you control have ward {2}. Suspend 6—{1}{U} (Rather than cast this card from your hand, you may pay {1}{U} and exile it with six time counters on it. At the beginning of your upkeep, remove a time counter. When the last is removed, you may cast it without paying its mana cost. It has haste.)
+• Language: en"
+Analyze The Pollen - Foil,"• Collector Number: 150
+• Set Code: MKM
+• Set Name: Murders at Karlov Manor
+• Foil: foil
+• Rarity: rare
+• Type Line: Sorcery
+• Color Identity: G
+• Colors: G
+• Mana Cost: {G}
+• Oracle Text: As an additional cost to cast this spell, you may collect evidence 8. (Exile cards with total mana value 8 or greater from your graveyard.) Search your library for a basic land card. If evidence was collected, instead search your library for a creature or land card. Reveal that card, put it into your hand, then shuffle.
+• Language: en"
+Titans' Nest - Normal,"• Collector Number: 347
+• Set Code: IKO
+• Set Name: Ikoria: Lair of Behemoths
+• Foil: normal
+• Rarity: rare
+• Type Line: Enchantment
+• Color Identity: B, G, U
+• Colors: B, G, U
+• Mana Cost: {1}{B}{G}{U}
+• Oracle Text: At the beginning of your upkeep, surveil 1. (Look at the top card of your library. You may put that card into your graveyard.) Exile a card from your graveyard: Add {C}. Spend this mana only to cast a spell that's one or more colors without {X} in its mana cost.
+• Language: en"
+Griselbrand - Normal,"• Collector Number: 381
+• Set Code: INR
+• Set Name: Innistrad Remastered
+• Foil: normal
+• Rarity: mythic
+• Type Line: Legendary Creature — Demon
+• Color Identity: B
+• Colors: B
+• Mana Cost: {4}{B}{B}{B}{B}
+• Oracle Text: Flying, lifelink Pay 7 life: Draw seven cards.
+• Language: en"
+Temur Battlecrier - Normal,"• Collector Number: 372
+• Set Code: TDM
+• Set Name: Tarkir: Dragonstorm
+• Foil: normal
+• Rarity: rare
+• Type Line: Creature — Orc Ranger
+• Color Identity: G, R, U
+• Colors: G, R, U
+• Mana Cost: {G}{U}{R}
+• Oracle Text: During your turn, spells you cast cost {1} less to cast for each creature you control with power 4 or greater.
+• Language: en"
+Merrow Harbinger - Normal,"• Collector Number: LRW-73
+• Set Code: PLST
+• Set Name: The List
+• Foil: normal
+• Rarity: uncommon
+• Type Line: Creature — Merfolk Wizard
+• Color Identity: U
+• Colors: U
+• Mana Cost: {3}{U}
+• Oracle Text: Islandwalk (This creature can't be blocked as long as defending player controls an Island.) When this creature enters, you may search your library for a Merfolk card, reveal it, then shuffle and put that card on top.
+• Language: en"
+Zimone And Dina - Normal,"• Collector Number: 318
+• Set Code: MOM
+• Set Name: March of the Machine
+• Foil: normal
+• Rarity: mythic
+• Type Line: Legendary Creature — Human Dryad
+• Color Identity: B, G, U
+• Colors: B, G, U
+• Mana Cost: {B}{G}{U}
+• Oracle Text: Whenever you draw your second card each turn, target opponent loses 2 life and you gain 2 life. {T}, Sacrifice another creature: Draw a card. You may put a land card from your hand onto the battlefield tapped. If you control eight or more lands, repeat this process once.
+• Language: en"
+Nanogene Conversion - Foil,"• Collector Number: 49
+• Set Code: WHO
+• Set Name: Doctor Who
+• Foil: foil
+• Rarity: rare
+• Type Line: Sorcery
+• Color Identity: U
+• Colors: U
+• Mana Cost: {3}{U}
+• Oracle Text: Choose target creature you control. Each other creature becomes a copy of that creature until end of turn, except it isn't legendary.
+• Language: en"
+Insidious Roots - Normal,"• Collector Number: 208
+• Set Code: MKM
+• Set Name: Murders at Karlov Manor
+• Foil: normal
+• Rarity: uncommon
+• Type Line: Enchantment
+• Color Identity: B, G
+• Colors: B, G
+• Mana Cost: {B}{G}
+• Oracle Text: Creature tokens you control have ""{T}: Add one mana of any color."" Whenever one or more creature cards leave your graveyard, create a 0/1 green Plant creature token, then put a +1/+1 counter on each Plant you control.
+• Language: en"
+Saproling Symbiosis - Foil,"• Collector Number: 175
+• Set Code: DMR
+• Set Name: Dominaria Remastered
+• Foil: foil
+• Rarity: rare
+• Type Line: Sorcery
+• Color Identity: G
+• Colors: G
+• Mana Cost: {3}{G}
+• Oracle Text: You may cast this spell as though it had flash if you pay {2} more to cast it. (You may cast it any time you could cast an instant.) Create a 1/1 green Saproling creature token for each creature you control.
 • Language: en"
 Leeches - Normal,"• Collector Number: 9
 • Set Code: HML
@@ -1077,25 +670,432 @@ Leeches - Normal,"• Collector Number: 9
 • Mana Cost: {1}{W}{W}
 • Oracle Text: Target player loses all poison counters. Leeches deals that much damage to that player.
 • Language: en"
-"Alela, Cunning Conqueror - Foil","• Collector Number: 34
-• Set Code: WOC
-• Set Name: Wilds of Eldraine Commander
+Entity Tracker - Foil,"• Collector Number: 290
+• Set Code: DSK
+• Set Name: Duskmourn: House of Horror
+• Foil: foil
+• Rarity: rare
+• Type Line: Creature — Human Scout
+• Color Identity: U
+• Colors: U
+• Mana Cost: {2}{U}
+• Oracle Text: Flash Eerie — Whenever an enchantment you control enters and whenever you fully unlock a Room, draw a card.
+• Language: en"
+Sundering Eruption // Volcanic Fissure - Normal,"• Collector Number: 248
+• Set Code: MH3
+• Set Name: Modern Horizons 3
+• Foil: normal
+• Rarity: uncommon
+• Type Line: Sorcery // Land
+• Color Identity: R
+• Colors: (none)
+• Mana Cost: (none)
+• Oracle Text: (none)
+• Language: en"
+Slaughter Specialist - Normal,"• Collector Number: 122
+• Set Code: DBL
+• Set Name: Innistrad: Double Feature
+• Foil: normal
+• Rarity: rare
+• Type Line: Creature — Vampire Warrior
+• Color Identity: B
+• Colors: B
+• Mana Cost: {1}{B}
+• Oracle Text: When this creature enters, each opponent creates a 1/1 white Human creature token. Whenever a creature an opponent controls dies, put a +1/+1 counter on this creature.
+• Language: en"
+"Krenko, Mob Boss - Foil","• Collector Number: 335
+• Set Code: RVR
+• Set Name: Ravnica Remastered
+• Foil: foil
+• Rarity: rare
+• Type Line: Legendary Creature — Goblin Warrior
+• Color Identity: R
+• Colors: R
+• Mana Cost: {2}{R}{R}
+• Oracle Text: {T}: Create X 1/1 red Goblin creature tokens, where X is the number of Goblins you control.
+• Language: en"
+Will Of The Jeskai - Normal,"• Collector Number: 80
+• Set Code: TDC
+• Set Name: Tarkir: Dragonstorm Commander
+• Foil: normal
+• Rarity: rare
+• Type Line: Sorcery
+• Color Identity: R
+• Colors: R
+• Mana Cost: {3}{R}
+• Oracle Text: Choose one. If you control a commander as you cast this spell, you may choose both instead. • Each player may discard their hand and draw five cards. • Each instant and sorcery card in your graveyard gains flashback until end of turn. The flashback cost is equal to its mana cost.
+• Language: en"
+Decimate - Foil,"• Collector Number: 444
+• Set Code: DMR
+• Set Name: Dominaria Remastered
+• Foil: foil
+• Rarity: rare
+• Type Line: Sorcery
+• Color Identity: G, R
+• Colors: G, R
+• Mana Cost: {2}{R}{G}
+• Oracle Text: Destroy target artifact, target creature, target enchantment, and target land. (You can't cast this spell unless you have legal choices for all its targets.)
+• Language: en"
+Wake The Dragon - Normal,"• Collector Number: 484
+• Set Code: LTC
+• Set Name: Tales of Middle-earth Commander
+• Foil: normal
+• Rarity: rare
+• Type Line: Sorcery
+• Color Identity: B, R
+• Colors: B, R
+• Mana Cost: {4}{B}{R}
+• Oracle Text: Create a 6/6 black and red Dragon creature token with flying, menace, and ""Whenever this token deals combat damage to a player, gain control of target artifact that player controls."" Flashback {6}{B}{R} (You may cast this card from your graveyard for its flashback cost. Then exile it.)
+• Language: en"
+Demonic Counsel - Normal,"• Collector Number: 92
+• Set Code: DSK
+• Set Name: Duskmourn: House of Horror
+• Foil: normal
+• Rarity: rare
+• Type Line: Sorcery
+• Color Identity: B
+• Colors: B
+• Mana Cost: {1}{B}
+• Oracle Text: Search your library for a Demon card, reveal it, put it into your hand, then shuffle. Delirium — If there are four or more card types among cards in your graveyard, instead search your library for any card, put it into your hand, then shuffle.
+• Language: en"
+Relic Of Progenitus - Normal,"• Collector Number: 230
+• Set Code: MB2
+• Set Name: Mystery Booster 2
+• Foil: normal
+• Rarity: common
+• Type Line: Artifact
+• Color Identity: (none)
+• Colors: (none)
+• Mana Cost: {1}
+• Oracle Text: {T}: Target player exiles a card from their graveyard. {1}, Exile this artifact: Exile all graveyards. Draw a card.
+• Language: en"
+Homunculus Horde - Normal,"• Collector Number: 454
+• Set Code: FDN
+• Set Name: Foundations
+• Foil: normal
+• Rarity: rare
+• Type Line: Creature — Homunculus
+• Color Identity: U
+• Colors: U
+• Mana Cost: {3}{U}
+• Oracle Text: Whenever you draw your second card each turn, create a token that's a copy of this creature.
+• Language: en"
+Cauldron Familiar - Foil,"• Collector Number: 1759
+• Set Code: SLD
+• Set Name: Secret Lair Drop
+• Foil: foil
+• Rarity: rare
+• Type Line: Creature — Cat
+• Color Identity: B
+• Colors: B
+• Mana Cost: {B}
+• Oracle Text: When this creature enters, each opponent loses 1 life and you gain 1 life. Sacrifice a Food: Return this card from your graveyard to the battlefield.
+• Language: en"
+Training Grounds - Foil,"• Collector Number: 155
+• Set Code: MAT
+• Set Name: March of the Machine: The Aftermath
+• Foil: foil
+• Rarity: rare
+• Type Line: Enchantment
+• Color Identity: U
+• Colors: U
+• Mana Cost: {U}
+• Oracle Text: Activated abilities of creatures you control cost {2} less to activate. This effect can't reduce the mana in that cost to less than one mana.
+• Language: en"
+"Sméagol, Helpful Guide - Foil","• Collector Number: 822
+• Set Code: LTR
+• Set Name: The Lord of the Rings: Tales of Middle-earth
+• Foil: foil
+• Rarity: rare
+• Type Line: Legendary Creature — Halfling Horror
+• Color Identity: B, G
+• Colors: B, G
+• Mana Cost: {1}{B}{G}
+• Oracle Text: At the beginning of your end step, if a creature died under your control this turn, the Ring tempts you. Whenever the Ring tempts you, target opponent reveals cards from the top of their library until they reveal a land card. Put that card onto the battlefield tapped under your control and the rest into their graveyard.
+• Language: en"
+Nature'S Claim - Normal,"• Collector Number: 364
+• Set Code: TSR
+• Set Name: Time Spiral Remastered
+• Foil: normal
+• Rarity: special
+• Type Line: Instant
+• Color Identity: G
+• Colors: G
+• Mana Cost: {G}
+• Oracle Text: Destroy target artifact or enchantment. Its controller gains 4 life.
+• Language: en"
+Lost Jitte - Foil,"• Collector Number: 88
+• Set Code: BIG
+• Set Name: The Big Score
 • Foil: foil
 • Rarity: mythic
-• Type Line: Legendary Creature — Faerie Warlock
-• Color Identity: B, U
-• Colors: B, U
-• Mana Cost: {2}{U}{B}
-• Oracle Text: Flying Whenever you cast your first spell during each opponent's turn, create a 1/1 black Faerie Rogue creature token with flying. Whenever one or more Faeries you control deal combat damage to a player, goad target creature that player controls.
+• Type Line: Legendary Artifact — Equipment
+• Color Identity: (none)
+• Colors: (none)
+• Mana Cost: {1}
+• Oracle Text: Whenever equipped creature deals combat damage, put a charge counter on Lost Jitte. Remove a charge counter from Lost Jitte: Choose one — • Untap target land. • Target creature can't block this turn. • Put a +1/+1 counter on equipped creature. Equip {1}
 • Language: en"
-Stern Scolding - Foil,"• Collector Number: 522
+Get Lost - Foil,"• Collector Number: 14
+• Set Code: LCI
+• Set Name: The Lost Caverns of Ixalan
+• Foil: foil
+• Rarity: rare
+• Type Line: Instant
+• Color Identity: W
+• Colors: W
+• Mana Cost: {1}{W}
+• Oracle Text: Destroy target creature, enchantment, or planeswalker. Its controller creates two Map tokens. (They're artifacts with ""{1}, {T}, Sacrifice this token: Target creature you control explores. Activate only as a sorcery."")
+• Language: en"
+Unstoppable Slasher - Foil,"• Collector Number: 119
+• Set Code: DSK
+• Set Name: Duskmourn: House of Horror
+• Foil: foil
+• Rarity: rare
+• Type Line: Creature — Zombie Assassin
+• Color Identity: B
+• Colors: B
+• Mana Cost: {2}{B}
+• Oracle Text: Deathtouch Whenever this creature deals combat damage to a player, they lose half their life, rounded up. When this creature dies, if it had no counters on it, return it to the battlefield tapped under its owner's control with two stun counters on it.
+• Language: en"
+Nowhere To Run - Normal,"• Collector Number: 111
+• Set Code: DSK
+• Set Name: Duskmourn: House of Horror
+• Foil: normal
+• Rarity: uncommon
+• Type Line: Enchantment
+• Color Identity: B
+• Colors: B
+• Mana Cost: {1}{B}
+• Oracle Text: Flash When this enchantment enters, target creature an opponent controls gets -3/-3 until end of turn. Creatures your opponents control can be the targets of spells and abilities as though they didn't have hexproof. Ward abilities of those creatures don't trigger.
+• Language: en"
+Voldaren Epicure - Foil,"• Collector Number: 405
+• Set Code: INR
+• Set Name: Innistrad Remastered
+• Foil: foil
+• Rarity: common
+• Type Line: Creature — Vampire
+• Color Identity: R
+• Colors: R
+• Mana Cost: {R}
+• Oracle Text: When this creature enters, it deals 1 damage to each opponent. Create a Blood token. (It's an artifact with ""{1}, {T}, Discard a card, Sacrifice this token: Draw a card."")
+• Language: en"
+Fatal Push - Normal,"• Collector Number: 93
+• Set Code: 2XM
+• Set Name: Double Masters
+• Foil: normal
+• Rarity: uncommon
+• Type Line: Instant
+• Color Identity: B
+• Colors: B
+• Mana Cost: {B}
+• Oracle Text: Destroy target creature if it has mana value 2 or less. Revolt — Destroy that creature if it has mana value 4 or less instead if a permanent left the battlefield under your control this turn.
+• Language: en"
+Overgrown Farmland - Foil,"• Collector Number: 281
+• Set Code: INR
+• Set Name: Innistrad Remastered
+• Foil: foil
+• Rarity: rare
+• Type Line: Land
+• Color Identity: G, W
+• Colors: (none)
+• Mana Cost: (none)
+• Oracle Text: This land enters tapped unless you control two or more other lands. {T}: Add {G} or {W}.
+• Language: en"
+Death In Heaven - Foil,"• Collector Number: 671
+• Set Code: WHO
+• Set Name: Doctor Who
+• Foil: foil
+• Rarity: rare
+• Type Line: Enchantment — Saga
+• Color Identity: B
+• Colors: B
+• Mana Cost: {3}{B}
+• Oracle Text: (As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.) I, II — Target player mills two cards, then exiles their graveyard. III — Put all creature cards exiled with this enchantment onto the battlefield face down under your control. They're 2/2 Cyberman artifact creatures.
+• Language: en"
+Rot-Curse Rakshasa - Foil,"• Collector Number: 87
+• Set Code: TDM
+• Set Name: Tarkir: Dragonstorm
+• Foil: foil
+• Rarity: mythic
+• Type Line: Creature — Demon
+• Color Identity: B
+• Colors: B
+• Mana Cost: {1}{B}
+• Oracle Text: Trample Decayed (This creature can't block. When it attacks, sacrifice it at end of combat.) Renew — {X}{B}{B}, Exile this card from your graveyard: Put a decayed counter on each of X target creatures. Activate only as a sorcery.
+• Language: en"
+Entish Restoration - Foil,"• Collector Number: 614
 • Set Code: LTR
 • Set Name: The Lord of the Rings: Tales of Middle-earth
 • Foil: foil
 • Rarity: uncommon
 • Type Line: Instant
+• Color Identity: G
+• Colors: G
+• Mana Cost: {2}{G}
+• Oracle Text: Sacrifice a land. Search your library for up to two basic land cards, put them onto the battlefield tapped, then shuffle. If you control a creature with power 4 or greater, instead search your library for up to three basic land cards, put them onto the battlefield tapped, then shuffle.
+• Language: en"
+Pinnacle Monk // Mystic Peak - Foil,"• Collector Number: 246
+• Set Code: MH3
+• Set Name: Modern Horizons 3
+• Foil: foil
+• Rarity: uncommon
+• Type Line: Creature — Djinn Monk // Land
+• Color Identity: R
+• Colors: (none)
+• Mana Cost: (none)
+• Oracle Text: (none)
+• Language: en"
+Defiler Of Vigor - Normal,"• Collector Number: 160
+• Set Code: DMU
+• Set Name: Dominaria United
+• Foil: normal
+• Rarity: rare
+• Type Line: Creature — Phyrexian Wurm
+• Color Identity: G
+• Colors: G
+• Mana Cost: {3}{G}{G}
+• Oracle Text: Trample As an additional cost to cast green permanent spells, you may pay 2 life. Those spells cost {G} less to cast if you paid life this way. This effect reduces only the amount of green mana you pay. Whenever you cast a green permanent spell, put a +1/+1 counter on each creature you control.
+• Language: en"
+"The Balrog, Durin'S Bane - Normal","• Collector Number: 646
+• Set Code: LTR
+• Set Name: The Lord of the Rings: Tales of Middle-earth
+• Foil: normal
+• Rarity: rare
+• Type Line: Legendary Creature — Avatar Demon
+• Color Identity: B, R
+• Colors: B, R
+• Mana Cost: {5}{B}{R}
+• Oracle Text: This spell costs {1} less to cast for each permanent sacrificed this turn. Haste The Balrog can't be blocked except by legendary creatures. When The Balrog dies, destroy target artifact or creature an opponent controls.
+• Language: en"
+Darksteel Mutation - Normal,"• Collector Number: 623
+• Set Code: CMM
+• Set Name: Commander Masters
+• Foil: normal
+• Rarity: uncommon
+• Type Line: Enchantment — Aura
+• Color Identity: W
+• Colors: W
+• Mana Cost: {1}{W}
+• Oracle Text: Enchant creature Enchanted creature is an Insect artifact creature with base power and toughness 0/1 and has indestructible, and it loses all other abilities, card types, and creature types.
+• Language: en"
+Ms. Bumbleflower - Normal,"• Collector Number: 3
+• Set Code: BLC
+• Set Name: Bloomburrow Commander
+• Foil: normal
+• Rarity: mythic
+• Type Line: Legendary Creature — Rabbit Citizen
+• Color Identity: G, U, W
+• Colors: G, U, W
+• Mana Cost: {1}{G}{W}{U}
+• Oracle Text: Vigilance Whenever you cast a spell, target opponent draws a card. Put a +1/+1 counter on target creature. It gains flying until end of turn. If this is the second time this ability has resolved this turn, you draw two cards.
+• Language: en"
+"Kiora, The Rising Tide - Normal","• Collector Number: 309
+• Set Code: FDN
+• Set Name: Foundations
+• Foil: normal
+• Rarity: rare
+• Type Line: Legendary Creature — Merfolk Noble
 • Color Identity: U
 • Colors: U
-• Mana Cost: {U}
-• Oracle Text: Counter target creature spell with power or toughness 2 or less.
+• Mana Cost: {2}{U}
+• Oracle Text: When Kiora enters, draw two cards, then discard two cards. Threshold — Whenever Kiora attacks, if there are seven or more cards in your graveyard, you may create Scion of the Deep, a legendary 8/8 blue Octopus creature token.
+• Language: en"
+Laboratory Maniac - Normal,"• Collector Number: 359
+• Set Code: INR
+• Set Name: Innistrad Remastered
+• Foil: normal
+• Rarity: uncommon
+• Type Line: Creature — Human Wizard
+• Color Identity: U
+• Colors: U
+• Mana Cost: {2}{U}
+• Oracle Text: If you would draw a card while your library has no cards in it, you win the game instead.
+• Language: en"
+Walk-In Closet // Forgotten Cellar - Foil,"• Collector Number: 205
+• Set Code: DSK
+• Set Name: Duskmourn: House of Horror
+• Foil: foil
+• Rarity: mythic
+• Type Line: Enchantment — Room // Enchantment — Room
+• Color Identity: G
+• Colors: G
+• Mana Cost: {2}{G} // {3}{G}{G}
+• Oracle Text: (none)
+• Language: en"
+Vanquish The Horde - Normal,"• Collector Number: 302
+• Set Code: INR
+• Set Name: Innistrad Remastered
+• Foil: normal
+• Rarity: rare
+• Type Line: Sorcery
+• Color Identity: W
+• Colors: W
+• Mana Cost: {6}{W}{W}
+• Oracle Text: This spell costs {1} less to cast for each creature on the battlefield. Destroy all creatures.
+• Language: en"
+Wastewood Verge - Foil,"• Collector Number: 268
+• Set Code: DFT
+• Set Name: Aetherdrift
+• Foil: foil
+• Rarity: rare
+• Type Line: Land
+• Color Identity: B, G
+• Colors: (none)
+• Mana Cost: (none)
+• Oracle Text: {T}: Add {G}. {T}: Add {B}. Activate only if you control a Swamp or a Forest.
+• Language: en"
+Leveler - Normal,"• Collector Number: 397
+• Set Code: TSR
+• Set Name: Time Spiral Remastered
+• Foil: normal
+• Rarity: special
+• Type Line: Artifact Creature — Juggernaut
+• Color Identity: (none)
+• Colors: (none)
+• Mana Cost: {5}
+• Oracle Text: When this creature enters, exile all cards from your library.
+• Language: en"
+The Haunt Of Hightower - Normal,"• Collector Number: RNA-273
+• Set Code: PLST
+• Set Name: The List
+• Foil: normal
+• Rarity: mythic
+• Type Line: Legendary Creature — Vampire
+• Color Identity: B
+• Colors: B
+• Mana Cost: {4}{B}{B}
+• Oracle Text: Flying, lifelink Whenever The Haunt of Hightower attacks, defending player discards a card. Whenever a card is put into an opponent's graveyard from anywhere, put a +1/+1 counter on The Haunt of Hightower.
+• Language: en"
+"Krenko, Mob Boss - Foil","• Collector Number: 335
+• Set Code: RVR
+• Set Name: Ravnica Remastered
+• Foil: foil
+• Rarity: rare
+• Type Line: Legendary Creature — Goblin Warrior
+• Color Identity: R
+• Colors: R
+• Mana Cost: {2}{R}{R}
+• Oracle Text: {T}: Create X 1/1 red Goblin creature tokens, where X is the number of Goblins you control.
+• Language: en"
+Alpha Deathclaw - Foil,"• Collector Number: 336
+• Set Code: PIP
+• Set Name: Fallout
+• Foil: foil
+• Rarity: rare
+• Type Line: Creature — Lizard Mutant
+• Color Identity: B, G
+• Colors: B, G
+• Mana Cost: {4}{B}{G}
+• Oracle Text: Menace, trample When this creature enters or becomes monstrous, destroy target permanent. {5}{B}{G}: Monstrosity 4. (If this creature isn't monstrous, put four +1/+1 counters on it and it becomes monstrous.)
+• Language: ja"
+Storm-Kiln Artist - Normal,"• Collector Number: 115
+• Set Code: STX
+• Set Name: Strixhaven: School of Mages
+• Foil: normal
+• Rarity: uncommon
+• Type Line: Creature — Dwarf Shaman
+• Color Identity: R
+• Colors: R
+• Mana Cost: {3}{R}
+• Oracle Text: This creature gets +1/+0 for each artifact you control. Magecraft — Whenever you cast or copy an instant or sorcery spell, create a Treasure token.
 • Language: en"

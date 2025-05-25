@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QLineEdit, QListWidget, QListWidgetItem, QTabWidget, QTableWidget, QTableWidgetItem, QComboBox, QMessageBox, QCheckBox, QFileDialog, QInputDialog, QWidget
+from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QLineEdit, QListWidget, QListWidgetItem, QTabWidget, QTableWidget, QTableWidgetItem, QComboBox, QMessageBox, QCheckBox, QFileDialog, QInputDialog, QWidget, QFormLayout
 from PySide6.QtCore import Qt
 from models.scryfall_api import fetch_scryfall_data
 import random
@@ -20,17 +20,24 @@ class BreakBuilderDialog(QDialog):
         # Tab 1: Inventory Search/Select
         self.inv_tab = QWidget()
         inv_layout = QVBoxLayout(self.inv_tab)
-        inv_layout.addWidget(QLabel("Search and select cards from inventory:"))
-        self.search_box = QLineEdit()
-        self.search_box.setPlaceholderText("Search by name, set, etc.")
-        self.search_box.textChanged.connect(self.update_inventory_list)
-        inv_layout.addWidget(self.search_box)
+        inv_layout.addWidget(QLabel("Filter and select cards from inventory:"))
+        # Dynamic filter row
+        self.filter_fields = self._get_all_inventory_fields()
+        self.filter_inputs = {}
+        filter_form = QFormLayout()
+        for field in self.filter_fields:
+            le = QLineEdit()
+            le.setPlaceholderText(f"Filter {field}")
+            le.textChanged.connect(self.update_inventory_list)
+            self.filter_inputs[field] = le
+            filter_form.addRow(QLabel(field+":"), le)
+        inv_layout.addLayout(filter_form)
         self.inv_list = QListWidget()
         inv_layout.addWidget(self.inv_list)
         self.add_selected_btn = QPushButton("Add Selected to Break List")
         self.add_selected_btn.clicked.connect(self.add_selected_to_break)
         inv_layout.addWidget(self.add_selected_btn)
-        # New: Random selection controls
+        # Random selection controls
         rand_row = QHBoxLayout()
         self.rand_count_input = QLineEdit()
         self.rand_count_input.setPlaceholderText("Number to randomly select")
@@ -77,18 +84,30 @@ class BreakBuilderDialog(QDialog):
         self.help_tab = QWidget()
         help_layout = QVBoxLayout(self.help_tab)
         help_layout.addWidget(QLabel("How to use the Break/Autobox Builder:"))
-        help_layout.addWidget(QLabel("1. Search and select cards from your inventory.\n2. Add them to the break list.\n3. Optionally add by Scryfall ID.\n4. Reorder, edit, or duplicate items.\n5. Preview and export the list for Whatnot.\n6. Optionally remove exported cards from inventory.\n7. You can re-import unused cards later."))
+        help_layout.addWidget(QLabel("1. Filter and select cards from your inventory.\n2. Add them to the break list.\n3. Optionally add by Scryfall ID.\n4. Reorder, edit, or duplicate items.\n5. Preview and export the list for Whatnot.\n6. Optionally remove exported cards from inventory.\n7. You can re-import unused cards later."))
         self.tabs.addTab(self.help_tab, "Help/Settings")
         # Populate inventory list
         self.update_inventory_list()
         self.update_break_list()
         self.update_preview()
+    def _get_all_inventory_fields(self):
+        # Get all unique fields from inventory
+        fields = set()
+        for card in self.inventory.get_all_cards():
+            fields.update(card.keys())
+        return sorted(fields)
     def update_inventory_list(self):
         self.inv_list.clear()
-        query = self.search_box.text().lower()
+        # AND all filters
+        filters = {field: le.text().strip().lower() for field, le in self.filter_inputs.items() if le.text().strip()}
         self.filtered_cards = []
         for card in self.inventory.get_all_cards():
-            if query in card.get("Name", "").lower() or query in card.get("Set name", "").lower():
+            match = True
+            for field, val in filters.items():
+                if val not in str(card.get(field, "")).lower():
+                    match = False
+                    break
+            if match:
                 item = QListWidgetItem(f"{card.get('Name', '')} [{card.get('Set name', '')}]")
                 item.setData(Qt.UserRole, card)
                 self.inv_list.addItem(item)

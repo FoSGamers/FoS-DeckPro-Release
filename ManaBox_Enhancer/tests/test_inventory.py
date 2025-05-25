@@ -1123,3 +1123,46 @@ def test_mainwindow_add_card_by_scryfall_id(qtbot, monkeypatch):
     after = len(window.inventory.get_all_cards())
     assert after == before + 1
     assert any(card["Name"] == "TestScry" for card in window.inventory.get_all_cards())
+
+def test_break_builder_advanced_filtering_and_random(qtbot):
+    from ManaBox_Enhancer.ui.dialogs.break_builder import BreakBuilderDialog
+    class DummyInventory:
+        def __init__(self):
+            self.cards = [
+                {"Name": "Alpha", "Set name": "SetA", "Rarity": "rare"},
+                {"Name": "Beta", "Set name": "SetA", "Rarity": "common"},
+                {"Name": "Gamma", "Set name": "SetB", "Rarity": "rare"},
+                {"Name": "Delta", "Set name": "SetB", "Rarity": "common"},
+            ]
+        def get_all_cards(self): return self.cards
+        def remove_card(self, card): self.cards.remove(card)
+        def add_card(self, card): self.cards.append(card)
+    inv = DummyInventory()
+    dlg = BreakBuilderDialog(inv)
+    qtbot.addWidget(dlg)
+    dlg.show()
+    # Filter by Set name = SetA
+    dlg.filter_inputs["Set name"].setText("SetA")
+    qtbot.wait(100)
+    assert dlg.inv_list.count() == 2
+    # Further filter by Rarity = rare
+    dlg.filter_inputs["Rarity"].setText("rare")
+    qtbot.wait(100)
+    assert dlg.inv_list.count() == 1
+    assert dlg.inv_list.item(0).text().startswith("Alpha")
+    # Clear Rarity filter, filter by Name contains 'a' (should match Alpha, Gamma, Delta)
+    dlg.filter_inputs["Rarity"].setText("")
+    dlg.filter_inputs["Name"].setText("a")
+    qtbot.wait(100)
+    names = [dlg.inv_list.item(i).text() for i in range(dlg.inv_list.count())]
+    assert any("Alpha" in n for n in names)
+    assert any("Gamma" in n for n in names)
+    assert any("Delta" in n for n in names)
+    # Test random selection only uses filtered set
+    dlg.filter_inputs["Set name"].setText("SetB")
+    dlg.filter_inputs["Name"].setText("")
+    qtbot.wait(100)
+    dlg.rand_count_input.setText("2")
+    qtbot.mouseClick(dlg.rand_select_btn, Qt.LeftButton)
+    selected_names = [c["Name"] for c in dlg.break_items]
+    assert set(selected_names).issubset({"Gamma", "Delta"})

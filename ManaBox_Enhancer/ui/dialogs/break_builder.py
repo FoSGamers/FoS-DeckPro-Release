@@ -393,6 +393,12 @@ class BreakBuilderDialog(QDialog):
         self.export_btn.setStyleSheet("padding: 8px 24px; border-radius: 10px; background: #388e3c; color: white; font-weight: bold; font-size: 15px;")
         self.export_btn.setToolTip("Export the break list in Title/Description format (CSV)")
         self.export_btn.clicked.connect(self.export_break_list_item_listing)
+        # --- Remove from Inventory button ---
+        self.remove_from_inventory_btn = QPushButton(" Remove from Inventory")
+        self.remove_from_inventory_btn.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_TrashIcon))
+        self.remove_from_inventory_btn.setStyleSheet("padding: 8px 24px; border-radius: 10px; background: #e53935; color: white; font-weight: bold; font-size: 15px;")
+        self.remove_from_inventory_btn.setToolTip("Remove all cards in the current break list from inventory (with confirmation)")
+        self.remove_from_inventory_btn.clicked.connect(self.remove_break_cards_from_inventory)
         self.break_preview_label = QLabel("Break List Preview:")
         self.break_preview_box = QTextEdit()
         self.break_preview_box.setReadOnly(True)
@@ -400,6 +406,7 @@ class BreakBuilderDialog(QDialog):
         self.break_preview_box.setMinimumHeight(60)
         btn_row.addWidget(self.generate_btn)
         btn_row.addWidget(self.export_btn)
+        btn_row.addWidget(self.remove_from_inventory_btn)
         btn_row.addWidget(self.break_preview_label)
         btn_row.addWidget(self.break_preview_box)
         generate_layout.addLayout(btn_row)
@@ -880,4 +887,32 @@ class BreakBuilderDialog(QDialog):
         btn_row.addWidget(save_btn)
         btn_row.addWidget(load_btn)
         btn_row.addStretch(1)
-        parent_layout.addLayout(btn_row) 
+        parent_layout.addLayout(btn_row)
+    def remove_break_cards_from_inventory(self):
+        """Remove all cards in the current break list from the inventory, with confirmation."""
+        from PySide6.QtWidgets import QMessageBox
+        if not self.current_break_list:
+            QMessageBox.warning(self, "Remove from Inventory", "No break list generated. Please generate the break list first.")
+            return
+        card_count = len(self.current_break_list)
+        reply = QMessageBox.question(
+            self,
+            "Confirm Remove from Inventory",
+            f"Are you sure you want to remove all {card_count} cards in the current break list from inventory? This cannot be undone.",
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No
+        )
+        if reply != QMessageBox.Yes:
+            return
+        removed = 0
+        for card in self.current_break_list:
+            try:
+                self.inventory.remove_card(card)
+                removed += 1
+            except Exception:
+                pass  # Ignore errors for cards not found
+        self.filtered_inventory = self.inventory.get_all_cards()
+        self.card_table.update_cards(self.filtered_inventory)
+        self.card_table.repaint()
+        self.generate_break_list()
+        QMessageBox.information(self, "Removed from Inventory", f"Removed {removed} cards from inventory.") 

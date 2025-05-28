@@ -261,7 +261,6 @@ class BreakBuilderDialog(QDialog):
         if not self.rule_widgets:
             self.add_rule()
         # Populate inventory list
-        self.update_break_list()
         self.update_preview()
     def _get_all_inventory_fields(self):
         # Get all unique fields from inventory
@@ -379,46 +378,6 @@ class BreakBuilderDialog(QDialog):
         self.filtered_inventory = filtered  # Store the filtered pool
         self.card_table.update_cards(filtered)
         self.card_table.repaint()
-    def update_break_list(self):
-        self.break_list.clear()
-        for card in self.break_items:
-            item = QListWidgetItem(f"{card.get('Name', '')} [{card.get('Set name', '')}]" )
-            item.setData(Qt.UserRole, card)
-            self.break_list.addItem(item)
-    def remove_selected_from_break(self):
-        for item in self.break_list.selectedItems():
-            idx = self.break_list.row(item)
-            if idx >= 0:
-                self.break_items.pop(idx)
-        self.update_break_list()
-        self.update_preview()
-    def duplicate_selected_in_break(self):
-        for item in self.break_list.selectedItems():
-            card = item.data(Qt.UserRole)
-            self.break_items.append(card.copy())
-        self.update_break_list()
-        self.update_preview()
-    def edit_break_item(self, item):
-        card = item.data(Qt.UserRole)
-        from ui.dialogs.edit_card import EditCardDialog
-        dlg = EditCardDialog(card, all_fields=list(card.keys()), parent=self)
-        if dlg.exec():
-            updated = dlg.get_card()
-            idx = self.break_list.row(item)
-            self.break_items[idx] = updated
-            self.update_break_list()
-            self.update_preview()
-    def add_by_scryfall_id(self):
-        scry_id, ok = QInputDialog.getText(self, "Add by Scryfall ID", "Enter Scryfall ID:")
-        if not ok or not scry_id.strip():
-            return
-        data = fetch_scryfall_data(scry_id.strip())
-        if not data:
-            QMessageBox.warning(self, "Not Found", "No card found for that Scryfall ID.")
-            return
-        self.break_items.append(data)
-        self.update_break_list()
-        self.update_preview()
     def update_preview(self):
         # For now, just show Title/Description for all items
         lines = []

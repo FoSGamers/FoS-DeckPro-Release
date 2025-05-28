@@ -260,8 +260,6 @@ class BreakBuilderDialog(QDialog):
         # Add initial rule widget if none exist
         if not self.rule_widgets:
             self.add_rule()
-        # Populate inventory list
-        self.update_preview()
     def _get_all_inventory_fields(self):
         # Get all unique fields from inventory
         fields = set()
@@ -412,12 +410,4 @@ class BreakBuilderDialog(QDialog):
         for child in rule_widget.findChildren(QDoubleSpinBox):
             child.valueChanged.connect(self.generate_break_list)
         rule_widget.remove_btn.clicked.connect(lambda: self.remove_rule(rule_widget))
-        self.generate_break_list()
-    def remove_rule(self, rule_widget):
-        """
-        Remove a rule widget from the break builder and update the break list preview.
-        """
-        self.rules_area.removeWidget(rule_widget)
-        rule_widget.setParent(None)
-        self.rule_widgets.remove(rule_widget)
         self.generate_break_list() 

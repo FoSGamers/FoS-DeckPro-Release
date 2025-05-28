@@ -714,6 +714,34 @@ class BreakBuilderDialog(QDialog):
     def _toggle_rules_area(self, checked):
         self.rules_area_widget.setVisible(checked)
         self.toggle_rules_btn.setText("▼ Rules" if checked else "► Rules")
+    def _enforce_percent_rule_limits(self):
+        """Ensure the sum of all enabled percent-based rules does not exceed 100%. If exceeded, adjust the last changed rule."""
+        percent_rules = []
+        for i in range(self.rules_area_layout.count()):
+            item = self.rules_area_layout.itemAt(i)
+            if not item or not item.widget():
+                continue
+            group = item.widget()
+            rule_widget = getattr(group, '_rule_widget', None)
+            enable_checkbox = getattr(group, '_enable_checkbox', None)
+            if not rule_widget or not enable_checkbox or not enable_checkbox.isChecked():
+                continue
+            rule = rule_widget.get_rule()
+            if rule.get('count_type') == '% of available':
+                percent_rules.append((rule_widget, rule))
+        total_percent = sum(float(r['count']) for _, r in percent_rules)
+        if total_percent > 100 and percent_rules:
+            # Reduce the last changed rule to fit
+            excess = total_percent - 100
+            last_widget, last_rule = percent_rules[-1]
+            new_val = float(last_rule['count']) - excess
+            if new_val < 0:
+                new_val = 0
+            last_widget.percent_value.blockSignals(True)
+            last_widget.percent_value.setValue(new_val)
+            last_widget.percent_value.blockSignals(False)
+            from PySide6.QtWidgets import QMessageBox
+            QMessageBox.warning(self, "Percent Rule Limit", "Total percent for all enabled percent-based rules cannot exceed 100%. The last rule was adjusted to fit.")
     def add_rule(self, rule_data=None):
         rule_widget = BreakRuleWidget(self, inventory_fields=self.filter_fields, inventory=self.inventory)
         if rule_data:
@@ -729,8 +757,7 @@ class BreakBuilderDialog(QDialog):
         enable_checkbox.setChecked(True)
         enable_checkbox.setToolTip("Enable or disable this rule without deleting it.")
         enable_checkbox.stateChanged.connect(self.generate_break_list)
-        enable_row.addWidget(enable_checkbox)
-        enable_row.addStretch(1)
+        enable_checkbox.stateChanged.connect(self._enforce_percent_rule_limits)
         vbox.addLayout(enable_row)
         vbox.addWidget(rule_widget)
         # Remove forced collapse logic: allow multiple rules to be expanded at once
@@ -751,6 +778,8 @@ class BreakBuilderDialog(QDialog):
         group._enable_checkbox = enable_checkbox
         self.rules_area_layout.addWidget(group)
         self.rule_widgets.append(rule_widget)
+        # Connect percent_value change to enforcement
+        rule_widget.percent_value.valueChanged.connect(self._enforce_percent_rule_limits)
         self.generate_break_list()
         group.setChecked(True)  # Expand the new rule by default
     def remove_rule_card(self, group, rule_widget):

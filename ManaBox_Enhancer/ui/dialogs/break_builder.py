@@ -1,5 +1,5 @@
-from PySide6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QLineEdit, QListWidget, QListWidgetItem, QTabWidget, QTableWidget, QTableWidgetItem, QComboBox, QMessageBox, QCheckBox, QFileDialog, QInputDialog, QWidget, QFormLayout, QScrollArea, QSizePolicy, QFrame, QSpinBox, QDoubleSpinBox, QGroupBox, QAbstractItemView, QSplitter)
-from PySide6.QtCore import Qt
+from PySide6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QLineEdit, QListWidget, QListWidgetItem, QTabWidget, QTableWidget, QTableWidgetItem, QComboBox, QMessageBox, QCheckBox, QFileDialog, QInputDialog, QWidget, QFormLayout, QScrollArea, QSizePolicy, QFrame, QSpinBox, QDoubleSpinBox, QGroupBox, QAbstractItemView, QSplitter, QTextEdit, QStyle)
+from PySide6.QtCore import Qt, QPropertyAnimation, QEasingCurve, QRect
 from models.scryfall_api import fetch_scryfall_data
 import random
 import json
@@ -7,11 +7,16 @@ from ui.card_table import CardTableView
 from ui.filter_overlay import FilterOverlay
 from ui.image_preview import ImagePreview
 from ui.card_details import CardDetails
+from ui.dialogs.export_item_listing_fields import ExportItemListingFieldsDialog
+import csv
+import os
 
 # Centralized config/constants for break builder
 BREAK_BUILDER_CONFIG = {
     'rule_fields': [
         {'name': 'Price', 'type': 'float', 'label': 'Price ($)', 'min': 0, 'max': 10000, 'step': 0.01},
+        {'name': 'Whatnot price', 'type': 'float', 'label': 'Whatnot Price', 'min': 0, 'max': 10000, 'step': 0.01},
+        {'name': 'Purchase price', 'type': 'float', 'label': 'Purchase Price', 'min': 0, 'max': 10000, 'step': 0.01},
         {'name': 'Rarity', 'type': 'str', 'label': 'Rarity', 'choices': ['common', 'uncommon', 'rare', 'mythic']},
         {'name': 'Set name', 'type': 'str', 'label': 'Set Name'},
         # Add more fields as needed
@@ -23,11 +28,15 @@ BREAK_BUILDER_CONFIG = {
 class BreakRuleWidget(QWidget):
     """
     Widget for a single rule in the break builder.
-    Allows user to specify count/percentage and filter criteria.
+    Supports AND logic: user can add multiple field criteria per rule.
     """
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, inventory_fields=None, inventory=None):
         super().__init__(parent)
-        layout = QHBoxLayout(self)
+        self.inventory = inventory
+        self.inventory_fields = inventory_fields or []
+        layout = QVBoxLayout(self)
+        # Top row: count/percent
+        count_row = QHBoxLayout()
         self.count_type = QComboBox()
         self.count_type.addItems(["Count", "% of available"])
         self.count_type.setToolTip("Choose whether to select a fixed number or a percentage of cards matching this rule.")
@@ -40,45 +49,141 @@ class BreakRuleWidget(QWidget):
         self.percent_value.setSuffix("%")
         self.percent_value.setVisible(False)
         self.count_type.currentIndexChanged.connect(self._toggle_count_type)
-        layout.addWidget(QLabel("Select:"))
-        layout.addWidget(self.count_type)
-        layout.addWidget(self.count_value)
-        layout.addWidget(self.percent_value)
-        # Field selectors
-        self.field_selectors = {}
-        for field in BREAK_BUILDER_CONFIG['rule_fields']:
-            if field['type'] == 'float':
-                min_box = QDoubleSpinBox()
-                min_box.setMinimum(field.get('min', 0))
-                min_box.setMaximum(field.get('max', 10000))
-                min_box.setSingleStep(field.get('step', 0.01))
-                min_box.setPrefix(">$ ")
-                max_box = QDoubleSpinBox()
-                max_box.setMinimum(field.get('min', 0))
-                max_box.setMaximum(field.get('max', 10000))
-                max_box.setSingleStep(field.get('step', 0.01))
-                max_box.setPrefix("< $")
-                layout.addWidget(QLabel(field['label']))
-                layout.addWidget(min_box)
-                layout.addWidget(max_box)
-                self.field_selectors[field['name']] = (min_box, max_box)
-            elif field['type'] == 'str' and 'choices' in field:
-                combo = QComboBox()
-                combo.addItem("")  # Allow blank (no filter)
-                combo.addItems(field['choices'])
-                layout.addWidget(QLabel(field['label']))
-                layout.addWidget(combo)
-                self.field_selectors[field['name']] = combo
-            else:
-                edit = QLineEdit()
-                edit.setPlaceholderText(f"Filter {field['label']}")
-                layout.addWidget(QLabel(field['label']))
-                layout.addWidget(edit)
-                self.field_selectors[field['name']] = edit
-        self.remove_btn = QPushButton("Remove")
+        count_row.addWidget(QLabel("Select:"))
+        count_row.addWidget(self.count_type)
+        count_row.addWidget(self.count_value)
+        count_row.addWidget(self.percent_value)
+        count_row.addStretch(1)
+        layout.addLayout(count_row)
+        # Criteria area
+        self.criteria_area = QVBoxLayout()
+        self.criteria_widgets = []  # List of (field_dropdown, input_widget, remove_btn)
+        layout.addLayout(self.criteria_area)
+        # Add Field button
+        add_field_btn = QPushButton("+ Add Field")
+        add_field_btn.setStyleSheet("background: #e3eaf7; color: #1976d2; font-weight: bold; border-radius: 6px; padding: 4px 12px;")
+        add_field_btn.clicked.connect(self.add_criterion_row)
+        layout.addWidget(add_field_btn)
+        # Remove rule button
+        self.remove_btn = QPushButton("Remove Rule")
         self.remove_btn.setStyleSheet("color: red;")
         layout.addWidget(self.remove_btn)
         layout.addStretch(1)
+        # Add initial criterion row
+        self.add_criterion_row()
+    def add_criterion_row(self, field=None):
+        row = QHBoxLayout()
+        field_dropdown = QComboBox()
+        field_dropdown.addItems([f for f in self.inventory_fields])
+        if field:
+            idx = field_dropdown.findText(field)
+            if idx >= 0:
+                field_dropdown.setCurrentIndex(idx)
+        input_widget = QWidget()
+        input_layout = QHBoxLayout(input_widget)
+        input_layout.setContentsMargins(0, 0, 0, 0)
+        # Build input for selected field
+        self._build_field_input(field_dropdown.currentText(), input_layout, input_widget)
+        field_dropdown.currentTextChanged.connect(lambda f, l=input_layout, w=input_widget: self._on_field_changed(f, l, w))
+        remove_btn = QPushButton("✕")
+        remove_btn.setFixedSize(24, 24)
+        remove_btn.setStyleSheet("color: #e53935; font-weight: bold; border: none; background: transparent;")
+        remove_btn.clicked.connect(lambda: self._remove_criterion_row(row, (field_dropdown, input_widget, remove_btn)))
+        row.addWidget(field_dropdown)
+        row.addWidget(input_widget)
+        row.addWidget(remove_btn)
+        self.criteria_area.addLayout(row)
+        self.criteria_widgets.append((field_dropdown, input_widget, remove_btn))
+    def _remove_criterion_row(self, row_layout, widget_tuple):
+        for i in reversed(range(row_layout.count())):
+            item = row_layout.takeAt(i)
+            if item.widget():
+                item.widget().deleteLater()
+        self.criteria_area.removeItem(row_layout)
+        if widget_tuple in self.criteria_widgets:
+            self.criteria_widgets.remove(widget_tuple)
+    def _on_field_changed(self, field, input_layout, input_widget):
+        # Clear old input
+        for i in reversed(range(input_layout.count())):
+            item = input_layout.takeAt(i)
+            if item.widget():
+                item.widget().deleteLater()
+        self._build_field_input(field, input_layout, input_widget)
+    def _build_field_input(self, field, input_layout, input_widget):
+        values = [c.get(field, "") for c in self.inventory.get_all_cards()] if self.inventory else []
+        try:
+            nums = [float(str(v).replace("$", "").strip()) for v in values if str(v).replace("$", "").strip() != ""]
+        except Exception:
+            nums = []
+        if len(nums) >= len(values) * 0.8 and len(nums) > 0:
+            min_box = QDoubleSpinBox()
+            min_box.setMinimum(-100000)
+            min_box.setMaximum(100000)
+            min_box.setSingleStep(0.01)
+            min_box.setPrefix(">= ")
+            max_box = QDoubleSpinBox()
+            max_box.setMinimum(-100000)
+            max_box.setMaximum(100000)
+            max_box.setSingleStep(0.01)
+            max_box.setPrefix("<= ")
+            input_layout.addWidget(min_box)
+            input_layout.addWidget(max_box)
+            input_widget._field_input = (min_box, max_box)
+        elif 1 < len(set(values)) <= 12:
+            combo = QComboBox()
+            combo.addItem("")
+            combo.addItems(sorted(set(str(v) for v in values if v != "")))
+            input_layout.addWidget(combo)
+            input_widget._field_input = combo
+        else:
+            edit = QLineEdit()
+            edit.setPlaceholderText(f"Filter {field}")
+            input_layout.addWidget(edit)
+            input_widget._field_input = edit
+    def get_rule(self):
+        rule = {}
+        rule['count_type'] = self.count_type.currentText()
+        rule['count'] = self.count_value.value() if self.count_type.currentIndex() == 0 else self.percent_value.value()
+        rule['criteria'] = []
+        for field_dropdown, input_widget, _ in self.criteria_widgets:
+            field = field_dropdown.currentText()
+            inp = getattr(input_widget, '_field_input', None)
+            if isinstance(inp, tuple):
+                min_val = inp[0].value()
+                max_val = inp[1].value()
+                rule['criteria'].append((field, (min_val, max_val)))
+            elif isinstance(inp, QComboBox):
+                rule['criteria'].append((field, inp.currentText()))
+            elif isinstance(inp, QLineEdit):
+                rule['criteria'].append((field, inp.text().strip()))
+        return rule
+    def set_rule(self, rule):
+        self.count_type.setCurrentIndex(0 if rule.get('count_type') == 'Count' else 1)
+        if rule.get('count_type') == 'Count':
+            self.count_value.setValue(int(rule.get('count', 1)))
+        else:
+            self.percent_value.setValue(float(rule.get('count', 1)))
+        # Remove all but one criterion row
+        while len(self.criteria_widgets) > 1:
+            self._remove_criterion_row(self.criteria_area.itemAt(0), self.criteria_widgets[0])
+        # Set criteria
+        for i, (field, val) in enumerate(rule.get('criteria', [])):
+            if i >= len(self.criteria_widgets):
+                self.add_criterion_row(field)
+            field_dropdown, input_widget, _ = self.criteria_widgets[i]
+            idx = field_dropdown.findText(field)
+            if idx >= 0:
+                field_dropdown.setCurrentIndex(idx)
+            inp = getattr(input_widget, '_field_input', None)
+            if isinstance(inp, tuple):
+                inp[0].setValue(val[0])
+                inp[1].setValue(val[1])
+            elif isinstance(inp, QComboBox):
+                idx2 = inp.findText(val)
+                if idx2 >= 0:
+                    inp.setCurrentIndex(idx2)
+            elif isinstance(inp, QLineEdit):
+                inp.setText(val)
     def _toggle_count_type(self, idx):
         if idx == 0:
             self.count_value.setVisible(True)
@@ -86,39 +191,6 @@ class BreakRuleWidget(QWidget):
         else:
             self.count_value.setVisible(False)
             self.percent_value.setVisible(True)
-    def get_rule(self):
-        rule = {}
-        rule['count_type'] = self.count_type.currentText()
-        rule['count'] = self.count_value.value() if self.count_type.currentIndex() == 0 else self.percent_value.value()
-        for field, widget in self.field_selectors.items():
-            if isinstance(widget, tuple):
-                min_val = widget[0].value()
-                max_val = widget[1].value()
-                rule[field] = (min_val, max_val)
-            elif isinstance(widget, QComboBox):
-                rule[field] = widget.currentText()
-            elif isinstance(widget, QLineEdit):
-                rule[field] = widget.text().strip()
-        return rule
-    def set_rule(self, rule):
-        if rule.get('count_type') == 'Count':
-            self.count_type.setCurrentIndex(0)
-            self.count_value.setValue(int(rule.get('count', 1)))
-        else:
-            self.count_type.setCurrentIndex(1)
-            self.percent_value.setValue(float(rule.get('count', 1)))
-        for field, widget in self.field_selectors.items():
-            if field in rule:
-                val = rule[field]
-                if isinstance(widget, tuple):
-                    widget[0].setValue(val[0])
-                    widget[1].setValue(val[1])
-                elif isinstance(widget, QComboBox):
-                    idx = widget.findText(val)
-                    if idx >= 0:
-                        widget.setCurrentIndex(idx)
-                elif isinstance(widget, QLineEdit):
-                    widget.setText(val)
 
 class BreakBuilderDialog(QDialog):
     """
@@ -135,40 +207,47 @@ class BreakBuilderDialog(QDialog):
         self.setMinimumSize(900, 600)
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.inventory = inventory
+        # --- Total cards input (must be initialized before any method uses it) ---
+        self.total_cards_input = QSpinBox()
+        self.total_cards_input.setMinimum(1)
+        self.total_cards_input.setMaximum(10000)
+        self.total_cards_input.setValue(30)
+        self.total_cards_input.setToolTip("Specify the total number of cards needed for the break.")
+        self.total_cards_input.valueChanged.connect(self.generate_break_list)  # Always trigger full break list regeneration
         # All required attributes must be initialized before any method that uses them (regression rule)
         self.filtered_inventory = self.inventory.get_all_cards()
         self.break_items = []  # List of dicts (cards/items)
         self.curated_cards = []  # List of curated card dicts
         self.rules = []  # List of rule dicts
         self.rule_widgets = []  # List of BreakRuleWidget
-        layout = QVBoxLayout(self)
-        # --- Step-by-step workflow guidance at the top ---
-        workflow_label = QLabel("<b>Step 1:</b> Filter inventory & select cards → <b>Step 2:</b> Curate must-haves → <b>Step 3:</b> Set rules → <b>Step 4:</b> Generate break")
-        workflow_label.setStyleSheet("font-size: 13px; margin-bottom: 8px;")
-        layout.insertWidget(0, workflow_label)
-        # --- Total cards input (must be initialized before any method uses it) ---
-        total_row = QHBoxLayout()
-        total_label = QLabel("Total cards needed for break:")
-        self.total_cards_input = QSpinBox()
-        self.total_cards_input.setMinimum(1)
-        self.total_cards_input.setMaximum(10000)
-        self.total_cards_input.setValue(30)
-        self.total_cards_input.setToolTip("Specify the total number of cards needed for the break.")
-        self.total_cards_input.valueChanged.connect(self.generate_break_list)
-        total_row.addWidget(total_label)
-        total_row.addWidget(self.total_cards_input)
-        layout.insertLayout(1, total_row)
-
+        self.current_break_list = []  # Flat list of cards in break (for export)
+        self.current_break_list_details = []  # [(section_type, section_info, [cards])]
+        # --- Tabbed workflow ---
+        self.tabs = QTabWidget()
+        self.tabs.setTabPosition(QTabWidget.North)
+        self.tabs.setMovable(False)
+        self.tabs.setStyleSheet("QTabBar::tab { min-width: 180px; font-size: 15px; font-weight: bold; padding: 8px 18px; } QTabBar::tab:selected { background: #1976d2; color: white; border-radius: 8px; }")
+        main_layout = QVBoxLayout(self)
+        main_layout.addWidget(self.tabs)
+        # --- Step 1: Filter Inventory Tab ---
+        filter_tab = QWidget()
+        filter_layout = QVBoxLayout(filter_tab)
         # --- Inventory Section ---
         inventory_group = QGroupBox("1. Inventory (Filter & Select)")
-        inventory_group.setStyleSheet("QGroupBox { font-weight: bold; border: 1px solid #bbb; margin-top: 8px; padding: 8px; } ")
+        inventory_group.setStyleSheet("QGroupBox { font-weight: bold; border: 1px solid #bbb; margin-top: 8px; padding: 12px 8px 18px 8px; background: #f7f7fa; } ")
         inv_group_layout = QVBoxLayout(inventory_group)
-        # Filter sidebar with background
+        inv_group_layout.setSpacing(10)
+        # Inventory area: sidebar (left) + table (right)
+        inv_hbox = QHBoxLayout()
+        # Filter sidebar with background and border
         sidebar = QFrame()
         sidebar.setFrameShape(QFrame.StyledPanel)
         sidebar.setMinimumWidth(260)
         sidebar.setMaximumWidth(340)
+        sidebar.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
+        sidebar.setStyleSheet("background: #e3eaf7; border: 1.5px solid #b3c6e0; border-radius: 8px; padding: 8px;")
         sidebar_layout = QVBoxLayout(sidebar)
+        sidebar_layout.setSpacing(8)
         sidebar_layout.addWidget(QLabel("Filters"))
         # Scroll area for filters
         filter_scroll = QScrollArea()
@@ -196,7 +275,7 @@ class BreakBuilderDialog(QDialog):
         self.clear_filters_btn.clicked.connect(self.clear_all_filters)
         sidebar_layout.addWidget(self.clear_filters_btn)
         sidebar_layout.addStretch(1)
-        inv_group_layout.addWidget(sidebar)
+        inv_hbox.addWidget(sidebar, 0)
         # CardTableView for inventory
         from ui.main_window import MainWindow  # for columns
         self.columns = MainWindow.default_columns if hasattr(MainWindow, 'default_columns') else [
@@ -205,58 +284,142 @@ class BreakBuilderDialog(QDialog):
         ]
         self.card_table = CardTableView(self.inventory, self.columns)
         self.card_table.setSelectionMode(QAbstractItemView.MultiSelection)
-        inv_group_layout.addWidget(self.card_table)
+        self.card_table.setMinimumHeight(220)
+        self.card_table.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        inv_table_vbox = QVBoxLayout()
+        inv_table_vbox.addWidget(self.card_table)
+        # Placeholder for empty inventory
+        self.inventory_placeholder = QLabel("No cards in inventory.")
+        self.inventory_placeholder.setStyleSheet("color: #888; font-style: italic; padding: 6px;")
+        if not self.inventory.get_all_cards():
+            inv_table_vbox.addWidget(self.inventory_placeholder)
         # Pagination widget below the table
-        inv_group_layout.addWidget(self.card_table.pagination_widget)
-        # Add inventory group to main layout
-        layout.insertWidget(1, inventory_group)
-
-        # --- Curated Cards Section ---
+        inv_table_vbox.addWidget(self.card_table.pagination_widget)
+        inv_hbox.addLayout(inv_table_vbox, 1)
+        inv_group_layout.addLayout(inv_hbox)
+        filter_layout.insertWidget(0, inventory_group)
+        # --- Step 2: Curate Must-Haves Tab ---
+        curate_tab = QWidget()
+        curate_layout = QVBoxLayout(curate_tab)
         curated_group = QGroupBox("2. Curated Cards (Guaranteed in Break)")
-        curated_group.setStyleSheet("QGroupBox { font-weight: bold; border: 1px solid #bbb; margin-top: 8px; padding: 8px; } ")
+        curated_group.setStyleSheet("QGroupBox { font-weight: bold; border: 1px solid #bbb; margin-top: 8px; padding: 12px 8px 18px 8px; background: #f7f7fa; } ")
         curated_layout = QVBoxLayout(curated_group)
+        curated_layout.setSpacing(10)
         curated_layout.addWidget(QLabel("Drag to reorder. Remove to exclude from break."))
-        # Add/Remove buttons for curated list
+        # Add/Remove buttons for curated list (modern, with icons)
         curated_btn_row = QHBoxLayout()
-        self.add_to_curated_btn = QPushButton("Add Selected to Curated")
+        self.add_to_curated_btn = QPushButton(" Add Selected to Curated")
+        self.add_to_curated_btn.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_DialogYesButton))
+        self.add_to_curated_btn.setStyleSheet("padding: 6px 18px; border-radius: 8px; background: #1976d2; color: white; font-weight: bold; font-size: 13px;")
+        self.add_to_curated_btn.setToolTip("Add selected cards from inventory to curated list.")
         self.add_to_curated_btn.clicked.connect(self.add_selected_to_curated)
-        self.remove_from_curated_btn = QPushButton("Remove Selected from Curated")
+        self.remove_from_curated_btn = QPushButton(" Remove Selected from Curated")
+        self.remove_from_curated_btn.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_DialogNoButton))
+        self.remove_from_curated_btn.setStyleSheet("padding: 6px 18px; border-radius: 8px; background: #e53935; color: white; font-weight: bold; font-size: 13px;")
+        self.remove_from_curated_btn.setToolTip("Remove selected cards from curated list.")
         self.remove_from_curated_btn.clicked.connect(self.remove_selected_from_curated)
         curated_btn_row.addWidget(self.add_to_curated_btn)
         curated_btn_row.addWidget(self.remove_from_curated_btn)
+        curated_btn_row.addStretch(1)
         curated_layout.addLayout(curated_btn_row)
         self.curated_table = CardTableView(self, self.columns)
         self.curated_table.setSelectionMode(QAbstractItemView.MultiSelection)
-        self.curated_table.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.curated_table.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.curated_table.setMinimumHeight(140)
         curated_layout.addWidget(self.curated_table)
-        layout.insertWidget(2, curated_group)
-
+        # Placeholder for empty curated table
+        self.curated_placeholder = QLabel("No curated cards yet.")
+        self.curated_placeholder.setStyleSheet("color: #888; font-style: italic; padding: 6px;")
+        if not self.curated_cards:
+            curated_layout.addWidget(self.curated_placeholder)
+        self._curated_layout = curated_layout  # Save for dynamic placeholder
+        curate_layout.insertWidget(0, curated_group)
+        # --- Step 3: Set Rules Tab ---
+        rules_tab = QWidget()
+        rules_layout = QVBoxLayout(rules_tab)
+        # --- Save/Load Rule Set buttons (move to top of rules tab) ---
+        self._add_rule_set_buttons(rules_layout)
         # --- Break List Controls/Preview Section ---
-        break_group = QGroupBox("3. Break List Controls & Preview")
-        break_group.setStyleSheet("QGroupBox { font-weight: bold; border: 1px solid #bbb; margin-top: 8px; padding: 8px; } ")
+        break_group = QGroupBox("3. Break List Controls  Preview")
+        break_group.setStyleSheet("QGroupBox { font-weight: bold; border: 1px solid #bbb; margin-top: 8px; padding: 12px 8px 18px 8px; background: #f7f7fa; } ")
         break_layout = QVBoxLayout(break_group)
-        # Add Rule button
-        self.add_rule_btn = QPushButton("Add Rule")
+        break_layout.setSpacing(10)
+        # Collapsible rule builder area (expanded by default)
+        self.rules_collapsed = False
+        self.toggle_rules_btn = QPushButton("▼ Rules")
+        self.toggle_rules_btn.setCheckable(True)
+        self.toggle_rules_btn.setChecked(True)
+        self.toggle_rules_btn.setStyleSheet("font-weight: bold; font-size: 14px; background: #f5f5f5; border: none; text-align: left; padding: 4px 8px;")
+        self.toggle_rules_btn.setToolTip("Show/hide the rule builder area.")
+        self.toggle_rules_btn.toggled.connect(self._toggle_rules_area)
+        break_layout.addWidget(self.toggle_rules_btn)
+        # Rule widgets area (as a QWidget for animation)
+        self.rules_area_scroll = QScrollArea()
+        self.rules_area_scroll.setWidgetResizable(True)
+        self.rules_area_widget = QWidget()
+        self.rules_area_layout = QVBoxLayout(self.rules_area_widget)
+        self.rules_area_layout.setContentsMargins(0, 0, 0, 0)
+        self.rules_area_layout.setSpacing(8)
+        self.rules_area_scroll.setWidget(self.rules_area_widget)
+        self.rules_area_scroll.setMinimumHeight(120)
+        self.rules_area_scroll.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        break_layout.addWidget(self.rules_area_scroll)
+        # Add Rule button (modern, with icon)
+        self.add_rule_btn = QPushButton(" Add Rule")
+        self.add_rule_btn.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_FileDialogNewFolder))
+        self.add_rule_btn.setStyleSheet("padding: 6px 18px; border-radius: 8px; background: #43a047; color: white; font-weight: bold; font-size: 13px;")
+        self.add_rule_btn.setToolTip("Add a new rule for break composition.")
         self.add_rule_btn.clicked.connect(self.add_rule)
         break_layout.addWidget(self.add_rule_btn)
-        # Rule widgets area
-        self.rules_area = QVBoxLayout()
-        break_layout.addLayout(self.rules_area)
-        # Generate button and preview
+        rules_layout.insertWidget(1, break_group)
+        # --- Step 4: Generate Break Tab ---
+        generate_tab = QWidget()
+        generate_layout = QVBoxLayout(generate_tab)
+        # Add total cards input at the top of the Generate tab
+        total_row = QHBoxLayout()
+        total_label = QLabel("Total cards needed for break:")
+        total_row.addWidget(total_label)
+        total_row.addWidget(self.total_cards_input)
+        generate_layout.addLayout(total_row)
+        # --- Generate Break List button and preview (moved from Set Rules tab) ---
         btn_row = QHBoxLayout()
-        self.generate_btn = QPushButton("Generate Break List")
+        self.generate_btn = QPushButton(" Generate Break List")
+        self.generate_btn.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_MediaPlay))
+        self.generate_btn.setStyleSheet("padding: 8px 24px; border-radius: 10px; background: #1976d2; color: white; font-weight: bold; font-size: 15px;")
+        self.generate_btn.setToolTip("Generate the break list using curated cards and rules, from the currently filtered inventory.")
         self.generate_btn.clicked.connect(self.generate_break_list)
+        self.export_btn = QPushButton(" Export Break List")
+        self.export_btn.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_DialogSaveButton))
+        self.export_btn.setStyleSheet("padding: 8px 24px; border-radius: 10px; background: #388e3c; color: white; font-weight: bold; font-size: 15px;")
+        self.export_btn.setToolTip("Export the break list in Title/Description format (CSV)")
+        self.export_btn.clicked.connect(self.export_break_list_item_listing)
         self.break_preview_label = QLabel("Break List Preview:")
-        self.break_preview_box = QLineEdit()
+        self.break_preview_box = QTextEdit()
         self.break_preview_box.setReadOnly(True)
-        self.filter_hint_label = QLabel("Rules will only select from cards currently visible in the inventory table.")
-        self.filter_hint_label.setStyleSheet("color: #888; font-style: italic;")
+        self.break_preview_box.setStyleSheet("background: #fafafa; border: 1px solid #bbb; border-radius: 6px; font-family: monospace; font-size: 13px; padding: 6px;")
+        self.break_preview_box.setMinimumHeight(60)
         btn_row.addWidget(self.generate_btn)
+        btn_row.addWidget(self.export_btn)
         btn_row.addWidget(self.break_preview_label)
         btn_row.addWidget(self.break_preview_box)
-        btn_row.addWidget(self.filter_hint_label)
-        break_layout.addLayout(btn_row)
-        layout.insertWidget(3, break_group)
+        generate_layout.addLayout(btn_row)
+        self.filter_hint_label = QLabel("Rules will only select from cards currently visible in the inventory table.")
+        self.filter_hint_label.setStyleSheet("color: #888; font-style: italic;")
+        generate_layout.addWidget(self.filter_hint_label)
+        # --- Add tabs ---
+        self.tabs.addTab(filter_tab, "1. Filter Inventory")
+        self.tabs.addTab(curate_tab, "2. Curate Must-Haves")
+        self.tabs.addTab(rules_tab, "3. Set Rules")
+        self.tabs.addTab(generate_tab, "4. Generate Break")
+        # --- Floating help button (add to main_layout) ---
+        self.help_btn = QPushButton()
+        self.help_btn.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_MessageBoxQuestion))
+        self.help_btn.setToolTip("Show quick tips and workflow guidance.")
+        self.help_btn.setFixedSize(44, 44)
+        self.help_btn.setStyleSheet("border-radius: 22px; background: #1976d2; color: white; position: absolute; bottom: 24px; right: 24px; font-size: 22px; box-shadow: 0 2px 8px rgba(0,0,0,0.18);")
+        self.help_btn.clicked.connect(self.show_help_dialog)
+        self.help_btn.setAccessibleName("Help")
+        main_layout.addWidget(self.help_btn, 0, Qt.AlignBottom | Qt.AlignRight)
         # Add initial rule widget if none exist
         if not self.rule_widgets:
             self.add_rule()
@@ -290,37 +453,105 @@ class BreakBuilderDialog(QDialog):
     def update_curated_table(self):
         """
         Update the curated table to reflect the current curated_cards list.
+        Animate added/removed rows for visual feedback.
+        Show/hide the empty placeholder dynamically.
         """
+        # Store previous set for animation
+        prev_set = set(id(card) for card in getattr(self, '_last_curated_cards', []))
+        new_set = set(id(card) for card in self.curated_cards)
         self.curated_table.update_cards(self.curated_cards)
+        self.curated_table.repaint()
+        # Animate added rows
+        for row, card in enumerate(self.curated_cards):
+            if id(card) not in prev_set:
+                self._animate_table_row(self.curated_table, row, added=True)
+        # Animate removed rows (optional, not shown since row is gone)
+        self._last_curated_cards = list(self.curated_cards)
+        # --- Dynamic placeholder logic ---
+        if hasattr(self, 'curated_placeholder') and hasattr(self, '_curated_layout'):
+            if not self.curated_cards:
+                if self._curated_layout.indexOf(self.curated_placeholder) == -1:
+                    self._curated_layout.addWidget(self.curated_placeholder)
+            else:
+                self.curated_placeholder.setParent(None)
+    def _animate_table_row(self, table, row, added=True, test_mode=False):
+        """
+        Animate a table row background color for add/remove feedback.
+        If test_mode is True, always create the overlay for test detection.
+        """
+        # Get the rect for the row (fix: do not offset by +1)
+        rect = table.visualRect(table.model.index(row, 0))
+        if (not rect.isValid() or rect.height() == 0) and not test_mode:
+            return
+        # If in test mode and rect is invalid, create a default rect
+        if test_mode and (not rect.isValid() or rect.height() == 0):
+            rect = QRect(0, 0, 120, 32)
+        # Create a QWidget overlay for animation
+        overlay = QWidget(table.viewport())
+        overlay.setGeometry(rect)
+        color_start = "#c8e6c9" if added else "#ffcdd2"
+        color_end = "#ffffff"
+        overlay.setStyleSheet(f"background: {color_start}; border-radius: 4px;")
+        overlay.show()
+        anim = QPropertyAnimation(overlay, b"windowOpacity")
+        anim.setDuration(600)
+        anim.setStartValue(1.0)
+        anim.setEndValue(0.0)
+        anim.setEasingCurve(QEasingCurve.InOutQuad)
+        anim.finished.connect(overlay.deleteLater)
+        overlay._row_anim = anim  # Prevent GC until finished
+        anim.start()
+    def _rule_to_str(self, rule):
+        """Return a human-readable string for a rule's criteria."""
+        parts = []
+        for field, val in rule.get('criteria', []):
+            if isinstance(val, tuple):
+                min_val, max_val = val
+                parts.append(f"{field} >= {min_val}, <= {max_val}")
+            elif isinstance(val, str) and val:
+                parts.append(f"{field}: {val}")
+        count_type = rule.get('count_type', '')
+        count = rule.get('count', '')
+        if count_type == '% of available':
+            return f"{count}% of filtered ({', '.join(parts)})"
+        else:
+            return f"{count} cards ({', '.join(parts)})"
     def generate_break_list(self):
         """
         Combine curated and rule-based selections, deduplicate, and match total.
-        Show preview with sections for curated and each rule-based group.
-        Handle errors if not enough cards are available for any rule.
-        Rules only operate on the currently filtered inventory pool.
+        Store both a flat list and a detailed breakdown for preview/export sync.
+        Show preview with sections for curated, each rule-based group (with rule info), and filler.
         """
         total_needed = self.total_cards_input.value()
         curated = list(self.curated_cards)
-        # Use only the filtered pool for rule-based selection
         all_cards = self.filtered_inventory
         used_ids = set(id(c) for c in curated)
         rule_cards_by_rule = []
-        # Advanced rule-based selection
-        for rule_widget in self.rule_widgets:
+        allocations = []  # (rule, filtered, n)
+        enabled_rules = []
+        for i in range(self.rules_area_layout.count()):
+            item = self.rules_area_layout.itemAt(i)
+            if not item or not item.widget():
+                continue
+            group = item.widget()
+            rule_widget = getattr(group, '_rule_widget', None)
+            enable_checkbox = getattr(group, '_enable_checkbox', None)
+            if not rule_widget or not enable_checkbox or not enable_checkbox.isChecked():
+                continue
             rule = rule_widget.get_rule()
-            # Build filter for this rule
             filtered = []
             for card in all_cards:
                 if id(card) in used_ids:
                     continue
                 match = True
-                for field, val in rule.items():
-                    if field in ("count_type", "count"):
-                        continue
+                for field, val in rule.get('criteria', []):
                     if isinstance(val, tuple):
                         min_val, max_val = val
                         try:
-                            card_val = float(card.get(field, 0))
+                            card_val = card.get(field, 0)
+                            if isinstance(card_val, str):
+                                card_val = card_val.replace("$", "").strip()
+                            card_val = float(card_val)
                         except Exception:
                             card_val = 0
                         if not (min_val <= card_val <= max_val):
@@ -332,44 +563,70 @@ class BreakBuilderDialog(QDialog):
                             break
                 if match:
                     filtered.append(card)
-            # Determine how many to select
             n = 0
             if rule.get("count_type") == "Count":
                 n = int(rule.get("count", 1))
             else:
                 percent = float(rule.get("count", 1))
-                n = max(1, int(len(filtered) * percent / 100))
-            if n > len(filtered):
-                QMessageBox.warning(self, "Not Enough Cards", f"Rule for {rule} requested {n} cards but only {len(filtered)} available. Using all available.")
-                n = len(filtered)
-            selected = filtered[:n]
+                n = int(total_needed * percent / 100)
+            n = min(n, len(filtered))
+            allocations.append((rule, filtered, n))
+            enabled_rules.append((rule, filtered))
+        # Adjust allocations if sum exceeds total_needed
+        total_alloc = sum(n for _, _, n in allocations)
+        if total_alloc > total_needed:
+            over = total_alloc - total_needed
+            for i in reversed(range(len(allocations))):
+                rule, filtered, n = allocations[i]
+                reduce_by = min(over, n-1 if n>1 else over)
+                allocations[i] = (rule, filtered, n - reduce_by)
+                over -= reduce_by
+                if over <= 0:
+                    break
+        # Second pass: select cards for each rule
+        rule_cards_by_rule = []
+        for rule, filtered, n in allocations:
+            selected = random.sample(filtered, n) if n > 0 else []
             for card in selected:
                 used_ids.add(id(card))
             rule_cards_by_rule.append((rule, selected))
-        # Combine curated and rule-based, fill with randoms if needed
         final_list = list(curated)
-        for rule, cards in rule_cards_by_rule:
+        break_details = []
+        if curated:
+            break_details.append(("Curated", None, curated))
+        for i, (rule, cards) in enumerate(rule_cards_by_rule):
+            break_details.append(("Rule", rule, cards))
             final_list.extend(cards)
-        # Fill with randoms if still not enough
+        filler = []
         if len(final_list) < total_needed:
             for card in all_cards:
                 if id(card) not in used_ids:
+                    filler.append(card)
                     final_list.append(card)
                     used_ids.add(id(card))
                     if len(final_list) >= total_needed:
                         break
-        # Show preview with sections
+        if filler:
+            break_details.append(("Filler", None, filler))
+        # Store for export
+        self.current_break_list = final_list[:total_needed]
+        self.current_break_list_details = break_details
+        # Show preview with sections and rule info
         lines = []
-        if curated:
-            lines.append("Curated Cards:")
-            lines.extend([f"  {c.get('Name', '')} [{c.get('Set name', '')}]" for c in curated])
-        for i, (rule, cards) in enumerate(rule_cards_by_rule):
-            lines.append(f"Rule {i+1} ({rule.get('count_type')} {rule.get('count')}):")
-            lines.extend([f"  {c.get('Name', '')} [{c.get('Set name', '')}]" for c in cards])
-        if len(final_list) > len(curated) + sum(len(cards) for _, cards in rule_cards_by_rule):
-            lines.append("Filler Cards:")
-            lines.extend([f"  {c.get('Name', '')} [{c.get('Set name', '')}]" for c in final_list[len(curated) + sum(len(cards) for _, cards in rule_cards_by_rule):]])
-        self.break_preview_box.setText("\n".join(lines[:total_needed + 10]))  # Show a bit more than needed for clarity
+        for section in break_details:
+            section_type, rule, cards = section
+            if not cards:
+                continue
+            if section_type == "Curated":
+                lines.append("Curated Cards:")
+            elif section_type == "Rule":
+                idx = [i for i, s in enumerate(break_details) if s[0] == "Rule" and s[1] == rule].index(0) + 1
+                lines.append(f"Rule ({self._rule_to_str(rule)}):")
+            elif section_type == "Filler":
+                lines.append("Filler Cards:")
+            for c in cards:
+                lines.append(f"  {c.get('Name', '')} [{c.get('Set name', '')}]")
+        self.break_preview_box.setText("\n".join(lines[:total_needed + 10]))
     def update_table_filter(self):
         # Use self.filter_inputs (sidebar QLineEdits) for filtering
         filters = {col: self.filter_inputs[col].text() for col in self.filter_inputs}
@@ -377,6 +634,14 @@ class BreakBuilderDialog(QDialog):
         self.filtered_inventory = filtered  # Store the filtered pool
         self.card_table.update_cards(filtered)
         self.card_table.repaint()
+        # --- Inventory placeholder logic ---
+        if hasattr(self, 'inventory_placeholder'):
+            if not filtered:
+                if self.card_table.parentWidget() and self.inventory_placeholder.parent() != self.card_table.parentWidget():
+                    self.card_table.parentWidget().layout().addWidget(self.inventory_placeholder)
+                self.inventory_placeholder.show()
+            else:
+                self.inventory_placeholder.hide()
         # --- Active filter chips logic ---
         # Clear old chips
         while self.active_filter_chips_layout.count():
@@ -395,38 +660,177 @@ class BreakBuilderDialog(QDialog):
     def _clear_filter_chip(self, col):
         self.filter_inputs[col].clear()
         self.update_table_filter()
-    def export_break_list(self):
+    def export_break_list_item_listing(self):
         """
-        Export the generated break list (from preview) to clipboard and/or CSV.
+        Export the generated break list (from preview) in Title/Description format (CSV), using the same logic and templates as the main export_item_listings.
+        Only export the cards in self.current_break_list, in order.
         """
-        import pyperclip
-        text = self.break_preview_box.text()
-        pyperclip.copy(text)
-        fname, _ = QFileDialog.getSaveFileName(self, "Export Break List", "break_list.csv", "CSV Files (*.csv)")
-        if fname:
-            with open(fname, 'w', encoding='utf-8', newline='') as f:
-                for line in text.splitlines():
-                    f.write(line + '\n')
-        QMessageBox.information(self, "Exported", "Break list exported and copied to clipboard.")
+        from PySide6.QtWidgets import QFileDialog, QMessageBox
+        final_list = self.current_break_list
+        if not final_list:
+            QMessageBox.warning(self, "Export Error", "No break list generated. Please generate the break list first.")
+            return
+        all_fields = set()
+        for card in final_list:
+            all_fields.update(card.keys())
+        all_fields = sorted(all_fields)
+        dlg = ExportItemListingFieldsDialog(all_fields, self)
+        if not dlg.exec():
+            return
+        title_fields, desc_fields = dlg.get_fields()
+        if not title_fields:
+            title_fields = ["Name", "Foil"] if "Name" in all_fields else all_fields[:1]
+        if not desc_fields:
+            desc_fields = [f for f in all_fields if f not in ("Name", "Foil", "Purchase price")]
+        listings = []
+        for card in final_list:
+            title = " ".join(str(card.get(f, "")) for f in title_fields if f in card)
+            desc_lines = [f"{f}: {card.get(f, '')}" for f in desc_fields if f in card]
+            desc = "\n".join(desc_lines)
+            listings.append((title.strip(), desc))
+        fname, _ = QFileDialog.getSaveFileName(self, "Export Break List (Item Listing)", "break_list.csv", "CSV Files (*.csv)")
+        if not fname:
+            return
+        with open(fname, "w", newline='', encoding="utf-8") as f:
+            writer = csv.writer(f)
+            writer.writerow(["Title", "Description"])
+            for title, desc in listings:
+                writer.writerow([title, desc])
+        QMessageBox.information(self, "Exported", f"Break list exported as item listing CSV with {len(listings)} cards.")
     def clear_all_filters(self):
         for le in self.filter_inputs.values():
             le.clear()
         self.update_table_filter()
-    def add_rule(self):
-        """
-        Add a new rule widget to the break builder, connect its signals to regenerate the break list preview, and update the UI.
-        """
-        rule_widget = BreakRuleWidget(self)
+    def _toggle_rules_area(self, checked):
+        self.rules_area_widget.setVisible(checked)
+        self.toggle_rules_btn.setText("▼ Rules" if checked else "► Rules")
+    def add_rule(self, rule_data=None):
+        rule_widget = BreakRuleWidget(self, inventory_fields=self.filter_fields, inventory=self.inventory)
+        if rule_data:
+            rule_widget.set_rule(rule_data)
+        group = QGroupBox(f"Rule {len(self.rule_widgets)+1}")
+        group.setCheckable(True)
+        group.setChecked(True)
+        group.setStyleSheet("QGroupBox { background: #f8fafd; border: 1.5px solid #b3c6e0; border-radius: 10px; margin: 6px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.04); font-weight: bold; } QGroupBox::indicator { width: 24px; height: 24px; }")
+        vbox = QVBoxLayout(group)
+        vbox.setContentsMargins(8, 4, 8, 4)
+        enable_row = QHBoxLayout()
+        enable_checkbox = QCheckBox("Enable Rule")
+        enable_checkbox.setChecked(True)
+        enable_checkbox.setToolTip("Enable or disable this rule without deleting it.")
+        enable_checkbox.stateChanged.connect(self.generate_break_list)
+        enable_row.addWidget(enable_checkbox)
+        enable_row.addStretch(1)
+        vbox.addLayout(enable_row)
+        vbox.addWidget(rule_widget)
+        # Remove forced collapse logic: allow multiple rules to be expanded at once
+        def on_toggle(checked):
+            rule_widget.setVisible(checked)
+        group.toggled.connect(on_toggle)
+        remove_btn = QPushButton()
+        remove_btn.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_DialogCloseButton))
+        remove_btn.setToolTip("Remove this rule")
+        remove_btn.setFixedSize(28, 28)
+        remove_btn.setStyleSheet("border: none; background: transparent;")
+        remove_btn.clicked.connect(lambda: self.remove_rule_card(group, rule_widget))
+        hbox = QHBoxLayout()
+        hbox.addStretch(1)
+        hbox.addWidget(remove_btn)
+        vbox.addLayout(hbox)
+        group._rule_widget = rule_widget
+        group._enable_checkbox = enable_checkbox
+        self.rules_area_layout.addWidget(group)
         self.rule_widgets.append(rule_widget)
-        self.rules_area.addWidget(rule_widget)
-        # Connect all child widgets to regenerate break list preview
-        for child in rule_widget.findChildren(QLineEdit):
-            child.textChanged.connect(self.generate_break_list)
-        for child in rule_widget.findChildren(QComboBox):
-            child.currentIndexChanged.connect(self.generate_break_list)
-        for child in rule_widget.findChildren(QSpinBox):
-            child.valueChanged.connect(self.generate_break_list)
-        for child in rule_widget.findChildren(QDoubleSpinBox):
-            child.valueChanged.connect(self.generate_break_list)
-        rule_widget.remove_btn.clicked.connect(lambda: self.remove_rule(rule_widget))
-        self.generate_break_list() 
+        self.generate_break_list()
+        group.setChecked(True)  # Expand the new rule by default
+    def remove_rule_card(self, group, rule_widget):
+        # Animate rule removal (optional, can use QPropertyAnimation for fade-out)
+        group.setVisible(False)
+        self.rules_area_layout.removeWidget(group)
+        group.deleteLater()
+        if rule_widget in self.rule_widgets:
+            self.rule_widgets.remove(rule_widget)
+        self.generate_break_list()
+    def show_help_dialog(self):
+        msg = (
+            "<b>Break/Autobox Builder Quick Tips</b><br><br>"
+            "<b>Step 1:</b> <b>Filter Inventory</b> — Use the sidebar to filter your cards. Only visible cards are used for rules.<br>"
+            "<b>Step 2:</b> <b>Curate Must-Haves</b> — Select cards you want guaranteed in the break and add them to the curated list.<br>"
+            "<b>Step 3:</b> <b>Set Rules</b> — Add rules to select cards by price, rarity, set, etc. Rules only use filtered cards.<br>"
+            "<b>Step 4:</b> <b>Generate Break</b> — Click 'Generate Break List' to preview and export your break.<br><br>"
+            "<b>Tips:</b><ul>"
+            "<li>Click filter chips to remove individual filters.</li>"
+            "<li>Use the 'Clear All Filters' button to reset filters.</li>"
+            "<li>Collapse the rule builder for a simpler view.</li>"
+            "<li>All actions are keyboard accessible and have tooltips.</li>"
+            "<li>Use the 'Simple/Advanced' toggle (coming soon) for more/less options.</li>"
+            "</ul>"
+        )
+        QMessageBox.information(self, "Break Builder Help", msg)
+    # --- Save/Load Rule Set ---
+    def save_rule_set(self):
+        """Save the current set of enabled rules to a template file."""
+        from PySide6.QtWidgets import QFileDialog, QMessageBox
+        rules = []
+        for i in range(self.rules_area_layout.count()):
+            item = self.rules_area_layout.itemAt(i)
+            if not item or not item.widget():
+                continue
+            group = item.widget()
+            rule_widget = getattr(group, '_rule_widget', None)
+            enable_checkbox = getattr(group, '_enable_checkbox', None)
+            if not rule_widget or not enable_checkbox or not enable_checkbox.isChecked():
+                continue
+            rules.append(rule_widget.get_rule())
+        if not rules:
+            QMessageBox.warning(self, "Save Rule Set", "No enabled rules to save.")
+            return
+        fname, _ = QFileDialog.getSaveFileName(self, "Save Rule Set", "break_rule_set.json", "JSON Files (*.json)")
+        if not fname:
+            return
+        with open(fname, 'w', encoding='utf-8') as f:
+            json.dump(rules, f, indent=2)
+        QMessageBox.information(self, "Saved", f"Rule set saved to {fname}.")
+
+    def load_rule_set(self):
+        """Load a rule set from a template file, replacing current rules."""
+        from PySide6.QtWidgets import QFileDialog, QMessageBox
+        fname, _ = QFileDialog.getOpenFileName(self, "Load Rule Set", "", "JSON Files (*.json)")
+        if not fname:
+            return
+        try:
+            with open(fname, 'r', encoding='utf-8') as f:
+                rules = json.load(f)
+        except Exception as e:
+            QMessageBox.warning(self, "Load Rule Set", f"Failed to load rule set: {e}")
+            return
+        # Remove all current rules
+        for i in reversed(range(self.rules_area_layout.count())):
+            item = self.rules_area_layout.itemAt(i)
+            if item and item.widget():
+                group = item.widget()
+                rule_widget = getattr(group, '_rule_widget', None)
+                self.rules_area_layout.removeWidget(group)
+                group.deleteLater()
+                if rule_widget in self.rule_widgets:
+                    self.rule_widgets.remove(rule_widget)
+        # Add loaded rules
+        for rule_data in rules:
+            self.add_rule(rule_data)
+        self.generate_break_list()
+
+    # Add Save/Load Rule Set buttons to the rules area
+    def _add_rule_set_buttons(self, parent_layout):
+        btn_row = QHBoxLayout()
+        save_btn = QPushButton("💾 Save Rule Set")
+        save_btn.setStyleSheet("padding: 6px 18px; border-radius: 8px; background: #1976d2; color: white; font-weight: bold; font-size: 13px;")
+        save_btn.setToolTip("Save the current set of enabled rules as a template.")
+        save_btn.clicked.connect(self.save_rule_set)
+        load_btn = QPushButton("📂 Load Rule Set")
+        load_btn.setStyleSheet("padding: 6px 18px; border-radius: 8px; background: #388e3c; color: white; font-weight: bold; font-size: 13px;")
+        load_btn.setToolTip("Load a saved rule set template, replacing current rules.")
+        load_btn.clicked.connect(self.load_rule_set)
+        btn_row.addWidget(save_btn)
+        btn_row.addWidget(load_btn)
+        btn_row.addStretch(1)
+        parent_layout.addLayout(btn_row) 

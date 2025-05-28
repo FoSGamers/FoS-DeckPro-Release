@@ -134,4 +134,30 @@ def test_generate_break_list_with_rules_and_curated(qtbot):
     preview2 = dlg.break_preview_box.text()
     lines2 = [line.strip() for line in preview2.splitlines() if line.strip() and not line.endswith(":")]
     assert len(set(lines2)) == len(lines2)
-    assert len(lines2) == 10 or len(lines2) == dlg.total_cards_input.value() 
+    assert len(lines2) == 10 or len(lines2) == dlg.total_cards_input.value()
+
+def test_break_builder_total_cards_input_exists_and_usable(qtbot):
+    """
+    Regression test: Ensure BreakBuilderDialog always initializes total_cards_input before any method uses it.
+    All required UI elements must be initialized before use, and tests must catch missing/unused attributes.
+    """
+    from ManaBox_Enhancer.ui.dialogs.break_builder import BreakBuilderDialog
+    class DummyInventory:
+        def get_all_cards(self):
+            return [{"Name": "Test", "Set name": "SetA", "Price": "5"} for _ in range(10)]
+        def filter_cards(self, filters):
+            return self.get_all_cards()
+        def remove_card(self, card):
+            pass
+        def add_card(self, card):
+            pass
+    dlg = BreakBuilderDialog(DummyInventory())
+    qtbot.addWidget(dlg)
+    # Should not raise AttributeError
+    try:
+        dlg.generate_break_list()
+    except AttributeError as e:
+        assert False, f"AttributeError raised: {e}"
+    # The input should exist and be functional
+    assert hasattr(dlg, "total_cards_input"), "total_cards_input should exist"
+    assert dlg.total_cards_input.value() > 0 

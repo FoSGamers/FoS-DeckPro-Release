@@ -135,6 +135,8 @@ class BreakBuilderDialog(QDialog):
         self.setMinimumSize(900, 600)
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.inventory = inventory
+        # All required attributes must be initialized before any method that uses them (regression rule)
+        self.filtered_inventory = self.inventory.get_all_cards()
         self.break_items = []  # List of dicts (cards/items)
         self.curated_cards = []  # List of curated card dicts
         self.rules = []  # List of rule dicts
@@ -144,6 +146,18 @@ class BreakBuilderDialog(QDialog):
         workflow_label = QLabel("<b>Step 1:</b> Filter inventory & select cards → <b>Step 2:</b> Curate must-haves → <b>Step 3:</b> Set rules → <b>Step 4:</b> Generate break")
         workflow_label.setStyleSheet("font-size: 13px; margin-bottom: 8px;")
         layout.insertWidget(0, workflow_label)
+        # --- Total cards input (must be initialized before any method uses it) ---
+        total_row = QHBoxLayout()
+        total_label = QLabel("Total cards needed for break:")
+        self.total_cards_input = QSpinBox()
+        self.total_cards_input.setMinimum(1)
+        self.total_cards_input.setMaximum(10000)
+        self.total_cards_input.setValue(30)
+        self.total_cards_input.setToolTip("Specify the total number of cards needed for the break.")
+        self.total_cards_input.valueChanged.connect(self.generate_break_list)
+        total_row.addWidget(total_label)
+        total_row.addWidget(self.total_cards_input)
+        layout.insertLayout(1, total_row)
 
         # --- Inventory Section ---
         inventory_group = QGroupBox("1. Inventory (Filter & Select)")
@@ -246,8 +260,6 @@ class BreakBuilderDialog(QDialog):
         # Add initial rule widget if none exist
         if not self.rule_widgets:
             self.add_rule()
-        # Track the current filtered inventory pool
-        self.filtered_inventory = self.inventory.get_all_cards()
         # Populate inventory list
         self.update_break_list()
         self.update_preview()
@@ -440,11 +452,14 @@ class BreakBuilderDialog(QDialog):
         self.rule_widgets.append(rule_widget)
         self.rules_area.addWidget(rule_widget)
         # Connect all child widgets to regenerate break list preview
-        for child in rule_widget.findChildren((QLineEdit, QComboBox, QSpinBox, QDoubleSpinBox)):
-            if isinstance(child, QLineEdit):
-                child.textChanged.connect(self.generate_break_list)
-            else:
-                child.valueChanged.connect(self.generate_break_list) if hasattr(child, 'valueChanged') else child.currentIndexChanged.connect(self.generate_break_list)
+        for child in rule_widget.findChildren(QLineEdit):
+            child.textChanged.connect(self.generate_break_list)
+        for child in rule_widget.findChildren(QComboBox):
+            child.currentIndexChanged.connect(self.generate_break_list)
+        for child in rule_widget.findChildren(QSpinBox):
+            child.valueChanged.connect(self.generate_break_list)
+        for child in rule_widget.findChildren(QDoubleSpinBox):
+            child.valueChanged.connect(self.generate_break_list)
         rule_widget.remove_btn.clicked.connect(lambda: self.remove_rule(rule_widget))
         self.generate_break_list()
     def remove_rule(self, rule_widget):

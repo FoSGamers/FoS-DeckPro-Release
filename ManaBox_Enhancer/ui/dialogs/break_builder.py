@@ -620,7 +620,6 @@ class BreakBuilderDialog(QDialog):
             if section_type == "Curated":
                 lines.append("Curated Cards:")
             elif section_type == "Rule":
-                idx = [i for i, s in enumerate(break_details) if s[0] == "Rule" and s[1] == rule].index(0) + 1
                 lines.append(f"Rule ({self._rule_to_str(rule)}):")
             elif section_type == "Filler":
                 lines.append("Filler Cards:")
@@ -769,7 +768,7 @@ class BreakBuilderDialog(QDialog):
         QMessageBox.information(self, "Break Builder Help", msg)
     # --- Save/Load Rule Set ---
     def save_rule_set(self):
-        """Save the current set of enabled rules to a template file."""
+        """Save the current set of rules (enabled and disabled) to a template file."""
         from PySide6.QtWidgets import QFileDialog, QMessageBox
         rules = []
         for i in range(self.rules_area_layout.count()):
@@ -779,11 +778,13 @@ class BreakBuilderDialog(QDialog):
             group = item.widget()
             rule_widget = getattr(group, '_rule_widget', None)
             enable_checkbox = getattr(group, '_enable_checkbox', None)
-            if not rule_widget or not enable_checkbox or not enable_checkbox.isChecked():
+            if not rule_widget or not enable_checkbox:
                 continue
-            rules.append(rule_widget.get_rule())
+            rule = rule_widget.get_rule()
+            rule['enabled'] = enable_checkbox.isChecked()
+            rules.append(rule)
         if not rules:
-            QMessageBox.warning(self, "Save Rule Set", "No enabled rules to save.")
+            QMessageBox.warning(self, "Save Rule Set", "No rules to save.")
             return
         fname, _ = QFileDialog.getSaveFileName(self, "Save Rule Set", "break_rule_set.json", "JSON Files (*.json)")
         if not fname:
@@ -814,9 +815,15 @@ class BreakBuilderDialog(QDialog):
                 group.deleteLater()
                 if rule_widget in self.rule_widgets:
                     self.rule_widgets.remove(rule_widget)
-        # Add loaded rules
+        # Add loaded rules (restore enabled/disabled state)
         for rule_data in rules:
-            self.add_rule(rule_data)
+            rule = dict(rule_data)
+            enabled = rule.pop('enabled', True)
+            self.add_rule(rule)
+            group = self.rules_area_layout.itemAt(self.rules_area_layout.count()-1).widget()
+            enable_checkbox = getattr(group, '_enable_checkbox', None)
+            if enable_checkbox:
+                enable_checkbox.setChecked(enabled)
         self.generate_break_list()
 
     # Add Save/Load Rule Set buttons to the rules area
@@ -824,7 +831,7 @@ class BreakBuilderDialog(QDialog):
         btn_row = QHBoxLayout()
         save_btn = QPushButton("💾 Save Rule Set")
         save_btn.setStyleSheet("padding: 6px 18px; border-radius: 8px; background: #1976d2; color: white; font-weight: bold; font-size: 13px;")
-        save_btn.setToolTip("Save the current set of enabled rules as a template.")
+        save_btn.setToolTip("Save the current set of rules as a template.")
         save_btn.clicked.connect(self.save_rule_set)
         load_btn = QPushButton("📂 Load Rule Set")
         load_btn.setStyleSheet("padding: 6px 18px; border-radius: 8px; background: #388e3c; color: white; font-weight: bold; font-size: 13px;")

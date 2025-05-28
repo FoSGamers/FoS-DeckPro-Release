@@ -371,7 +371,8 @@ class BreakBuilderDialog(QDialog):
             lines.extend([f"  {c.get('Name', '')} [{c.get('Set name', '')}]" for c in final_list[len(curated) + sum(len(cards) for _, cards in rule_cards_by_rule):]])
         self.break_preview_box.setText("\n".join(lines[:total_needed + 10]))  # Show a bit more than needed for clarity
     def update_table_filter(self):
-        filters = {col: self.filter_overlay.filters[col].text() for col in self.columns}
+        # Use self.filter_inputs (sidebar QLineEdits) for filtering
+        filters = {col: self.filter_inputs[col].text() for col in self.filter_inputs}
         filtered = self.inventory.filter_cards(filters)
         self.filtered_inventory = filtered  # Store the filtered pool
         self.card_table.update_cards(filtered)

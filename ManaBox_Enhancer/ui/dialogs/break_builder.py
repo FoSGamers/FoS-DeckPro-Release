@@ -624,7 +624,18 @@ class BreakBuilderDialog(QDialog):
             elif section_type == "Filler":
                 lines.append("Filler Cards:")
             for c in cards:
-                lines.append(f"  {c.get('Name', '')} [{c.get('Set name', '')}]")
+                # For rules, show relevant fields next to the card name
+                if section_type == "Rule" and rule:
+                    crit_fields = [field for field, _ in rule.get('criteria', [])]
+                    crit_values = []
+                    for field in crit_fields:
+                        val = c.get(field, None)
+                        if val is not None and val != '':
+                            crit_values.append(f"{field}: {val}")
+                    crit_str = f" ({', '.join(crit_values)})" if crit_values else ""
+                else:
+                    crit_str = ""
+                lines.append(f"  {c.get('Name', '')} [{c.get('Set name', '')}]{crit_str}")
         self.break_preview_box.setText("\n".join(lines[:total_needed + 10]))
     def update_table_filter(self):
         # Use self.filter_inputs (sidebar QLineEdits) for filtering

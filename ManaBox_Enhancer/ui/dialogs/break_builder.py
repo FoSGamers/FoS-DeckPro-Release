@@ -377,6 +377,24 @@ class BreakBuilderDialog(QDialog):
         self.filtered_inventory = filtered  # Store the filtered pool
         self.card_table.update_cards(filtered)
         self.card_table.repaint()
+        # --- Active filter chips logic ---
+        # Clear old chips
+        while self.active_filter_chips_layout.count():
+            chip = self.active_filter_chips_layout.takeAt(0)
+            if chip.widget():
+                chip.widget().deleteLater()
+        # Add a chip for each active filter
+        for col, val in filters.items():
+            if val:
+                chip = QPushButton(f"{col}: {val}")
+                chip.setStyleSheet("background: #e0e0e0; border-radius: 10px; padding: 2px 8px; margin: 2px; font-size: 11px;")
+                chip.setCursor(Qt.PointingHandCursor)
+                chip.clicked.connect(lambda _, c=col: self._clear_filter_chip(c))
+                self.active_filter_chips_layout.addWidget(chip)
+        self.active_filter_chips_layout.addStretch(1)
+    def _clear_filter_chip(self, col):
+        self.filter_inputs[col].clear()
+        self.update_table_filter()
     def export_break_list(self):
         """
         Export the generated break list (from preview) to clipboard and/or CSV.

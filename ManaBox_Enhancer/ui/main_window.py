@@ -37,15 +37,8 @@ class MainWindow(QMainWindow):
             "Name", "Set name", "Set code", "Collector number", "Rarity",
             "Condition", "Foil", "Language", "Purchase price", "Whatnot price"
         ]
-        try:
-            self.columns, self.visible_columns = self.load_column_prefs()
-            # Fallback: if columns are missing or misaligned, reset to defaults
-            if not self.columns or len(self.columns) != len(self.default_columns):
-                self.columns = self.default_columns.copy()
-                self.visible_columns = self.default_columns.copy()
-        except Exception:
-            self.columns = self.default_columns.copy()
-            self.visible_columns = self.default_columns.copy()
+        self.columns = self.default_columns.copy()
+        self.visible_columns = self.default_columns.copy()
         self.inventory = CardInventory()
         # Load sample data for now
         sample_cards = [
@@ -53,6 +46,7 @@ class MainWindow(QMainWindow):
             {"Name": "Lightning Bolt", "Set name": "Magic 2011", "Set code": "M11", "Collector number": "145", "Rarity": "common", "Condition": "near_mint", "Foil": "foil", "Language": "en", "Purchase price": "$2.00", "Whatnot price": "$2"},
         ]
         self.inventory.load_cards(sample_cards)
+        self._update_columns_from_inventory()
 
         # Menu bar and File > Open
         menubar = self.menuBar()  # Use native menu bar for macOS robustness
@@ -187,6 +181,7 @@ class MainWindow(QMainWindow):
                             if isinstance(card[col], float) and (card[col] != card[col]):
                                 card[col] = ""
                     self.inventory.load_cards(cards)
+                    self._update_columns_from_inventory()
                     self.card_table.update_cards(self.inventory.get_all_cards())
                     self.statusBar().showMessage(f"Loaded {len(cards)} cards from {os.path.basename(last_file)} (auto)")
             except Exception as e:
@@ -227,6 +222,33 @@ class MainWindow(QMainWindow):
         add_scryfall_action.triggered.connect(self.add_card_by_scryfall_id)
         tools_menu.addAction(add_scryfall_action)
 
+    def _update_columns_from_inventory(self):
+        # Dynamically set self.columns to all unique fields in inventory, with defaults first
+        all_fields = set(self.default_columns)
+        for card in self.inventory.get_all_cards():
+            all_fields.update(card.keys())
+        # Keep default columns order, then add the rest sorted
+        extra_fields = sorted(f for f in all_fields if f not in self.default_columns)
+        self.columns = self.default_columns + extra_fields
+        self.visible_columns = self.columns.copy()
+        # Update table and filter overlay if they exist
+        if hasattr(self, 'card_table'):
+            self.card_table.columns = self.columns
+            self.card_table.model.columns = self.columns
+            self.card_table.update_cards(self.inventory.get_all_cards())
+        if hasattr(self, 'filter_overlay'):
+            self.filter_overlay.columns = self.columns
+            # Rebuild overlay filters
+            for filt in self.filter_overlay.filters.values():
+                filt.deleteLater()
+            self.filter_overlay.filters = {}
+            for col in self.columns:
+                filt = QLineEdit(self.filter_overlay)
+                filt.setPlaceholderText(col)
+                filt.textChanged.connect(self.update_table_filter)
+                self.filter_overlay.filters[col] = filt
+            self.filter_overlay.update_positions()
+
     def update_table_filter(self):
         filters = {col: self.filter_overlay.filters[col].text() for col in self.columns}
         # Debug: print all card values for each filter
@@ -257,6 +279,7 @@ class MainWindow(QMainWindow):
                             if isinstance(card[col], float) and (card[col] != card[col]):
                                 card[col] = ""
                     self.inventory.load_cards(cards)
+                    self._update_columns_from_inventory()
                     self.card_table.update_cards(self.inventory.get_all_cards())
                     self.statusBar().showMessage(f"Loaded {len(cards)} cards from {os.path.basename(filename)}")
                     save_last_file(filename)

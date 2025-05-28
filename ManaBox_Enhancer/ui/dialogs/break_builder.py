@@ -378,14 +378,6 @@ class BreakBuilderDialog(QDialog):
         self.filtered_inventory = filtered  # Store the filtered pool
         self.card_table.update_cards(filtered)
         self.card_table.repaint()
-    def update_preview(self):
-        # For now, just show Title/Description for all items
-        lines = []
-        for card in self.break_items:
-            title = card.get("Name", "")
-            desc = card.get("Set name", "")
-            lines.append(f"{title}\t{desc}")
-        self.preview_box.setText("\n".join(lines))
     def export_break_list(self):
         """
         Export the generated break list (from preview) to clipboard and/or CSV.

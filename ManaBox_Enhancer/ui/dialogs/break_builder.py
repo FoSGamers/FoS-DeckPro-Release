@@ -137,32 +137,19 @@ class BreakBuilderDialog(QDialog):
         self.inventory = inventory
         self.break_items = []  # List of dicts (cards/items)
         self.curated_cards = []  # List of curated card dicts
-        self.removed_from_inventory = []
         self.rules = []  # List of rule dicts
         self.rule_widgets = []  # List of BreakRuleWidget
         layout = QVBoxLayout(self)
-        # --- Total cards needed input ---
-        total_row = QHBoxLayout()
-        total_row.addWidget(QLabel("Total cards needed for break:"))
-        self.total_cards_input = QSpinBox()
-        self.total_cards_input.setMinimum(1)
-        self.total_cards_input.setMaximum(10000)
-        self.total_cards_input.setValue(30)
-        self.total_cards_input.setToolTip("Specify the total number of cards you want in the break (from curated + rules).")
-        total_row.addWidget(self.total_cards_input)
-        total_row.addStretch(1)
-        layout.addLayout(total_row)
-        self.tabs = QTabWidget()
-        layout.addWidget(self.tabs)
-        # Tab 1: Inventory Search/Select (now with CardTableView)
-        self.inv_tab = QWidget()
-        inv_main_layout = QHBoxLayout(self.inv_tab)
-        splitter = QSplitter()
-        splitter.setChildrenCollapsible(False)
-        # Left: Filters + Table + Pagination
-        left_widget = QWidget()
-        left_layout = QVBoxLayout(left_widget)
-        # Sidebar for filters
+        # --- Step-by-step workflow guidance at the top ---
+        workflow_label = QLabel("<b>Step 1:</b> Filter inventory & select cards → <b>Step 2:</b> Curate must-haves → <b>Step 3:</b> Set rules → <b>Step 4:</b> Generate break")
+        workflow_label.setStyleSheet("font-size: 13px; margin-bottom: 8px;")
+        layout.insertWidget(0, workflow_label)
+
+        # --- Inventory Section ---
+        inventory_group = QGroupBox("1. Inventory (Filter & Select)")
+        inventory_group.setStyleSheet("QGroupBox { font-weight: bold; border: 1px solid #bbb; margin-top: 8px; padding: 8px; } ")
+        inv_group_layout = QVBoxLayout(inventory_group)
+        # Filter sidebar with background
         sidebar = QFrame()
         sidebar.setFrameShape(QFrame.StyledPanel)
         sidebar.setMinimumWidth(260)
@@ -195,7 +182,7 @@ class BreakBuilderDialog(QDialog):
         self.clear_filters_btn.clicked.connect(self.clear_all_filters)
         sidebar_layout.addWidget(self.clear_filters_btn)
         sidebar_layout.addStretch(1)
-        left_layout.addWidget(sidebar)
+        inv_group_layout.addWidget(sidebar)
         # CardTableView for inventory
         from ui.main_window import MainWindow  # for columns
         self.columns = MainWindow.default_columns if hasattr(MainWindow, 'default_columns') else [
@@ -204,104 +191,63 @@ class BreakBuilderDialog(QDialog):
         ]
         self.card_table = CardTableView(self.inventory, self.columns)
         self.card_table.setSelectionMode(QAbstractItemView.MultiSelection)
-        left_layout.addWidget(self.card_table)
+        inv_group_layout.addWidget(self.card_table)
         # Pagination widget below the table
-        left_layout.addWidget(self.card_table.pagination_widget)
-        left_widget.setLayout(left_layout)
-        # Filter overlay for fast searching (as in main window)
-        self.filter_overlay = FilterOverlay(self.card_table, self.columns)
-        self.filter_overlay.show()
-        for col, filt in self.filter_overlay.filters.items():
-            filt.textChanged.connect(self.update_table_filter)
-        # Right: Image preview and card details in a vertical splitter
-        right_splitter = QSplitter()
-        right_splitter.setOrientation(Qt.Vertical)
-        self.image_preview = ImagePreview()
-        self.image_preview.setMinimumHeight(120)
-        self.image_preview.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
-        self.card_details = CardDetails()
-        self.card_details.setMinimumHeight(120)
-        self.card_details.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
-        right_splitter.addWidget(self.image_preview)
-        right_splitter.addWidget(self.card_details)
-        right_splitter.setSizes([200, 400])
-        right_splitter.setChildrenCollapsible(False)
-        right_splitter.setHandleWidth(8)
-        right_splitter.setMinimumWidth(100)
-        right_splitter.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
-        # Compose splitter
-        splitter.addWidget(left_widget)
-        splitter.addWidget(right_splitter)
-        splitter.setStretchFactor(0, 3)
-        splitter.setStretchFactor(1, 2)
-        inv_main_layout.addWidget(splitter)
-        self.tabs.addTab(self.inv_tab, "Inventory")
-        # Tab 2: Break List
-        self.break_tab = QWidget()
-        break_layout = QVBoxLayout(self.break_tab)
-        break_layout.addWidget(QLabel("Break/Autobox Items (drag to reorder, double-click to edit):"))
-        self.break_list = QListWidget()
-        self.break_list.setDragDropMode(QListWidget.InternalMove)
-        self.break_list.itemDoubleClicked.connect(self.edit_break_item)
-        break_layout.addWidget(self.break_list)
-        btn_row = QHBoxLayout()
-        self.remove_btn = QPushButton("Remove Selected")
-        self.remove_btn.clicked.connect(self.remove_selected_from_break)
-        self.duplicate_btn = QPushButton("Duplicate Selected")
-        self.duplicate_btn.clicked.connect(self.duplicate_selected_in_break)
-        self.add_custom_btn = QPushButton("Add by Scryfall ID")
-        self.add_custom_btn.clicked.connect(self.add_by_scryfall_id)
-        btn_row.addWidget(self.remove_btn)
-        btn_row.addWidget(self.duplicate_btn)
-        btn_row.addWidget(self.add_custom_btn)
-        break_layout.addLayout(btn_row)
-        self.tabs.addTab(self.break_tab, "Break List")
-        # Tab 3: Preview/Export
-        self.preview_tab = QWidget()
-        preview_layout = QVBoxLayout(self.preview_tab)
-        preview_layout.addWidget(QLabel("Preview Export (Title/Description):"))
-        self.preview_box = QLineEdit()
-        self.preview_box.setReadOnly(True)
-        preview_layout.addWidget(self.preview_box)
-        self.export_btn = QPushButton("Export/Copy for Whatnot")
-        self.export_btn.clicked.connect(self.export_break_list)
-        self.remove_from_inv_chk = QCheckBox("Remove exported cards from inventory")
-        preview_layout.addWidget(self.remove_from_inv_chk)
-        preview_layout.addWidget(self.export_btn)
-        self.tabs.addTab(self.preview_tab, "Preview/Export")
-        # Tab 4: Help/Settings
-        self.help_tab = QWidget()
-        help_layout = QVBoxLayout(self.help_tab)
-        help_layout.addWidget(QLabel("How to use the Break/Autobox Builder:"))
-        help_layout.addWidget(QLabel("1. Filter and select cards from your inventory.\n2. Add them to the break list.\n3. Optionally add by Scryfall ID.\n4. Reorder, edit, or duplicate items.\n5. Preview and export the list for Whatnot.\n6. Optionally remove exported cards from inventory.\n7. You can re-import unused cards later."))
-        self.tabs.addTab(self.help_tab, "Help/Settings")
-        # Generate Break List button
-        self.generate_btn = QPushButton("Generate Break List")
-        self.generate_btn.clicked.connect(self.generate_break_list)
-        inv_main_layout.addWidget(self.generate_btn)
-        # Preview of final break list
-        self.break_preview_label = QLabel("Break List Preview:")
-        inv_main_layout.addWidget(self.break_preview_label)
-        self.break_preview_box = QLineEdit()
-        self.break_preview_box.setReadOnly(True)
-        inv_main_layout.addWidget(self.break_preview_box)
-        # --- Curated Table Section ---
-        # Place below the inventory splitter, in a labeled, resizable section
-        self.curated_section = QWidget()
-        curated_layout = QVBoxLayout(self.curated_section)
-        curated_layout.addWidget(QLabel("Curated Cards (drag to reorder):"))
+        inv_group_layout.addWidget(self.card_table.pagination_widget)
+        # Add inventory group to main layout
+        layout.insertWidget(1, inventory_group)
+
+        # --- Curated Cards Section ---
+        curated_group = QGroupBox("2. Curated Cards (Guaranteed in Break)")
+        curated_group.setStyleSheet("QGroupBox { font-weight: bold; border: 1px solid #bbb; margin-top: 8px; padding: 8px; } ")
+        curated_layout = QVBoxLayout(curated_group)
+        curated_layout.addWidget(QLabel("Drag to reorder. Remove to exclude from break."))
+        # Add/Remove buttons for curated list
+        curated_btn_row = QHBoxLayout()
+        self.add_to_curated_btn = QPushButton("Add Selected to Curated")
+        self.add_to_curated_btn.clicked.connect(self.add_selected_to_curated)
+        self.remove_from_curated_btn = QPushButton("Remove Selected from Curated")
+        self.remove_from_curated_btn.clicked.connect(self.remove_selected_from_curated)
+        curated_btn_row.addWidget(self.add_to_curated_btn)
+        curated_btn_row.addWidget(self.remove_from_curated_btn)
+        curated_layout.addLayout(curated_btn_row)
         self.curated_table = CardTableView(self, self.columns)
         self.curated_table.setSelectionMode(QAbstractItemView.MultiSelection)
         self.curated_table.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
         curated_layout.addWidget(self.curated_table)
-        # Add to main layout below the splitter
-        self.layout().addWidget(self.curated_section)
-        # Track the current filtered inventory pool
-        self.filtered_inventory = self.inventory.get_all_cards()
-        # Add a UI hint for users
+        layout.insertWidget(2, curated_group)
+
+        # --- Break List Controls/Preview Section ---
+        break_group = QGroupBox("3. Break List Controls & Preview")
+        break_group.setStyleSheet("QGroupBox { font-weight: bold; border: 1px solid #bbb; margin-top: 8px; padding: 8px; } ")
+        break_layout = QVBoxLayout(break_group)
+        # Add Rule button
+        self.add_rule_btn = QPushButton("Add Rule")
+        self.add_rule_btn.clicked.connect(self.add_rule)
+        break_layout.addWidget(self.add_rule_btn)
+        # Rule widgets area
+        self.rules_area = QVBoxLayout()
+        break_layout.addLayout(self.rules_area)
+        # Generate button and preview
+        btn_row = QHBoxLayout()
+        self.generate_btn = QPushButton("Generate Break List")
+        self.generate_btn.clicked.connect(self.generate_break_list)
+        self.break_preview_label = QLabel("Break List Preview:")
+        self.break_preview_box = QLineEdit()
+        self.break_preview_box.setReadOnly(True)
         self.filter_hint_label = QLabel("Rules will only select from cards currently visible in the inventory table.")
         self.filter_hint_label.setStyleSheet("color: #888; font-style: italic;")
-        inv_main_layout.addWidget(self.filter_hint_label)
+        btn_row.addWidget(self.generate_btn)
+        btn_row.addWidget(self.break_preview_label)
+        btn_row.addWidget(self.break_preview_box)
+        btn_row.addWidget(self.filter_hint_label)
+        break_layout.addLayout(btn_row)
+        layout.insertWidget(3, break_group)
+        # Add initial rule widget if none exist
+        if not self.rule_widgets:
+            self.add_rule()
+        # Track the current filtered inventory pool
+        self.filtered_inventory = self.inventory.get_all_cards()
         # Populate inventory list
         self.update_break_list()
         self.update_preview()
@@ -312,19 +258,30 @@ class BreakBuilderDialog(QDialog):
             fields.update(card.keys())
         return sorted(fields)
     def add_selected_to_curated(self):
+        """
+        Add selected cards from the inventory table to the curated list, avoiding duplicates, and update the curated table and break preview.
+        """
         selected_rows = self.card_table.selectionModel().selectedRows()
         for idx in selected_rows:
             card = self.card_table.cards[idx.row() - 1]
             if card not in self.curated_cards:
                 self.curated_cards.append(card)
         self.update_curated_table()
+        self.generate_break_list()  # Always update preview
     def remove_selected_from_curated(self):
+        """
+        Remove selected cards from the curated list and update the curated table and break preview.
+        """
         selected_rows = self.curated_table.selectionModel().selectedRows()
         for idx in sorted(selected_rows, reverse=True):
             if 0 <= idx.row() - 1 < len(self.curated_cards):
                 self.curated_cards.pop(idx.row() - 1)
         self.update_curated_table()
+        self.generate_break_list()  # Always update preview
     def update_curated_table(self):
+        """
+        Update the curated table to reflect the current curated_cards list.
+        """
         self.curated_table.update_cards(self.curated_cards)
     def generate_break_list(self):
         """
@@ -459,42 +416,42 @@ class BreakBuilderDialog(QDialog):
             lines.append(f"{title}\t{desc}")
         self.preview_box.setText("\n".join(lines))
     def export_break_list(self):
-        # Copy to clipboard and/or save as CSV
+        """
+        Export the generated break list (from preview) to clipboard and/or CSV.
+        """
         import pyperclip
-        lines = []
-        for card in self.break_items:
-            title = card.get("Name", "")
-            desc = card.get("Set name", "")
-            lines.append(f"{title}\t{desc}")
-        text = "\n".join(lines)
+        text = self.break_preview_box.text()
         pyperclip.copy(text)
-        # Optionally save as CSV
         fname, _ = QFileDialog.getSaveFileName(self, "Export Break List", "break_list.csv", "CSV Files (*.csv)")
         if fname:
             with open(fname, 'w', encoding='utf-8', newline='') as f:
-                for line in lines:
+                for line in text.splitlines():
                     f.write(line + '\n')
-        # After export, ask if user wants to remove from inventory (if not already checked)
-        if not self.remove_from_inv_chk.isChecked():
-            remove = QMessageBox.question(self, "Remove from Inventory?", "Do you want to remove the exported cards from inventory?", QMessageBox.Yes | QMessageBox.No)
-            if remove == QMessageBox.Yes:
-                for card in self.break_items:
-                    self.inventory.remove_card(card)
-                self.removed_from_inventory = self.break_items.copy()
-                QMessageBox.information(self, "Removed", f"{len(self.break_items)} cards removed from inventory.")
-        else:
-            for card in self.break_items:
-                self.inventory.remove_card(card)
-            self.removed_from_inventory = self.break_items.copy()
-            QMessageBox.information(self, "Removed", f"{len(self.break_items)} cards removed from inventory.")
         QMessageBox.information(self, "Exported", "Break list exported and copied to clipboard.")
-    def reimport_removed(self):
-        # Optionally re-import removed cards
-        for card in self.removed_from_inventory:
-            self.inventory.add_card(card)
-        self.removed_from_inventory = []
-        QMessageBox.information(self, "Re-imported", "Removed cards re-imported to inventory.")
     def clear_all_filters(self):
         for le in self.filter_inputs.values():
             le.clear()
-        self.update_table_filter() 
+        self.update_table_filter()
+    def add_rule(self):
+        """
+        Add a new rule widget to the break builder, connect its signals to regenerate the break list preview, and update the UI.
+        """
+        rule_widget = BreakRuleWidget(self)
+        self.rule_widgets.append(rule_widget)
+        self.rules_area.addWidget(rule_widget)
+        # Connect all child widgets to regenerate break list preview
+        for child in rule_widget.findChildren((QLineEdit, QComboBox, QSpinBox, QDoubleSpinBox)):
+            if isinstance(child, QLineEdit):
+                child.textChanged.connect(self.generate_break_list)
+            else:
+                child.valueChanged.connect(self.generate_break_list) if hasattr(child, 'valueChanged') else child.currentIndexChanged.connect(self.generate_break_list)
+        rule_widget.remove_btn.clicked.connect(lambda: self.remove_rule(rule_widget))
+        self.generate_break_list()
+    def remove_rule(self, rule_widget):
+        """
+        Remove a rule widget from the break builder and update the break list preview.
+        """
+        self.rules_area.removeWidget(rule_widget)
+        rule_widget.setParent(None)
+        self.rule_widgets.remove(rule_widget)
+        self.generate_break_list() 

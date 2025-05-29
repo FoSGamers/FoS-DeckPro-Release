@@ -1,6 +1,13 @@
 [
   {
     "date": "UNRELEASED",
+    "type": [],
+    "summary": "",
+    "details": [],
+    "rationale": []
+  },
+  {
+    "date": "1.3.0",
     "type": ["enhancement", "feature", "ui", "refactor", "test", "ci", "documentation"],
     "summary": "Break Builder Modernization, Modern UI/UX, Async Image Preview, Dynamic Filters, Curated/Rule-based Selection, Total/Avg Cost, Full Test Coverage, CI Integration.",
     "details": [

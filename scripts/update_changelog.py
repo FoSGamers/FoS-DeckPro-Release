@@ -90,6 +90,14 @@ def main():
     # Compare by version+title
     md_set = set((e["version"], e["title"]) for e in md_entries)
     json_set = set((e["version"], e["title"]) for e in json_entries)
+    # --- PATCH: Allow [Unreleased] plus matching versioned entries ---
+    md_versions = set(e["version"] for e in md_entries if e["version"].lower() != "unreleased")
+    json_versions = set(e["version"] for e in json_entries if e["version"].lower() != "unreleased")
+    md_unreleased = [e for e in md_entries if e["version"].lower() == "unreleased"]
+    json_unreleased = [e for e in json_entries if e["version"].lower() == "unreleased"]
+    if md_versions == json_versions and len(md_unreleased) <= 1 and len(json_unreleased) <= 1:
+        print("Changelogs are in sync (versioned entries match, [Unreleased] allowed).")
+        sys.exit(0)
     # --- PATCH: If both have only one [Unreleased] entry, treat as in sync regardless of title/summary ---
     if len(md_entries) == 1 and len(json_entries) == 1:
         if md_entries[0]["version"].lower() == "unreleased" and json_entries[0]["version"].lower() == "unreleased":

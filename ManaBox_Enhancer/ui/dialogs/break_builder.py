@@ -10,6 +10,7 @@ from ui.card_details import CardDetails
 from ui.dialogs.export_item_listing_fields import ExportItemListingFieldsDialog
 import csv
 import os
+from ui.columns_config import DEFAULT_COLUMNS
 
 # Centralized config/constants for break builder
 BREAK_BUILDER_CONFIG = {
@@ -237,67 +238,84 @@ class BreakBuilderDialog(QDialog):
         inventory_group.setStyleSheet("QGroupBox { font-weight: bold; border: 1px solid #bbb; margin-top: 8px; padding: 12px 8px 18px 8px; background: #f7f7fa; } ")
         inv_group_layout = QVBoxLayout(inventory_group)
         inv_group_layout.setSpacing(10)
-        # Inventory area: sidebar (left) + table (right)
+        # Inventory area: table (left) + preview (right)
         inv_hbox = QHBoxLayout()
-        # Filter sidebar with background and border
-        sidebar = QFrame()
-        sidebar.setFrameShape(QFrame.StyledPanel)
-        sidebar.setMinimumWidth(260)
-        sidebar.setMaximumWidth(340)
-        sidebar.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Expanding)
-        sidebar.setStyleSheet("background: #e3eaf7; border: 1.5px solid #b3c6e0; border-radius: 8px; padding: 8px;")
-        sidebar_layout = QVBoxLayout(sidebar)
-        sidebar_layout.setSpacing(8)
-        sidebar_layout.addWidget(QLabel("Filters"))
-        # Scroll area for filters
-        filter_scroll = QScrollArea()
-        filter_scroll.setWidgetResizable(True)
-        filter_widget = QWidget()
-        filter_form = QFormLayout(filter_widget)
+        # --- Dynamically get all fields from inventory for filtering ---
         self.filter_fields = self._get_all_inventory_fields()
-        self.filter_inputs = {}
-        for field in self.filter_fields:
-            le = QLineEdit()
-            le.setPlaceholderText(f"Filter {field}")
-            le.textChanged.connect(self.update_table_filter)
-            self.filter_inputs[field] = le
-            filter_form.addRow(QLabel(field+":"), le)
-        filter_widget.setLayout(filter_form)
-        filter_scroll.setWidget(filter_widget)
-        sidebar_layout.addWidget(filter_scroll, 1)
-        # Active filter chips
-        self.active_filter_chips = QWidget()
-        self.active_filter_chips_layout = QHBoxLayout(self.active_filter_chips)
-        self.active_filter_chips_layout.setContentsMargins(0, 0, 0, 0)
-        sidebar_layout.addWidget(self.active_filter_chips)
-        # Clear all filters button
-        self.clear_filters_btn = QPushButton("Clear All Filters")
-        self.clear_filters_btn.clicked.connect(self.clear_all_filters)
-        sidebar_layout.addWidget(self.clear_filters_btn)
-        sidebar_layout.addStretch(1)
-        inv_hbox.addWidget(sidebar, 0)
-        # CardTableView for inventory
-        from ui.main_window import MainWindow  # for columns
-        self.columns = MainWindow.default_columns if hasattr(MainWindow, 'default_columns') else [
-            "Name", "Set name", "Set code", "Collector number", "Rarity",
-            "Condition", "Foil", "Language", "Purchase price", "Whatnot price"
-        ]
+        self.columns = DEFAULT_COLUMNS + [f for f in self.filter_fields if f not in DEFAULT_COLUMNS]
         self.card_table = CardTableView(self.inventory, self.columns)
         self.card_table.setSelectionMode(QAbstractItemView.MultiSelection)
         self.card_table.setMinimumHeight(220)
         self.card_table.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        inv_table_vbox = QVBoxLayout()
-        inv_table_vbox.addWidget(self.card_table)
-        # Placeholder for empty inventory
+        # Add FilterOverlay above the table
+        self.filter_overlay = FilterOverlay(self.card_table, self.columns)
+        self.filter_overlay.show()
+        for col, filt in self.filter_overlay.filters.items():
+            filt.textChanged.connect(self.update_table_filter)
+        # --- Add Clear All Filters button above overlay ---
+        clear_filters_btn = QPushButton("Clear All Filters")
+        clear_filters_btn.setStyleSheet("padding: 4px 16px; border-radius: 8px; background: #e0e0e0; font-weight: bold;")
+        clear_filters_btn.clicked.connect(lambda: [f.clear() for f in self.filter_overlay.filters.values()])
+        clear_filters_btn.clicked.connect(self.update_table_filter)
+        self.clear_filters_btn = clear_filters_btn
+        # --- Group filter controls in a styled QFrame above the table ---
+        filter_controls_frame = QFrame()
+        filter_controls_frame.setFrameShape(QFrame.StyledPanel)
+        filter_controls_frame.setStyleSheet("background: #f5f7fa; border: 1.5px solid #b3c6e0; border-radius: 10px; padding: 2px 18px 2px 18px; margin-bottom: 2px;")
+        filter_controls_hbox = QHBoxLayout(filter_controls_frame)
+        filter_controls_hbox.setContentsMargins(0, 0, 0, 0)
+        filter_controls_hbox.setSpacing(10)
+        filter_controls_hbox.addWidget(self.filter_overlay, 1)
+        filter_controls_hbox.addWidget(clear_filters_btn, 0, Qt.AlignRight)
+        # --- Style the filter overlay for clarity ---
+        self.filter_overlay.setStyleSheet("background: #eaf1fb; border: 1px solid #b3c6e0; border-radius: 6px; padding: 2px 0 2px 0;")
+        # --- Table and preview layout ---
+        preview_frame = QFrame()
+        preview_frame.setFrameShape(QFrame.StyledPanel)
+        preview_frame.setStyleSheet("background: #f8fafd; border: 1.5px solid #b3c6e0; border-radius: 10px; padding: 10px 10px 10px 10px;")
+        preview_vbox = QVBoxLayout(preview_frame)
+        preview_vbox.setContentsMargins(0, 0, 0, 0)
+        preview_vbox.setSpacing(8)
+        self.image_preview = ImagePreview()
+        self.image_preview.setMinimumHeight(100)
+        self.image_preview.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
+        self.card_details = CardDetails()
+        self.card_details.setMinimumHeight(100)
+        self.card_details.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
+        preview_vbox.addWidget(self.image_preview)
+        preview_vbox.addWidget(self.card_details)
+        # --- Use QSplitter for table/preview, but add spacing and frame ---
+        table_preview_splitter = QSplitter()
+        table_preview_splitter.setOrientation(Qt.Horizontal)
+        table_preview_splitter.addWidget(self.card_table)
+        table_preview_splitter.addWidget(preview_frame)
+        table_preview_splitter.setSizes([700, 300])
+        table_preview_splitter.setChildrenCollapsible(False)
+        table_preview_splitter.setHandleWidth(8)
+        table_preview_splitter.setMinimumWidth(200)
+        table_preview_splitter.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        # --- Main inventory area layout ---
+        table_vbox = QVBoxLayout()
+        table_vbox.setContentsMargins(12, 12, 12, 12)
+        table_vbox.setSpacing(10)
+        table_vbox.addWidget(filter_controls_frame)
+        table_vbox.addWidget(table_preview_splitter)
+        table_vbox.addWidget(self.card_table.pagination_widget)
         self.inventory_placeholder = QLabel("No cards in inventory.")
         self.inventory_placeholder.setStyleSheet("color: #888; font-style: italic; padding: 6px;")
         if not self.inventory.get_all_cards():
-            inv_table_vbox.addWidget(self.inventory_placeholder)
-        # Pagination widget below the table
-        inv_table_vbox.addWidget(self.card_table.pagination_widget)
-        inv_hbox.addLayout(inv_table_vbox, 1)
+            table_vbox.addWidget(self.inventory_placeholder)
+        inv_hbox.addLayout(table_vbox, 1)
         inv_group_layout.addLayout(inv_hbox)
         filter_layout.insertWidget(0, inventory_group)
+        # --- Ensure inventory table is populated on launch ---
+        self.card_table.update_cards(self.inventory.get_all_cards())
+        # --- Connect card_selected signal to preview widgets ---
+        def _debug_card_selected(card):
+            print(f"DEBUG: BreakBuilderDialog received card_selected: {card}")
+            self.image_preview.show_card_image(card)
+            self.card_details.show_card_details(card)
+        self.card_table.card_selected.connect(_debug_card_selected)
         # --- Step 2: Curate Must-Haves Tab ---
         curate_tab = QWidget()
         curate_layout = QVBoxLayout(curate_tab)
@@ -375,14 +393,18 @@ class BreakBuilderDialog(QDialog):
         # --- Step 4: Generate Break Tab ---
         generate_tab = QWidget()
         generate_layout = QVBoxLayout(generate_tab)
+        generate_layout.setContentsMargins(18, 18, 18, 18)
+        generate_layout.setSpacing(16)
         # Add total cards input at the top of the Generate tab
         total_row = QHBoxLayout()
         total_label = QLabel("Total cards needed for break:")
+        total_label.setStyleSheet("font-weight: bold; font-size: 15px; margin-right: 12px;")
         total_row.addWidget(total_label)
         total_row.addWidget(self.total_cards_input)
         generate_layout.addLayout(total_row)
-        # --- Generate Break List button and preview (moved from Set Rules tab) ---
+        # --- Modern, clean button row ---
         btn_row = QHBoxLayout()
+        btn_row.setSpacing(18)
         self.generate_btn = QPushButton(" Generate Break List")
         self.generate_btn.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_MediaPlay))
         self.generate_btn.setStyleSheet("padding: 8px 24px; border-radius: 10px; background: #1976d2; color: white; font-weight: bold; font-size: 15px;")
@@ -393,25 +415,49 @@ class BreakBuilderDialog(QDialog):
         self.export_btn.setStyleSheet("padding: 8px 24px; border-radius: 10px; background: #388e3c; color: white; font-weight: bold; font-size: 15px;")
         self.export_btn.setToolTip("Export the break list in Title/Description format (CSV)")
         self.export_btn.clicked.connect(self.export_break_list_item_listing)
-        # --- Remove from Inventory button ---
         self.remove_from_inventory_btn = QPushButton(" Remove from Inventory")
         self.remove_from_inventory_btn.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_TrashIcon))
         self.remove_from_inventory_btn.setStyleSheet("padding: 8px 24px; border-radius: 10px; background: #e53935; color: white; font-weight: bold; font-size: 15px;")
         self.remove_from_inventory_btn.setToolTip("Remove all cards in the current break list from inventory (with confirmation)")
         self.remove_from_inventory_btn.clicked.connect(self.remove_break_cards_from_inventory)
+        self.undo_remove_btn = QPushButton(" Undo Remove")
+        self.undo_remove_btn.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_ArrowBack))
+        self.undo_remove_btn.setStyleSheet("padding: 8px 24px; border-radius: 10px; background: #1976d2; color: white; font-weight: bold; font-size: 15px;")
+        self.undo_remove_btn.setToolTip("Undo the last removal of break cards from inventory")
+        self.undo_remove_btn.clicked.connect(self.undo_remove_from_inventory)
+        self.undo_remove_btn.setEnabled(False)
+        self.last_removed_cards = []
+        btn_row.addWidget(self.generate_btn)
+        btn_row.addWidget(self.export_btn)
+        btn_row.addWidget(self.remove_from_inventory_btn)
+        btn_row.addWidget(self.undo_remove_btn)
+        generate_layout.addLayout(btn_row)
+        # --- Total and average cost labels ---
+        self.total_cost_label = QLabel()
+        self.avg_cost_label = QLabel()
+        cost_row = QHBoxLayout()
+        cost_row.setSpacing(24)
+        cost_row.addWidget(self.total_cost_label)
+        cost_row.addWidget(self.avg_cost_label)
+        cost_row.addStretch(1)
+        generate_layout.addLayout(cost_row)
+        # --- Modern, scrollable break preview box ---
+        preview_group = QFrame()
+        preview_group.setFrameShape(QFrame.StyledPanel)
+        preview_group.setStyleSheet("background: #f8fafd; border: 1.5px solid #b3c6e0; border-radius: 10px; padding: 10px 10px 10px 10px;")
+        preview_layout = QVBoxLayout(preview_group)
+        preview_layout.setContentsMargins(0, 0, 0, 0)
+        preview_layout.setSpacing(6)
         self.break_preview_label = QLabel("Break List Preview:")
         self.break_preview_box = QTextEdit()
         self.break_preview_box.setReadOnly(True)
         self.break_preview_box.setStyleSheet("background: #fafafa; border: 1px solid #bbb; border-radius: 6px; font-family: monospace; font-size: 13px; padding: 6px;")
-        self.break_preview_box.setMinimumHeight(60)
-        btn_row.addWidget(self.generate_btn)
-        btn_row.addWidget(self.export_btn)
-        btn_row.addWidget(self.remove_from_inventory_btn)
-        btn_row.addWidget(self.break_preview_label)
-        btn_row.addWidget(self.break_preview_box)
-        generate_layout.addLayout(btn_row)
+        self.break_preview_box.setMinimumHeight(180)
+        preview_layout.addWidget(self.break_preview_label)
+        preview_layout.addWidget(self.break_preview_box)
+        generate_layout.addWidget(preview_group)
         self.filter_hint_label = QLabel("Rules will only select from cards currently visible in the inventory table.")
-        self.filter_hint_label.setStyleSheet("color: #888; font-style: italic;")
+        self.filter_hint_label.setStyleSheet("color: #888; font-style: italic; margin-top: 8px;")
         generate_layout.addWidget(self.filter_hint_label)
         # --- Add tabs ---
         self.tabs.addTab(filter_tab, "1. Filter Inventory")
@@ -644,39 +690,41 @@ class BreakBuilderDialog(QDialog):
                     crit_str = ""
                 lines.append(f"  {c.get('Name', '')} [{c.get('Set name', '')}]{crit_str}")
         self.break_preview_box.setText("\n".join(lines[:total_needed + 10]))
+        # --- Compute and display total and average cost ---
+        prices = []
+        for card in self.current_break_list:
+            price = card.get('Purchase price') or card.get('Whatnot price')
+            if price is not None:
+                try:
+                    if isinstance(price, str):
+                        price = price.replace("$", "").strip()
+                    price = float(price)
+                    prices.append(price)
+                except Exception:
+                    continue
+        total_cost = sum(prices)
+        avg_cost = (total_cost / len(prices)) if prices else 0.0
+        self.total_cost_label.setText(f"<b>Total Card Cost:</b> ${total_cost:,.2f}")
+        self.avg_cost_label.setText(f"<b>Average Card Cost:</b> ${avg_cost:,.2f}")
     def update_table_filter(self):
-        # Use self.filter_inputs (sidebar QLineEdits) for filtering
-        filters = {col: self.filter_inputs[col].text() for col in self.filter_inputs}
+        """
+        Update the inventory table based on the FilterOverlay fields.
+        This method is now unified with the main GUI's filtering logic for modularity.
+        """
+        filters = {col: self.filter_overlay.filters[col].text() for col in self.columns}
         filtered = self.inventory.filter_cards(filters)
         self.filtered_inventory = filtered  # Store the filtered pool
         self.card_table.update_cards(filtered)
         self.card_table.repaint()
-        # --- Inventory placeholder logic ---
+        # Inventory placeholder logic
         if hasattr(self, 'inventory_placeholder'):
             if not filtered:
-                if self.card_table.parentWidget() and self.inventory_placeholder.parent() != self.card_table.parentWidget():
-                    self.card_table.parentWidget().layout().addWidget(self.inventory_placeholder)
+                parent = self.card_table.parentWidget()
+                if parent and parent.layout() and self.inventory_placeholder.parent() != parent:
+                    parent.layout().addWidget(self.inventory_placeholder)
                 self.inventory_placeholder.show()
             else:
                 self.inventory_placeholder.hide()
-        # --- Active filter chips logic ---
-        # Clear old chips
-        while self.active_filter_chips_layout.count():
-            chip = self.active_filter_chips_layout.takeAt(0)
-            if chip.widget():
-                chip.widget().deleteLater()
-        # Add a chip for each active filter
-        for col, val in filters.items():
-            if val:
-                chip = QPushButton(f"{col}: {val}")
-                chip.setStyleSheet("background: #e0e0e0; border-radius: 10px; padding: 2px 8px; margin: 2px; font-size: 11px;")
-                chip.setCursor(Qt.PointingHandCursor)
-                chip.clicked.connect(lambda _, c=col: self._clear_filter_chip(c))
-                self.active_filter_chips_layout.addWidget(chip)
-        self.active_filter_chips_layout.addStretch(1)
-    def _clear_filter_chip(self, col):
-        self.filter_inputs[col].clear()
-        self.update_table_filter()
     def export_break_list_item_listing(self):
         """
         Export the generated break list (from preview) in Title/Description format (CSV), using the same logic and templates as the main export_item_listings.
@@ -715,7 +763,7 @@ class BreakBuilderDialog(QDialog):
                 writer.writerow([title, desc])
         QMessageBox.information(self, "Exported", f"Break list exported as item listing CSV with {len(listings)} cards.")
     def clear_all_filters(self):
-        for le in self.filter_inputs.values():
+        for le in self.filter_overlay.filters.values():
             le.clear()
         self.update_table_filter()
     def _toggle_rules_area(self, checked):
@@ -904,15 +952,48 @@ class BreakBuilderDialog(QDialog):
         )
         if reply != QMessageBox.Yes:
             return
-        removed = 0
-        for card in self.current_break_list:
-            try:
-                self.inventory.remove_card(card)
-                removed += 1
-            except Exception:
-                pass  # Ignore errors for cards not found
+        self.last_removed_cards = list(self.current_break_list)
+        # Use batch removal for robustness
+        if hasattr(self.inventory, 'remove_cards'):
+            self.inventory.remove_cards(self.current_break_list)
+            removed = len(self.last_removed_cards)
+        else:
+            removed = 0
+            for card in self.current_break_list:
+                try:
+                    self.inventory.remove_card(card)
+                    removed += 1
+                except Exception:
+                    pass
         self.filtered_inventory = self.inventory.get_all_cards()
         self.card_table.update_cards(self.filtered_inventory)
         self.card_table.repaint()
         self.generate_break_list()
-        QMessageBox.information(self, "Removed from Inventory", f"Removed {removed} cards from inventory.") 
+        self.undo_remove_btn.setEnabled(bool(self.last_removed_cards))
+        QMessageBox.information(self, "Removed from Inventory", f"Removed {removed} cards from inventory.")
+
+    def undo_remove_from_inventory(self):
+        """Restore the last removed set of cards to inventory."""
+        from PySide6.QtWidgets import QMessageBox
+        if not self.last_removed_cards:
+            QMessageBox.information(self, "Undo Remove", "No removal to undo.")
+            return
+        # Use batch add if available, else loop
+        if hasattr(self.inventory, 'add_cards'):
+            self.inventory.add_cards(self.last_removed_cards)
+            restored = len(self.last_removed_cards)
+        else:
+            restored = 0
+            for card in self.last_removed_cards:
+                try:
+                    self.inventory.add_card(card)
+                    restored += 1
+                except Exception:
+                    pass
+        self.filtered_inventory = self.inventory.get_all_cards()
+        self.card_table.update_cards(self.filtered_inventory)
+        self.card_table.repaint()
+        self.generate_break_list()
+        self.last_removed_cards = []
+        self.undo_remove_btn.setEnabled(False)
+        QMessageBox.information(self, "Undo Remove", f"Restored {restored} cards to inventory.") 

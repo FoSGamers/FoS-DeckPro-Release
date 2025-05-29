@@ -25,6 +25,7 @@ from ui.dialogs.export_item_listing_fields import ExportItemListingFieldsDialog
 import pandas as pd
 import re
 from ui.dialogs.break_builder import BreakBuilderDialog
+from ui.columns_config import DEFAULT_COLUMNS
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -33,12 +34,8 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(1200, 700)
 
         # Expanded columns for display and filtering
-        self.default_columns = [
-            "Name", "Set name", "Set code", "Collector number", "Rarity",
-            "Condition", "Foil", "Language", "Purchase price", "Whatnot price"
-        ]
-        self.columns = self.default_columns.copy()
-        self.visible_columns = self.default_columns.copy()
+        self.columns = DEFAULT_COLUMNS.copy()
+        self.visible_columns = DEFAULT_COLUMNS.copy()
         self.inventory = CardInventory()
         # Load sample data for now
         sample_cards = [
@@ -224,12 +221,12 @@ class MainWindow(QMainWindow):
 
     def _update_columns_from_inventory(self):
         # Dynamically set self.columns to all unique fields in inventory, with defaults first
-        all_fields = set(self.default_columns)
+        all_fields = set(DEFAULT_COLUMNS)
         for card in self.inventory.get_all_cards():
             all_fields.update(card.keys())
         # Keep default columns order, then add the rest sorted
-        extra_fields = sorted(f for f in all_fields if f not in self.default_columns)
-        self.columns = self.default_columns + extra_fields
+        extra_fields = sorted(f for f in all_fields if f not in DEFAULT_COLUMNS)
+        self.columns = DEFAULT_COLUMNS + extra_fields
         self.visible_columns = self.columns.copy()
         # Update table and filter overlay if they exist
         if hasattr(self, 'card_table'):
@@ -682,7 +679,7 @@ class MainWindow(QMainWindow):
             QMessageBox.critical(self, "Restore Failed", f"Failed to restore: {e}")
 
     def customize_columns(self):
-        dlg = ColumnCustomizationDialog(self.columns, self.visible_columns, self.default_columns, self)
+        dlg = ColumnCustomizationDialog(self.columns, self.visible_columns, self.columns, self)
         if dlg.exec():
             ordered, visible = dlg.get_columns()
             self.columns = ordered
@@ -730,11 +727,11 @@ class MainWindow(QMainWindow):
                 with open(prefs_file, 'r', encoding='utf-8') as f:
                     prefs = json.load(f)
                 self.column_widths = prefs.get('column_widths', {})
-                return prefs.get('columns', self.default_columns), prefs.get('visible_columns', self.default_columns)
+                return prefs.get('columns', self.columns), prefs.get('visible_columns', self.columns)
             except Exception:
                 pass
         self.column_widths = {}
-        return self.default_columns, self.default_columns
+        return self.columns, self.columns
 
     def save_column_preset(self):
         import json
@@ -768,8 +765,8 @@ class MainWindow(QMainWindow):
         try:
             with open(filename, 'r', encoding='utf-8') as f:
                 preset = json.load(f)
-            self.columns = preset.get('columns', self.default_columns)
-            self.visible_columns = preset.get('visible_columns', self.default_columns)
+            self.columns = preset.get('columns', self.columns)
+            self.visible_columns = preset.get('visible_columns', self.columns)
             self.column_widths = preset.get('column_widths', {})
             self.save_column_prefs()
             # Update table columns and visibility

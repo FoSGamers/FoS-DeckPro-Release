@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QGridLayout, QLabel, QGroupBox, QTextEdit, QHBoxLayout, QScrollArea
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QGridLayout, QLabel, QGroupBox, QTextEdit, QHBoxLayout, QScrollArea, QFormLayout, QSizePolicy, QFrame
 from PySide6.QtGui import QFont
 from PySide6.QtCore import Qt
 
@@ -35,73 +35,52 @@ FRIENDLY_NAMES = {
 HIDE_FIELDS = {"_original_order", "image_url", "quantity"}
 
 class CardDetails(QWidget):
+    """
+    Widget to display all key card info in a readable, modern, scrollable layout.
+    """
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.vlayout = QVBoxLayout()
-        self.setLayout(self.vlayout)
-        self.grid_layout = None
-        self.oracle_group = None
-        self.oracle_text = None
-
-        # Add a scroll area for the details content
-        self.scroll_area = QScrollArea(self)
-        self.scroll_area.setWidgetResizable(True)
-        self.scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        self.scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        self.vlayout.addWidget(self.scroll_area)
-
-        # The widget that will actually hold the details
-        self.details_widget = QWidget()
-        self.details_layout = QVBoxLayout()
-        self.details_widget.setLayout(self.details_layout)
-        self.scroll_area.setWidget(self.details_widget)
+        self.setStyleSheet("background: #f8fafd; border: 1.5px solid #b3c6e0; border-radius: 10px; padding: 10px 10px 10px 10px;")
+        self.scroll = QScrollArea(self)
+        self.scroll.setWidgetResizable(True)
+        self.scroll.setFrameShape(QFrame.NoFrame)
+        self.inner = QWidget()
+        self.form = QFormLayout(self.inner)
+        self.form.setLabelAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.form.setFormAlignment(Qt.AlignTop)
+        self.form.setSpacing(8)
+        self.labels = {}
+        for key in [
+            "Name", "Set name", "Set code", "Collector number", "Rarity", "Condition", "Foil", "Language", "Purchase price", "Whatnot price", "type_line", "mana_cost", "colors", "oracle_text"
+        ]:
+            l = QLabel()
+            l.setWordWrap(True)
+            l.setStyleSheet("font-size: 15px; color: #222; padding: 2px 0;")
+            self.labels[key] = l
+            label_widget = QLabel(f"<b>{key.replace('_', ' ').title()}:</b>")
+            label_widget.setStyleSheet("font-size: 15px; color: #1976d2; padding: 2px 0;")
+            self.form.addRow(label_widget, l)
+        self.inner.setLayout(self.form)
+        self.scroll.setWidget(self.inner)
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.addWidget(self.scroll)
+        self.setMinimumHeight(180)
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
     def show_card_details(self, card):
-        # DEBUG: Print the full card dict
-        print("DEBUG: Card details for preview:", card)
-        # Clear previous widgets and layouts from the details layout
-        while self.details_layout.count():
-            item = self.details_layout.takeAt(0)
-            if item.widget() is not None:
-                item.widget().deleteLater()
-            elif item.layout() is not None:
-                self._delete_layout(item.layout())
-        # Prepare fields (excluding oracle_text and hidden fields)
-        fields = [(k, v) for k, v in card.items() if k != "oracle_text" and k not in HIDE_FIELDS and v not in (None, "")]
-        # Use a single QGridLayout with two columns of fields (label/value, label/value per row)
-        grid = QGridLayout()
-        num_fields = len(fields)
-        for i in range(0, num_fields, 2):
-            # Left column
-            key1, value1 = fields[i]
-            label1 = QLabel(FRIENDLY_NAMES.get(key1, key1) + ":")
-            label1.setFont(QFont("Arial", weight=QFont.Bold))
-            label1.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-            val_label1 = QLabel(str(value1))
-            val_label1.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-            grid.addWidget(label1, i // 2, 0)
-            grid.addWidget(val_label1, i // 2, 1)
-            # Right column (if exists)
-            if i + 1 < num_fields:
-                key2, value2 = fields[i + 1]
-                label2 = QLabel(FRIENDLY_NAMES.get(key2, key2) + ":")
-                label2.setFont(QFont("Arial", weight=QFont.Bold))
-                label2.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-                val_label2 = QLabel(str(value2))
-                val_label2.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-                grid.addWidget(label2, i // 2, 2)
-                grid.addWidget(val_label2, i // 2, 3)
-        self.details_layout.addLayout(grid)
-        # Show oracle_text in a QTextEdit at the end if present
-        if "oracle_text" in card and card["oracle_text"]:
-            group = QGroupBox("Oracle Text")
-            vbox = QVBoxLayout()
-            self.oracle_text = QTextEdit()
-            self.oracle_text.setReadOnly(True)
-            self.oracle_text.setPlainText(card["oracle_text"])
-            vbox.addWidget(self.oracle_text)
-            group.setLayout(vbox)
-            self.details_layout.addWidget(group)
+        """
+        Update the details area with all key info from the card dict.
+        """
+        for key, label in self.labels.items():
+            val = card.get(key, "")
+            if key == "colors" and isinstance(val, (list, tuple)):
+                val = ", ".join(val)
+            if key == "oracle_text":
+                val = val.replace("\n", "<br>")
+                label.setText(f'<span style="font-size:14px; color:#444;">{val}</span>')
+            else:
+                label.setText(str(val))
 
     def _delete_layout(self, layout):
         if layout is not None:

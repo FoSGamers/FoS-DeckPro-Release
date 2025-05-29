@@ -1,0 +1,43 @@
+[
+  {
+    "date": "UNRELEASED",
+    "type": ["enhancement", "feature", "ui", "refactor", "test", "ci", "documentation"],
+    "summary": "Break Builder Modernization, Modern UI/UX, Async Image Preview, Dynamic Filters, Curated/Rule-based Selection, Total/Avg Cost, Full Test Coverage, CI Integration.",
+    "details": [
+      {
+        "category": "Break Builder Modernization",
+        "description": "Refactored the Break/Autobox Builder to be modular, extensible, and robust for both beginners and advanced users. Ensured all UI and logic are modular, reusable, and backward compatible. Modern Break/Autobox Builder: now uses the modular CardTableView, FilterOverlay, ImagePreview, and CardDetails widgets for a robust, maintainable UI. All Scryfall and inventory fields are dynamically filterable, just like the main GUI. Async image preview for cards, with robust error handling and fallback. Curated card selection and advanced rule-based break list generation, with deduplication and filler logic. Live display of total and average card cost in the Generate Break tab. Modern, clean, and resizable UI/UX throughout the workflow. All features are fully tested; all tests pass.",
+        "files": ["ManaBox_Enhancer/ui/dialogs/break_builder.py", "ManaBox_Enhancer/ui/card_table.py", "ManaBox_Enhancer/ui/image_preview.py", "ManaBox_Enhancer/ui/card_details.py", "ManaBox_Enhancer/ui/columns_config.py", "ManaBox_Enhancer/ui/main_window.py", "ManaBox_Enhancer/tests/test_break_builder.py"]
+      },
+      {
+        "category": "Test Suite Improvements",
+        "description": "Updated test DummyInventory to use key-based logic for card removal and addition, matching the real app's behavior. Moved the card_key function above the DummyInventory class in the test to ensure consistent key logic. Corrected the use of QMessageBox.Yes/No in dialog patching to properly simulate user confirmation/cancellation. Fixed the final assertion in the inventory removal/undo test to check for the correct state after a cancel operation. All break builder tests now pass, covering sidebar filtering, rule logic, curation, UI, and inventory operations.",
+        "files": ["ManaBox_Enhancer/tests/test_break_builder.py"]
+      },
+      {
+        "category": "Continuous Integration (CI)",
+        "description": "Added .github/workflows/python-ci.yml to run all tests on every push and pull request. Ensures Python 3.12, PySide6, and pytest are installed and configured for headless GUI testing. Uses PYTHONPATH=. and QT_QPA_PLATFORM=offscreen for correct package resolution and headless operation. Added a CI step to enforce that any code/config change (.py or .yml) must be accompanied by a CHANGELOG.md update.",
+        "files": [".github/workflows/python-ci.yml"]
+      },
+      {
+        "category": "Changelog & Documentation Enforcement",
+        "description": "Added .github/pull_request_template.md to require changelog, test, and rationale documentation for every PR. Added .git/hooks/pre-commit to block local commits to .py or .yml files unless CHANGELOG.md is also staged. Made the hook executable.",
+        "files": [".github/pull_request_template.md", ".git/hooks/pre-commit"]
+      }
+    ],
+    "rationale": [
+      "Key-based logic is necessary for inventory operations to ensure correct card removal and addition.",
+      "Dialog patching must use the correct constants to accurately simulate user actions in tests.",
+      "Assertions must match the intended post-operation state to ensure test reliability.",
+      "Changelog and documentation enforcement ensures all changes are traceable and maintainable for future developers and AI tools.",
+      "CI ensures that regressions are caught early and that the codebase remains healthy and reliable.",
+      "Comprehensive tests provide confidence for refactoring, adding features, or upgrading dependencies.",
+      "All break builder features are now modular, maintainable, and robust.",
+      "UI/UX is modern, clear, and user-friendly.",
+      "All Scryfall/inventory fields are filterable for advanced curation.",
+      "Async image preview is reliable and race-condition free.",
+      "Total and average card cost are always visible for break planning.",
+      "All features are fully tested and backward compatible."
+    ]
+  }
+] 

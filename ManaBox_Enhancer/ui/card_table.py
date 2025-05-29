@@ -136,9 +136,9 @@ class CardTableView(QTableView):
         start = self.current_page * self.page_size
         end = start + self.page_size
         page_cards = self.filtered_cards[start:end]
+        print(f"DEBUG: CardTableView _update_pagination: displaying {len(page_cards)} cards: {[c.get('Name') for c in page_cards]}")
         self.model.set_cards(page_cards)
         self.cards = page_cards
-        print(f"DEBUG: CardTableView _update_pagination: self.cards now has {len(self.cards)} cards")
         self.viewport().update()
         self.first_btn.setEnabled(self.current_page > 0)
         self.prev_btn.setEnabled(self.current_page > 0)
@@ -146,7 +146,7 @@ class CardTableView(QTableView):
         self.last_btn.setEnabled(self.current_page < max_page)
 
     def update_cards(self, cards):
-        print(f"DEBUG: CardTableView update_cards called with {len(cards)} cards")
+        print(f"DEBUG: CardTableView update_cards called with {len(cards)} cards: {[c.get('Name') for c in cards]}")
         self.filtered_cards = cards
         self.current_page = 0
         self._update_pagination()

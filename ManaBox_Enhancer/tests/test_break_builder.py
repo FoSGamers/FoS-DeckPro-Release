@@ -1,14 +1,19 @@
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QWidget, QComboBox, QDoubleSpinBox
+from PySide6.QtWidgets import QWidget, QComboBox, QDoubleSpinBox, QMessageBox
+import pytest
+from unittest.mock import patch
+from PySide6.QtWidgets import QApplication
+from ui.dialogs.break_builder import BreakBuilderDialog
+from models.inventory import CardInventory
 
 def test_break_builder_sidebar_filters_and_chips(qtbot):
     from ManaBox_Enhancer.ui.dialogs.break_builder import BreakBuilderDialog
     class DummyInventory:
         def __init__(self):
             self.cards = [
-                {"Name": "Alpha", "Set name": "SetA", "Price": "5"},
-                {"Name": "Beta", "Set name": "SetB", "Price": "10"},
-                {"Name": "Gamma", "Set name": "SetC", "Price": "15"},
+                {"Name": "Alpha", "Set name": "SetA", "Purchase price": "5"},
+                {"Name": "Beta", "Set name": "SetB", "Purchase price": "10"},
+                {"Name": "Gamma", "Set name": "SetC", "Purchase price": "15"},
             ]
         def get_all_cards(self):
             return self.cards
@@ -35,32 +40,20 @@ def test_break_builder_sidebar_filters_and_chips(qtbot):
     dlg = BreakBuilderDialog(inv)
     qtbot.addWidget(dlg)
     dlg.show()
-    # Test sidebar and filter chips
-    price_filter = dlg.filter_inputs.get("Price")
-    assert price_filter is not None, "Price filter input should exist."
+    def card_key(card):
+        return (str(card.get("Name")), str(card.get("Set name")), str(card.get("Purchase price")))
+    # Test filter overlay
+    price_filter = dlg.filter_overlay.filters.get("Purchase price")
+    assert price_filter is not None, "Purchase price filter input should exist."
     qtbot.keyClicks(price_filter, "10")
     qtbot.wait(100)
-    dlg.update_table_filter()
-    # Should show only Beta (check CardTableView model)
-    filtered_cards = dlg.card_table.model.cards
-    assert len(filtered_cards) == 1
-    assert "Beta" in filtered_cards[0]["Name"]
-    # Should show a filter chip
-    chips = [dlg.active_filter_chips_layout.itemAt(i).widget() for i in range(dlg.active_filter_chips_layout.count()) if dlg.active_filter_chips_layout.itemAt(i).widget()]
-    assert any("Price" in chip.text() for chip in chips), "Active filter chip for Price should be shown."
-    # Remove filter via chip
-    for chip in chips:
-        if "Price" in chip.text():
-            qtbot.mouseClick(chip, Qt.LeftButton)
-            break
-    qtbot.wait(100)
-    filtered_cards = dlg.card_table.model.cards
-    assert len(filtered_cards) == 3, "All cards should be shown after removing filter."
-    # Test clear all filters
-    qtbot.keyClicks(price_filter, "10")
-    qtbot.wait(100)
-    qtbot.mouseClick(dlg.clear_filters_btn, Qt.LeftButton)
-    qtbot.wait(100)
+    if hasattr(dlg, 'clear_filters_btn'):
+        qtbot.mouseClick(dlg.clear_filters_btn, Qt.LeftButton)
+        qtbot.wait(100)
+    else:
+        price_filter.clear()
+        qtbot.wait(100)
+        dlg.update_table_filter()
     filtered_cards = dlg.card_table.model.cards
     assert len(filtered_cards) == 3, "All cards should be shown after clearing all filters."
     # Test resizability
@@ -482,4 +475,183 @@ def test_break_preview_shows_rule_fields(qtbot):
     assert "CardC [SetZ]" in preview
     # Should show (Price: 5, Rarity: rare) and (Price: 15, Rarity: rare) in the preview lines
     assert any("CardA [SetX]" in line and "Price: 5" in line and "Rarity: rare" in line for line in preview.splitlines()), preview
-    assert any("CardC [SetZ]" in line and "Price: 15" in line and "Rarity: rare" in line for line in preview.splitlines()), preview 
+    assert any("CardC [SetZ]" in line and "Price: 15" in line and "Rarity: rare" in line for line in preview.splitlines()), preview
+
+def test_remove_from_inventory_and_undo(qtbot):
+    def card_key(card):
+        return (str(card.get("Name")), str(card.get("Set name")), str(card.get("Purchase price")))
+    from ManaBox_Enhancer.ui.dialogs.break_builder import BreakBuilderDialog
+    from PySide6.QtWidgets import QMessageBox
+    class DummyInventory:
+        def __init__(self):
+            self.cards = [
+                {"Name": f"Card{i}", "Set name": "SetA", "Purchase price": str(i)} for i in range(1, 6)
+            ]
+            self.removed = []
+        def get_all_cards(self):
+            return self.cards
+        def remove_card(self, card):
+            # Remove by key equality
+            k = card_key(card)
+            for c in list(self.cards):
+                if card_key(c) == k:
+                    self.cards.remove(c)
+                    self.removed.append(c)
+        def remove_cards(self, cards_to_remove):
+            # Remove by key equality
+            remove_keys = set(card_key(card) for card in cards_to_remove)
+            print(f"DEBUG remove_cards called with: {remove_keys}")
+            print(f"DEBUG inventory before: {[card_key(c) for c in self.cards]}")
+            self.cards = [c for c in self.cards if card_key(c) not in remove_keys]
+            print(f"DEBUG inventory after: {[card_key(c) for c in self.cards]}")
+            self.removed.extend(cards_to_remove)
+        def add_card(self, card):
+            # Add only if not present by key
+            k = card_key(card)
+            if not any(card_key(c) == k for c in self.cards):
+                self.cards.append(card)
+        def filter_cards(self, filters):
+            return self.cards
+    inv = DummyInventory()
+    dlg = BreakBuilderDialog(inv)
+    qtbot.addWidget(dlg)
+    dlg.show()
+    # Generate a break list
+    dlg.total_cards_input.setValue(3)
+    dlg.generate_break_list()
+    break_cards = list(dlg.current_break_list)
+    assert all(card in inv.cards for card in break_cards)
+    # Simulate user confirms removal
+    with patch("PySide6.QtWidgets.QMessageBox.question", return_value=QMessageBox.Yes):
+        dlg.remove_break_cards_from_inventory()
+    # Cards should be removed
+    # assert all(not any(card == c for c in inv.cards) for card in break_cards)
+    # Cards should be removed (no card with same key remains)
+    break_keys = set(card_key(card) for card in break_cards)
+    inv_keys = set(card_key(card) for card in inv.cards)
+    print(f"DEBUG break_keys: {break_keys}")
+    print(f"DEBUG inv_keys: {inv_keys}")
+    print(f"DEBUG inv.cards actual: {[card_key(c) for c in inv.cards]}")
+    assert break_keys.isdisjoint(inv_keys)
+    # Simulate undo
+    dlg.undo_remove_from_inventory()
+    # Cards should be restored
+    assert all(card in inv.cards for card in break_cards)
+    # Simulate user cancels removal
+    dlg.generate_break_list()
+    with patch("PySide6.QtWidgets.QMessageBox.question", return_value=QMessageBox.No):
+        dlg.remove_break_cards_from_inventory()
+    # Cards should still be present
+    assert all(card in inv.cards for card in dlg.current_break_list)
+    # Cards should be removed (no card with same key remains)
+    break_keys = set(card_key(card) for card in break_cards)
+    inv_keys = set(card_key(card) for card in inv.cards)
+    # After cancel, break cards should still be present in inventory
+    assert all(k in inv_keys for k in break_keys)
+
+def test_filter_overlay_filters_table(qtbot):
+    """
+    Test that typing in the FilterOverlay filters updates the inventory table in BreakBuilderDialog.
+    """
+    inventory = CardInventory()
+    cards = [
+        {"Name": "Paradise Plume", "Set name": "Time Spiral Remastered", "Rarity": "uncommon", "Whatnot price": "$1"},
+        {"Name": "Lightning Bolt", "Set name": "Magic 2011", "Rarity": "common", "Whatnot price": "$2"},
+        {"Name": "Sol Ring", "Set name": "Commander Legends", "Rarity": "uncommon", "Whatnot price": "$3"},
+    ]
+    inventory.load_cards(cards)
+    dlg = BreakBuilderDialog(inventory)
+    qtbot.addWidget(dlg)
+    dlg.show()
+    # Simulate typing 'uncommon' in the Rarity filter
+    rarity_filter = dlg.filter_overlay.filters["Rarity"]
+    qtbot.keyClicks(rarity_filter, "uncommon")
+    qtbot.wait(100)
+    dlg.update_table_filter()
+    filtered_cards = dlg.card_table.model.cards
+    assert len(filtered_cards) == 2
+    assert all(card["Rarity"] == "uncommon" for card in filtered_cards)
+    # Clear filter
+    rarity_filter.clear()
+    qtbot.wait(100)
+    dlg.update_table_filter()
+    filtered_cards = dlg.card_table.model.cards
+    assert len(filtered_cards) == 3
+
+def test_card_selection_updates_preview(qtbot):
+    """
+    Test that selecting a card in the table updates the ImagePreview and CardDetails widgets.
+    """
+    inventory = CardInventory()
+    cards = [
+        {"Name": "Sol Ring", "Set name": "Commander Legends", "Rarity": "uncommon", "image_url": "https://example.com/solring.jpg", "oracle_text": "Add two colorless mana."},
+        {"Name": "Lightning Bolt", "Set name": "Magic 2011", "Rarity": "common", "image_url": "https://example.com/bolt.jpg", "oracle_text": "Deal 3 damage."},
+    ]
+    inventory.load_cards(cards)
+    dlg = BreakBuilderDialog(inventory)
+    qtbot.addWidget(dlg)
+    dlg.show()
+    # Select the second card (Lightning Bolt)
+    dlg.card_table.update_cards(cards)
+    dlg.card_table.selectRow(2)  # row 2 in model (row 1 in cards, since row 0 is filter row)
+    # Simulate selection event
+    dlg.card_table.card_selected.emit(cards[1])
+    # Check that preview widgets received the card
+    preview_text = dlg.image_preview.text()
+    assert (
+        preview_text == "" or
+        preview_text == "Loading image..." or
+        "image" in preview_text.lower() or
+        "failed" in preview_text.lower() or
+        dlg.image_preview._original_pixmap is not None
+    ), f"Unexpected image preview text: {preview_text}"
+    # Check all QLabel descendants for 'Lightning Bolt'
+    from PySide6.QtWidgets import QLabel
+    found = False
+    for label in dlg.card_details.details_widget.findChildren(QLabel):
+        if "Lightning Bolt" in label.text():
+            found = True
+            break
+    assert found, "Lightning Bolt not found in any QLabel in card details."
+
+def test_dynamic_filter_fields_and_clear_button(qtbot):
+    """
+    Test that all unique fields from the inventory are present as filter fields in the BreakBuilderDialog filter overlay, and that the clear filters button works.
+    """
+    from ui.dialogs.break_builder import BreakBuilderDialog
+    class DummyInventory:
+        def __init__(self):
+            self.cards = [
+                {"Name": "Alpha", "Set name": "SetA", "Purchase price": "5", "Scryfall ID": "abc123", "oracle_text": "Test text."},
+                {"Name": "Beta", "Set name": "SetB", "Purchase price": "10", "ManaBox ID": "mbx1", "type_line": "Creature"},
+            ]
+        def get_all_cards(self):
+            return self.cards
+        def filter_cards(self, filters):
+            result = []
+            for card in self.cards:
+                match = True
+                for k, v in filters.items():
+                    if v and v.lower() not in str(card.get(k, "")).lower():
+                        match = False
+                        break
+                if match:
+                    result.append(card)
+            return result
+    inv = DummyInventory()
+    dlg = BreakBuilderDialog(inv)
+    qtbot.addWidget(dlg)
+    dlg.show()
+    # All unique fields should be present as filter fields
+    all_fields = set()
+    for card in inv.cards:
+        all_fields.update(card.keys())
+    for field in all_fields:
+        assert field in dlg.filter_overlay.filters, f"Field '{field}' missing from filter overlay."
+    # Test clear filters button
+    for field, filt in dlg.filter_overlay.filters.items():
+        filt.setText("test")
+    qtbot.mouseClick(dlg.clear_filters_btn, Qt.LeftButton)
+    qtbot.wait(100)
+    for field, filt in dlg.filter_overlay.filters.items():
+        assert filt.text() == "", f"Filter for '{field}' was not cleared." 

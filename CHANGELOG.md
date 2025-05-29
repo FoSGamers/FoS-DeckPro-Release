@@ -2,6 +2,39 @@
 
 ## [Unreleased]
 
+### Major Enhancements
+- **Whatnot Packing Slip Processing:**
+  - Added end-to-end workflow for scanning a folder of Whatnot packing slip PDFs, extracting singles sold, and automatically removing them from inventory.
+  - Robust PDF parsing (via pdfplumber), dynamic field extraction, and modular parser for Whatnot slip format.
+  - Buyer info (name, username, address) is extracted and tracked for analytics/CRM.
+  - All non-card items are ignored; only real singles are processed.
+  - Modern, scrollable summary dialog shows cards removed, not found, ambiguous, buyers updated, files processed, and errors.
+  - Option to export summary as CSV/JSON for record-keeping.
+- **Buyers Database & Analytics:**
+  - Modular buyers database (JSON) tracks all buyers, purchase history, totals, and analytics.
+  - Buyers DB is updated on every slip processed; supports future CRM/marketing features.
+- **Inventory Removal Logic:**
+  - Best-match logic for removing sold cards from inventory, with logging for ambiguous/not-found cases.
+  - Fully tested for edge cases (quantity, ambiguous, partial match, etc.).
+- **File/Folder Workflow:**
+  - Only processes new PDFs; after processing, moves/renames to a `done/` subfolder with safe filenames.
+  - Robust file handling and error logging.
+- **UI Integration:**
+  - "Process Whatnot Packing Slips..." menu action in the main GUI.
+  - Folder selection, progress, and summary dialog for user review.
+  - All actions are user-friendly, robust, and follow modern UX patterns.
+
+### Tests & Reliability
+- **Full Unit and Integration Test Coverage:**
+  - All new modules (parser, buyers DB, inventory removal, file manager) are fully tested.
+  - Integration tests for the end-to-end workflow.
+  - All previous tests pass; no regressions.
+
+### Fixed
+- **Break Builder Indentation Bug:**
+  - Fixed an IndentationError in break_builder.py that could prevent app startup.
+  - Reformatted and checked for hidden tab/space issues.
+
 ## [1.3.0] - 2024-06-09
 
 ### Major Enhancements

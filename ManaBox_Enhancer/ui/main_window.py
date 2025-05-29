@@ -26,6 +26,13 @@ import pandas as pd
 import re
 from ui.dialogs.break_builder import BreakBuilderDialog
 from ui.columns_config import DEFAULT_COLUMNS
+import pdfplumber
+import traceback
+from utils.packing_slip_file_manager import find_new_packing_slips, move_and_rename_packing_slip
+from logic.whatnot_packing_slip_parser import WhatnotPackingSlipParser
+from logic.whatnot_inventory_removal import remove_sold_cards_from_inventory
+from logic.whatnot_buyer_db import WhatnotBuyerDB
+from ui.dialogs.packing_slip_summary import PackingSlipSummaryDialog
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -79,6 +86,8 @@ class MainWindow(QMainWindow):
         export_whatnot_action.triggered.connect(self.export_to_whatnot)
         export_item_listings_action = file_menu.addAction("Export Item Listings...")
         export_item_listings_action.triggered.connect(self.export_item_listings_dialog)
+        process_packing_slips_action = file_menu.addAction("Process Whatnot Packing Slips...")
+        process_packing_slips_action.triggered.connect(self.process_packing_slips)
         edit_menu = menubar.addMenu("Edit")
         bulk_edit_remove_action = edit_menu.addAction("Bulk Edit/Remove...")
         bulk_edit_remove_action.triggered.connect(self.bulk_edit_remove_dialog)
@@ -1138,3 +1147,78 @@ class MainWindow(QMainWindow):
         self.inventory.get_all_cards().append(data)
         self.card_table.update_cards(self.inventory.get_all_cards())
         QMessageBox.information(self, "Added", f"Card '{data.get('Name', '')}' added to inventory.")
+
+    def process_packing_slips(self):
+        from PySide6.QtWidgets import QFileDialog, QMessageBox
+        import pdfplumber
+        import traceback
+        from utils.packing_slip_file_manager import find_new_packing_slips, move_and_rename_packing_slip
+        from logic.whatnot_packing_slip_parser import WhatnotPackingSlipParser
+        from logic.whatnot_inventory_removal import remove_sold_cards_from_inventory
+        from logic.whatnot_buyer_db import WhatnotBuyerDB
+        from ui.dialogs.packing_slip_summary import PackingSlipSummaryDialog
+        import os
+
+        # 1. Prompt for folder
+        folder = getattr(self, '_packing_slip_folder', None)
+        if not folder or not os.path.isdir(folder):
+            folder = QFileDialog.getExistingDirectory(self, "Select Packing Slip Folder", os.getcwd())
+            if not folder:
+                return
+            self._packing_slip_folder = folder
+        done_folder = os.path.join(folder, 'done')
+        os.makedirs(done_folder, exist_ok=True)
+
+        # 2. Find new PDFs
+        pdfs = find_new_packing_slips(folder)
+        if not pdfs:
+            QMessageBox.information(self, "Packing Slips", "No new packing slip PDFs found.")
+            return
+
+        parser = WhatnotPackingSlipParser()
+        buyer_db = WhatnotBuyerDB()
+        summary = {'removed': [], 'not_found': [], 'ambiguous': [], 'buyers': [], 'files': [], 'errors': []}
+        updated_inventory = self.inventory.get_all_cards()
+        buyers_updated = set()
+
+        for pdf_path in pdfs:
+            try:
+                with pdfplumber.open(pdf_path) as pdf:
+                    text = "\n".join(page.extract_text() or '' for page in pdf.pages)
+                buyers = parser.parse(text)
+                for buyer_entry in buyers:
+                    show = buyer_entry['show']
+                    buyer = buyer_entry['buyer']
+                    sales = buyer_entry['sales']
+                    # Remove from inventory
+                    updated_inventory, removal_log = remove_sold_cards_from_inventory(updated_inventory, sales)
+                    for log in removal_log:
+                        if log['action'] == 'removed':
+                            summary['removed'].append(log)
+                        elif log['action'] == 'not_found':
+                            summary['not_found'].append(log)
+                        elif log['action'] == 'ambiguous':
+                            summary['ambiguous'].append(log)
+                    # Update buyers DB
+                    for sale in sales:
+                        buyer_db.add_purchase(buyer, sale, show)
+                    buyers_updated.add(buyer['username'] or buyer['name'])
+                # Move/rename file
+                show_date = buyers[0]['show']['date'] if buyers and buyers[0]['show']['date'] else 'UnknownDate'
+                show_title = buyers[0]['show']['title'] if buyers and buyers[0]['show']['title'] else 'UnknownShow'
+                new_path = move_and_rename_packing_slip(pdf_path, show_date, show_title, done_folder)
+                summary['files'].append(new_path)
+            except Exception as e:
+                summary['errors'].append(f"{os.path.basename(pdf_path)}: {e}\n{traceback.format_exc()}")
+
+        # Save updated inventory
+        self.inventory.load_cards(updated_inventory)
+        self.card_table.update_cards(self.inventory.get_all_cards())
+        # Add buyers summary
+        for key in buyers_updated:
+            b = buyer_db.get_buyer(key)
+            if b:
+                summary['buyers'].append(b)
+        # Show summary dialog
+        dlg = PackingSlipSummaryDialog(summary, self)
+        dlg.exec()

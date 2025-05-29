@@ -1,0 +1,48 @@
+name: Python CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      QT_QPA_PLATFORM: offscreen  # For headless PySide6 tests
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libegl1-mesa libgl1-mesa-glx
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest PySide6
+
+      - name: Ensure changelog updated
+        run: |
+          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '\.(py|yml)$' | grep . && ! git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep 'CHANGELOG.md'; then
+            echo 'ERROR: CHANGELOG.md must be updated for code/config changes.'
+            exit 1
+          fi
+
+      - name: Sync changelogs (fail if out of sync)
+        run: |
+          if [ -f scripts/update_changelog.py ]; then
+            python3 scripts/update_changelog.py
+          fi
+
+      - name: Run tests
+        run: |
+          PYTHONPATH=. pytest ManaBox_Enhancer/tests/ --maxfail=1 --disable-warnings -v 

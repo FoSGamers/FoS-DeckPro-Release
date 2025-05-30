@@ -62,9 +62,11 @@ class WhatnotPackingSlipParser:
         # Find all Name: ... Quantity: ... blocks
         sales = []
         for m in re.finditer(r"Name: ([^\n]+?) Quantity: (\d+)[\n\r]+Description: ([^\n]+)?", page):
-            name = m.group(1).strip()
+            raw_name = m.group(1).strip()
             quantity = int(m.group(2))
             description = m.group(3) or ''
+            # Split foil/normal from name if present
+            name, foil = self._split_name_foil(raw_name)
             # Ignore non-card names if validator is set
             if self.card_name_validator and not self.card_name_validator(name):
                 continue
@@ -72,8 +74,20 @@ class WhatnotPackingSlipParser:
             fields = self._parse_description(description)
             fields["Name"] = name
             fields["Quantity"] = quantity
+            # Prefer foil from name, then from description
+            if foil:
+                fields["Foil"] = foil
+            elif "Foil" not in fields:
+                fields["Foil"] = "normal"  # Default to normal if not specified
             sales.append(fields)
         return sales
+
+    def _split_name_foil(self, raw_name: str):
+        # If the name ends with ' normal' or ' foil', split it
+        m = re.match(r"(.+?)\s+(normal|foil|etched)$", raw_name, re.IGNORECASE)
+        if m:
+            return m.group(1).strip(), m.group(2).strip().lower()
+        return raw_name, None
 
     def _parse_description(self, desc: str) -> Dict[str, Any]:
         # Try to extract as many fields as possible

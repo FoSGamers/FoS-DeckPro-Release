@@ -1,5 +1,7 @@
 # ManaBox Enhancer
 
+## Version: v1.5.1 (2024-06-XX)
+
 ## Quick Start
 
 1. **Install requirements:**
@@ -33,14 +35,21 @@
     - The total and average Whatnot price is shown at the bottom of the break builder.
     - All cards (including filler) are included, and 0 prices are counted as 1 for math.
 
-- **Whatnot Packing Slip Processing (in progress):**
-  - Scan a folder of Whatnot packing slip PDFs and update inventory automatically (requires `pdfplumber`).
-  - Buyer analytics and robust error handling.
+- **Whatnot Packing Slip Processing:**
+  - Robust PDF parsing with `pdfplumber`.
+  - **Sale Parsing:** Card name and foil/normal status are always split and normalized, even if the status is in the name (e.g., "Bribery normal").
+  - **Matching:** Cards are matched using name, set code, collector number, foil/normal, and language. Fuzzy matching and set code aliases are used for best results.
+  - **Ambiguity Handling:** If multiple inventory cards match except for language, the user is prompted to resolve the ambiguity.
+  - **Undo/Restore:** Every packing slip removal can be undone from the File menu.
+  - **No Auto-Remove:** Cards are not removed from inventory or files moved until the user confirms.
+  - **Debugging:** All not-found cards are logged with detailed debug output for troubleshooting.
 
 - **Buyers Database & Analytics:**
   - Tracks buyers, purchase history, and analytics for future CRM features.
 
 - **Full test coverage and CI integration.**
+  - All core logic is covered by regression and edge-case tests.
+  - Sale parsing and matching logic are tested for all known edge cases.
 
 ## Requirements
 
@@ -63,23 +72,51 @@
 
 ## Versioning & GitHub Best Practices
 
-- Each stable, working version is tagged (e.g., `v1.5.0`) and has a dedicated branch (e.g., `v1.5.0-working`).
+- Each stable, working version is tagged (e.g., `v1.5.1`) and has a dedicated branch (e.g., `v1.5.1-working`).
 - All changes are documented in the `CHANGELOG.md` and committed with clear messages.
 - Releases are created on GitHub for easy download, rollback, and reproducibility.
 - Always use the provided `requirements.txt` and follow the Quick Start for setup on new machines.
+
+## AI Contributor & Developer Guide
+
+- **Modular Design:** All features are implemented as encapsulated modules/classes with clear interfaces.
+- **No Cross-Module Manipulation:** Use only public methods/events for communication between modules.
+- **Backward Compatibility:** Never break or remove a working feature without a migration plan and tests.
+- **Incremental Refactoring:** Refactor in small, testable steps. Run all tests after each change.
+- **Unit Testing:** Every module has unit tests for its core logic. All tests must pass before merging.
+- **Documentation:** Every class and function has a docstring explaining its purpose and usage.
+- **Centralized Configuration:** All config/constants are in a config file or module.
+- **Consistent UI/UX:** All UI components follow a consistent style and interaction pattern.
+- **Safe Fallbacks and Error Handling:** All features provide safe fallbacks and user-friendly error messages.
+- **Feature Isolation:** New features must be independently enable/disable-able and not affect unrelated features.
+- **Full-Data Operations:** All filtering/exporting/analytics operate on the full filtered dataset, not just the current GUI page.
+- **Extensibility:** The codebase is structured so new features/modules can be added without modifying or risking existing features.
+- **Process Documentation:** The process for adding new features/modules is documented for future enhancements.
+
+## Project Tracking & Documentation Policy
+
+- This project is tracked with Git for full version control and history.
+- **README.md and CHANGELOG.md are updated for every change, feature, or fix.**
+- All contributors must document what was changed, why, and how it was tested in these files.
+- Every new feature, bug fix, or refactor must be described here immediately after implementation.
+
+---
+
+## Project Overview
+
+ManaBox Enhancer is a modular, extensible tool for managing and enhancing card inventory workflows. All modules, features, and changes are documented below.
+
+---
+
+## Change Log
+
+See `CHANGELOG.md` for a full history of all changes and releases.
 
 ## Notes
 
 - This is the advanced, modular PySide6 version described in the documentation and changelog.
 - The Whatnot packing slip PDF feature is under active development.
 - For any issues, ensure all requirements are installed and you are running the app from the correct entry point (`main.py`).
-
-## Project Tracking & Documentation Policy
-
-- This project is now tracked with Git for full version control and history.
-- **README.md will be updated for every change, feature, or fix.**
-- All contributors must document what was changed, why, and how it was tested in this file.
-- Every new feature, bug fix, or refactor must be described here immediately after implementation.
 
 ## Initial Commit
 - Initialized Git repository on this project.

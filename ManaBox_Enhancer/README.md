@@ -1,6 +1,8 @@
 # ManaBox Enhancer
 
-## Version: v1.5.1 (2024-06-XX)
+**Release: v1.5.1 (2024-06-XX) — Working, Stable, and Fully Modular**
+
+> This release is a fully working, stable, and modular version of ManaBox Enhancer. All core workflows (break builder, Whatnot packing slip processing, inventory management, buyers database, and analytics) are robust, tested, and documented. All break templates and configuration files are present and correctly referenced. Legacy and backup files are isolated in the `legacy/` folder. See below for usage, features, and details.
 
 ## Quick Start
 

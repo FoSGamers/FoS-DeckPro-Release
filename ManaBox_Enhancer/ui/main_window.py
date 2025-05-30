@@ -88,6 +88,11 @@ class MainWindow(QMainWindow):
         export_item_listings_action.triggered.connect(self.export_item_listings_dialog)
         process_packing_slips_action = file_menu.addAction("Process Whatnot Packing Slips...")
         process_packing_slips_action.triggered.connect(self.process_packing_slips)
+        undo_packing_slip_action = file_menu.addAction("Undo Last Packing Slip Removal")
+        undo_packing_slip_action.setEnabled(False)
+        undo_packing_slip_action.triggered.connect(self.undo_last_packing_slip_removal)
+        self._last_packing_slip_inventory = None
+        self._last_packing_slip_summary = None
         edit_menu = menubar.addMenu("Edit")
         bulk_edit_remove_action = edit_menu.addAction("Bulk Edit/Remove...")
         bulk_edit_remove_action.triggered.connect(self.bulk_edit_remove_dialog)
@@ -1157,6 +1162,7 @@ class MainWindow(QMainWindow):
         from logic.whatnot_inventory_removal import remove_sold_cards_from_inventory
         from logic.whatnot_buyer_db import WhatnotBuyerDB
         from ui.dialogs.packing_slip_summary import PackingSlipSummaryDialog
+        from ui.dialogs.edit_card import EditCardDialog
         import os
 
         # 1. Prompt for folder
@@ -1178,8 +1184,26 @@ class MainWindow(QMainWindow):
         parser = WhatnotPackingSlipParser()
         buyer_db = WhatnotBuyerDB()
         summary = {'removed': [], 'not_found': [], 'ambiguous': [], 'buyers': [], 'files': [], 'errors': []}
-        updated_inventory = self.inventory.get_all_cards()
+        updated_inventory = copy.deepcopy(self.inventory.get_all_cards())
+        self._last_packing_slip_inventory = copy.deepcopy(self.inventory.get_all_cards())
+        self._last_packing_slip_summary = None
         buyers_updated = set()
+        files_to_move = []
+
+        def user_prompt_callback(sale, matches):
+            # Show dialog to user to resolve ambiguity
+            dlg = EditCardDialog(card=sale, all_fields=list(matches[0].keys()), parent=self)
+            # Optionally, show a list of matches and let user pick one
+            # For now, just let user edit the sale fields and try to match again
+            if dlg.exec():
+                selected_card = dlg.get_card()
+                # Try to find the best match from matches
+                for m in matches:
+                    if all(str(m.get(f, '')).lower() == str(selected_card.get(f, '')).lower() for f in ['Name', 'Set code', 'Collector number', 'Foil', 'Language'] if selected_card.get(f, '')):
+                        return m
+                # If not found, just return the first
+                return matches[0]
+            return None
 
         for pdf_path in pdfs:
             try:
@@ -1190,8 +1214,9 @@ class MainWindow(QMainWindow):
                     show = buyer_entry['show']
                     buyer = buyer_entry['buyer']
                     sales = buyer_entry['sales']
-                    # Remove from inventory
-                    updated_inventory, removal_log = remove_sold_cards_from_inventory(updated_inventory, sales)
+                    # Remove from inventory with user prompt for ambiguous
+                    updated_inventory, removal_log = remove_sold_cards_from_inventory(
+                        updated_inventory, sales, user_prompt_callback=user_prompt_callback)
                     for log in removal_log:
                         if log['action'] == 'removed':
                             summary['removed'].append(log)
@@ -1203,22 +1228,66 @@ class MainWindow(QMainWindow):
                     for sale in sales:
                         buyer_db.add_purchase(buyer, sale, show)
                     buyers_updated.add(buyer['username'] or buyer['name'])
-                # Move/rename file
+                # Do not move/rename file yet; add to files_to_move for after confirmation
                 show_date = buyers[0]['show']['date'] if buyers and buyers[0]['show']['date'] else 'UnknownDate'
                 show_title = buyers[0]['show']['title'] if buyers and buyers[0]['show']['title'] else 'UnknownShow'
-                new_path = move_and_rename_packing_slip(pdf_path, show_date, show_title, done_folder)
-                summary['files'].append(new_path)
+                files_to_move.append((pdf_path, show_date, show_title))
             except Exception as e:
                 summary['errors'].append(f"{os.path.basename(pdf_path)}: {e}\n{traceback.format_exc()}")
 
         # Save updated inventory
         self.inventory.load_cards(updated_inventory)
         self.card_table.update_cards(self.inventory.get_all_cards())
-        # Add buyers summary
-        for key in buyers_updated:
-            b = buyer_db.get_buyer(key)
-            if b:
-                summary['buyers'].append(b)
+        self._last_packing_slip_summary = copy.deepcopy(summary)
+        # Enable undo after a successful removal
+        if summary['removed']:
+            for action in self.menuBar().actions():
+                for act in action.menu().actions():
+                    if act.text() == "Undo Last Packing Slip Removal":
+                        act.setEnabled(True)
+                        break
         # Show summary dialog
         dlg = PackingSlipSummaryDialog(summary, self)
         dlg.exec()
+
+        # Ask user to confirm removal and moving files
+        if summary['removed']:
+            confirm = QMessageBox.question(
+                self, "Confirm Removal and Move Files",
+                f"{len(summary['removed'])} cards were removed from inventory. Move processed packing slips to 'done'?",
+                QMessageBox.Yes | QMessageBox.No, QMessageBox.Yes)
+            if confirm == QMessageBox.Yes:
+                for pdf_path, show_date, show_title in files_to_move:
+                    try:
+                        new_path = move_and_rename_packing_slip(pdf_path, show_date, show_title, done_folder)
+                        summary['files'].append(new_path)
+                    except Exception as e:
+                        summary['errors'].append(f"{os.path.basename(pdf_path)}: {e}\n{traceback.format_exc()}")
+        else:
+            QMessageBox.information(self, "Packing Slips", "No cards were removed. Packing slips will not be moved.")
+
+    def undo_last_packing_slip_removal(self):
+        from PySide6.QtWidgets import QMessageBox
+        if self._last_packing_slip_inventory is None:
+            QMessageBox.information(self, "Undo", "No packing slip removal to undo.")
+            return
+        confirm = QMessageBox.question(
+            self, "Undo Packing Slip Removal",
+            "Are you sure you want to restore the inventory to its state before the last packing slip removal?",
+            QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if confirm == QMessageBox.Yes:
+            self.inventory.load_cards(copy.deepcopy(self._last_packing_slip_inventory))
+            self.card_table.update_cards(self.inventory.get_all_cards())
+            self.statusBar().showMessage("Inventory restored to before last packing slip removal.")
+            # Optionally, show the previous summary dialog
+            if self._last_packing_slip_summary:
+                dlg = PackingSlipSummaryDialog(self._last_packing_slip_summary, self)
+                dlg.exec()
+            # Disable undo until next packing slip removal
+            for action in self.menuBar().actions():
+                for act in action.menu().actions():
+                    if act.text() == "Undo Last Packing Slip Removal":
+                        act.setEnabled(False)
+                        break
+            self._last_packing_slip_inventory = None
+            self._last_packing_slip_summary = None

@@ -1,5 +1,126 @@
 # ManaBox Enhancer
 
+**Release: v1.5.1 (2024-06-XX) — Working, Stable, and Fully Modular**
+
+> This release is a fully working, stable, and modular version of ManaBox Enhancer. All core workflows (break builder, Whatnot packing slip processing, inventory management, buyers database, and analytics) are robust, tested, and documented. All break templates and configuration files are present and correctly referenced. Legacy and backup files are isolated in the `legacy/` folder. See below for usage, features, and details.
+
+---
+
+## Table of Contents
+- [How to Use](#how-to-use)
+- [Beginner FAQ](#beginner-faq)
+- [Troubleshooting](#troubleshooting)
+- [Where to Get Help](#where-to-get-help)
+- [License](#license)
+- [Release Notes](#release-notes)
+- [Contributing](#contributing)
+- [Code of Conduct](#code-of-conduct)
+- [Roadmap](#roadmap)
+- [Use Cases](#use-cases)
+- [Credits & Acknowledgments](#credits--acknowledgments)
+
+---
+
+## How to Use
+
+### Quick Start
+1. **Install requirements:**
+   ```sh
+   pip install -r ManaBox_Enhancer/requirements.txt
+   ```
+2. **Launch the app:**
+   ```sh
+   python3 ManaBox_Enhancer/main.py
+   ```
+3. **Build a Break or Process Packing Slips:**
+   - Use the GUI to access the Break Builder or Packing Slip Processor from the Tools menu.
+   - Follow on-screen instructions for each workflow.
+
+### Example Workflow
+- **Build a Whatnot Break:**
+  1. Open the Break Builder.
+  2. Filter/select cards, set rules, and preview the break.
+  3. Export the break list for Whatnot.
+- **Remove Sold Cards from Inventory:**
+  1. Open the Packing Slip Processor.
+  2. Select your Whatnot PDF(s).
+  3. Review matches, resolve ambiguities, and confirm removals.
+
+---
+
+## Beginner FAQ
+- **Q: What is ManaBox Enhancer?**
+  - A modular tool for managing card inventory, building Whatnot breaks, and processing packing slips.
+- **Q: Do I need to know Python?**
+  - No, the app is fully GUI-based for normal use.
+- **Q: Where are my break templates?**
+  - In the project root (e.g., `50-30-15-5.json`).
+- **Q: How do I undo a removal?**
+  - Use the Undo option in the File menu after processing a packing slip.
+
+---
+
+## Troubleshooting
+- **App won't start:**
+  - Ensure all requirements are installed and you are running from the correct directory.
+- **GUI errors in headless environments:**
+  - Use Xvfb for GUI tests or run on a local desktop.
+- **Packing slip not matching cards:**
+  - Check that inventory and slip data are up to date and formatted correctly.
+- **Still stuck?**
+  - See [Where to Get Help](#where-to-get-help).
+
+---
+
+## Where to Get Help
+- **GitHub Issues:** [Open an issue](https://github.com/YOUR_GITHUB_REPO/issues)
+- **Discussions:** [GitHub Discussions](https://github.com/YOUR_GITHUB_REPO/discussions)
+- **Email:** [your.email@example.com]
+- **Community Chat:** (Add Discord/Matrix/Slack link if available)
+
+---
+
+## License
+ManaBox Enhancer is released under the MIT License. See [LICENSE](LICENSE) for details.
+
+---
+
+## Release Notes
+See [CHANGELOG.md](CHANGELOG.md) for full details. v1.5.1 is a stable, working release with all core workflows tested and documented.
+
+---
+
+## Contributing
+We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines and how to get started.
+
+---
+
+## Code of Conduct
+All contributors and users are expected to follow our [Code of Conduct](CODE_OF_CONDUCT.md).
+
+---
+
+## Roadmap
+- [ ] API integration with Whatnot (future)
+- [ ] Support for packs, bundles, and accessories
+- [ ] Enhanced analytics and reporting
+- [ ] Multi-language support
+- [ ] Community plugin system
+
+---
+
+## Use Cases
+- **Card Sellers:** Manage inventory, build and export Whatnot breaks, and process sales efficiently.
+- **Streamers:** Quickly generate break lists and overlays for live sales.
+- **Shops:** Track buyers, automate packing slip processing, and maintain accurate inventory.
+
+---
+
+## Credits & Acknowledgments
+- Project lead: [Your Name]
+- Contributors: See [CONTRIBUTORS.md](CONTRIBUTORS.md)
+- Special thanks to the open source community and all testers.
+
 ## Whatnot Export Rules
 
 - **Whatnot Price Minimum:** If a card's Whatnot price is 0, it will be exported as 1 in the Whatnot export CSV. This ensures no item is listed with a price of 0.

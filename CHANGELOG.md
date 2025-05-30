@@ -1,11 +1,19 @@
 # Changelog
 
-## [Unreleased]
+## [v1.5.1] - 2024-06-XX
+
+### Working Release Summary
+- This release marks a fully working, stable, and modular version of ManaBox Enhancer.
+- All core workflows (break builder, Whatnot packing slip processing, inventory management, buyers database, and analytics) are robust and tested.
+- All break templates and configuration files are present and correctly referenced.
+- All tests pass except for known GUI headless environment issues (see README for details).
+- The codebase is clean, with legacy and backup files isolated in the `legacy/` folder.
+- Documentation and changelog are up to date for all features and fixes.
 
 ### Major Enhancements
 - **Whatnot Packing Slip Processing:**
-  - Added end-to-end workflow for scanning a folder of Whatnot packing slip PDFs, extracting singles sold, and automatically removing them from inventory.
-  - Robust PDF parsing (via pdfplumber), dynamic field extraction, and modular parser for Whatnot slip format.
+  - End-to-end workflow for scanning Whatnot packing slip PDFs, extracting singles sold, and removing them from inventory.
+  - Robust PDF parsing, dynamic field extraction, and modular parser for Whatnot slip format.
   - Buyer info (name, username, address) is extracted and tracked for analytics/CRM.
   - All non-card items are ignored; only real singles are processed.
   - Modern, scrollable summary dialog shows cards removed, not found, ambiguous, buyers updated, files processed, and errors.
@@ -34,6 +42,10 @@
 - **Break Builder Indentation Bug:**
   - Fixed an IndentationError in break_builder.py that could prevent app startup.
   - Reformatted and checked for hidden tab/space issues.
+
+## [Unreleased]
+
+- All future changes will be documented here.
 
 ## [1.3.0] - 2024-06-09
 

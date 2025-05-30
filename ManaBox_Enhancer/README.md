@@ -15,17 +15,31 @@
    - Select **Open Break/Autobox Builder**.
    - Use the tabs to filter inventory, curate must-haves, set rules, and generate/export your break list.
 
-## Features
+## Features & Workflow
 
 - **Advanced Break/Autobox Builder:**
   - Modular, rule-based, and curated break list generation.
   - Dynamic filtering, live preview, cost calculation, and export.
   - Save/load rule sets, batch inventory operations, and undo support.
+  - **Filler Cards:** If your rules/curation do not fill the break, remaining slots are filled with available cards ("filler"), and their Whatnot price is shown and used in calculations.
+  - **Whatnot Price Minimum Rule:**
+    - For all break cost and average calculations, any card with a Whatnot price of 0 is treated as 1 (display still shows the original value).
+    - This ensures compliance with Whatnot's minimum price policy and accurate break math.
+  - **Break Preview:**
+    - All cards (including filler) show their Whatnot price in the preview.
+    - Rule-based cards also show the fields that matched the rule.
+    - Curated, rule-based, and filler cards are clearly separated in the preview.
+  - **Cost/Average Calculation:**
+    - The total and average Whatnot price is shown at the bottom of the break builder.
+    - All cards (including filler) are included, and 0 prices are counted as 1 for math.
+
 - **Whatnot Packing Slip Processing (in progress):**
   - Scan a folder of Whatnot packing slip PDFs and update inventory automatically (requires `pdfplumber`).
   - Buyer analytics and robust error handling.
+
 - **Buyers Database & Analytics:**
   - Tracks buyers, purchase history, and analytics for future CRM features.
+
 - **Full test coverage and CI integration.**
 
 ## Requirements
@@ -46,6 +60,13 @@
   ```sh
   xvfb-run -a pytest ManaBox_Enhancer/tests --maxfail=3 --disable-warnings -v
   ```
+
+## Versioning & GitHub Best Practices
+
+- Each stable, working version is tagged (e.g., `v1.5.0`) and has a dedicated branch (e.g., `v1.5.0-working`).
+- All changes are documented in the `CHANGELOG.md` and committed with clear messages.
+- Releases are created on GitHub for easy download, rollback, and reproducibility.
+- Always use the provided `requirements.txt` and follow the Quick Start for setup on new machines.
 
 ## Notes
 

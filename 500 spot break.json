@@ -1,0 +1,69 @@
+[
+  {
+    "count_type": "% of available",
+    "count": 50.0,
+    "criteria": [
+      [
+        "Whatnot price",
+        [
+          0.0,
+          3.0
+        ]
+      ]
+    ],
+    "enabled": true
+  },
+  {
+    "count_type": "% of available",
+    "count": 30.0,
+    "criteria": [
+      [
+        "Whatnot price",
+        [
+          4.0,
+          8.0
+        ]
+      ]
+    ],
+    "enabled": true
+  },
+  {
+    "count_type": "% of available",
+    "count": 16.0,
+    "criteria": [
+      [
+        "Whatnot price",
+        [
+          9.04,
+          15.0
+        ]
+      ]
+    ],
+    "enabled": true
+  },
+  {
+    "count_type": "% of available",
+    "count": 2.0,
+    "criteria": [
+      [
+        "Whatnot price",
+        [
+          76.0,
+          100.0
+        ]
+      ]
+    ],
+    "enabled": true
+  },
+  {
+    "count_type": "Count",
+    "count": 1,
+    "criteria": [
+      [
+        "Altered",
+        ""
+      ]
+    ],
+    "enabled": true
+  }
+]

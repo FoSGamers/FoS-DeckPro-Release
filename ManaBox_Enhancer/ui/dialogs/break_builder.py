@@ -596,7 +596,7 @@ class BreakBuilderDialog(QDialog):
             for card in all_cards:
                 if id(card) in used_ids:
                     continue
-            match = True
+                match = True
                 for field, val in rule.get('criteria', []):
                     if isinstance(val, tuple):
                         min_val, max_val = val
@@ -612,9 +612,9 @@ class BreakBuilderDialog(QDialog):
                             break
                     elif isinstance(val, str) and val:
                         if str(card.get(field, "")).lower() != val.lower():
-                    match = False
-                    break
-            if match:
+                            match = False
+                            break
+                if match:
                     filtered.append(card)
             n = 0
             if rule.get("count_type") == "Count":
@@ -700,7 +700,7 @@ class BreakBuilderDialog(QDialog):
                         price = price.replace("$", "").strip()
                     price = float(price)
                     prices.append(price)
-        except Exception:
+                except Exception:
                     continue
         total_cost = sum(prices)
         avg_cost = (total_cost / len(prices)) if prices else 0.0
@@ -986,7 +986,7 @@ class BreakBuilderDialog(QDialog):
             restored = 0
             for card in self.last_removed_cards:
                 try:
-            self.inventory.add_card(card)
+                    self.inventory.add_card(card)
                     restored += 1
                 except Exception:
                     pass

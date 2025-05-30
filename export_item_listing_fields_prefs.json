@@ -1,6 +1,7 @@
 {
   "selected_title": [
     "Foil",
+    "Language",
     "Name"
   ],
   "order_title": [
@@ -31,7 +32,8 @@
   ],
   "check_order_title": {
     "Name": 1,
-    "Foil": 2
+    "Foil": 2,
+    "Language": 14
   },
   "selected_desc": [
     "Collector number",

@@ -1,5 +1,58 @@
 # ManaBox Enhancer
 
+## Quick Start
+
+1. **Install requirements:**
+   ```sh
+   pip install -r ManaBox_Enhancer/requirements.txt
+   ```
+2. **Launch the app:**
+   ```sh
+   python3 ManaBox_Enhancer/main.py
+   ```
+3. **Access the Break/Autobox Builder:**
+   - In the running app, go to the **Tools** menu.
+   - Select **Open Break/Autobox Builder**.
+   - Use the tabs to filter inventory, curate must-haves, set rules, and generate/export your break list.
+
+## Features
+
+- **Advanced Break/Autobox Builder:**
+  - Modular, rule-based, and curated break list generation.
+  - Dynamic filtering, live preview, cost calculation, and export.
+  - Save/load rule sets, batch inventory operations, and undo support.
+- **Whatnot Packing Slip Processing (in progress):**
+  - Scan a folder of Whatnot packing slip PDFs and update inventory automatically (requires `pdfplumber`).
+  - Buyer analytics and robust error handling.
+- **Buyers Database & Analytics:**
+  - Tracks buyers, purchase history, and analytics for future CRM features.
+- **Full test coverage and CI integration.**
+
+## Requirements
+
+- All dependencies are listed in `ManaBox_Enhancer/requirements.txt`.
+- Key packages:
+  - `PySide6` (GUI)
+  - `pandas`, `requests`, `tqdm`, `pillow`, `pdfplumber`
+  - See the requirements file for the full list.
+
+## Testing
+
+- To run tests:
+  ```sh
+  PYTHONPATH=$PYTHONPATH:$(pwd) pytest ManaBox_Enhancer/tests --maxfail=3 --disable-warnings -v
+  ```
+- For GUI tests in headless environments, use Xvfb:
+  ```sh
+  xvfb-run -a pytest ManaBox_Enhancer/tests --maxfail=3 --disable-warnings -v
+  ```
+
+## Notes
+
+- This is the advanced, modular PySide6 version described in the documentation and changelog.
+- The Whatnot packing slip PDF feature is under active development.
+- For any issues, ensure all requirements are installed and you are running the app from the correct entry point (`main.py`).
+
 ## Project Tracking & Documentation Policy
 
 - This project is now tracked with Git for full version control and history.

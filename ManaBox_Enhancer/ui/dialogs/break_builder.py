@@ -677,7 +677,10 @@ class BreakBuilderDialog(QDialog):
             elif section_type == "Filler":
                 lines.append("Filler Cards:")
             for c in cards:
-                # For rules, show relevant fields next to the card name
+                # For rules and filler, show Whatnot price next to the card name
+                whatnot_price = c.get('Whatnot price', None)
+                price_str = f" (Whatnot price: {whatnot_price})" if whatnot_price is not None else ""
+                crit_str = ""
                 if section_type == "Rule" and rule:
                     crit_fields = [field for field, _ in rule.get('criteria', [])]
                     crit_values = []
@@ -686,26 +689,26 @@ class BreakBuilderDialog(QDialog):
                         if val is not None and val != '':
                             crit_values.append(f"{field}: {val}")
                     crit_str = f" ({', '.join(crit_values)})" if crit_values else ""
-                else:
-                    crit_str = ""
-                lines.append(f"  {c.get('Name', '')} [{c.get('Set name', '')}]{crit_str}")
+                lines.append(f"  {c.get('Name', '')} [{c.get('Set name', '')}]{crit_str}{price_str}")
         self.break_preview_box.setText("\n".join(lines[:total_needed + 10]))
         # --- Compute and display total and average cost ---
         prices = []
         for card in self.current_break_list:
-            price = card.get('Purchase price') or card.get('Whatnot price')
+            price = card.get('Whatnot price')
             if price is not None:
                 try:
                     if isinstance(price, str):
                         price = price.replace("$", "").strip()
                     price = float(price)
+                    if price == 0:
+                        price = 1.0
                     prices.append(price)
                 except Exception:
                     continue
         total_cost = sum(prices)
         avg_cost = (total_cost / len(prices)) if prices else 0.0
-        self.total_cost_label.setText(f"<b>Total Card Cost:</b> ${total_cost:,.2f}")
-        self.avg_cost_label.setText(f"<b>Average Card Cost:</b> ${avg_cost:,.2f}")
+        self.total_cost_label.setText(f"<b>Total Whatnot Price:</b> ${total_cost:,.2f}")
+        self.avg_cost_label.setText(f"<b>Average Whatnot Price:</b> ${avg_cost:,.2f}")
     def update_table_filter(self):
         """
         Update the inventory table based on the FilterOverlay fields.

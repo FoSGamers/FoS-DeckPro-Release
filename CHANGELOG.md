@@ -55,6 +55,7 @@
 - Per-feature subscription/lifetime licensing, automated expiration, and user-friendly paywall UX.
 - All documentation and code up to date for public release.
 - Only core app and documentation included in release commit; backups and user data excluded.
+- License generator scripts removed from public release; only core app and documentation are included.
 
 ## [Unreleased]
 

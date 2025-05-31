@@ -1323,46 +1323,27 @@ class MainWindow(QMainWindow):
             self._last_packing_slip_summary = None
 
     def _lock_paid_features(self):
-        # Disable all paid feature actions/buttons
-        if self.break_builder_action is not None:
-            self.break_builder_action.setEnabled(False)
-        if hasattr(self, 'export_whatnot_action') and self.export_whatnot_action is not None:
-            self.export_whatnot_action.setEnabled(False)
-        if hasattr(self, 'export_item_listings_action') and self.export_item_listings_action is not None:
-            self.export_item_listings_action.setEnabled(False)
-        if hasattr(self, 'enrich_action') and self.enrich_action is not None:
-            self.enrich_action.setEnabled(False)
-        if hasattr(self, 'add_scryfall_action') and self.add_scryfall_action is not None:
-            self.add_scryfall_action.setEnabled(False)
-        if hasattr(self, 'adjust_whatnot_action') and self.adjust_whatnot_action is not None:
-            self.adjust_whatnot_action.setEnabled(False)
-        if hasattr(self, 'process_packing_slips_action') and self.process_packing_slips_action is not None:
-            self.process_packing_slips_action.setEnabled(False)
-        # Add other paid features here later
+        # Do not disable any paid feature actions/buttons; all should remain enabled
+        pass
 
     def _unlock_paid_features(self):
-        # Enable only the paid feature actions/buttons for which the license is valid
-        from utils import license as license_utils
-        if self.break_builder_action is not None:
-            self.break_builder_action.setEnabled(license_utils.is_license_valid('break_builder'))
-        if hasattr(self, 'export_whatnot_action') and self.export_whatnot_action is not None:
-            self.export_whatnot_action.setEnabled(license_utils.is_license_valid('export_whatnot'))
-        if hasattr(self, 'export_item_listings_action') and self.export_item_listings_action is not None:
-            self.export_item_listings_action.setEnabled(license_utils.is_license_valid('export_item_listings'))
-        if hasattr(self, 'enrich_action') and self.enrich_action is not None:
-            self.enrich_action.setEnabled(license_utils.is_license_valid('enrich_scryfall'))
-        if hasattr(self, 'add_scryfall_action') and self.add_scryfall_action is not None:
-            self.add_scryfall_action.setEnabled(license_utils.is_license_valid('add_scryfall'))
-        if hasattr(self, 'adjust_whatnot_action') and self.adjust_whatnot_action is not None:
-            self.adjust_whatnot_action.setEnabled(license_utils.is_license_valid('adjust_whatnot_pricing'))
-        if hasattr(self, 'process_packing_slips_action') and self.process_packing_slips_action is not None:
-            self.process_packing_slips_action.setEnabled(license_utils.is_license_valid('process_packing_slips'))
-        # Add other paid features here later
+        # Do not enable/disable any paid feature actions/buttons; all should remain enabled
+        pass
 
     def _on_paid_feature_triggered(self, feature_func, feature_name=None):
         # Call this wrapper for any paid feature
-        if not license.is_license_valid(feature_name=feature_name):
-            if not license.prompt_for_license_key(self, feature_name=feature_name):
-                return  # User cancelled or invalid
-            self._unlock_paid_features()
+        from utils import license as license_utils
+        if not license_utils.is_license_valid(feature_name=feature_name):
+            # Only prompt for a key if no key is stored at all
+            if not license_utils.is_license_valid():
+                if not license_utils.prompt_for_license_key(self, feature_name=feature_name):
+                    return
+                if not license_utils.is_license_valid(feature_name=feature_name):
+                    from PySide6.QtWidgets import QMessageBox
+                    QMessageBox.warning(self, "Feature Locked", f"You do not have access to this feature.\n\nPlease contact Thereal.FosGameres@gmail.com to purchase or upgrade your license.")
+                    return
+            else:
+                from PySide6.QtWidgets import QMessageBox
+                QMessageBox.warning(self, "Feature Locked", f"You do not have access to this feature.\n\nPlease contact Thereal.FosGameres@gmail.com to purchase or upgrade your license.")
+                return
         feature_func()

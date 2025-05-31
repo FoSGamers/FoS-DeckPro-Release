@@ -51,6 +51,10 @@
 - Added per-feature subscription/lifetime license system with automated expiration.
 - License key generator and app now handle all Google Sheet columns automatically; no manual editing required.
 - Expired features prompt for renewal in-app.
+- Marked as official v1.5.1 stable release.
+- Per-feature subscription/lifetime licensing, automated expiration, and user-friendly paywall UX.
+- All documentation and code up to date for public release.
+- Only core app and documentation included in release commit; backups and user data excluded.
 
 ## [Unreleased]
 

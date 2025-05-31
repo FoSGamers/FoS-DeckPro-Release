@@ -43,6 +43,12 @@
   - Fixed an IndentationError in break_builder.py that could prevent app startup.
   - Reformatted and checked for hidden tab/space issues.
 
+### Added
+- Marked as stable, modular, and fully working release.
+- All license prompts and documentation updated to use Thereal.FosGameres@gmail.com for access/support.
+- Paid features require a license key; users must contact that email for access.
+- All documentation and in-app prompts are up to date and consistent with the current licensing model.
+
 ## [Unreleased]
 
 - All future changes will be documented here.

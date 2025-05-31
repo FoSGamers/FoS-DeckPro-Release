@@ -1,1 +1,1 @@
-from FoS_DeckPro.ui.main_window import MainWindow 
+from ui.main_window import MainWindow 

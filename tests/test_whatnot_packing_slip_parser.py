@@ -1,1 +1,1 @@
-from FoS_DeckPro.logic.whatnot_packing_slip_parser import WhatnotPackingSlipParser 
+from logic.whatnot_packing_slip_parser import WhatnotPackingSlipParser 

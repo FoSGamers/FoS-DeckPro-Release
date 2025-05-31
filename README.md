@@ -22,6 +22,8 @@
 - [Known Issues](#known-issues)
 - [Monetization & Add-ons](#monetization--add-ons)
 - [Release Status](#release-status)
+- [Free vs. Paid Features](#free-vs-paid-features)
+- [License Key Activation](#license-key-activation)
 
 ---
 
@@ -79,7 +81,7 @@
 ## Where to Get Help
 - **GitHub Issues:** [Open an issue](https://github.com/YOUR_GITHUB_REPO/issues)
 - **Discussions:** [GitHub Discussions](https://github.com/YOUR_GITHUB_REPO/discussions)
-- **Email:** [your.email@example.com]
+- **Email:** Thereal.FosGameres@gmail.com
 - **Community Chat:** (Add Discord/Matrix/Slack link if available)
 
 ---
@@ -167,7 +169,7 @@ FoS-DeckPro is dual-licensed:
 
 **You may not use, copy, modify, or distribute this software for commercial purposes without written permission.**
 
-To obtain a commercial license, contact: [your.email@example.com]
+To obtain a commercial license or paid feature access, contact: Thereal.FosGameres@gmail.com
 
 See [LICENSE](LICENSE) for full terms.
 
@@ -182,4 +184,24 @@ See [LICENSE](LICENSE) for full terms.
 
 ## Release Status
 
-- This version is a stable, working release. All core features work as intended except for the minor known issue above. 
+- This version is a stable, working release. All core features work as intended except for the minor known issue above.
+
+## Free vs. Paid Features
+
+### Free Features
+- Inventory management (import/export from ManaBox or CSV, local database, view/edit/delete/filter/search)
+
+### Paid Features (Require License Key)
+- All Whatnot features (break builder, export listing, packing slip tools, analytics)
+- Add card via Scryfall
+- Scryfall enrichment (auto-fill card details/images)
+
+## License Key Activation
+- Paid features are locked by default.
+- On first use of a paid feature, you will be prompted to enter a license key.
+- The app checks your key online (Google Sheets) and unlocks only the features your key is valid for.
+- License key is stored locally for future use.
+
+**To request a license key for paid features, contact: Thereal.FosGameres@gmail.com**
+
+For more details, see the in-app help or contact support at the email above. 

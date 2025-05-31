@@ -1,2 +1,2 @@
-from FoS_DeckPro.logic.whatnot_inventory_removal import remove_sold_cards_from_inventory
-from FoS_DeckPro.logic.whatnot_packing_slip_parser import WhatnotPackingSlipParser 
+from logic.whatnot_inventory_removal import remove_sold_cards_from_inventory
+from logic.whatnot_packing_slip_parser import WhatnotPackingSlipParser 

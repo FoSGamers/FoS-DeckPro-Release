@@ -17,4 +17,4 @@
 ## How to Contribute to the Roadmap
 - Comment on the ROADMAP.md file via PR
 - Join discussions on GitHub
-- Reach out via community chat or email 
+- Reach out via community chat or email: Thereal.FosGameres@gmail.com 

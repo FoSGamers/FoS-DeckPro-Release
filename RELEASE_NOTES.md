@@ -42,4 +42,24 @@
 
 - This version is a stable, working release. All core features work as intended except for the minor known issue above.
 
-See [CHANGELOG.md](CHANGELOG.md) for full details. 
+See [CHANGELOG.md](CHANGELOG.md) for full details.
+
+## Free vs. Paid Features
+
+### Free Features
+- Inventory management (import/export from ManaBox or CSV, local database, view/edit/delete/filter/search)
+
+### Paid Features (Require License Key)
+- All Whatnot features (break builder, export listing, packing slip tools, analytics)
+- Add card via Scryfall
+- Scryfall enrichment (auto-fill card details/images)
+
+## License Key System
+- Paid features are locked by default.
+- On first use of a paid feature, you will be prompted to enter a license key.
+- The app checks your key online (Google Sheets) and unlocks only the features your key is valid for.
+- License key is stored locally for future use.
+
+**To request a license key for paid features, contact: Thereal.FosGameres@gmail.com**
+
+This is the recommended model for future releases. 

@@ -33,6 +33,7 @@ from logic.whatnot_packing_slip_parser import WhatnotPackingSlipParser
 from logic.whatnot_inventory_removal import remove_sold_cards_from_inventory
 from logic.whatnot_buyer_db import WhatnotBuyerDB
 from ui.dialogs.packing_slip_summary import PackingSlipSummaryDialog
+from utils import license
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -83,11 +84,11 @@ class MainWindow(QMainWindow):
         self.undo_action.setEnabled(False)
         self.undo_action.triggered.connect(self.undo_last_change)
         export_whatnot_action = file_menu.addAction("Export to Whatnot...")
-        export_whatnot_action.triggered.connect(self.export_to_whatnot)
+        export_whatnot_action.triggered.connect(lambda: self._on_paid_feature_triggered(self.export_to_whatnot, feature_name='export_whatnot'))
         export_item_listings_action = file_menu.addAction("Export Item Listings...")
-        export_item_listings_action.triggered.connect(self.export_item_listings_dialog)
+        export_item_listings_action.triggered.connect(lambda: self._on_paid_feature_triggered(self.export_item_listings_dialog, feature_name='export_item_listings'))
         process_packing_slips_action = file_menu.addAction("Process Whatnot Packing Slips...")
-        process_packing_slips_action.triggered.connect(self.process_packing_slips)
+        process_packing_slips_action.triggered.connect(lambda: self._on_paid_feature_triggered(self.process_packing_slips, feature_name='process_packing_slips'))
         undo_packing_slip_action = file_menu.addAction("Undo Last Packing Slip Removal")
         undo_packing_slip_action.setEnabled(False)
         undo_packing_slip_action.triggered.connect(self.undo_last_packing_slip_removal)
@@ -100,6 +101,9 @@ class MainWindow(QMainWindow):
         self._current_json_file = None
         self._unsaved_changes = False
         self._auto_save = False
+        self.break_builder_action = None  # Ensure attribute exists early
+        if license.is_license_valid():
+            self._unlock_paid_features()
         # self.setMenuBar(menubar)  # Not needed with self.menuBar()
 
         # Central widget and main layout
@@ -215,23 +219,49 @@ class MainWindow(QMainWindow):
         stretch_columns_action.triggered.connect(toggle_stretch)
         view_menu.addAction(stretch_columns_action)
 
-        # Add Whatnot pricing adjustment action
+        # Add Whatnot pricing adjustment action (paid)
         tools_menu = menubar.addMenu("Tools")
         adjust_whatnot_action = QAction("Adjust Whatnot Pricing...", self)
-        adjust_whatnot_action.triggered.connect(self.adjust_whatnot_pricing_dialog)
+        adjust_whatnot_action.triggered.connect(lambda: self._on_paid_feature_triggered(self.adjust_whatnot_pricing_dialog, feature_name='adjust_whatnot_pricing'))
         tools_menu.addAction(adjust_whatnot_action)
+        self.adjust_whatnot_action = adjust_whatnot_action
         # Add Scryfall enrichment action
         enrich_action = QAction("Enrich All Cards from Scryfall...", self)
-        enrich_action.triggered.connect(self.enrich_all_cards_from_scryfall)
+        enrich_action.triggered.connect(lambda: self._on_paid_feature_triggered(self.enrich_all_cards_from_scryfall, feature_name='enrich_scryfall'))
         tools_menu.addAction(enrich_action)
         # Add Break/Autobox Builder action
         break_builder_action = QAction("Open Break/Autobox Builder", self)
-        break_builder_action.triggered.connect(self.open_break_builder)
-        tools_menu.addAction(break_builder_action)
+        self.break_builder_action = break_builder_action
+        self.break_builder_action.triggered.connect(lambda: self._on_paid_feature_triggered(self.open_break_builder, feature_name='break_builder'))
+        tools_menu.addAction(self.break_builder_action)
         # Add Scryfall ID to Inventory action
         add_scryfall_action = QAction("Add Card by Scryfall ID", self)
-        add_scryfall_action.triggered.connect(self.add_card_by_scryfall_id)
+        add_scryfall_action.triggered.connect(lambda: self._on_paid_feature_triggered(self.add_card_by_scryfall_id, feature_name='add_scryfall'))
         tools_menu.addAction(add_scryfall_action)
+
+        # Add Whatnot export action (paid)
+        self.export_whatnot_action = export_whatnot_action
+        self.export_whatnot_action.triggered.disconnect()
+        self.export_whatnot_action.triggered.connect(lambda: self._on_paid_feature_triggered(self.export_to_whatnot, feature_name='export_whatnot'))
+        # Add export item listings action (paid)
+        self.export_item_listings_action = export_item_listings_action
+        self.export_item_listings_action.triggered.disconnect()
+        self.export_item_listings_action.triggered.connect(lambda: self._on_paid_feature_triggered(self.export_item_listings_dialog, feature_name='export_item_listings'))
+        # Add Scryfall enrichment action (paid)
+        self.enrich_action = enrich_action
+        self.enrich_action.triggered.disconnect()
+        self.enrich_action.triggered.connect(lambda: self._on_paid_feature_triggered(self.enrich_all_cards_from_scryfall, feature_name='enrich_scryfall'))
+        # Add add card by Scryfall ID action (paid)
+        self.add_scryfall_action = add_scryfall_action
+        self.add_scryfall_action.triggered.disconnect()
+        self.add_scryfall_action.triggered.connect(lambda: self._on_paid_feature_triggered(self.add_card_by_scryfall_id, feature_name='add_scryfall'))
+        # Add break builder action (already paid)
+        # self.break_builder_action already set up
+
+        # Add process Whatnot packing slips action (paid)
+        self.process_packing_slips_action = process_packing_slips_action
+        self.process_packing_slips_action.triggered.disconnect()
+        self.process_packing_slips_action.triggered.connect(lambda: self._on_paid_feature_triggered(self.process_packing_slips, feature_name='process_packing_slips'))
 
     def _update_columns_from_inventory(self):
         # Dynamically set self.columns to all unique fields in inventory, with defaults first
@@ -1291,3 +1321,48 @@ class MainWindow(QMainWindow):
                         break
             self._last_packing_slip_inventory = None
             self._last_packing_slip_summary = None
+
+    def _lock_paid_features(self):
+        # Disable all paid feature actions/buttons
+        if self.break_builder_action is not None:
+            self.break_builder_action.setEnabled(False)
+        if hasattr(self, 'export_whatnot_action') and self.export_whatnot_action is not None:
+            self.export_whatnot_action.setEnabled(False)
+        if hasattr(self, 'export_item_listings_action') and self.export_item_listings_action is not None:
+            self.export_item_listings_action.setEnabled(False)
+        if hasattr(self, 'enrich_action') and self.enrich_action is not None:
+            self.enrich_action.setEnabled(False)
+        if hasattr(self, 'add_scryfall_action') and self.add_scryfall_action is not None:
+            self.add_scryfall_action.setEnabled(False)
+        if hasattr(self, 'adjust_whatnot_action') and self.adjust_whatnot_action is not None:
+            self.adjust_whatnot_action.setEnabled(False)
+        if hasattr(self, 'process_packing_slips_action') and self.process_packing_slips_action is not None:
+            self.process_packing_slips_action.setEnabled(False)
+        # Add other paid features here later
+
+    def _unlock_paid_features(self):
+        # Enable only the paid feature actions/buttons for which the license is valid
+        from utils import license as license_utils
+        if self.break_builder_action is not None:
+            self.break_builder_action.setEnabled(license_utils.is_license_valid('break_builder'))
+        if hasattr(self, 'export_whatnot_action') and self.export_whatnot_action is not None:
+            self.export_whatnot_action.setEnabled(license_utils.is_license_valid('export_whatnot'))
+        if hasattr(self, 'export_item_listings_action') and self.export_item_listings_action is not None:
+            self.export_item_listings_action.setEnabled(license_utils.is_license_valid('export_item_listings'))
+        if hasattr(self, 'enrich_action') and self.enrich_action is not None:
+            self.enrich_action.setEnabled(license_utils.is_license_valid('enrich_scryfall'))
+        if hasattr(self, 'add_scryfall_action') and self.add_scryfall_action is not None:
+            self.add_scryfall_action.setEnabled(license_utils.is_license_valid('add_scryfall'))
+        if hasattr(self, 'adjust_whatnot_action') and self.adjust_whatnot_action is not None:
+            self.adjust_whatnot_action.setEnabled(license_utils.is_license_valid('adjust_whatnot_pricing'))
+        if hasattr(self, 'process_packing_slips_action') and self.process_packing_slips_action is not None:
+            self.process_packing_slips_action.setEnabled(license_utils.is_license_valid('process_packing_slips'))
+        # Add other paid features here later
+
+    def _on_paid_feature_triggered(self, feature_func, feature_name=None):
+        # Call this wrapper for any paid feature
+        if not license.is_license_valid(feature_name=feature_name):
+            if not license.prompt_for_license_key(self, feature_name=feature_name):
+                return  # User cancelled or invalid
+            self._unlock_paid_features()
+        feature_func()

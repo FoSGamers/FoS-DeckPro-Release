@@ -7,7 +7,7 @@ def normalize(name):
     return re.sub(r"[^a-z0-9 ]", "", name.lower())
 
 # Load inventory
-inv_file = 'FoS_DeckPro/models/inventory.json' if os.path.exists('FoS_DeckPro/models/inventory.json') else 'buyers.json'
+inv_file = 'models/inventory.json' if os.path.exists('models/inventory.json') else 'buyers.json'
 with open(inv_file, encoding='utf-8') as f:
     inv = json.load(f)
 

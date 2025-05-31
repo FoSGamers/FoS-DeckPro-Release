@@ -45,4 +45,4 @@ jobs:
 
       - name: Run tests
         run: |
-          PYTHONPATH=. pytest ManaBox_Enhancer/tests/ --maxfail=1 --disable-warnings -v 
+          PYTHONPATH=. pytest FoS_DeckPro/tests/ --maxfail=1 --disable-warnings -v 

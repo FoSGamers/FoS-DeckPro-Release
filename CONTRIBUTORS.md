@@ -1,19 +1,19 @@
-# ManaBox Enhancer Contributors
+# FoS-DeckPro Contributors
 
 ## Project Lead
-- [Your Name] (Project Lead)
+- Jamey Gleaon (Project Lead)
 
 ## Major Contributors
-- [Add names and GitHub handles here]
+- None all me
 
 ## Documentation Contributors
-- [Add names and GitHub handles here]
+- None all me
 
 ## Code Contributors
-- [Add names and GitHub handles here]
+- None all me
 
 ## Community & Support
-- [Add names and GitHub handles here]
+- None all me
 
 ---
 

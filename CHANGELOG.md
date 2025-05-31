@@ -3,7 +3,7 @@
 ## [v1.5.1] - 2024-06-XX
 
 ### Working Release Summary
-- This release marks a fully working, stable, and modular version of ManaBox Enhancer.
+- This release marks a fully working, stable, and modular version of FoS_DeckPro.
 - All core workflows (break builder, Whatnot packing slip processing, inventory management, buyers database, and analytics) are robust and tested.
 - All break templates and configuration files are present and correctly referenced.
 - All tests pass except for known GUI headless environment issues (see README for details).

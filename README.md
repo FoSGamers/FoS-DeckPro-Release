@@ -1,8 +1,8 @@
-# ManaBox Enhancer
+# FoS-DeckPro
 
 **Release: v1.5.1 (2024-06-XX) — Working, Stable, and Fully Modular**
 
-> This release is a fully working, stable, and modular version of ManaBox Enhancer. All core workflows (break builder, Whatnot packing slip processing, inventory management, buyers database, and analytics) are robust, tested, and documented. All break templates and configuration files are present and correctly referenced. Legacy and backup files are isolated in the `legacy/` folder. See below for usage, features, and details.
+> This release is a fully working, stable, and modular version of FoS-DeckPro. All core workflows (break builder, Whatnot packing slip processing, inventory management, buyers database, and analytics) are robust, tested, and documented. All break templates and configuration files are present and correctly referenced. Legacy and backup files are isolated in the `legacy/` folder. See below for usage, features, and details.
 
 ---
 
@@ -18,6 +18,10 @@
 - [Roadmap](#roadmap)
 - [Use Cases](#use-cases)
 - [Credits & Acknowledgments](#credits--acknowledgments)
+- [Licensing & Commercial Use](#licensing--commercial-use)
+- [Known Issues](#known-issues)
+- [Monetization & Add-ons](#monetization--add-ons)
+- [Release Status](#release-status)
 
 ---
 
@@ -26,11 +30,11 @@
 ### Quick Start
 1. **Install requirements:**
    ```sh
-   pip install -r ManaBox_Enhancer/requirements.txt
+   pip install -r FoS_DeckPro/requirements.txt
    ```
 2. **Launch the app:**
    ```sh
-   python3 ManaBox_Enhancer/main.py
+   python3 FoS_DeckPro/main.py
    ```
 3. **Build a Break or Process Packing Slips:**
    - Use the GUI to access the Break Builder or Packing Slip Processor from the Tools menu.
@@ -49,7 +53,7 @@
 ---
 
 ## Beginner FAQ
-- **Q: What is ManaBox Enhancer?**
+- **Q: What is FoS-DeckPro?**
   - A modular tool for managing card inventory, building Whatnot breaks, and processing packing slips.
 - **Q: Do I need to know Python?**
   - No, the app is fully GUI-based for normal use.
@@ -81,7 +85,7 @@
 ---
 
 ## License
-ManaBox Enhancer is released under the MIT License. See [LICENSE](LICENSE) for details.
+FoS-DeckPro is released under the MIT License. See [LICENSE](LICENSE) for details.
 
 ---
 
@@ -151,4 +155,31 @@ All contributors and users are expected to follow our [Code of Conduct](CODE_OF_
 ## Whatnot Integration Status
 
 - **Current:** There is no direct API integration with Whatnot. All workflows are manual: users copy and paste the required Title and Description rows from the app into Whatnot's Breaks interface. No other columns are needed for breaks at this time.
-- **Future:** API integration is planned. When API access and documentation are available, the app and this README will be updated to support and document direct integration, automation, and new workflows as needed. 
+- **Future:** API integration is planned. When API access and documentation are available, the app and this README will be updated to support and document direct integration, automation, and new workflows as needed.
+
+---
+
+## Licensing & Commercial Use
+
+FoS-DeckPro is dual-licensed:
+- **Non-commercial, personal use:** Free for evaluation and personal projects only.
+- **Commercial use:** Any use by businesses, organizations, or for-profit activities requires a paid commercial license.
+
+**You may not use, copy, modify, or distribute this software for commercial purposes without written permission.**
+
+To obtain a commercial license, contact: [your.email@example.com]
+
+See [LICENSE](LICENSE) for full terms.
+
+## Known Issues
+
+- The only known issue in this release is that the **Customize Columns** feature does not work. This is a trivial UI bug and does not affect any core functionality or data integrity.
+
+## Monetization & Add-ons
+
+- The base app (inventory management and Scryfall enrichment) is free and open source.
+- All other features (break builder, packing slip tools, analytics, etc.) are planned as paid add-ons/plugins in future versions. The codebase is structured to support this model without risk to the core app.
+
+## Release Status
+
+- This version is a stable, working release. All core features work as intended except for the minor known issue above. 

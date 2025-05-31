@@ -34,7 +34,7 @@
       [
         "Whatnot price",
         [
-          9.04,
+          9.0,
           15.0
         ]
       ]
@@ -56,12 +56,15 @@
     "enabled": true
   },
   {
-    "count_type": "Count",
-    "count": 1,
+    "count_type": "% of available",
+    "count": 1.0,
     "criteria": [
       [
-        "Altered",
-        ""
+        "Whatnot price",
+        [
+          100.0,
+          110.0
+        ]
       ]
     ],
     "enabled": true

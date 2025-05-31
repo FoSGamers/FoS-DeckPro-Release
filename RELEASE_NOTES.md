@@ -1,4 +1,4 @@
-# ManaBox Enhancer Release Notes
+# FoS-DeckPro Release Notes
 
 ## v1.5.1 (2024-06-XX)
 
@@ -26,12 +26,20 @@
 - Improved test reliability and CI integration.
 
 ### Known Issues
-- Some GUI tests require a display environment (see README for headless testing instructions).
-- No direct Whatnot API integration yet (planned for future).
+- The only known issue in this release is that the **Customize Columns** feature does not work. This is a trivial UI bug and does not affect any core functionality or data integrity.
 
 ### Upgrade Instructions
-- Install requirements from `ManaBox_Enhancer/requirements.txt`.
-- Run the app from `ManaBox_Enhancer/main.py`.
+- Install requirements from `FoS_DeckPro/requirements.txt`.
+- Run the app from `FoS_DeckPro/main.py`.
 - Move any custom break templates to the project root if needed.
+
+## Monetization & Add-ons
+
+- The base app (inventory management and Scryfall enrichment) is free and open source.
+- All other features (break builder, packing slip tools, analytics, etc.) are planned as paid add-ons/plugins in future versions. The codebase is structured to support this model without risk to the core app.
+
+## Release Status
+
+- This version is a stable, working release. All core features work as intended except for the minor known issue above.
 
 See [CHANGELOG.md](CHANGELOG.md) for full details. 

@@ -14,12 +14,12 @@
       {
         "category": "Break Builder Modernization",
         "description": "Refactored the Break/Autobox Builder to be modular, extensible, and robust for both beginners and advanced users. Ensured all UI and logic are modular, reusable, and backward compatible. Modern Break/Autobox Builder: now uses the modular CardTableView, FilterOverlay, ImagePreview, and CardDetails widgets for a robust, maintainable UI. All Scryfall and inventory fields are dynamically filterable, just like the main GUI. Async image preview for cards, with robust error handling and fallback. Curated card selection and advanced rule-based break list generation, with deduplication and filler logic. Live display of total and average card cost in the Generate Break tab. Modern, clean, and resizable UI/UX throughout the workflow. All features are fully tested; all tests pass.",
-        "files": ["ManaBox_Enhancer/ui/dialogs/break_builder.py", "ManaBox_Enhancer/ui/card_table.py", "ManaBox_Enhancer/ui/image_preview.py", "ManaBox_Enhancer/ui/card_details.py", "ManaBox_Enhancer/ui/columns_config.py", "ManaBox_Enhancer/ui/main_window.py", "ManaBox_Enhancer/tests/test_break_builder.py"]
+        "files": ["FoS_DeckPro/ui/dialogs/break_builder.py", "FoS_DeckPro/ui/card_table.py", "FoS_DeckPro/ui/image_preview.py", "FoS_DeckPro/ui/card_details.py", "FoS_DeckPro/ui/columns_config.py", "FoS_DeckPro/ui/main_window.py", "FoS_DeckPro/tests/test_break_builder.py"]
       },
       {
         "category": "Test Suite Improvements",
         "description": "Updated test DummyInventory to use key-based logic for card removal and addition, matching the real app's behavior. Moved the card_key function above the DummyInventory class in the test to ensure consistent key logic. Corrected the use of QMessageBox.Yes/No in dialog patching to properly simulate user confirmation/cancellation. Fixed the final assertion in the inventory removal/undo test to check for the correct state after a cancel operation. All break builder tests now pass, covering sidebar filtering, rule logic, curation, UI, and inventory operations.",
-        "files": ["ManaBox_Enhancer/tests/test_break_builder.py"]
+        "files": ["FoS_DeckPro/tests/test_break_builder.py"]
       },
       {
         "category": "Continuous Integration (CI)",

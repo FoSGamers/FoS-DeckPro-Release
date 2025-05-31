@@ -1,4 +1,4 @@
-# Contributing to ManaBox Enhancer
+# Contributing to FoS-DeckPro
 
 Thank you for your interest in contributing! We welcome all contributions, from code to documentation, bug reports, and feature requests.
 
@@ -17,7 +17,7 @@ Thank you for your interest in contributing! We welcome all contributions, from 
 2. Create a new branch for your change.
 3. Make your changes (code or docs).
 4. Write or update tests as needed.
-5. Ensure all tests pass (`pytest ManaBox_Enhancer/tests`).
+5. Ensure all tests pass (`pytest FoS_DeckPro/tests`).
 6. Commit with a clear message and push to your fork.
 7. Open a pull request (PR) to the main repo.
 
@@ -42,4 +42,4 @@ Thank you for your interest in contributing! We welcome all contributions, from 
 
 ---
 
-We appreciate your help in making ManaBox Enhancer better for everyone! 
+We appreciate your help in making FoS-DeckPro better for everyone! 

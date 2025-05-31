@@ -48,6 +48,9 @@
 - All license prompts and documentation updated to use Thereal.FosGameres@gmail.com for access/support.
 - Paid features require a license key; users must contact that email for access.
 - All documentation and in-app prompts are up to date and consistent with the current licensing model.
+- Added per-feature subscription/lifetime license system with automated expiration.
+- License key generator and app now handle all Google Sheet columns automatically; no manual editing required.
+- Expired features prompt for renewal in-app.
 
 ## [Unreleased]
 

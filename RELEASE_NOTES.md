@@ -60,6 +60,14 @@ See [CHANGELOG.md](CHANGELOG.md) for full details.
 - The app checks your key online (Google Sheets) and unlocks only the features your key is valid for.
 - License key is stored locally for future use.
 
+### Subscription & Lifetime Licenses
+- Each paid feature can be unlocked for a limited time (subscription) or permanently (lifetime).
+- The license key generator allows you to set per-feature expiration and license type.
+- When a feature's subscription expires, the app will prompt you to renew and will not unlock the feature until a new key is entered.
+- Lifetime features never expire.
+- All license key and expiration management is handled automatically; you never need to edit the Google Sheet manually.
+- The app and key generator will always update the sheet with any new features or columns as needed.
+
 **To request a license key for paid features, contact: Thereal.FosGameres@gmail.com**
 
 This is the recommended model for future releases. 

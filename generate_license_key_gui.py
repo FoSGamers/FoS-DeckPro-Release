@@ -3,10 +3,12 @@ import hashlib
 import secrets
 import string
 from PySide6.QtWidgets import (
-    QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QTextEdit, QPushButton, QCheckBox, QMessageBox, QScrollArea, QGroupBox
+    QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QTextEdit, QPushButton, QCheckBox, QMessageBox, QScrollArea, QGroupBox, QComboBox, QDateEdit
 )
 import gspread
 from google.oauth2.service_account import Credentials
+import datetime
+from PySide6.QtCore import QDate
 
 # --- CONFIGURATION ---
 SHEET_ID = '1hvOb_2fADbCs3DSLg0CMOdCAOVAy2Is_ok0JIvqAZEY'
@@ -34,7 +36,7 @@ def generate_key():
 def hash_key(key):
     return hashlib.sha256(key.strip().upper().encode('utf-8')).hexdigest()
 
-def add_hash_to_sheet(key_hash, features_to_unlock, user='', notes=''):
+def add_hash_to_sheet(key_hash, features_to_unlock, feature_expirations, feature_types, user='', notes=''):
     scopes = ['https://www.googleapis.com/auth/spreadsheets']
     creds = Credentials.from_service_account_file(CREDENTIALS_FILE, scopes=scopes)
     gc = gspread.authorize(creds)
@@ -43,10 +45,25 @@ def add_hash_to_sheet(key_hash, features_to_unlock, user='', notes=''):
     # Read and update header if needed
     header = worksheet.row_values(1)
     needed_cols = ['hash', 'status'] + ALL_FEATURES + ['user', 'notes']
+    # Add per-feature expiration/type columns
+    for feat in ALL_FEATURES:
+        if feat == 'all_features':
+            continue
+        needed_cols.append(f'{feat}_expiration')
+        needed_cols.append(f'{feat}_license_type')
+    # If header is missing any needed columns, update it
+    header_set = set(header)
     for col in needed_cols:
-        if col not in header:
+        if col not in header_set:
             header.append(col)
+    # If header order is wrong or missing columns, rewrite header
     if header != worksheet.row_values(1):
+        # Remove any extra columns from header that are not needed
+        header = [col for col in header if col in needed_cols]
+        # Add any missing needed columns at the end
+        for col in needed_cols:
+            if col not in header:
+                header.append(col)
         worksheet.update('1:1', [header])
     row = [''] * len(header)
     row[0] = key_hash
@@ -55,10 +72,16 @@ def add_hash_to_sheet(key_hash, features_to_unlock, user='', notes=''):
         for feat in ALL_FEATURES:
             idx = header.index(feat)
             row[idx] = 'yes'
+            if feat != 'all_features':
+                row[header.index(f'{feat}_expiration')] = feature_expirations.get(feat, 'lifetime')
+                row[header.index(f'{feat}_license_type')] = feature_types.get(feat, 'lifetime')
     else:
         for feat in ALL_FEATURES:
             idx = header.index(feat)
             row[idx] = 'yes' if feat in features_to_unlock else 'no'
+            if feat in features_to_unlock and feat != 'all_features':
+                row[header.index(f'{feat}_expiration')] = feature_expirations.get(feat, 'lifetime')
+                row[header.index(f'{feat}_license_type')] = feature_types.get(feat, 'lifetime')
     if 'user' in header:
         row[header.index('user')] = user
     if 'notes' in header:
@@ -87,8 +110,10 @@ class LicenseKeyGenerator(QWidget):
         layout.addWidget(QLabel('Notes:'))
         layout.addWidget(self.notes_input)
 
-        # Features checkboxes
+        # Features checkboxes and per-feature controls
         self.feature_checks = {}
+        self.feature_type_boxes = {}
+        self.feature_expiry_boxes = {}
         features_box = QGroupBox('Features to Unlock:')
         features_layout = QVBoxLayout(features_box)
         self.select_all = QCheckBox('Select All Features (bundle)')
@@ -97,9 +122,28 @@ class LicenseKeyGenerator(QWidget):
         for feat in ALL_FEATURES:
             if feat == 'all_features':
                 continue
+            row = QHBoxLayout()
             cb = QCheckBox(feat.replace('_', ' ').title())
             self.feature_checks[feat] = cb
-            features_layout.addWidget(cb)
+            row.addWidget(cb)
+            # License type dropdown
+            type_box = QComboBox()
+            type_box.addItems(['subscription', 'lifetime'])
+            type_box.setCurrentText('subscription')
+            self.feature_type_boxes[feat] = type_box
+            row.addWidget(type_box)
+            # Expiration date picker
+            expiry_box = QDateEdit()
+            expiry_box.setCalendarPopup(True)
+            expiry_box.setDate(QDate.currentDate().addMonths(1))
+            self.feature_expiry_boxes[feat] = expiry_box
+            row.addWidget(expiry_box)
+            # Connect type_box to enable/disable expiry_box
+            def update_expiry_enabled(box=expiry_box, tbox=type_box):
+                box.setEnabled(tbox.currentText() == 'subscription')
+            type_box.currentTextChanged.connect(update_expiry_enabled)
+            update_expiry_enabled()
+            features_layout.addLayout(row)
         layout.addWidget(features_box)
 
         self.generate_btn = QPushButton('Generate License Key')
@@ -125,6 +169,11 @@ class LicenseKeyGenerator(QWidget):
         checked = state == 2
         for cb in self.feature_checks.values():
             cb.setChecked(checked)
+        for tbox in self.feature_type_boxes.values():
+            tbox.setCurrentText('lifetime' if checked else 'subscription')
+        for ebox in self.feature_expiry_boxes.values():
+            ebox.setDate(QDate.currentDate().addYears(99) if checked else QDate.currentDate().addMonths(1))
+            ebox.setEnabled(not checked)
 
     def copy_key(self):
         key = self.key_line.text()
@@ -135,15 +184,29 @@ class LicenseKeyGenerator(QWidget):
         user = self.name_input.text().strip()
         notes = self.notes_input.toPlainText().strip()
         features = [feat for feat, cb in self.feature_checks.items() if cb.isChecked()]
+        feature_expirations = {}
+        feature_types = {}
+        for feat in features:
+            tbox = self.feature_type_boxes[feat]
+            ebox = self.feature_expiry_boxes[feat]
+            t = tbox.currentText()
+            feature_types[feat] = t
+            if t == 'lifetime':
+                feature_expirations[feat] = 'lifetime'
+            else:
+                feature_expirations[feat] = ebox.date().toString('yyyy-MM-dd')
         if self.select_all.isChecked():
             features = ['all_features']
+            for feat in self.feature_checks:
+                feature_types[feat] = 'lifetime'
+                feature_expirations[feat] = 'lifetime'
         if not features:
             QMessageBox.warning(self, 'No Features Selected', 'Please select at least one feature to unlock.')
             return
         try:
             key = generate_key()
             key_hash = hash_key(key)
-            add_hash_to_sheet(key_hash, features, user=user, notes=notes)
+            add_hash_to_sheet(key_hash, features, feature_expirations, feature_types, user=user, notes=notes)
             self.key_line.setText(key)
             self.result_label.setText(f'<b>Features Unlocked:</b> {", ".join(features)}<br>'
                                      f'<b>Hash stored in sheet:</b> <code>{key_hash}</code>')

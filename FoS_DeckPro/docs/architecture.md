@@ -25,7 +25,7 @@ FoS-DeckPro v1.5.1 is a modular, extensible application for managing card invent
 
 ## Main Workflows
 - **Break Builder:** Modular, rule-based, and curated break list generation with dynamic filtering, preview, and export.
-- **Whatnot Packing Slip Processing:** Robust PDF parsing, best-match logic, ambiguity handling, and undo/restore.
+- **Whatnot Packing Slip Processing:** Robust PDF parsing, best-match logic (at least three fields must match, prioritizing collector number, foil/normal, set code after name), ambiguity handling (user intervention for language ambiguity), and undo/restore.
 - **Buyers Database:** Modular buyers DB with analytics, updated on every slip processed.
 - **Testing:** All logic and workflows are covered by unit and integration tests.
 

@@ -14,6 +14,7 @@ This guide will show you how to remove sold cards from your inventory using a Wh
 
 ## Step 3: Review Matches
 - The app will parse the slips and show which cards were matched in your inventory.
+- **Matching logic:** Cards are matched if at least three fields match, with collector number, foil/normal, and set code prioritized after name. If multiple languages are found and language is not specified, you will be prompted to choose the correct one.
 - ![Review Matches](../screenshots/review_matches.png)
 
 ## Step 4: Resolve Ambiguities

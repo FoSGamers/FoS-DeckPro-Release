@@ -124,6 +124,11 @@ def remove_sold_cards_from_inventory(
     return updated_inventory, removal_log
 
 def _find_matches(inventory: List[Dict[str, Any]], sale: Dict[str, Any]) -> Tuple[List[Dict[str, Any]], str]:
+    """
+    Find inventory cards matching a sale. At least three fields must match, prioritizing collector number, foil/normal, and set code after name.
+    If multiple languages are found and language is not specified, set ambiguity reason for user intervention.
+    Returns (matches, ambiguity_reason).
+    """
     sale_name = normalize_name(sale.get('Name', ''))
     sale_set_code = normalize_set_code(sale.get('Set code', ''))
     sale_collector = normalize_collector_number(sale.get('Collector number', ''))
@@ -146,88 +151,27 @@ def _find_matches(inventory: List[Dict[str, Any]], sale: Dict[str, Any]) -> Tupl
     matches = []
     ambiguity_reason = ''
 
-    # Try exact match on all fields
-    exact_matches = [n['orig'] for n in norm_inv if (
-        n['Name'] == sale_name and
-        n['Set code'] == sale_set_code and
-        n['Collector number'] == sale_collector and
-        n['Foil'] == sale_foil and
-        (not sale_language or n['Language'] == sale_language)
-    )]
-    if exact_matches:
-        matches = exact_matches
-        ambiguity_reason = ''
-    else:
-        # Fuzzy name match (with debug)
-        inv_names = [n['Name'] for n in norm_inv]
-        fuzzy_name = fuzzy_name_match(sale_name, inv_names, threshold=0.8)
-        if not fuzzy_name:
-            print(f"DEBUG: No fuzzy name match for '{sale_name}' in {[n['Name'] for n in norm_inv]}")
-            matches = []
-            ambiguity_reason = 'No fuzzy name match'
-        else:
-            # Score each card in inventory
-            scored = []
-            for n in norm_inv:
-                score = 0
-                if n['Name'] == fuzzy_name:
-                    score += 1
-                if n['Set code'] == sale_set_code and sale_set_code:
-                    score += 1
-                if n['Collector number'] == sale_collector and sale_collector:
-                    score += 1
-                if n['Foil'] == sale_foil and sale_foil:
-                    score += 1
-                if sale_language and n['Language'] == sale_language:
-                    score += 1
-                scored.append((score, n['orig']))
-            max_score = max((s for s, _ in scored), default=0)
-            matches = [c for s, c in scored if s == max_score and s >= 3]
-            ambiguity_reason = ''
-            if not matches:
-                # Fallback: ignore language
-                matches = [n['orig'] for n in norm_inv if (
-                    n['Name'] == fuzzy_name and
-                    n['Set code'] == sale_set_code and
-                    n['Collector number'] == sale_collector and
-                    n['Foil'] == sale_foil
-                )]
-                if matches:
-                    ambiguity_reason = 'Matched on all but language'
-            if not matches:
-                # Fallback: ignore foil
-                matches = [n['orig'] for n in norm_inv if (
-                    n['Name'] == fuzzy_name and
-                    n['Set code'] == sale_set_code and
-                    n['Collector number'] == sale_collector
-                )]
-                if matches:
-                    ambiguity_reason = 'Matched on name, set code, collector number'
-            if not matches:
-                # Fallback: ignore set code
-                matches = [n['orig'] for n in norm_inv if (
-                    n['Name'] == fuzzy_name and
-                    n['Collector number'] == sale_collector
-                )]
-                if matches:
-                    ambiguity_reason = 'Matched on name and collector number'
-            if not matches:
-                # Fallback: just fuzzy name
-                matches = [n['orig'] for n in norm_inv if n['Name'] == fuzzy_name]
-                if matches:
-                    ambiguity_reason = 'Matched on name only'
-            if not matches:
-                # Fallback: show closest matches for debugging
-                close_matches = difflib.get_close_matches(sale_name, [n['Name'] for n in norm_inv], n=3, cutoff=0.6)
-                print(f"DEBUG: No match for sale: {sale}")
-                print(f"DEBUG: Normalized sale: name={sale_name}, set_code={sale_set_code}, collector={sale_collector}, foil={sale_foil}, lang={sale_language}")
-                print(f"DEBUG: Inventory candidates:")
-                for n in norm_inv:
-                    print(f"  {n}")
-                print(f"DEBUG: Closest name matches: {close_matches}")
-                ambiguity_reason = 'No match in inventory'
-
-    # Final check: if multiple matches and only language differs, set language ambiguity reason
+    # Score each card in inventory by number of matching fields (prioritize collector number, foil, set code)
+    scored = []
+    for n in norm_inv:
+        score = 0
+        if n['Name'] == sale_name:
+            score += 1
+        if n['Collector number'] == sale_collector and sale_collector:
+            score += 1
+        if n['Foil'] == sale_foil and sale_foil:
+            score += 1
+        if n['Set code'] == sale_set_code and sale_set_code:
+            score += 1
+        if sale_language and n['Language'] == sale_language:
+            score += 1
+        scored.append((score, n['orig']))
+    max_score = max((s for s, _ in scored), default=0)
+    # Only consider matches with at least 3 fields matching
+    matches = [c for s, c in scored if s == max_score and s >= 3]
+    if not matches:
+        ambiguity_reason = 'No match with at least 3 fields'
+    # If multiple matches and only language differs, set ambiguity reason
     if matches and len(matches) > 1:
         fields = ['Name', 'Set code', 'Collector number', 'Foil']
         first = matches[0]

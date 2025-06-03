@@ -212,4 +212,55 @@ See [LICENSE](LICENSE) for full terms.
 
 **To request a license key for paid features, contact: Thereal.FosGameres@gmail.com**
 
-For more details, see the in-app help or contact support at the email above. 
+For more details, see the in-app help or contact support at the email above.
+
+# FoS-DeckPro License Key Generator (Private)
+
+**This repository is private and for maintainers only. Do not share or publish these scripts.**
+
+## Overview
+This repository contains the license key generator tools for FoS-DeckPro. Use these scripts to generate, hash, and insert license keys into the Google Sheet that controls access to paid features in the public app.
+
+- Supports per-feature subscription/lifetime licensing and expiration.
+- Automatically updates the Google Sheet with any new features or columns.
+- GUI and CLI tools included.
+
+## Security Warning
+- This repository contains sensitive scripts and credentials. Do **not** share or publish this code.
+- Only trusted maintainers should have access.
+
+## Usage
+
+### 1. **Google Service Account Credentials**
+- The file `fosbot-456712-d8da65f7bfc9.json` is your Google service account credentials.
+- The service account must have edit access to the license Google Sheet.
+- Never share this file outside trusted maintainers.
+
+### 2. **GUI License Key Generator**
+- Run the GUI tool:
+  ```sh
+  python3 generate_license_key_gui.py
+  ```
+- Fill in user info, select features, set license type (subscription/lifetime), and expiration dates as needed.
+- Click "Generate License Key". The key will be hashed and added to the Google Sheet.
+- Use the "Copy" button to copy the generated key for distribution.
+
+### 3. **CLI License Key Generator**
+- (If you have a CLI version, document usage here. Otherwise, remove this section.)
+
+### 4. **Google Sheet Structure**
+- The generator will automatically update the sheet header to include all required columns for features, expiration, and license type.
+- No manual editing is required.
+
+## Notes
+- Only distribute license keys to users who have paid for features.
+- For any questions or issues, contact the project lead.
+
+## Whatnot Packing Slip Processing:
+
+- **Sale Parsing:** Card name and foil/normal status are always split and normalized, even if the status is in the name (e.g., "Bribery normal").
+- **Matching:** Cards are matched if at least three fields match, with collector number, foil/normal, and set code prioritized after name. Fuzzy matching and set code aliases are used for best results.
+- **Ambiguity Handling:** If multiple inventory cards match except for language, and language is not specified, the user is prompted to resolve the ambiguity.
+- **Undo/Restore:** Every packing slip removal can be undone from the File menu.
+- **No Auto-Remove:** Cards are not removed from inventory or files moved until the user confirms.
+- **Debugging:** All not-found cards are logged with detailed debug output for troubleshooting. 

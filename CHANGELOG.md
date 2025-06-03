@@ -57,6 +57,11 @@
 - Only core app and documentation included in release commit; backups and user data excluded.
 - License generator scripts removed from public release; only core app and documentation are included.
 
+### Changed
+- Whatnot packing slip PDF removal logic now matches cards if at least three fields match, prioritizing collector number, foil/normal, and set code after name.
+- If multiple languages are found and language is not specified, user intervention is required to resolve ambiguity.
+- All relevant documentation and tests updated to reflect new matching logic and user prompt behavior.
+
 ## [Unreleased]
 
 - All future changes will be documented here.

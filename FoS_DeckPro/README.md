@@ -40,8 +40,8 @@
 - **Whatnot Packing Slip Processing:**
   - Robust PDF parsing with `pdfplumber`.
   - **Sale Parsing:** Card name and foil/normal status are always split and normalized, even if the status is in the name (e.g., "Bribery normal").
-  - **Matching:** Cards are matched using name, set code, collector number, foil/normal, and language. Fuzzy matching and set code aliases are used for best results.
-  - **Ambiguity Handling:** If multiple inventory cards match except for language, the user is prompted to resolve the ambiguity.
+  - **Matching:** Cards are matched if at least three fields match, with collector number, foil/normal, and set code prioritized after name. Fuzzy matching and set code aliases are used for best results.
+  - **Ambiguity Handling:** If multiple inventory cards match except for language, and language is not specified, the user is prompted to resolve the ambiguity.
   - **Undo/Restore:** Every packing slip removal can be undone from the File menu.
   - **No Auto-Remove:** Cards are not removed from inventory or files moved until the user confirms.
   - **Debugging:** All not-found cards are logged with detailed debug output for troubleshooting.

@@ -17,20 +17,59 @@ class WhatnotPackingSlipParser:
         Parses the full text of a packing slip PDF (all pages concatenated).
         Returns a list of dicts, one per buyer, each with show, buyer, and sales info.
         """
+        print("=== RAW PDF TEXT PASSED TO PARSER ===")
+        print(text)
         buyers = []
-        pages = re.split(r"--- PAGE \d+ ---", text)
+        pages = re.split(r"--- PAGE \\d+ ---", text)
         for page in pages:
             if not page.strip():
                 continue
             show_info = self._extract_show_info(page)
-            buyer_info = self._extract_buyer_info(page)
-            sales = self._extract_sales(page)
-            if buyer_info and sales:
+            lines = page.splitlines()
+            buyer_info = None
+            sales = []
+            i = 0
+            while i < len(lines):
+                line = lines[i].strip()
+                # Detect buyer block
+                if line.startswith("Ships to:") or line.startswith("( NEW BUYER! )") or re.match(r".+\d{5}(-\d{4})?\. US", line):
+                    if buyer_info and sales:
+                        buyers.append({
+                            "show": show_info,
+                            "buyer": buyer_info,
+                            "sales": sales
+                        })
+                        sales = []
+                    # Parse buyer info (use next lines)
+                    name = ''
+                    username = ''
+                    address = ''
+                    # Try to extract name/username/address from next lines
+                    if i+1 < len(lines):
+                        next_line = lines[i+1].strip()
+                        m = re.match(r"(.+?) \(([^)]+)\) (.+)", next_line)
+                        if m:
+                            name = m.group(1).strip()
+                            username = m.group(2).strip()
+                            address = m.group(3).strip()
+                        else:
+                            name = next_line
+                    buyer_info = {"name": name, "username": username, "address": address}
+                    i += 2
+                    continue
+                i += 1
+            # After collecting all lines, extract sales for this page
+            page_sales = self._extract_sales(page)
+            if buyer_info and page_sales:
                 buyers.append({
                     "show": show_info,
                     "buyer": buyer_info,
-                    "sales": sales
+                    "sales": page_sales
                 })
+        if buyers:
+            print("=== PARSED SALES FOR FIRST BUYER ===")
+            for sale in buyers[0]["sales"]:
+                print(sale)
         return buyers
 
     def _extract_show_info(self, page: str) -> Dict[str, Any]:
@@ -59,27 +98,68 @@ class WhatnotPackingSlipParser:
         }
 
     def _extract_sales(self, page: str) -> List[Dict[str, Any]]:
-        # Find all Name: ... Quantity: ... blocks
+        # Robustly handle Name: ... Quantity: ... [card name/details] Description: ...
         sales = []
-        for m in re.finditer(r"Name: ([^\n]+?) Quantity: (\d+)[\n\r]+Description: ([^\n]+)?", page):
-            raw_name = m.group(1).strip()
-            quantity = int(m.group(2))
-            description = m.group(3) or ''
-            # Split foil/normal from name if present
-            name, foil = self._split_name_foil(raw_name)
-            # Ignore non-card names if validator is set
-            if self.card_name_validator and not self.card_name_validator(name):
+        lines = page.splitlines()
+        current_break = None
+        i = 0
+        while i < len(lines):
+            line = lines[i].strip()
+            # Detect break/lot line
+            break_match = re.match(r"(Break|Lot)[ #:]*([\w\- ]+)", line, re.IGNORECASE)
+            if break_match:
+                current_break = break_match.group(0).strip()
+                i += 1
                 continue
-            # Extract fields from description
-            fields = self._parse_description(description)
-            fields["Name"] = name
-            fields["Quantity"] = quantity
-            # Prefer foil from name, then from description
-            if foil:
-                fields["Foil"] = foil
-            elif "Foil" not in fields:
-                fields["Foil"] = "normal"  # Default to normal if not specified
-            sales.append(fields)
+            # Look for Name: ...
+            if line.startswith("Name:"):
+                # Skip to Quantity
+                i += 1
+                while i < len(lines) and not lines[i].strip().startswith("Quantity:"):
+                    i += 1
+                if i >= len(lines):
+                    break
+                i += 1  # Move past Quantity
+                # Next line: card name/details (if not empty and not a URL)
+                if i < len(lines):
+                    card_line = lines[i].strip()
+                    if card_line and not card_line.startswith("http") and not card_line.startswith("Order:") and not card_line.startswith("Description:"):
+                        card_name_details = card_line
+                        i += 1
+                    else:
+                        card_name_details = None
+                else:
+                    card_name_details = None
+                # Next line: Description
+                desc_line = None
+                while i < len(lines):
+                    if lines[i].strip().startswith("Description:"):
+                        desc_line = lines[i].strip()
+                        i += 1
+                        break
+                    i += 1
+                if card_name_details and desc_line:
+                    # Parse card_name_details (e.g., 'Prime Speaker Zegana foil en')
+                    parts = card_name_details.split()
+                    name = " ".join(parts[:-2]) if len(parts) > 2 else card_name_details
+                    foil = parts[-2] if len(parts) > 1 else ''
+                    lang = parts[-1] if len(parts) > 1 else ''
+                    # Parse description fields
+                    desc_fields = {}
+                    for m in re.finditer(r"([\w ]+): ([^:]+)", desc_line):
+                        k, v = m.group(1).strip(), m.group(2).strip()
+                        desc_fields[k] = v
+                    sale = {
+                        "Name": name,
+                        "Foil": foil,
+                        "Language": lang,
+                        **desc_fields
+                    }
+                    if current_break:
+                        sale["Break"] = current_break
+                    sales.append(sale)
+                continue
+            i += 1
         return sales
 
     def _split_name_foil(self, raw_name: str):

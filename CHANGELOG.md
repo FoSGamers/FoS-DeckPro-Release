@@ -62,6 +62,16 @@
 - If multiple languages are found and language is not specified, user intervention is required to resolve ambiguity.
 - All relevant documentation and tests updated to reflect new matching logic and user prompt behavior.
 
+## [v1.5.2] - 2024-06-XX
+
+### Changed
+- Improved Whatnot packing slip logic:
+  - Robustly parses cards from slips, including breaks/lots and multi-line card details.
+  - Correctly groups sales by buyer for all slip formats.
+  - Ensures all cards are found and removed from inventory as expected.
+  - Fixes summary dialog to display removed cards without error.
+- This is a release update for better real-world slip handling and reliability.
+
 ## [Unreleased]
 
 - All future changes will be documented here.

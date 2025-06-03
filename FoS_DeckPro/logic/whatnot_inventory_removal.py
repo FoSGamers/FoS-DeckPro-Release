@@ -62,121 +62,73 @@ def remove_sold_cards_from_inventory(
     user_prompt_callback: Callable[[Dict[str, Any], List[Dict[str, Any]]], Dict[str, Any]] = None
 ) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
     """
-    Remove sold cards from inventory using best-match logic.
-    Returns (updated_inventory, removal_log).
-    removal_log: list of dicts with keys: action (removed/not_found/ambiguous), sale, matched_card, reason
-    user_prompt_callback: function(sale, matches) -> selected_card (for ambiguous cases)
+    Remove sold cards from inventory. For each sale, try to find a matching card in inventory and remove it.
+    Returns (updated_inventory, removal_log)
     """
-    updated_inventory = copy.deepcopy(inventory)
+    updated_inventory = inventory.copy()
     removal_log = []
-    def card_key(card):
-        return (
-            str(card.get('Name', '')).strip().lower(),
-            str(card.get('Set code', '')).strip().lower(),
-            str(card.get('Collector number', '')).strip().lower(),
-            str(card.get('Foil', '')).strip().lower(),
-            str(card.get('Language', '')).strip().lower(),
-        )
-    decremented_cards = set()
-    decremented_to_zero = set()
     for sale in sales:
+        print(f"\n=== PROCESSING SALE ===\n{sale}")
         matches, ambiguity_reason = _find_matches(updated_inventory, sale)
+        print(f"DEBUG: Matches found: {len(matches)} | Ambiguity: {ambiguity_reason}")
         if len(matches) == 1:
-            card = matches[0]
-            qty_to_remove = sale.get('Quantity', 1)
-            inv_qty = int(card.get('Quantity', 1))
-            if inv_qty >= qty_to_remove:
-                card['Quantity'] = inv_qty - qty_to_remove
-                decremented_cards.add(card_key(card))
-                if card['Quantity'] == 0:
-                    decremented_to_zero.add(card_key(card))
-                removal_log.append({'action': 'removed', 'sale': sale, 'matched_card': card, 'reason': ''})
-            else:
-                card['Quantity'] = 0
-                decremented_cards.add(card_key(card))
-                decremented_to_zero.add(card_key(card))
-                removal_log.append({'action': 'removed', 'sale': sale, 'matched_card': card, 'reason': f'Only {inv_qty} in inventory, needed {qty_to_remove}'})
-        elif len(matches) == 0:
-            removal_log.append({'action': 'not_found', 'sale': sale, 'matched_card': None, 'reason': 'No match in inventory'})
-        else:
+            # Remove the card
+            match = matches[0]
+            print(f"REMOVED: {match}")
+            updated_inventory.remove(match)
+            removal_log.append({'action': 'removed', 'sale': sale, 'match': match})
+        elif len(matches) > 1:
+            print(f"AMBIGUOUS: Multiple matches found for sale: {sale}")
             if user_prompt_callback:
                 selected = user_prompt_callback(sale, matches)
                 if selected:
-                    qty_to_remove = sale.get('Quantity', 1)
-                    inv_qty = int(selected.get('Quantity', 1))
-                    if inv_qty >= qty_to_remove:
-                        selected['Quantity'] = inv_qty - qty_to_remove
-                        decremented_cards.add(card_key(selected))
-                        if selected['Quantity'] == 0:
-                            decremented_to_zero.add(card_key(selected))
-                        removal_log.append({'action': 'removed', 'sale': sale, 'matched_card': selected, 'reason': 'User selected from ambiguous'})
-                    else:
-                        selected['Quantity'] = 0
-                        decremented_cards.add(card_key(selected))
-                        decremented_to_zero.add(card_key(selected))
-                        removal_log.append({'action': 'removed', 'sale': sale, 'matched_card': selected, 'reason': f'User selected from ambiguous, only {inv_qty} in inventory, needed {qty_to_remove}'})
+                    print(f"USER SELECTED: {selected}")
+                    updated_inventory.remove(selected)
+                    removal_log.append({'action': 'removed', 'sale': sale, 'match': selected})
                 else:
-                    removal_log.append({'action': 'ambiguous', 'sale': sale, 'matched_card': matches, 'reason': ambiguity_reason or f'{len(matches)} possible matches'})
+                    removal_log.append({'action': 'ambiguous', 'sale': sale, 'matches': matches, 'reason': ambiguity_reason})
             else:
-                removal_log.append({'action': 'ambiguous', 'sale': sale, 'matched_card': matches, 'reason': ambiguity_reason or f'{len(matches)} possible matches'})
-    # Only remove cards with Quantity 0 if they were decremented to zero by a removal
-    updated_inventory = [c for c in updated_inventory if card_key(c) not in decremented_to_zero]
+                removal_log.append({'action': 'ambiguous', 'sale': sale, 'matches': matches, 'reason': ambiguity_reason})
+        else:
+            print(f"NOT FOUND: No match for sale: {sale}")
+            removal_log.append({'action': 'not_found', 'sale': sale})
     return updated_inventory, removal_log
 
 def _find_matches(inventory: List[Dict[str, Any]], sale: Dict[str, Any]) -> Tuple[List[Dict[str, Any]], str]:
     """
-    Find inventory cards matching a sale. At least three fields must match, prioritizing collector number, foil/normal, and set code after name.
-    If multiple languages are found and language is not specified, set ambiguity reason for user intervention.
+    Find inventory cards matching a sale. At least three fields must match, including name.
     Returns (matches, ambiguity_reason).
     """
-    sale_name = normalize_name(sale.get('Name', ''))
-    sale_set_code = normalize_set_code(sale.get('Set code', ''))
-    sale_collector = normalize_collector_number(sale.get('Collector number', ''))
-    sale_foil = normalize_foil(sale.get('Foil', ''))
-    sale_language = normalize_language(sale.get('Language', ''))
-
-    # Build normalized inventory index
-    norm_inv = []
-    for c in inventory:
-        norm = {
-            'Name': normalize_name(c.get('Name', '')),
-            'Set code': normalize_set_code(c.get('Set code', '')),
-            'Collector number': normalize_collector_number(c.get('Collector number', '')),
-            'Foil': normalize_foil(c.get('Foil', '')),
-            'Language': normalize_language(c.get('Language', '')),
-            'orig': c
-        }
-        norm_inv.append(norm)
-
-    matches = []
-    ambiguity_reason = ''
-
-    # Score each card in inventory by number of matching fields (prioritize collector number, foil, set code)
-    scored = []
-    for n in norm_inv:
-        score = 0
-        if n['Name'] == sale_name:
-            score += 1
-        if n['Collector number'] == sale_collector and sale_collector:
-            score += 1
-        if n['Foil'] == sale_foil and sale_foil:
-            score += 1
-        if n['Set code'] == sale_set_code and sale_set_code:
-            score += 1
-        if sale_language and n['Language'] == sale_language:
-            score += 1
-        scored.append((score, n['orig']))
-    max_score = max((s for s, _ in scored), default=0)
-    # Only consider matches with at least 3 fields matching
-    matches = [c for s, c in scored if s == max_score and s >= 3]
-    if not matches:
-        ambiguity_reason = 'No match with at least 3 fields'
-    # If multiple matches and only language differs, set ambiguity reason
-    if matches and len(matches) > 1:
-        fields = ['Name', 'Set code', 'Collector number', 'Foil']
-        first = matches[0]
-        if all(all(normalize_name(c.get(f, '')) == normalize_name(first.get(f, '')) for f in fields) for c in matches):
-            languages = set(normalize_language(c.get('Language', '')) for c in matches)
-            if len(languages) > 1:
-                ambiguity_reason = 'Multiple languages in inventory, language not specified or not found in sale (language ambiguity)'
-    return matches, ambiguity_reason 
+    def norm(val):
+        return str(val).strip().lower() if val is not None else ''
+    sale_fields = ['Name', 'Collector number', 'Foil', 'Set code', 'Language']
+    sale_norm = {f: norm(sale.get(f, '')) for f in sale_fields}
+    print(f"DEBUG: Sale normalized fields: {sale_norm}")
+    candidates = []
+    for card in inventory:
+        card_norm = {f: norm(card.get(f, '')) for f in sale_fields}
+        # Count matching fields (name must match)
+        match_count = sum(sale_norm[f] == card_norm[f] and sale_norm[f] != '' for f in sale_fields)
+        print(f"DEBUG: Candidate card: {card_norm} | match_count: {match_count}")
+        if sale_norm['Name'] == card_norm['Name'] and match_count >= 3:
+            candidates.append(card)
+    if candidates:
+        return candidates, ''
+    # Fallback: try 2 fields
+    for card in inventory:
+        card_norm = {f: norm(card.get(f, '')) for f in sale_fields}
+        match_count = sum(sale_norm[f] == card_norm[f] and sale_norm[f] != '' for f in sale_fields)
+        if sale_norm['Name'] == card_norm['Name'] and match_count >= 2:
+            print(f"DEBUG: Fallback 2-field match: {card_norm}")
+            candidates.append(card)
+    if candidates:
+        return candidates, 'matched on 2 fields'
+    # Fallback: just name
+    for card in inventory:
+        card_norm = {f: norm(card.get(f, '')) for f in sale_fields}
+        if sale_norm['Name'] == card_norm['Name']:
+            print(f"DEBUG: Fallback name-only match: {card_norm}")
+            candidates.append(card)
+    if candidates:
+        return candidates, 'matched on name only'
+    return [], 'no match found' 

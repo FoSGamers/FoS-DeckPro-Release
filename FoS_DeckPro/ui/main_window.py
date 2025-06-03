@@ -1220,6 +1220,11 @@ class MainWindow(QMainWindow):
         buyers_updated = set()
         files_to_move = []
 
+        # DEBUG: Print first 5 inventory cards before removal
+        print("=== INVENTORY SAMPLE BEFORE REMOVAL ===")
+        for card in updated_inventory[:5]:
+            print(card)
+
         def user_prompt_callback(sale, matches):
             # Show dialog to user to resolve ambiguity
             dlg = EditCardDialog(card=sale, all_fields=list(matches[0].keys()), parent=self)
@@ -1240,13 +1245,28 @@ class MainWindow(QMainWindow):
                 with pdfplumber.open(pdf_path) as pdf:
                     text = "\n".join(page.extract_text() or '' for page in pdf.pages)
                 buyers = parser.parse(text)
+                print(f"=== BUYERS PARSED FROM PDF ===\n{buyers}")
+                if not buyers:
+                    print("=== RAW PDF TEXT ===")
+                    print(text)
                 for buyer_entry in buyers:
+                    print(f"=== PARSED SALES FOR BUYER: {buyer_entry['buyer']} ===")
+                    for sale in buyer_entry['sales']:
+                        print(sale)
                     show = buyer_entry['show']
                     buyer = buyer_entry['buyer']
                     sales = buyer_entry['sales']
+                    # Print sales list before removal
+                    print(f"=== SALES TO REMOVE FROM INVENTORY ===")
+                    for sale in sales:
+                        print(sale)
                     # Remove from inventory with user prompt for ambiguous
                     updated_inventory, removal_log = remove_sold_cards_from_inventory(
                         updated_inventory, sales, user_prompt_callback=user_prompt_callback)
+                    # Print removal log after removal
+                    print(f"=== REMOVAL LOG ===")
+                    for log in removal_log:
+                        print(log)
                     for log in removal_log:
                         if log['action'] == 'removed':
                             summary['removed'].append(log)

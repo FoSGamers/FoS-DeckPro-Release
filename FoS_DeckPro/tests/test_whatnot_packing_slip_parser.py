@@ -1,5 +1,5 @@
 import unittest
-from ManaBox_Enhancer.logic.whatnot_packing_slip_parser import WhatnotPackingSlipParser
+from FoS_DeckPro.logic.whatnot_packing_slip_parser import WhatnotPackingSlipParser
 
 def always_true(_):
     return True
@@ -48,7 +48,10 @@ class TestWhatnotPackingSlipParser(unittest.TestCase):
         buyer1 = buyers[0]
         self.assertEqual(buyer1['buyer']['name'], 'Aaron solomon')
         self.assertEqual(buyer1['buyer']['username'], 'aarsolo')
-        self.assertIn('Armory Paladin normal', [s['Name'] for s in buyer1['sales']])
+        self.assertIn('Armory Paladin', [s['Name'] for s in buyer1['sales']])
+        # Check foil field is correct
+        armory = next(s for s in buyer1['sales'] if s['Name'] == 'Armory Paladin')
+        self.assertEqual(armory['Foil'], 'normal')
         self.assertEqual(buyer1['show']['title'], 'Rise & Shine w/FoSGamers | 1K+ Singles')
         self.assertEqual(buyer1['show']['date'], '25 May, 2025')
         card = buyer1['sales'][0]
@@ -79,6 +82,37 @@ class TestWhatnotPackingSlipParser(unittest.TestCase):
         # Missing fields should not raise errors
         self.assertNotIn('Set name', card)
         self.assertNotIn('Set code', card)
+
+    def test_parse_break_line(self):
+        text = '''--- PAGE 1 ---
+Livestream Name: Test Show
+Livestream Date: 1 Jan, 2024
+Ships to:
+Jane Doe (janed) 123 Main St.
+Break: Main Event
+Name: Card One Quantity: 1
+Description: Foil: normal Collector number: 1 Set name: SetA Set code: SETA Rarity: rare Language: en
+Name: Card Two Quantity: 2
+Description: Foil: foil Collector number: 2 Set name: SetB Set code: SETB Rarity: mythic Language: ja
+--- PAGE 2 ---
+Livestream Name: Test Show
+Livestream Date: 1 Jan, 2024
+Ships to:
+John Smith (jsmith) 456 Oak Ave.
+Name: Card Three Quantity: 1
+Description: Foil: normal Collector number: 3 Set name: SetC Set code: SETC Rarity: uncommon Language: en
+'''
+        parser = WhatnotPackingSlipParser(card_name_validator=always_true)
+        buyers = parser.parse(text)
+        self.assertEqual(len(buyers), 2)
+        sales1 = buyers[0]['sales']
+        self.assertEqual(sales1[0]['Name'], 'Card One')
+        self.assertEqual(sales1[0]['Break'], 'Break: Main Event')
+        self.assertEqual(sales1[1]['Name'], 'Card Two')
+        self.assertEqual(sales1[1]['Break'], 'Break: Main Event')
+        sales2 = buyers[1]['sales']
+        self.assertEqual(sales2[0]['Name'], 'Card Three')
+        self.assertNotIn('Break', sales2[0])
 
 if __name__ == '__main__':
     unittest.main() 

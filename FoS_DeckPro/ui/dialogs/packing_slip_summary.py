@@ -29,7 +29,7 @@ class PackingSlipSummaryDialog(QDialog):
             txt.setPlainText("\n".join(formatter(i) for i in items))
             txt.setMinimumHeight(min(200, 30 + 20 * len(items)))
             content_layout.addWidget(txt)
-        add_section("Cards Removed", removed, lambda i: f"{i['sale'].get('Name','')} x{i['sale'].get('Quantity','')} (matched: {i['matched_card'].get('Set code','') if i['matched_card'] else ''}) {i['reason']}")
+        add_section("Cards Removed", removed, lambda i: f"{i['sale'].get('Name','')} x{i['sale'].get('Quantity','')} (matched: {i['match'].get('Set code','') if i.get('match') else ''}) {i.get('reason','')}")
         add_section("Not Found", not_found, lambda i: f"{i['sale'].get('Name','')} x{i['sale'].get('Quantity','')} - {i['reason']}")
         add_section("Ambiguous", ambiguous, lambda i: f"{i['sale'].get('Name','')} x{i['sale'].get('Quantity','')} - {i['reason']}")
         add_section("Buyers Updated", buyers, lambda i: f"{i['name']} ({i['username']}) - {i['total_cards']} cards, ${i['total_spent']:.2f} total")

@@ -79,6 +79,15 @@
 - All documentation (README, RELEASE.md, CONTRIBUTING.md) updated with explicit instructions and CI warnings.
 - All contributors must read and follow RELEASE.md and CONTRIBUTING.md before merging or releasing.
 
+## [v1.5.4] - 2024-06-XX
+
+### Added
+- Dummy-proof scripts: `start_feature.sh`, `finish_release.sh`, and `onboarding.sh` for safe branch management, release, and onboarding.
+- GitHub Action to automatically delete old releases and assets, keeping only the latest available for download.
+- PR and issue templates to enforce release hygiene and guide contributors.
+- Onboarding script prints current branch, last release, and next steps on repo open.
+- These changes make the workflow safer, more automated, and prevent accidental mistakes.
+
 ## [Unreleased]
 
 - All future changes will be documented here.

@@ -249,4 +249,10 @@ All files that contain project rules—including this file, .cursor files, .gith
 ### Fixed
 - Image preview race conditions and network errors.
 - Filtering and selection logic for large inventories.
-- UI layout and usability issues in all break builder tabs. 
+- UI layout and usability issues in all break builder tabs.
+
+### Added
+- Integrated secure license check backend: all license validation is now performed via a Google Cloud Function (Python, Flask) that checks the Google Sheet and returns license status via a secure API.
+- Updated `FoS_DeckPro/utils/license.py` to use the new API endpoint: `https://us-central1-fosbot-456712.cloudfunctions.net/license_check`.
+- Automated deployment script (`deploy_license_check.sh`) for the backend, with full documentation and idempotent, safe operation.
+- All documentation, code, and workflow updated to reflect the new secure, privacy-safe, and scalable license management system. 

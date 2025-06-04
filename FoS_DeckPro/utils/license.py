@@ -2,11 +2,18 @@ import os
 import json
 import requests
 import hashlib
-from PySide6.QtWidgets import QInputDialog, QMessageBox
+from PySide6.QtWidgets import QInputDialog, QMessageBox, QFileDialog
 import datetime
+import uuid
+import glob
 
 LICENSE_FILE = os.path.expanduser("~/.fosdeckpro_license.json")
+LICENSE_API_URL = "https://us-central1-fosbot-456712.cloudfunctions.net/license_check"
 GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSbvtVQ8yxoc9GUBihv0LGLhgetHmQNfdGRo8VbXu-xSICNp2jKkZ3c91M5g-x5OkDD2ZlODcF5RH1X/pub?output=csv"
+
+# Google Sheet trial config (legacy, not used in new API)
+SHEET_ID = '1hvOb_2fADbCs3DSLg0CMOdCAOVAy2Is_ok0JIvqAZEY'
+WORKSHEET_NAME = 'Sheet1'
 
 FEATURES = [
     'break_builder',
@@ -20,133 +27,46 @@ FEATURES = [
 ]
 
 def hash_key(key):
-    """Return the SHA256 hex digest of the normalized key string."""
+    """
+    Return the SHA256 hex digest of the normalized key string.
+    """
     return hashlib.sha256(key.strip().upper().encode('utf-8')).hexdigest()
 
-def prompt_for_license_key(parent=None, feature_name=None):
-    msg = ("This feature requires a license.\n"
-           "Please enter your license key to unlock paid features.\n\n"
-           "To request access, contact: Thereal.FosGameres@gmail.com")
-    if feature_name:
-        msg = (f"This feature requires a license.\nPlease enter your license key to unlock: {feature_name.replace('_', ' ').title()}\n\n"
-               "To request access, contact: Thereal.FosGameres@gmail.com")
-    key, ok = QInputDialog.getText(parent, "Enter License Key", msg)
-    if ok and key:
-        valid = validate_license_key(key, feature_name=feature_name)
-        if valid:
-            store_license_key(key)
-            QMessageBox.information(parent, "License Activated", "Thank you! Paid features are now unlocked.")
-            return True
+def get_machine_id():
+    """
+    Return a hashed unique machine identifier (MAC address) for privacy-safe tracking.
+    """
+    mac = uuid.getnode()
+    return hashlib.sha256(str(mac).encode('utf-8')).hexdigest()
+
+# --- New: License API Integration ---
+def check_license_api(key, feature_name=None, machine_id=None):
+    """
+    Call the secure license check API to validate a license key for a given feature and machine.
+    Returns the API response as a dict.
+    """
+    payload = {
+        "key": key,
+        "feature": feature_name,
+        "machine_id": machine_id
+    }
+    try:
+        resp = requests.post(LICENSE_API_URL, json=payload, timeout=5)
+        if resp.status_code == 200:
+            return resp.json()
         else:
-            # Check if expired for this feature
-            try:
-                resp = requests.get(GOOGLE_SHEET_CSV_URL, timeout=5)
-                if resp.status_code == 200:
-                    lines = resp.text.splitlines()
-                    key_hash = hash_key(key)
-                    header = None
-                    for i, line in enumerate(lines):
-                        parts = [p.strip() for p in line.split(',')]
-                        if i == 0:
-                            header = parts
-                            continue
-                        if key_hash == parts[0] and parts[1].lower() == 'active':
-                            exp_col = f'{feature_name}_expiration'
-                            type_col = f'{feature_name}_license_type'
-                            exp_val = None
-                            type_val = None
-                            if header and exp_col in header:
-                                idx = header.index(exp_col)
-                                if idx < len(parts):
-                                    exp_val = parts[idx].strip().lower()
-                            if header and type_col in header:
-                                idx = header.index(type_col)
-                                if idx < len(parts):
-                                    type_val = parts[idx].strip().lower()
-                            if type_val == 'subscription' and exp_val and exp_val != 'lifetime':
-                                try:
-                                    today = datetime.date.today()
-                                    exp_date = datetime.datetime.strptime(exp_val, '%Y-%m-%d').date()
-                                    if exp_date < today:
-                                        QMessageBox.warning(parent, "License Expired", f"Your license for {feature_name.replace('_', ' ').title()} has expired.\n\nPlease renew your subscription by contacting Thereal.FosGameres@gmail.com.")
-                                        return False
-                                except Exception:
-                                    pass
-            except Exception:
-                pass
-            QMessageBox.warning(parent, "Invalid Key", "The license key you entered is not valid or does not include this feature.\n\nTo request access or support, contact: Thereal.FosGameres@gmail.com")
-    return False
+            return {"valid": False, "reason": f"API error: {resp.status_code}"}
+    except Exception as e:
+        return {"valid": False, "reason": str(e)}
 
 def validate_license_key(key, feature_name=None):
     """
-    Check the Google Sheet for a valid, active key hash. If feature_name is given, require that column to be 'yes' or 'true' or '1', or 'all_features' to be 'yes'.
-    The sheet should store only SHA256 hashes of keys in the first column.
-    Now also checks per-feature expiration and license type.
+    Validate the license key for a specific feature using the secure backend API.
+    Returns True if valid, False otherwise.
     """
-    try:
-        resp = requests.get(GOOGLE_SHEET_CSV_URL, timeout=5)
-        if resp.status_code != 200:
-            return False
-        lines = resp.text.splitlines()
-        key_hash = hash_key(key)
-        header = None
-        for i, line in enumerate(lines):
-            parts = [p.strip() for p in line.split(',')]
-            if i == 0:
-                header = parts
-                continue
-            if len(parts) < 2:
-                continue
-            if key_hash == parts[0] and parts[1].lower() == 'active':
-                # If no feature_name, any active key is valid
-                if not feature_name:
-                    return True
-                # Check for feature column or all_features
-                valid = False
-                if header and feature_name in header:
-                    idx = header.index(feature_name)
-                    if idx < len(parts) and parts[idx].strip().lower() in ('yes', 'true', '1'):
-                        valid = True
-                if header and 'all_features' in header:
-                    idx = header.index('all_features')
-                    if idx < len(parts) and parts[idx].strip().lower() in ('yes', 'true', '1'):
-                        valid = True
-                if not valid:
-                    return False
-                # Per-feature expiration/license_type
-                exp_col = f'{feature_name}_expiration'
-                type_col = f'{feature_name}_license_type'
-                exp_val = None
-                type_val = None
-                if header and exp_col in header:
-                    idx = header.index(exp_col)
-                    if idx < len(parts):
-                        exp_val = parts[idx].strip().lower()
-                if header and type_col in header:
-                    idx = header.index(type_col)
-                    if idx < len(parts):
-                        type_val = parts[idx].strip().lower()
-                # If lifetime, always valid
-                if (type_val == 'lifetime') or (exp_val == 'lifetime'):
-                    return True
-                # If subscription, check expiration
-                if type_val == 'subscription' and exp_val:
-                    try:
-                        today = datetime.date.today()
-                        exp_date = datetime.datetime.strptime(exp_val, '%Y-%m-%d').date()
-                        if exp_date >= today:
-                            return True
-                        else:
-                            # Expired
-                            return False
-                    except Exception:
-                        return False
-                # If no type/expiration, fallback to valid
-                return valid
-        return False
-    except Exception:
-        pass
-    return False
+    machine_id = get_machine_id()
+    result = check_license_api(key, feature_name=feature_name, machine_id=machine_id)
+    return result.get("valid", False)
 
 def is_license_valid(feature_name=None):
     """
@@ -170,4 +90,67 @@ def store_license_key(key):
     Store the license key locally for future use (plain, but always checked as hash).
     """
     with open(LICENSE_FILE, "w") as f:
-        json.dump({"key": key.strip()}, f) 
+        json.dump({"key": key.strip()}, f)
+
+def prompt_for_license_key(parent=None, feature_name=None):
+    """
+    Prompt the user for a license key and validate it using the API. Store if valid.
+    """
+    msg = ("This feature requires a license.\n"
+           "Please enter your license key to unlock paid features.\n\n"
+           "To request access, contact: Thereal.FosGameres@gmail.com")
+    if feature_name:
+        msg = (f"This feature requires a license.\nPlease enter your license key to unlock: {feature_name.replace('_', ' ').title()}\n\n"
+               "To request access, contact: Thereal.FosGameres@gmail.com")
+    key, ok = QInputDialog.getText(parent, "Enter License Key", msg)
+    if ok and key:
+        valid = validate_license_key(key, feature_name=feature_name)
+        if valid:
+            store_license_key(key)
+            QMessageBox.information(parent, "License Activated", "Thank you! Paid features are now unlocked.")
+            return True
+        else:
+            QMessageBox.warning(parent, "Invalid Key", "The license key you entered is not valid or does not include this feature.\n\nTo request access or support, contact: Thereal.FosGameres@gmail.com")
+    return False
+
+# --- Trial logic and legacy Google Sheet code is now deprecated and not used ---
+
+def is_trial_expired():
+    """
+    Always returns True (trials now managed by backend API).
+    """
+    return True
+
+def is_trial_active():
+    """
+    Always returns False (trials now managed by backend API).
+    """
+    return False
+
+def get_trial_status():
+    """
+    Always returns no active trial (trials now managed by backend API).
+    """
+    return {'trial_count': 0, 'active_trial': False, 'expiry_date': None}
+
+def start_new_trial():
+    """
+    Not implemented (trials now managed by backend API).
+    """
+    return False
+
+# --- Documentation ---
+"""
+FoS-DeckPro License Validation Module
+------------------------------------
+
+This module now uses a secure backend API (Google Cloud Function) for all license and feature checks.
+
+- All license validation is performed by POSTing to the LICENSE_API_URL.
+- No Google service account credentials are ever distributed to users.
+- All legacy direct Google Sheet access is deprecated and removed.
+- All functions are documented with clear docstrings per project rules.
+- To update the API endpoint, change LICENSE_API_URL at the top of this file.
+
+See the cloud_functions/license_check/README.md for backend deployment and security details.
+""" 

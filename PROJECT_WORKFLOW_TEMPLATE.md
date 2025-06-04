@@ -1,4 +1,4 @@
-**NOTE:** This summary and checklist must be included at the top of README.md, RELEASE.md, CONTRIBUTING.md, and CHANGELOG.md in every project.
+**NOTE:** This summary and checklist must be included at the top of README.md, RELEASE.md, CONTRIBUTING.md, and CHANGELOG.md in every project. All code must have clear comments explaining what each part does, including layman descriptions in code blocks where possible, so anyone (even non-developers) can understand the logic and purpose.
 
 # Dummy-Proof, Privacy-Safe, and Automated Project Workflow Template
 

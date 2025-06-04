@@ -8,7 +8,8 @@
 > - Never commit build artifacts or large files (e.g., `dist/`, `build/`, `*.zip`, `*.pkg`, `*.app`, `*.spec`, `*.dmg`, `*.exe`, `*.bin`, `*.tar.gz`, `*.whl`, `*.egg`, `*.pyc`, `__pycache__/`). Always add these to `.gitignore` and clean them from git history.
 > - Use the provided scripts for feature, release, onboarding, and cleaning.
 > - CI/CD and branch protection block unsafe merges and releases.
-> - All code is modular, documented, and tested. All changes update the changelog and docs.
+> - All code is modular, documented, and tested. All code must have clear comments explaining what each part does, including layman descriptions in code blocks where possible, so anyone (even non-developers) can understand the logic and purpose.
+> - All changes update the changelog and docs.
 > - All PRs and issues use the provided templates and checklists.
 >
 > ## Checklist
@@ -16,6 +17,7 @@
 > - [ ] All build artifacts and large files are in `.gitignore` and **never** committed.
 > - [ ] No build artifacts or large files are present in git history (use `git filter-repo` if needed).
 > - [ ] All code is modular, documented, and tested (with docstrings and unit tests).
+> - [ ] All code is clearly commented, with layman descriptions in code blocks where possible, so anyone can understand what it does and why.
 > - [ ] All configuration and constants are centralized.
 > - [ ] All features are independently enable/disable-able.
 > - [ ] All UI/UX follows a consistent style guide.

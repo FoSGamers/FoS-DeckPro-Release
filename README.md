@@ -31,6 +31,7 @@
 - [Release and Privacy Process](#release-and-privacy-process)
 - [Release Hygiene & Personal Data](#release-hygiene--personal-data)
 - [How to Build a Clean Release](#how-to-build-a-clean-release)
+- [Build Artifact Hygiene](#build-artifact-hygiene)
 
 ---
 
@@ -285,6 +286,7 @@ This repository contains the license key generator tools for FoS-DeckPro. Use th
 - All contributors must read and follow [RELEASE.md](RELEASE.md) and [CONTRIBUTING.md](CONTRIBUTING.md) for every release or merge.
 - All personal files (backups, inventory, templates, sensitive configs) must be kept in `user_private/` (which is in `.gitignore`).
 - Never commit or push personal files to the release branch.
+- **Never commit build artifacts or large files. See Build Artifact Hygiene above.**
 - Use the `clean_for_release.sh` script before every release to ensure no personal files are present.
 
 ## How to Build a Clean Release
@@ -293,4 +295,10 @@ This repository contains the license key generator tools for FoS-DeckPro. Use th
 2. Verify only public files are present.
 3. Build and package the app as described above.
 
-See `RELEASE.md` and `CONTRIBUTING.md` for full details. 
+See `RELEASE.md` and `CONTRIBUTING.md` for full details.
+
+## Build Artifact Hygiene
+- **Never commit build artifacts or large files (e.g., dist/, build/, *.zip, *.pkg, *.app, *.spec, *.dmg, *.exe, *.bin, *.tar.gz, *.whl, *.egg, *.pyc, __pycache__/).**
+- Always add these to `.gitignore`.
+- Clean them from git tracking before pushing or releasing.
+- Only source code, scripts, and documentation should be versioned. 

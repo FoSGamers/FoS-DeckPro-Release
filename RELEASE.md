@@ -4,9 +4,16 @@
 > - A GitHub Action enforces release hygiene: any personal files in a PR or push to a release branch will cause the build to fail.
 > - You MUST read and follow this file and [CONTRIBUTING.md](CONTRIBUTING.md) before merging or releasing.
 
+## Build Artifact Hygiene
+- **Never commit build artifacts or large files (e.g., dist/, build/, *.zip, *.pkg, *.app, *.spec, *.dmg, *.exe, *.bin, *.tar.gz, *.whl, *.egg, *.pyc, __pycache__/).**
+- Always add these to `.gitignore`.
+- Clean them from git tracking before pushing or releasing.
+- Only source code, scripts, and documentation should be versioned.
+
 ## 1. Clean Personal Files Before Release
 - All personal files (backups, inventory, templates, sensitive configs, etc.) must be moved to `user_private/`.
 - `user_private/` is in `.gitignore` and will never be included in a public release.
+- **Never commit build artifacts or large files. See Build Artifact Hygiene above.**
 - Run the provided script before every release:
 
 ```sh

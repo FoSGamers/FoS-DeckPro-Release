@@ -1,1 +1,17 @@
 user_private/
+
+# Ignore build artifacts and large files
+/dist/
+/build/
+*.zip
+*.pkg
+*.app
+*.spec
+*.dmg
+*.exe
+*.bin
+*.tar.gz
+*.whl
+*.egg
+*.pyc
+__pycache__/

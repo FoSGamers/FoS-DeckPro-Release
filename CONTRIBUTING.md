@@ -54,9 +54,16 @@ We appreciate your help in making FoS-DeckPro better for everyone!
 - **personal-dev**: Your private development branch. All personal files (backups, inventory, templates, sensitive configs) live here in `user_private/`.
 - **v1.5.0-working** (or `main`): Public release branch. No personal files—only code, resources, and docs.
 
+## Build Artifact Hygiene
+- **Never commit build artifacts or large files (e.g., dist/, build/, *.zip, *.pkg, *.app, *.spec, *.dmg, *.exe, *.bin, *.tar.gz, *.whl, *.egg, *.pyc, __pycache__/).**
+- Always add these to `.gitignore`.
+- Clean them from git tracking before pushing or releasing.
+- Only source code, scripts, and documentation should be versioned.
+
 ## Keeping Personal Files Private
 - All personal files must be in `user_private/`, which is in `.gitignore`.
 - Never commit or push personal files to the release branch.
+- **Never commit build artifacts or large files. See Build Artifact Hygiene above.**
 - Use the `clean_for_release.sh` script before every release to ensure no personal files are present.
 
 ## Merging Code Changes Safely
@@ -70,6 +77,7 @@ We appreciate your help in making FoS-DeckPro better for everyone!
 - [ ] Run all tests and verify the app works without personal files.
 - [ ] Run `./clean_for_release.sh`.
 - [ ] Check that only public files are present.
+- [ ] **Check that no build artifacts or large files are present.**
 - [ ] Build and package the app for release.
 
 ## Questions?

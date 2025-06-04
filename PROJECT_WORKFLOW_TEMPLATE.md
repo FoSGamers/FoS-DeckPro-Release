@@ -15,10 +15,17 @@ This document describes a robust, privacy-safe, and highly automated workflow fo
 - **personal-dev**: Your private branch for development with personal files (never pushed to public).
 - **feature/your-feature**: All new work starts here, branched from `personal-dev`.
 
+## 2a. Build Artifact Hygiene
+- **Never commit build artifacts or large files (e.g., dist/, build/, *.zip, *.pkg, *.app, *.spec, *.dmg, *.exe, *.bin, *.tar.gz, *.whl, *.egg, *.pyc, __pycache__/).**
+- Always add these to `.gitignore`.
+- Clean them from git tracking before pushing or releasing.
+- Only source code, scripts, and documentation should be versioned.
+
 ## 2. Personal File Hygiene
 - All personal, backup, or sensitive files must be kept in `user_private/` (add to `.gitignore`).
 - Use a script (`clean_for_release.sh`) to move/remove all personal files before any release.
 - **Never commit or push personal files to public branches.**
+- **Never commit build artifacts or large files. See Build Artifact Hygiene above.**
 
 ## 3. Coding Standards & Rules
 - All code must be modular, maintainable, and documented.
@@ -87,6 +94,8 @@ This document describes a robust, privacy-safe, and highly automated workflow fo
 5. Set up branch protection rules in GitHub for `main` and your release branch.
 6. Update your README, RELEASE.md, and CONTRIBUTING.md with explicit instructions and rules.
 7. Add a style guide and test policy if needed.
+8. **Add build artifacts and large files to `.gitignore` immediately.**
+9. **Clean any accidentally committed build artifacts from git history.**
 
 ## 11. Customization
 - Adjust the list of personal files in `clean_for_release.sh` for your project.

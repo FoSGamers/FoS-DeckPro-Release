@@ -24,6 +24,7 @@
 - [Release Status](#release-status)
 - [Free vs. Paid Features](#free-vs-paid-features)
 - [License Key Activation](#license-key-activation)
+- [Release and Privacy Process](#release-and-privacy-process)
 
 ---
 
@@ -263,4 +264,11 @@ This repository contains the license key generator tools for FoS-DeckPro. Use th
 - **Ambiguity Handling:** If multiple inventory cards match except for language, and language is not specified, the user is prompted to resolve the ambiguity.
 - **Undo/Restore:** Every packing slip removal can be undone from the File menu.
 - **No Auto-Remove:** Cards are not removed from inventory or files moved until the user confirms.
-- **Debugging:** All not-found cards are logged with detailed debug output for troubleshooting. 
+- **Debugging:** All not-found cards are logged with detailed debug output for troubleshooting.
+
+## Release and Privacy Process
+
+- All personal files (backups, inventory, templates, sensitive configs, etc.) must be kept in the `user_private/` directory.
+- `user_private/` is listed in `.gitignore` and will never be committed or pushed to public branches.
+- Before every release, run the `clean_for_release.sh` script to ensure no personal files are present in the release branch.
+- See `RELEASE.md` and `CONTRIBUTING.md` for full instructions on safe merging and release management. 

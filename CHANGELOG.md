@@ -1,3 +1,36 @@
+> **GOLD STANDARD SUMMARY & CHECKLIST**
+>
+> This project follows a strict, privacy-safe, and automated workflow. Use this summary and checklist to ensure every project is 100% clean, safe, and compliant:
+>
+> ## Summary
+> - Only develop on `personal-dev` or `feature/*` branches. Never commit to `main` or release branches.
+> - All personal files go in `user_private/` (in `.gitignore`). Never commit personal files to public branches.
+> - Never commit build artifacts or large files (e.g., `dist/`, `build/`, `*.zip`, `*.pkg`, `*.app`, `*.spec`, `*.dmg`, `*.exe`, `*.bin`, `*.tar.gz`, `*.whl`, `*.egg`, `*.pyc`, `__pycache__/`). Always add these to `.gitignore` and clean them from git history.
+> - Use the provided scripts for feature, release, onboarding, and cleaning.
+> - CI/CD and branch protection block unsafe merges and releases.
+> - All code is modular, documented, and tested. All changes update the changelog and docs.
+> - All PRs and issues use the provided templates and checklists.
+>
+> ## Checklist
+> - [ ] All personal files are in `user_private/` and listed in `.gitignore`.
+> - [ ] All build artifacts and large files are in `.gitignore` and **never** committed.
+> - [ ] No build artifacts or large files are present in git history (use `git filter-repo` if needed).
+> - [ ] All code is modular, documented, and tested (with docstrings and unit tests).
+> - [ ] All configuration and constants are centralized.
+> - [ ] All features are independently enable/disable-able.
+> - [ ] All UI/UX follows a consistent style guide.
+> - [ ] All error handling is user-friendly and provides safe fallbacks.
+> - [ ] Every code change is accompanied by a test and documentation update.
+> - [ ] Changelog is updated for every release or significant change.
+> - [ ] All scripts (`start_feature.sh`, `finish_release.sh`, `onboarding.sh`, `clean_for_release.sh`) are present and used.
+> - [ ] Onboarding script is added to your shell profile for reminders.
+> - [ ] GitHub Actions for release hygiene and old release cleanup are enabled.
+> - [ ] Branch protection rules are set for `main` and release branches.
+> - [ ] All PRs and issues use the provided templates and checklists.
+> - [ ] All documentation (`README.md`, `RELEASE.md`, `CONTRIBUTING.md`, `PROJECT_WORKFLOW_TEMPLATE.md`) is up to date and explicit.
+> - [ ] No secrets, credentials, or sensitive data are ever committed.
+> - [ ] All contributors are aware of and follow these rules.
+
 # Changelog
 
 ## [v1.5.1] - 2024-06-XX

@@ -1,5 +1,9 @@
 **NOTE:** This summary and checklist must be included at the top of README.md, RELEASE.md, CONTRIBUTING.md, and CHANGELOG.md in every project. All code must have clear comments explaining what each part does, including layman descriptions in code blocks where possible, so anyone (even non-developers) can understand the logic and purpose.
 
+## Code Commenting and Layman Description Rule for All Project Rule Files
+
+All files that contain project rules—including this file, .cursor files, .github workflows, and any configuration or automation files—must explicitly state and enforce the requirement that all code must be clearly commented, with layman descriptions in code blocks where possible. This ensures that anyone, regardless of technical background, can understand the logic, purpose, and workflow of every part of the project.
+
 # Dummy-Proof, Privacy-Safe, and Automated Project Workflow Template
 
 > **GOLD STANDARD SUMMARY & CHECKLIST**

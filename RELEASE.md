@@ -33,6 +33,10 @@
 > - [ ] No secrets, credentials, or sensitive data are ever committed.
 > - [ ] All contributors are aware of and follow these rules.
 
+## Code Commenting and Layman Description Rule for All Project Rule Files
+
+All files that contain project rules—including this file, .cursor files, .github workflows, and any configuration or automation files—must explicitly state and enforce the requirement that all code must be clearly commented, with layman descriptions in code blocks where possible. This ensures that anyone, regardless of technical background, can understand the logic, purpose, and workflow of every part of the project.
+
 # Release Process for FoS-DeckPro
 
 > **IMPORTANT:**

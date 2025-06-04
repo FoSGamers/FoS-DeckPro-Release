@@ -33,6 +33,10 @@
 > - [ ] No secrets, credentials, or sensitive data are ever committed.
 > - [ ] All contributors are aware of and follow these rules.
 
+## Code Commenting and Layman Description Rule for All Project Rule Files
+
+All files that contain project rules—including this file, .cursor files, .github workflows, and any configuration or automation files—must explicitly state and enforce the requirement that all code must be clearly commented, with layman descriptions in code blocks where possible. This ensures that anyone, regardless of technical background, can understand the logic, purpose, and workflow of every part of the project.
+
 # Contributing to FoS-DeckPro
 
 > **IMPORTANT:**
@@ -127,15 +131,4 @@ We appreciate your help in making FoS-DeckPro better for everyone!
 
 ## Checklist for Every Release
 - [ ] All personal files are in `user_private/`.
-- [ ] `./clean_for_release.sh` has been run.
-- [ ] Only public files are present in the release branch.
-- [ ] Code changes have been merged/cherry-picked from `personal-dev`.
-- [ ] All tests pass and documentation is up to date.
-- [ ] Commit and push the release branch.
-
-## CI Release Hygiene Check
-- Every PR and push to a release branch runs a GitHub Action that blocks the build if any personal files are present.
-- If the check fails:
-  1. Run `./clean_for_release.sh` locally.
-  2. Commit and push the cleaned branch.
-  3. Re-read this file and [RELEASE.md](RELEASE.md) to ensure compliance. 
+- [ ] `./clean_for_release.sh`

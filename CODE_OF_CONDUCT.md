@@ -1,5 +1,9 @@
 # Contributor Covenant Code of Conduct
 
+# Code Commenting and Documentation Rule
+
+All project rules require that code must be clearly commented, with layman descriptions in code blocks where possible, so anyone (even non-developers) can understand what each part does and why. This requirement is enforced in all documentation and project rule files, including automation and configuration files (such as .cursor or project rule files).
+
 ## Our Pledge
 
 We as members, contributors, and leaders pledge to make participation in our community a harassment-free experience for everyone, regardless of age, body size, visible or invisible disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, religion, or sexual identity and orientation.

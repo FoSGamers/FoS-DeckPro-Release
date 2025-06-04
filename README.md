@@ -24,6 +24,9 @@
 - [Release Status](#release-status)
 - [Free vs. Paid Features](#free-vs-paid-features)
 - [License Key Activation](#license-key-activation)
+- [Release and Privacy Process](#release-and-privacy-process)
+- [Release Hygiene & Personal Data](#release-hygiene--personal-data)
+- [How to Build a Clean Release](#how-to-build-a-clean-release)
 
 ---
 
@@ -263,4 +266,25 @@ This repository contains the license key generator tools for FoS-DeckPro. Use th
 - **Ambiguity Handling:** If multiple inventory cards match except for language, and language is not specified, the user is prompted to resolve the ambiguity.
 - **Undo/Restore:** Every packing slip removal can be undone from the File menu.
 - **No Auto-Remove:** Cards are not removed from inventory or files moved until the user confirms.
-- **Debugging:** All not-found cards are logged with detailed debug output for troubleshooting. 
+- **Debugging:** All not-found cards are logged with detailed debug output for troubleshooting.
+
+## Release and Privacy Process
+
+- All personal files (backups, inventory, templates, sensitive configs, etc.) must be kept in the `user_private/` directory.
+- `user_private/` is listed in `.gitignore` and will never be committed or pushed to public branches.
+- Before every release, run the `clean_for_release.sh` script to ensure no personal files are present in the release branch.
+- See `RELEASE.md` and `CONTRIBUTING.md` for full instructions on safe merging and release management.
+
+## Release Hygiene & Personal Data
+
+- All personal files (backups, inventory, templates, sensitive configs) must be kept in `user_private/` (which is in `.gitignore`).
+- Never commit or push personal files to the release branch.
+- Use the `clean_for_release.sh` script before every release to ensure no personal files are present.
+
+## How to Build a Clean Release
+
+1. Run `./clean_for_release.sh` to move/remove all personal files.
+2. Verify only public files are present.
+3. Build and package the app as described above.
+
+See `RELEASE.md` and `CONTRIBUTING.md` for full details. 

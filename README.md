@@ -2,6 +2,10 @@
 
 **Release: v1.5.1 (2024-06-XX) — Working, Stable, and Fully Modular**
 
+> **IMPORTANT:**
+> - A GitHub Action now enforces release hygiene: any personal files (backups, inventory, templates, sensitive configs, etc.) in a PR or push to a release branch will cause the build to fail.
+> - You MUST read and follow [RELEASE.md](RELEASE.md) and [CONTRIBUTING.md](CONTRIBUTING.md) before merging or releasing.
+
 > This release is a fully working, stable, and modular version of FoS-DeckPro. All core workflows (break builder, Whatnot packing slip processing, inventory management, buyers database, and analytics) are robust, tested, and documented. All break templates and configuration files are present and correctly referenced. Legacy and backup files are isolated in the `legacy/` folder. See below for usage, features, and details.
 
 ---
@@ -277,6 +281,8 @@ This repository contains the license key generator tools for FoS-DeckPro. Use th
 
 ## Release Hygiene & Personal Data
 
+- **A GitHub Action will block any release or PR if personal files are present.**
+- All contributors must read and follow [RELEASE.md](RELEASE.md) and [CONTRIBUTING.md](CONTRIBUTING.md) for every release or merge.
 - All personal files (backups, inventory, templates, sensitive configs) must be kept in `user_private/` (which is in `.gitignore`).
 - Never commit or push personal files to the release branch.
 - Use the `clean_for_release.sh` script before every release to ensure no personal files are present.

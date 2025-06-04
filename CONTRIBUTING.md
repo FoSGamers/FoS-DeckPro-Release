@@ -1,5 +1,9 @@
 # Contributing to FoS-DeckPro
 
+> **IMPORTANT:**
+> - A GitHub Action enforces release hygiene: any personal files in a PR or push to a release branch will cause the build to fail.
+> - You MUST read and follow this file and [RELEASE.md](RELEASE.md) before merging or releasing.
+
 Thank you for your interest in contributing! We welcome all contributions, from code to documentation, bug reports, and feature requests.
 
 ## How to Contribute
@@ -84,4 +88,11 @@ We appreciate your help in making FoS-DeckPro better for everyone!
 - [ ] Only public files are present in the release branch.
 - [ ] Code changes have been merged/cherry-picked from `personal-dev`.
 - [ ] All tests pass and documentation is up to date.
-- [ ] Commit and push the release branch. 
+- [ ] Commit and push the release branch.
+
+## CI Release Hygiene Check
+- Every PR and push to a release branch runs a GitHub Action that blocks the build if any personal files are present.
+- If the check fails:
+  1. Run `./clean_for_release.sh` locally.
+  2. Commit and push the cleaned branch.
+  3. Re-read this file and [RELEASE.md](RELEASE.md) to ensure compliance. 

@@ -72,6 +72,13 @@
   - Fixes summary dialog to display removed cards without error.
 - This is a release update for better real-world slip handling and reliability.
 
+## [v1.5.3] - 2024-06-XX
+
+### Added
+- GitHub Action to enforce release hygiene: any personal files in a PR or push to a release branch will cause the build to fail.
+- All documentation (README, RELEASE.md, CONTRIBUTING.md) updated with explicit instructions and CI warnings.
+- All contributors must read and follow RELEASE.md and CONTRIBUTING.md before merging or releasing.
+
 ## [Unreleased]
 
 - All future changes will be documented here.

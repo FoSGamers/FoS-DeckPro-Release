@@ -5,6 +5,13 @@ set -e
 BRANCH=$(git branch --show-current)
 LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "none")
 
+if [[ "$BRANCH" == "main" || "$BRANCH" == "v1.5.0-working" ]]; then
+  echo -e "\033[31m\n==============================="
+  echo -e "WARNING: You are on a PROTECTED branch ($BRANCH)!"
+  echo -e "Do NOT develop or commit here. Switch to a feature branch or personal-dev."
+  echo -e "===============================\033[0m\n"
+fi
+
 echo "\n=== FoS-DeckPro Onboarding ==="
 echo "Current branch: $BRANCH"
 echo "Last release tag: $LAST_TAG"

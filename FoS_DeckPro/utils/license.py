@@ -115,28 +115,68 @@ def prompt_for_license_key(parent=None, feature_name=None):
 
 # --- Trial logic and legacy Google Sheet code is now deprecated and not used ---
 
-def is_trial_expired():
-    """
-    Always returns True (trials now managed by backend API).
-    """
-    return True
-
 def is_trial_active():
     """
-    Always returns False (trials now managed by backend API).
+    Check with the backend API if a trial is currently active for this machine.
+    Returns True if a trial is active, False otherwise.
     """
+    machine_id = get_machine_id()
+    payload = {"trial_status": True, "machine_id": machine_id}
+    try:
+        resp = requests.post(LICENSE_API_URL, json=payload, timeout=5)
+        if resp.status_code == 200:
+            data = resp.json()
+            return data.get("active_trial", False)
+    except Exception:
+        pass
     return False
+
+def is_trial_expired():
+    """
+    Check with the backend API if all trials are expired for this machine.
+    Returns True if no trial is active and all trials are used, False otherwise.
+    """
+    machine_id = get_machine_id()
+    payload = {"trial_status": True, "machine_id": machine_id}
+    try:
+        resp = requests.post(LICENSE_API_URL, json=payload, timeout=5)
+        if resp.status_code == 200:
+            data = resp.json()
+            # Expired if not active and trial_count >= 3
+            return not data.get("active_trial", False) and data.get("trial_count", 0) >= 3
+    except Exception:
+        pass
+    return True
 
 def get_trial_status():
     """
-    Always returns no active trial (trials now managed by backend API).
+    Get the trial status for this machine from the backend API.
+    Returns a dict with trial_count, active_trial, and expiry_date.
     """
+    machine_id = get_machine_id()
+    payload = {"trial_status": True, "machine_id": machine_id}
+    try:
+        resp = requests.post(LICENSE_API_URL, json=payload, timeout=5)
+        if resp.status_code == 200:
+            return resp.json()
+    except Exception:
+        pass
     return {'trial_count': 0, 'active_trial': False, 'expiry_date': None}
 
 def start_new_trial():
     """
-    Not implemented (trials now managed by backend API).
+    Request the backend API to start a new trial for this machine.
+    Returns True if a new trial was started, False otherwise.
     """
+    machine_id = get_machine_id()
+    payload = {"start_trial": True, "machine_id": machine_id}
+    try:
+        resp = requests.post(LICENSE_API_URL, json=payload, timeout=5)
+        if resp.status_code == 200:
+            data = resp.json()
+            return data.get("started", False)
+    except Exception:
+        pass
     return False
 
 # --- Documentation ---

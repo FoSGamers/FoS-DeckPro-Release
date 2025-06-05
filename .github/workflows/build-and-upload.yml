@@ -41,7 +41,7 @@ jobs:
             pyinstaller --onefile --windowed --name FoS-DeckPro --icon=icon.png main.py
           fi
       - name: Upload artifact
-        uses: actions/upload-artifact@v3.1.2
+        uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.artifact }}
           path: dist/${{ matrix.artifact }}

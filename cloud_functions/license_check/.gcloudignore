@@ -15,3 +15,6 @@
 
 node_modules
 #!include:.gitignore
+
+# service_account.json must NOT be ignored for deployment!
+# See README.md for security and deployment rules.

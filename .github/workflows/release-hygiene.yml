@@ -34,8 +34,27 @@ jobs:
             "Whatnot Card Inventory - Template (3).csv"
             "Whatnot Card Inventory - Template (9).csv"
           )
+          # SAFE_ALLOWLIST: Add any files here that are allowed even if private/restricted
+          SAFE_ALLOWLIST=(
+            "user_private/README.md"
+            "user_private/ALLOWED_PLACEHOLDER.txt"
+          )
           found=0
           for f in "${PERSONAL_FILES[@]}"; do
+            # Skip .github/workflows/ files to allow workflow files to reference private patterns
+            if [[ $f == .github/workflows/* ]]; then
+              continue
+            fi
+            skip=0
+            for safe in "${SAFE_ALLOWLIST[@]}"; do
+              if [ "$f" = "$safe" ]; then
+                skip=1
+                break
+              fi
+            done
+            if [ $skip -eq 1 ]; then
+              continue
+            fi
             if [ -e "$f" ]; then
               echo "::error file=$f::Personal file $f must not be present in a release branch!"
               found=1

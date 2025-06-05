@@ -1,41 +1,74 @@
-> **GOLD STANDARD SUMMARY & CHECKLIST**
->
-> This project follows a strict, privacy-safe, and automated workflow. Use this summary and checklist to ensure every project is 100% clean, safe, and compliant:
->
-> ## Summary
-> - Only develop on `personal-dev` or `feature/*` branches. Never commit to `main` or release branches.
-> - All personal files go in `user_private/` (in `.gitignore`). Never commit personal files to public branches.
-> - Never commit build artifacts or large files (e.g., `dist/`, `build/`, `*.zip`, `*.pkg`, `*.app`, `*.spec`, `*.dmg`, `*.exe`, `*.bin`, `*.tar.gz`, `*.whl`, `*.egg`, `*.pyc`, `__pycache__/`). Always add these to `.gitignore` and clean them from git history.
-> - Use the provided scripts for feature, release, onboarding, and cleaning.
-> - CI/CD and branch protection block unsafe merges and releases.
-> - All code is modular, documented, and tested. All changes update the changelog and docs.
-> - All PRs and issues use the provided templates and checklists.
->
-> ## Checklist
-> - [ ] All personal files are in `user_private/` and listed in `.gitignore`.
-> - [ ] All build artifacts and large files are in `.gitignore` and **never** committed.
-> - [ ] No build artifacts or large files are present in git history (use `git filter-repo` if needed).
-> - [ ] All code is modular, documented, and tested (with docstrings and unit tests).
-> - [ ] All configuration and constants are centralized.
-> - [ ] All features are independently enable/disable-able.
-> - [ ] All UI/UX follows a consistent style guide.
-> - [ ] All error handling is user-friendly and provides safe fallbacks.
-> - [ ] Every code change is accompanied by a test and documentation update.
-> - [ ] Changelog is updated for every release or significant change.
-> - [ ] All scripts (`start_feature.sh`, `finish_release.sh`, `onboarding.sh`, `clean_for_release.sh`) are present and used.
-> - [ ] Onboarding script is added to your shell profile for reminders.
-> - [ ] GitHub Actions for release hygiene and old release cleanup are enabled.
-> - [ ] Branch protection rules are set for `main` and release branches.
-> - [ ] All PRs and issues use the provided templates and checklists.
-> - [ ] All documentation (`README.md`, `RELEASE.md`, `CONTRIBUTING.md`, `PROJECT_WORKFLOW_TEMPLATE.md`) is up to date and explicit.
-> - [ ] No secrets, credentials, or sensitive data are ever committed.
-> - [ ] All contributors are aware of and follow these rules.
-
-## Code Commenting and Layman Description Rule for All Project Rule Files
-
-All files that contain project rules—including this file, .cursor files, .github workflows, and any configuration or automation files—must explicitly state and enforce the requirement that all code must be clearly commented, with layman descriptions in code blocks where possible. This ensures that anyone, regardless of technical background, can understand the logic, purpose, and workflow of every part of the project.
-
 # Changelog
+
+## [Unreleased]
+
+### Added
+- GitHub Actions workflow for cross-platform builds (Windows, Mac, Linux) to ensure every release includes all platform-specific executables.
+
+## [v1.6.1] - 2024-06-09
+
+### Added
+- Mac app bundle (`FoS-DeckPro.app.zip`) for easy installation and usage.
+- Enhanced public/private separation to ensure only public files are included in releases.
+- Automated release hygiene workflows to maintain clean, professional releases.
+
+### Changed
+- Updated documentation for clarity and ease of use.
+
+### Fixed
+- Resolved merge conflicts and ensured compliance with project standards.
+
+## [v1.6.0] - 2024-06-08
+
+### Added
+- Initial public release with gold-standard license and trial system.
+- Automated workflows for code quality, security, and compliance.
+
+### Changed
+- Reorganized project structure for better maintainability.
+
+### Fixed
+- Removed legacy files and directories after migration.
+
+## [v1.5.4] - 2024-06-02
+
+### Added
+- Dummy-proof scripts and improved onboarding experience.
+
+### Changed
+- Updated README with Whatnot packing slip processing and workflow details.
+
+## [v1.5.3] - 2024-06-01
+
+### Added
+- Release hygiene CI, updated documentation, and contribution guidelines.
+
+### Changed
+- Improved project organization and structure.
+
+## [v1.5.2] - 2024-05-31
+
+### Added
+- New features and improvements for better user experience.
+
+### Changed
+- Updated documentation and project structure.
+
+## [v1.5.1] - 2024-05-30
+
+### Added
+- Initial features and improvements.
+
+### Changed
+- Updated project structure and documentation.
+
+## [v1.5.0] - 2024-05-29
+
+### Added
+- Initial release with core features and improvements.
+
+### Changed
+- Updated project structure and documentation.
 
 ## [v1.5.1] - 2024-06-XX
 

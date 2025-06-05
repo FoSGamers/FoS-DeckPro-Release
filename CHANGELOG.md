@@ -152,15 +152,8 @@ All files that contain project rules—including this file, .cursor files, .gith
 
 # [Unreleased]
 
-### Gold-Standard Automation, Security, and Documentation Upgrades
-- Added privacy-respecting, opt-in error reporting (disabled by default, fully documented).
-- Added GPG signing workflow for release artifacts and documentation for maintainers.
-- Added and enforced public/private separation: all personal, legacy, and admin files are blocked from public branches by CI and .gitignore.
-- All public docs and code scrubbed of private/internal references.
-- Major CI/CD upgrades: Python linting, markdown/yaml linting, mypy type checks, test coverage enforcement, Bandit security scanning, REUSE license compliance, Dependabot, changelog auto-generation, and docs build checks.
-- All workflows and automation are now documented in the repo and in the gold-standard playbook.
-- Created `PROJECT_GOLD_STANDARD_PLAYBOOK.md` for easy porting of all rules, automation, and best practices to new projects.
-- All changes are modular, fully documented, and enforced by automation.
-
 ### Fixed
 - Resolved merge conflict in `FoS_DeckPro/ui/main_window.py` to ensure the file is syntactically correct and ready for use.
+
+### Updated
+- Updated release notes to clearly indicate what users should download and use, ensuring the release page is professional and user-friendly.

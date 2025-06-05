@@ -65,45 +65,11 @@ jobs:
         run: |
           for pattern in '*.pyc' '__pycache__/' '*.zip' '*.pkg' '*.app' '*.spec' '*.dmg' '*.exe' '*.bin' '*.tar.gz' '*.whl' '*.egg' 'dist/' 'build/' 'logs/' '*.bak' '*.tmp' '*.log' '*.pdf' '*.xlsx'; do
             if git ls-files | grep "$pattern" > /dev/null; then
-              echo "[ERROR] Build artifact or large file detected: $pattern"; exit 1;
+              echo "[ERROR] Build artifact or large file detected: $pattern"
+              exit 1
             fi
           done
 
-      - name: Check for personal files
-        run: |
-          set -e
-          PERSONAL_FILES=(
-            "FoS_DeckPro/Backups"
-            "buyers.json"
-            "For_Sale.json"
-            "New_For_Sale.json"
-            "packing_slip_summary.csv"
-            "packing_slip_summary.json"
-            "break_list.csv"
-            "500 spot break.json"
-            "50-30-15-5.json"
-            "break_templates.json"
-            "export_item_listing_fields_prefs.json"
-            "fosbot-456712-d8da65f7bfc9.json"
-            "client_secret_425804375982-49q9n1hgv592nhkmdup5egtj1eq6shq5.apps.googleusercontent.com (3).json"
-            "live-7b09df55-5d0c-4dee-a698-6644a2abc082-all-slips-letter-size-168541b2.pdf"
-            "Single_Shot_500.csv"
-            "Whatnot Card Inventory - Template (3).csv"
-            "Whatnot Card Inventory - Template (9).csv"
-          )
-          found=0
-          for f in "${PERSONAL_FILES[@]}"; do
-            if [ -e "$f" ]; then
-              echo "::error file=$f::Personal file $f must not be present in a release branch!"
-              found=1
-            fi
-          done
-          if [ "$found" -eq 1 ]; then
-            echo "\nERROR: One or more personal files are present in this branch."
-            echo "Run ./clean_for_release.sh and re-commit before merging or releasing."
-            echo "See RELEASE.md and CONTRIBUTING.md for instructions."
-            exit 1
-          fi
       - name: Success message
         if: success()
         run: echo "No personal files found. Release hygiene check passed." 

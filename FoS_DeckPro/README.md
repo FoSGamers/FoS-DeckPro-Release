@@ -1,18 +1,18 @@
-# ManaBox Enhancer
+# 🚀 FoS-DeckPro
 
-**Release: v1.5.1 (2024-06-XX) — Working, Stable, and Fully Modular**
+**Release: v1.6.0 (2024-06-05) — Working, Stable, and Fully Modular**
 
-> This release is a fully working, stable, and modular version of ManaBox Enhancer. All core workflows (break builder, Whatnot packing slip processing, inventory management, buyers database, and analytics) are robust, tested, and documented. All break templates and configuration files are present and correctly referenced. Legacy and backup files are isolated in the `legacy/` folder. See below for usage, features, and details.
+> This release is a fully working, stable, and modular version of FoS-DeckPro. All core workflows (break builder, Whatnot packing slip processing, inventory management, buyers database, and analytics) are robust, tested, and documented. All break templates and configuration files are present and correctly referenced. Legacy and backup files are isolated in the `legacy/` folder. See below for usage, features, and details.
 
 ## Quick Start
 
 1. **Install requirements:**
    ```sh
-   pip install -r ManaBox_Enhancer/requirements.txt
+   pip install -r FoS_DeckPro/requirements.txt
    ```
 2. **Launch the app:**
    ```sh
-   python3 ManaBox_Enhancer/main.py
+   python3 FoS_DeckPro/main.py
    ```
 3. **Access the Break/Autobox Builder:**
    - In the running app, go to the **Tools** menu.
@@ -55,7 +55,7 @@
 
 ## Requirements
 
-- All dependencies are listed in `ManaBox_Enhancer/requirements.txt`.
+- All dependencies are listed in `FoS_DeckPro/requirements.txt`.
 - Key packages:
   - `PySide6` (GUI)
   - `pandas`, `requests`, `tqdm`, `pillow`, `pdfplumber`
@@ -65,16 +65,16 @@
 
 - To run tests:
   ```sh
-  PYTHONPATH=$PYTHONPATH:$(pwd) pytest ManaBox_Enhancer/tests --maxfail=3 --disable-warnings -v
+  PYTHONPATH=$PYTHONPATH:$(pwd) pytest FoS_DeckPro/tests --maxfail=3 --disable-warnings -v
   ```
 - For GUI tests in headless environments, use Xvfb:
   ```sh
-  xvfb-run -a pytest ManaBox_Enhancer/tests --maxfail=3 --disable-warnings -v
+  xvfb-run -a pytest FoS_DeckPro/tests --maxfail=3 --disable-warnings -v
   ```
 
 ## Versioning & GitHub Best Practices
 
-- Each stable, working version is tagged (e.g., `v1.5.1`) and has a dedicated branch (e.g., `v1.5.1-working`).
+- Each stable, working version is tagged (e.g., `v1.6.0`) and has a dedicated branch (e.g., `v1.6.0-working`).
 - All changes are documented in the `CHANGELOG.md` and committed with clear messages.
 - Releases are created on GitHub for easy download, rollback, and reproducibility.
 - Always use the provided `requirements.txt` and follow the Quick Start for setup on new machines.
@@ -106,7 +106,7 @@
 
 ## Project Overview
 
-ManaBox Enhancer is a modular, extensible tool for managing and enhancing card inventory workflows. All modules, features, and changes are documented below.
+FoS-DeckPro is a modular, extensible tool for managing and enhancing card inventory workflows. All modules, features, and changes are documented below.
 
 ---
 
@@ -128,7 +128,7 @@ See `CHANGELOG.md` for a full history of all changes and releases.
 
 ## Project Overview
 
-ManaBox Enhancer is a modular, extensible tool for managing and enhancing card inventory workflows. All modules, features, and changes are documented below.
+FoS-DeckPro is a modular, extensible tool for managing and enhancing card inventory workflows. All modules, features, and changes are documented below.
 
 ---
 
@@ -159,11 +159,11 @@ ManaBox Enhancer is a modular, extensible tool for managing and enhancing card i
 
 ```sh
 # Always run with the project root on PYTHONPATH:
-PYTHONPATH=$PYTHONPATH:$(pwd) pytest ManaBox_Enhancer/tests --maxfail=3 --disable-warnings -v
+PYTHONPATH=$PYTHONPATH:$(pwd) pytest FoS_DeckPro/tests --maxfail=3 --disable-warnings -v
 ```
 
 - For GUI tests, ensure you have a display environment or use Xvfb:
 
 ```sh
-xvfb-run -a pytest ManaBox_Enhancer/tests --maxfail=3 --disable-warnings -v
+xvfb-run -a pytest FoS_DeckPro/tests --maxfail=3 --disable-warnings -v
 ```

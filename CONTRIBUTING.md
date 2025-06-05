@@ -1,134 +1,61 @@
-> **GOLD STANDARD SUMMARY & CHECKLIST**
->
-> This project follows a strict, privacy-safe, and automated workflow. Use this summary and checklist to ensure every project is 100% clean, safe, and compliant:
->
-> ## Summary
-> - Only develop on `personal-dev` or `feature/*` branches. Never commit to `main` or release branches.
-> - All personal files go in `user_private/` (in `.gitignore`). Never commit personal files to public branches.
-> - Never commit build artifacts or large files (e.g., `dist/`, `build/`, `*.zip`, `*.pkg`, `*.app`, `*.spec`, `*.dmg`, `*.exe`, `*.bin`, `*.tar.gz`, `*.whl`, `*.egg`, `*.pyc`, `__pycache__/`). Always add these to `.gitignore` and clean them from git history.
-> - Use the provided scripts for feature, release, onboarding, and cleaning.
-> - CI/CD and branch protection block unsafe merges and releases.
-> - All code is modular, documented, and tested. All code must have clear comments explaining what each part does, including layman descriptions in code blocks where possible, so anyone (even non-developers) can understand the logic and purpose.
-> - All changes update the changelog and docs.
-> - All PRs and issues use the provided templates and checklists.
->
-> ## Checklist
-> - [ ] All personal files are in `user_private/` and listed in `.gitignore`.
-> - [ ] All build artifacts and large files are in `.gitignore` and **never** committed.
-> - [ ] No build artifacts or large files are present in git history (use `git filter-repo` if needed).
-> - [ ] All code is modular, documented, and tested (with docstrings and unit tests).
-> - [ ] All code is clearly commented, with layman descriptions in code blocks where possible, so anyone can understand what it does and why.
-> - [ ] All configuration and constants are centralized.
-> - [ ] All features are independently enable/disable-able.
-> - [ ] All UI/UX follows a consistent style guide.
-> - [ ] All error handling is user-friendly and provides safe fallbacks.
-> - [ ] Every code change is accompanied by a test and documentation update.
-> - [ ] Changelog is updated for every release or significant change.
-> - [ ] All scripts (`start_feature.sh`, `finish_release.sh`, `onboarding.sh`, `clean_for_release.sh`) are present and used.
-> - [ ] Onboarding script is added to your shell profile for reminders.
-> - [ ] GitHub Actions for release hygiene and old release cleanup are enabled.
-> - [ ] Branch protection rules are set for `main` and release branches.
-> - [ ] All PRs and issues use the provided templates and checklists.
-> - [ ] All documentation (`README.md`, `RELEASE.md`, `CONTRIBUTING.md`, `PROJECT_WORKFLOW_TEMPLATE.md`) is up to date and explicit.
-> - [ ] No secrets, credentials, or sensitive data are ever committed.
-> - [ ] All contributors are aware of and follow these rules.
+# CONTRIBUTING.md
 
-## Code Commenting and Layman Description Rule for All Project Rule Files
+## 📢 Release Notes Policy
 
-All files that contain project rules—including this file, .cursor files, .github workflows, and any configuration or automation files—must explicitly state and enforce the requirement that all code must be clearly commented, with layman descriptions in code blocks where possible. This ensures that anyone, regardless of technical background, can understand the logic, purpose, and workflow of every part of the project.
+The [GitHub Releases page](https://github.com/FoSGamers/FoS-DeckPro/releases) is the single source of truth for all features, changes, and upgrade instructions. Every public release must have clear, user-focused, and up-to-date release notes. All contributors are responsible for ensuring the release notes are accurate and complete for every release.
 
-# Contributing to FoS-DeckPro
+---
 
-> **IMPORTANT:**
-> - A GitHub Action enforces release hygiene: any personal files in a PR or push to a release branch will cause the build to fail.
-> - You MUST read and follow this file and [RELEASE.md](RELEASE.md) before merging or releasing.
+## 🤝 How to Contribute
 
-Thank you for your interest in contributing! We welcome all contributions, from code to documentation, bug reports, and feature requests.
+- Fork the repository and clone it locally.
+- Create a new branch for your change (feature, fix, or documentation).
+- Make your changes (code or docs).
+- Write or update tests as needed.
+- Ensure all tests pass (`pytest FoS_DeckPro/tests`).
+- Commit with a clear message and push to your fork.
+- Open a pull request (PR) to the main repo.
 
-## How to Contribute
+---
 
-### Reporting Bugs
-- Open an issue on GitHub with a clear title and description.
-- Include steps to reproduce, expected behavior, and screenshots/logs if possible.
+## 🧑‍💻 Code Style & Best Practices
 
-### Requesting Features
-- Open a feature request issue on GitHub.
-- Describe the use case and why it would be helpful.
-
-### Submitting Code or Documentation
-1. Fork the repository and clone it locally.
-2. Create a new branch for your change.
-3. Make your changes (code or docs).
-4. Write or update tests as needed.
-5. Ensure all tests pass (`pytest FoS_DeckPro/tests`).
-6. Commit with a clear message and push to your fork.
-7. Open a pull request (PR) to the main repo.
-
-### Code Style
 - Follow PEP8 for Python code.
 - Use clear, descriptive variable and function names.
 - Add docstrings to all public classes and functions.
 - Keep code modular and avoid cross-module manipulation.
-
-### Pull Request Process
-- All PRs are reviewed by maintainers.
-- Address any requested changes.
-- PRs must pass all tests and CI checks before merging.
-
-### Marking Beginner-Friendly Issues
-- Use the label `good first issue` for tasks suitable for new contributors.
-- Add clear instructions and context to these issues.
-
-### Getting Help
-- For questions, open a GitHub Discussion or join our community chat.
-- See [Code of Conduct](CODE_OF_CONDUCT.md) for community guidelines.
+- All configuration and constants must be centralized.
+- All features must be independently enable/disable-able.
+- All UI/UX must follow a consistent style guide.
+- All error handling must be user-friendly and provide safe fallbacks.
 
 ---
 
-We appreciate your help in making FoS-DeckPro better for everyone!
+## 🔀 Branch Workflow
 
-# Contributing Guide
-
-## Branch Workflow
 - **personal-dev**: Your private development branch. All personal files (backups, inventory, templates, sensitive configs) live here in `user_private/`.
-- **v1.5.0-working** (or `main`): Public release branch. No personal files—only code, resources, and docs.
+- **main**: Public release branch. No personal files—only code, resources, and docs.
 
-## Build Artifact Hygiene
-- **Never commit build artifacts or large files (e.g., dist/, build/, *.zip, *.pkg, *.app, *.spec, *.dmg, *.exe, *.bin, *.tar.gz, *.whl, *.egg, *.pyc, __pycache__/).**
+---
+
+## 🧹 Build Artifact Hygiene
+- **Never commit build artifacts or large files (e.g., `dist/`, `build/`, `*.zip`, `*.pkg`, `*.app`, `*.spec`, `*.dmg`, `*.exe`, `*.bin`, `*.tar.gz`, `*.whl`, `*.egg`, `*.pyc`, `__pycache__/`).**
 - Always add these to `.gitignore`.
 - Clean them from git tracking before pushing or releasing.
 - Only source code, scripts, and documentation should be versioned.
 
-## Keeping Personal Files Private
-- All personal files must be in `user_private/`, which is in `.gitignore`.
-- Never commit or push personal files to the release branch.
-- **Never commit build artifacts or large files. See Build Artifact Hygiene above.**
-- Use the `clean_for_release.sh` script before every release to ensure no personal files are present.
+---
 
-## Merging Code Changes Safely
-1. Commit your work on `personal-dev`.
-2. Switch to `v1.5.0-working`.
-3. Merge or cherry-pick only code changes (not personal files).
-4. Run `./clean_for_release.sh` to verify the branch is clean.
-5. Build and push the release.
+## ✅ Pull Request Process
 
-## Release Checklist
-- [ ] Run all tests and verify the app works without personal files.
-- [ ] Run `./clean_for_release.sh`.
-- [ ] Check that only public files are present.
-- [ ] **Check that no build artifacts or large files are present.**
-- [ ] Build and package the app for release.
+- All PRs are reviewed by maintainers.
+- Address any requested changes.
+- PRs must pass all tests and CI checks before merging.
+- Every PR must update the release notes if it changes user-facing features or behavior.
 
-## Questions?
-- Contact the maintainer for help with branch management or the release process.
+---
 
-## Automated Cleaning Script
-- The `clean_for_release.sh` script will move all personal files to `user_private/` and ensure only public files are present in the release branch.
-- Run the script with:
-  ```sh
-  ./clean_for_release.sh
-  ```
+## 📝 Final Note
+- Every public release must have clear, user-focused, and up-to-date release notes on the [GitHub Releases page](https://github.com/FoSGamers/FoS-DeckPro/releases). This is the single source of truth for users and contributors.
 
-## Checklist for Every Release
-- [ ] All personal files are in `user_private/`.
-- [ ] `./clean_for_release.sh`
+<!-- Legacy and detailed process notes have been moved to LEGACY_CONTRIBUTING_ARCHIVE.md for private reference. -->

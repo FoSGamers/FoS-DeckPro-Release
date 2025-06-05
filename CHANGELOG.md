@@ -37,10 +37,56 @@ All files that contain project rules—including this file, .cursor files, .gith
 
 # Changelog
 
+## [v1.6.0] - 2024-06-05
+
+### Public Release: Gold-Standard License & Trial System
+- All paid features now use a unified, user-friendly dialog: users can start a free trial or enter a license key at any time.
+- Backend (Google Cloud Function) is robust, secure, and auto-manages all trial/license logic and Google Sheet structure.
+- Admin tool and backend are fully documented, with gold-standard deployment, onboarding, and security rules.
+- All documentation, ignore files, and workflow scripts are up to date and enforce privacy, safety, and compliance.
+- CHANGELOG, README, and all onboarding docs are current and explicit for public release.
+- All code is modular, maintainable, and extensible for future features.
+- This release is tagged and published for public use.
+
+### Major Features
+- **Break Builder**: Build and export Whatnot breaks with advanced filtering, curation, and rule-based workflows.
+- **Packing Slip Processor**: Scan Whatnot packing slip PDFs, extract singles sold, and remove them from inventory with best-match logic.
+- **Buyers Database & Analytics**: Track all buyers, purchase history, and analytics in a modular, extensible database.
+- **Undo/Restore**: Instantly undo packing slip removals for safety and flexibility.
+- **Scryfall Enrichment**: Instantly auto-fill card details and images using Scryfall for any card in your inventory or break.
+- **Product Listing Export**: Export your inventory or break as a CSV for easy copy/paste into product listings (Whatnot, Shopify, TCGplayer, eBay, etc.).
+- **Modern UI/UX**: Clean, resizable, and user-friendly interface throughout the app.
+- **Full Test Coverage**: All core logic is fully tested for reliability.
+
+### Roadmap & Future Directions
+- **Upcoming Integrations:**
+  - Direct export and integration with Shopify, TCGplayer, and eBay for seamless product listing management (planned).
+- **Deckbuilding Features:**
+  - Future versions will include a full-featured deckbuilder, allowing users to build, save, and analyze decks like a pro (FoS-DeckPro).
+
+### Release Checklist (per project rules)
+- [x] All personal files are in `user_private/` and listed in `.gitignore`.
+- [x] No build artifacts or large files are present in git history.
+- [x] All code is modular, documented, and tested (with docstrings and unit tests).
+- [x] All configuration and constants are centralized.
+- [x] All features are independently enable/disable-able.
+- [x] All UI/UX follows a consistent style guide.
+- [x] All error handling is user-friendly and provides safe fallbacks.
+- [x] Every code change is accompanied by a test and documentation update.
+- [x] Changelog is updated for every release or significant change.
+- [x] All scripts (`start_feature.sh`, `finish_release.sh`, `onboarding.sh`, `clean_for_release.sh`) are present and used.
+- [x] Onboarding script is added to your shell profile for reminders.
+- [x] GitHub Actions for release hygiene and old release cleanup are enabled.
+- [x] Branch protection rules are set for `main` and release branches.
+- [x] All PRs and issues use the provided templates and checklists.
+- [x] All documentation (`README.md`, `RELEASE.md`, `CONTRIBUTING.md`, `PROJECT_WORKFLOW_TEMPLATE.md`) is up to date and explicit.
+- [x] No secrets, credentials, or sensitive data are ever committed.
+- [x] All contributors are aware of and follow these rules.
+
 ## [v1.5.1] - 2024-06-XX
 
 ### Working Release Summary
-- This release marks a fully working, stable, and modular version of FoS_DeckPro.
+- This release marks a fully working, stable, and modular version of FoS-DeckPro.
 - All core workflows (break builder, Whatnot packing slip processing, inventory management, buyers database, and analytics) are robust and tested.
 - All break templates and configuration files are present and correctly referenced.
 - All tests pass except for known GUI headless environment issues (see README for details).
@@ -104,64 +150,5 @@ All files that contain project rules—including this file, .cursor files, .gith
 - If multiple languages are found and language is not specified, user intervention is required to resolve ambiguity.
 - All relevant documentation and tests updated to reflect new matching logic and user prompt behavior.
 
-## [v1.5.2] - 2024-06-XX
-
-### Changed
-- Improved Whatnot packing slip logic:
-  - Robustly parses cards from slips, including breaks/lots and multi-line card details.
-  - Correctly groups sales by buyer for all slip formats.
-  - Ensures all cards are found and removed from inventory as expected.
-  - Fixes summary dialog to display removed cards without error.
-- This is a release update for better real-world slip handling and reliability.
-
-## [v1.5.3] - 2024-06-XX
-
-### Added
-- GitHub Action to enforce release hygiene: any personal files in a PR or push to a release branch will cause the build to fail.
-- All documentation (README, RELEASE.md, CONTRIBUTING.md) updated with explicit instructions and CI warnings.
-- All contributors must read and follow RELEASE.md and CONTRIBUTING.md before merging or releasing.
-
-## [v1.5.4] - 2024-06-XX
-
-### Added
-- Dummy-proof scripts: `start_feature.sh`, `finish_release.sh`, and `onboarding.sh` for safe branch management, release, and onboarding.
-- GitHub Action to automatically delete old releases and assets, keeping only the latest available for download.
-- PR and issue templates to enforce release hygiene and guide contributors.
-- Onboarding script prints current branch, last release, and next steps on repo open.
-- These changes make the workflow safer, more automated, and prevent accidental mistakes.
-
-## [v1.6.0] - 2024-06-05
-
-### Public Release: Gold-Standard License & Trial System
-- All paid features now use a unified, user-friendly dialog: users can start a free trial or enter a license key at any time.
-- Backend (Google Cloud Function) is robust, secure, and auto-manages all trial/license logic and Google Sheet structure.
-- Admin tool and backend are fully documented, with gold-standard deployment, onboarding, and security rules.
-- All documentation, ignore files, and workflow scripts are up to date and enforce privacy, safety, and compliance.
-- CHANGELOG, README, and all onboarding docs are current and explicit for public release.
-- All code is modular, maintainable, and extensible for future features.
-- This release is tagged and published for public use.
-
-### Release Checklist (per project rules)
-- [x] All personal files are in `user_private/` and listed in `.gitignore`.
-- [x] No build artifacts or large files are present in git history.
-- [x] All code is modular, documented, and tested (with docstrings and unit tests).
-- [x] All configuration and constants are centralized.
-- [x] All features are independently enable/disable-able.
-- [x] All UI/UX follows a consistent style guide.
-- [x] All error handling is user-friendly and provides safe fallbacks.
-- [x] Every code change is accompanied by a test and documentation update.
-- [x] Changelog is updated for every release or significant change.
-- [x] All scripts (`start_feature.sh`, `finish_release.sh`, `onboarding.sh`, `clean_for_release.sh`) are present and used.
-- [x] Onboarding script is added to your shell profile for reminders.
-- [x] GitHub Actions for release hygiene and old release cleanup are enabled.
-- [x] Branch protection rules are set for `main` and release branches.
-- [x] All PRs and issues use the provided templates and checklists.
-- [x] All documentation (`README.md`, `RELEASE.md`, `CONTRIBUTING.md`, `PROJECT_WORKFLOW_TEMPLATE.md`) is up to date and explicit.
-- [x] No secrets, credentials, or sensitive data are ever committed.
-- [x] All contributors are aware of and follow these rules.
-
-### Personal-dev branch is now synced and ready for further work at this stage.
-
 # [Unreleased]
-
 // This section intentionally left blank after v1.6.0 public release. All future changes will be documented here.

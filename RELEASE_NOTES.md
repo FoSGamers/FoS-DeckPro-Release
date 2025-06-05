@@ -1,73 +1,105 @@
-# FoS-DeckPro Release Notes
+# 🚀 FoS-DeckPro v1.6.0
 
-## v1.5.1 (2024-06-XX)
+> **Release Date:** 2024-06-05  
+> **Maintainer:** [@FoSGamers](https://github.com/FoSGamers)
 
-### Highlights
-- Fully working, stable, and modular release.
-- All core workflows (break builder, Whatnot packing slip processing, inventory management, buyers database, analytics) are robust and tested.
-- All break templates and configuration files are present and referenced.
-- Legacy and backup files are isolated in the `legacy/` folder.
-- Documentation, changelog, and contributor guides are up to date.
+---
 
-### New Features
-- End-to-end Whatnot packing slip PDF processing and inventory removal.
-- Modular break builder with rule-based and curated workflows.
-- Buyers database and analytics.
-- Undo/restore for packing slip removals.
-- Full test coverage for all core logic.
+## ✨ What's New in v1.6.0
 
-### Improvements
-- Modern, modular UI/UX throughout the app.
-- Robust error handling and user feedback.
-- All configuration and templates centralized.
+- **Unified License & Trial System**
+  All paid features now use a single, user-friendly dialog: start a free trial or enter a license key at any time.
+  Secure backend (Google Cloud Function) manages all license/trial logic—no backend credentials ever shipped to users.
 
-### Bug Fixes
-- Fixed break builder indentation and UI bugs.
-- Improved test reliability and CI integration.
+- **Modern, Modular Codebase**
+  Every feature is independently enable/disable-able.
+  Centralized configuration and robust error handling throughout.
+  All code is modular, maintainable, and extensible for future features.
 
-### Known Issues
-- The only known issue in this release is that the **Customize Columns** feature does not work. This is a trivial UI bug and does not affect any core functionality or data integrity.
+  - Every feature is independently enable/disable-able.
+  - Centralized configuration and robust error handling throughout.
+  - All code is modular, maintainable, and extensible for future features.
 
-### Upgrade Instructions
-- Install requirements from `FoS_DeckPro/requirements.txt`.
-- Run the app from `FoS_DeckPro/main.py`.
-- Move any custom break templates to the project root if needed.
+- **Documentation & Workflow**
+  - All documentation, ignore files, and workflow scripts are up to date.
+  - CHANGELOG, README, and onboarding docs are current and explicit for public release.
 
-## Monetization & Add-ons
+- **Admin Tool (Private)**
+  - Powerful admin dashboard for license/trial management (never included in public releases).
+  - Full documentation and onboarding for maintainers.
 
-- The base app (inventory management and Scryfall enrichment) is free and open source.
-- All other features (break builder, packing slip tools, analytics, etc.) are planned as paid add-ons/plugins in future versions. The codebase is structured to support this model without risk to the core app.
+---
 
-## Release Status
+## 🛠️ Major Features
 
-- This version is a stable, working release. All core features work as intended except for the minor known issue above.
+- **Break Builder**: Build and export Whatnot breaks with advanced filtering, curation, and rule-based workflows.
+- **Packing Slip Processor**: Scan Whatnot packing slip PDFs, extract singles sold, and remove them from inventory with best-match logic.
+- **Buyers Database & Analytics**: Track all buyers, purchase history, and analytics in a modular, extensible database.
+- **Undo/Restore**: Instantly undo packing slip removals for safety and flexibility.
+- **Scryfall Enrichment**: Instantly auto-fill card details and images using Scryfall for any card in your inventory or break.
+- **Product Listing Export**: Export your inventory or break as a CSV for easy copy/paste into product listings (Whatnot, Shopify, TCGplayer, eBay, etc.).
+- **Modern UI/UX**: Clean, resizable, and user-friendly interface throughout the app.
+- **Full Test Coverage**: All core logic is fully tested for reliability.
 
-See [CHANGELOG.md](CHANGELOG.md) for full details.
+---
 
-## Free vs. Paid Features
+## 🚦 How to Get Started
 
-### Free Features
-- Inventory management (import/export from ManaBox or CSV, local database, view/edit/delete/filter/search)
+1. **Install requirements:**
+   ```sh
+   pip install -r FoS_DeckPro/requirements.txt
+   ```
+2. **Launch the app:**
+   ```sh
+   python3 FoS_DeckPro/main.py
+   ```
+3. **Access paid features:**
+   - When prompted, start a free trial or enter a license key.
 
-### Paid Features (Require License Key)
+---
+
+## 💡 Free vs. Paid Features
+
+**Free Features:**
+- Inventory management (import/export, local database, view/edit/delete/filter/search)
+
+**Paid Features (Require License Key):**
 - All Whatnot features (break builder, export listing, packing slip tools, analytics)
 - Add card via Scryfall
 - Scryfall enrichment (auto-fill card details/images)
 
-## License Key System
+---
+
+## 🔑 License Key System
 - Paid features are locked by default.
-- On first use of a paid feature, you will be prompted to enter a license key.
-- The app checks your key online (Google Sheets) and unlocks only the features your key is valid for.
+- On first use of a paid feature, you will be prompted to enter a license key or start a free trial.
+- The app checks your key online and unlocks only the features your key is valid for.
 - License key is stored locally for future use.
-
-### Subscription & Lifetime Licenses
 - Each paid feature can be unlocked for a limited time (subscription) or permanently (lifetime).
-- The license key generator allows you to set per-feature expiration and license type.
-- When a feature's subscription expires, the app will prompt you to renew and will not unlock the feature until a new key is entered.
-- Lifetime features never expire.
-- All license key and expiration management is handled automatically; you never need to edit the Google Sheet manually.
-- The app and key generator will always update the sheet with any new features or columns as needed.
+- All license key and expiration management is handled automatically.
 
-**To request a license key for paid features, contact: Thereal.FosGameres@gmail.com**
+**To request a license key for paid features, contact:** Thereal.FosGameres@gmail.com
 
-This is the recommended model for future releases. 
+---
+
+## 🛣️ Roadmap & Future Directions
+- **Upcoming Integrations:**
+  - Direct export and integration with Shopify, TCGplayer, and eBay for seamless product listing management (planned).
+- **Deckbuilding Features:**
+  - Future versions will include a full-featured deckbuilder, allowing users to build, save, and analyze decks like a pro (FoS-DeckPro).
+
+---
+
+## 📝 Full Changelog
+See [CHANGELOG.md](https://github.com/FoSGamers/FoS-DeckPro/blob/main/CHANGELOG.md) for detailed history.
+
+---
+
+## 💬 Support & Feedback
+- [Open an Issue](https://github.com/FoSGamers/FoS-DeckPro/issues)
+- [Read the Docs](https://github.com/FoSGamers/FoS-DeckPro#readme)
+- [Contact Maintainer](mailto:Thereal.FosGameres@gmail.com)
+
+---
+
+**Thank you for using FoS-DeckPro!** 

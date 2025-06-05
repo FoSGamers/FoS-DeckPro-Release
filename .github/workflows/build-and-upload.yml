@@ -35,16 +35,21 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libgl1 libegl1 xvfb
-      - name: Build executable
+      - name: Build executable (macOS)
+        if: matrix.os == 'macos-latest'
         run: |
-          if [ "${{ matrix.os }}" == "macos-latest" ]; then
-            pyinstaller --onefile --windowed --name FoS-DeckPro --icon=icon.icns main.py
-            cd dist && zip -r FoS-DeckPro.app.zip FoS-DeckPro.app && cd ..
-          elif [ "${{ matrix.os }}" == "windows-latest" ]; then
-            pyinstaller --onefile --windowed --name FoS-DeckPro --icon=icon.ico main.py
-          elif [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
-            pyinstaller --onefile --windowed --name FoS-DeckPro --icon=icon.png main.py
-          fi
+          pyinstaller --onefile --windowed --name FoS-DeckPro --icon=icon.icns main.py
+          cd dist && zip -r FoS-DeckPro.app.zip FoS-DeckPro.app && cd ..
+
+      - name: Build executable (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          pyinstaller --onefile --windowed --name FoS-DeckPro --icon=icon.ico main.py
+
+      - name: Build executable (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          pyinstaller --onefile --windowed --name FoS-DeckPro --icon=icon.png main.py
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:

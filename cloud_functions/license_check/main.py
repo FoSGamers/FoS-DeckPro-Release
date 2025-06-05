@@ -15,12 +15,44 @@ WORKSHEET_NAME = os.environ.get('WORKSHEET_NAME', 'Sheet1')
 def hash_key(key):
     return hashlib.sha256(key.strip().upper().encode('utf-8')).hexdigest()
 
+def ensure_trial_columns(worksheet):
+    """
+    Ensure the Google Sheet has all required columns for trial logic.
+    If any required columns are missing from the header, they are added in place.
+    This function guarantees that trial logic will always work, even if the sheet is new or missing columns.
+    """
+    required_cols = [
+        'machine_id',
+        'trial_start_1', 'trial_expiry_1',
+        'trial_start_2', 'trial_expiry_2',
+        'trial_start_3', 'trial_expiry_3',
+    ]
+    data = worksheet.get_all_values()
+    if not data:
+        worksheet.append_row(required_cols)
+        return required_cols
+    header = data[0]
+    updated = False
+    for col in required_cols:
+        if col not in header:
+            header.append(col)
+            updated = True
+    if updated:
+        worksheet.delete_row(1)
+        worksheet.insert_row(header, 1)
+    return header
+
 def get_gsheet():
+    """
+    Get the worksheet object and ensure all required trial columns are present.
+    This function is called before any trial or license logic to guarantee sheet structure.
+    """
     scopes = ['https://www.googleapis.com/auth/spreadsheets']
     creds = Credentials.from_service_account_file(CREDENTIALS_FILE, scopes=scopes)
     gc = gspread.authorize(creds)
     sh = gc.open_by_key(SHEET_ID)
     worksheet = sh.worksheet(WORKSHEET_NAME)
+    ensure_trial_columns(worksheet)
     return worksheet
 
 def check_license(key, feature_name=None, machine_id=None):

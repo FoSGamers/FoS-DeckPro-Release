@@ -1351,19 +1351,28 @@ class MainWindow(QMainWindow):
         pass
 
     def _on_paid_feature_triggered(self, feature_func, feature_name=None):
-        # Call this wrapper for any paid feature
+        """
+        Wrapper for all paid feature actions. Prompts the user to start a free trial or enter a license key if needed.
+        Uses the new prompt_for_trial_or_license flow for maximum clarity and user-friendliness.
+        """
         from utils import license as license_utils
-        if not license_utils.is_license_valid(feature_name=feature_name):
-            # Only prompt for a key if no key is stored at all
-            if not license_utils.is_license_valid():
-                if not license_utils.prompt_for_license_key(self, feature_name=feature_name):
-                    return
-                if not license_utils.is_license_valid(feature_name=feature_name):
-                    from PySide6.QtWidgets import QMessageBox
-                    QMessageBox.warning(self, "Feature Locked", f"You do not have access to this feature.\n\nPlease contact Thereal.FosGameres@gmail.com to purchase or upgrade your license.")
-                    return
-            else:
-                from PySide6.QtWidgets import QMessageBox
-                QMessageBox.warning(self, "Feature Locked", f"You do not have access to this feature.\n\nPlease contact Thereal.FosGameres@gmail.com to purchase or upgrade your license.")
-                return
-        feature_func()
+        # If a valid license is present for this feature, allow access
+        if license_utils.is_license_valid(feature_name=feature_name):
+            feature_func()
+            return
+        # Otherwise, prompt for trial or license
+        if license_utils.prompt_for_trial_or_license(self, feature_name=feature_name):
+            # If unlocked, allow the feature
+            feature_func()
+            return
+        # If still not unlocked, show a warning
+        from PySide6.QtWidgets import QMessageBox
+        QMessageBox.warning(self, "Feature Locked", f"You do not have access to this feature.\n\nPlease contact Thereal.FosGameres@gmail.com to purchase or upgrade your license.")
+
+    # Layman description:
+    # - This function now checks for a valid license key first.
+    # - If no license, it checks if a 3-day free trial is active (server-checked).
+    # - If the trial is expired, all paid features are locked until a license key is entered.
+    # - If not expired, it tries to start a new trial (up to 3 per user/machine).
+    # - If a trial is active, all features are unlocked for 3 days.
+    # - After 3 trials, a license key is required to use paid features.

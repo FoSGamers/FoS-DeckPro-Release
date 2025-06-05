@@ -2,7 +2,7 @@ import os
 import json
 import requests
 import hashlib
-from PySide6.QtWidgets import QInputDialog, QMessageBox, QFileDialog
+from PySide6.QtWidgets import QInputDialog, QMessageBox, QFileDialog, QDialog, QPushButton, QVBoxLayout, QLabel
 import datetime
 import uuid
 import glob
@@ -95,6 +95,7 @@ def store_license_key(key):
 def prompt_for_license_key(parent=None, feature_name=None):
     """
     Prompt the user for a license key and validate it using the API. Store if valid.
+    Returns True if the license is valid and stored, False otherwise.
     """
     msg = ("This feature requires a license.\n"
            "Please enter your license key to unlock paid features.\n\n"
@@ -111,6 +112,55 @@ def prompt_for_license_key(parent=None, feature_name=None):
             return True
         else:
             QMessageBox.warning(parent, "Invalid Key", "The license key you entered is not valid or does not include this feature.\n\nTo request access or support, contact: Thereal.FosGameres@gmail.com")
+    return False
+
+def prompt_for_trial_or_license(parent=None, feature_name=None):
+    """
+    Prompt the user to either start a free trial or enter a license key for a paid feature.
+    If the user chooses trial, attempt to start a new trial (if available).
+    If the user chooses license, call prompt_for_license_key.
+    Returns True if the feature is unlocked, False otherwise.
+    """
+    msg = f"This feature requires a license.\n\nWould you like to start a free trial or enter a license key?\n\nFeature: {feature_name.replace('_', ' ').title() if feature_name else ''}"
+    dialog = QDialog(parent)
+    dialog.setWindowTitle("Unlock Paid Feature")
+    layout = QVBoxLayout(dialog)
+    label = QLabel(msg)
+    layout.addWidget(label)
+    btn_trial = QPushButton("Start Free Trial")
+    btn_license = QPushButton("Enter License Key")
+    layout.addWidget(btn_trial)
+    layout.addWidget(btn_license)
+    result = {'choice': None}
+    def choose_trial():
+        result['choice'] = 'trial'
+        dialog.accept()
+    def choose_license():
+        result['choice'] = 'license'
+        dialog.accept()
+    btn_trial.clicked.connect(choose_trial)
+    btn_license.clicked.connect(choose_license)
+    dialog.exec()
+    if result['choice'] == 'trial':
+        # Try to start a new trial
+        status = get_trial_status()
+        if status.get('active_trial', False):
+            QMessageBox.information(parent, "Trial Active", f"You already have an active trial.\nExpires: {status.get('expiry_date')}")
+            return True
+        elif status.get('trial_count', 0) < 3:
+            started = start_new_trial()
+            if started:
+                status = get_trial_status()
+                QMessageBox.information(parent, "Trial Started", f"Free trial started!\nExpires: {status.get('expiry_date')}")
+                return True
+            else:
+                QMessageBox.warning(parent, "Trial Error", "Could not start a new trial. Please try again or contact support.")
+                return False
+        else:
+            QMessageBox.warning(parent, "Trial Expired", "You have used all available free trials. Please enter a license key to continue.")
+            return False
+    elif result['choice'] == 'license':
+        return prompt_for_license_key(parent, feature_name=feature_name)
     return False
 
 # --- Trial logic and legacy Google Sheet code is now deprecated and not used ---

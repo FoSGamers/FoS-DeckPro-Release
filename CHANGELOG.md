@@ -75,6 +75,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Removed legacy files and directories after migration.
+- Updated Ubuntu dependencies in GitHub Actions workflows to use `libgl1` and `libegl1` for Ubuntu 24.04 compatibility.
 
 ## [v1.5.4] - 2024-06-02
 

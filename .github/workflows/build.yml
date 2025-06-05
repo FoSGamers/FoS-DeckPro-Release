@@ -27,10 +27,10 @@ jobs:
           pip install pyinstaller
           
       - name: Install system dependencies (Ubuntu)
-        if: matrix.os == 'ubuntu-latest'
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgl1-mesa-glx libegl1-mesa xvfb
+          sudo apt-get install -y libgl1 libegl1 xvfb
           
       - name: Build executable
         run: |

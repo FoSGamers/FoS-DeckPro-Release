@@ -283,3 +283,35 @@ All files that contain project rules—including this file, .cursor files, .gith
 
 ### Changed
 - Refactored all paid feature triggers to use the new `prompt_for_trial_or_license` dialog. Users are always offered a choice to start a free trial or enter a license key when accessing paid features. Removed legacy trial/license prompt logic. UX and compliance are now gold-standard and consistent across the app.
+
+## [v1.6.0] - 2024-06-05
+
+### Public Release: Gold-Standard License & Trial System
+- All paid features now use a unified, user-friendly dialog: users can start a free trial or enter a license key at any time.
+- Backend (Google Cloud Function) is robust, secure, and auto-manages all trial/license logic and Google Sheet structure.
+- Admin tool and backend are fully documented, with gold-standard deployment, onboarding, and security rules.
+- All documentation, ignore files, and workflow scripts are up to date and enforce privacy, safety, and compliance.
+- CHANGELOG, README, and all onboarding docs are current and explicit for public release.
+- All code is modular, maintainable, and extensible for future features.
+- This release is tagged and published for public use.
+
+### Release Checklist (per project rules)
+- [x] All personal files are in `user_private/` and listed in `.gitignore`.
+- [x] No build artifacts or large files are present in git history.
+- [x] All code is modular, documented, and tested (with docstrings and unit tests).
+- [x] All configuration and constants are centralized.
+- [x] All features are independently enable/disable-able.
+- [x] All UI/UX follows a consistent style guide.
+- [x] All error handling is user-friendly and provides safe fallbacks.
+- [x] Every code change is accompanied by a test and documentation update.
+- [x] Changelog is updated for every release or significant change.
+- [x] All scripts (`start_feature.sh`, `finish_release.sh`, `onboarding.sh`, `clean_for_release.sh`) are present and used.
+- [x] Onboarding script is added to your shell profile for reminders.
+- [x] GitHub Actions for release hygiene and old release cleanup are enabled.
+- [x] Branch protection rules are set for `main` and release branches.
+- [x] All PRs and issues use the provided templates and checklists.
+- [x] All documentation (`README.md`, `RELEASE.md`, `CONTRIBUTING.md`, `PROJECT_WORKFLOW_TEMPLATE.md`) is up to date and explicit.
+- [x] No secrets, credentials, or sensitive data are ever committed.
+- [x] All contributors are aware of and follow these rules.
+
+### Personal-dev branch is now synced and ready for further work at this stage.

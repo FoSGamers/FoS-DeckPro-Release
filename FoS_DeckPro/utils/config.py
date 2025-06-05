@@ -2,6 +2,14 @@ import os
 
 CONFIG_FILE = os.path.join(os.path.dirname(__file__), '..', 'last_file.txt')
 
+# --- Centralized Error Reporting Config ---
+# Set to True to enable anonymous error reporting (opt-in, privacy-respecting)
+ERROR_REPORTING_ENABLED = False
+# Endpoint for error reports (leave blank to disable)
+ERROR_REPORTING_ENDPOINT = ''
+# App version for error reporting and diagnostics
+APP_VERSION = '1.0.0'
+
 def save_last_file(path):
     try:
         with open(CONFIG_FILE, 'w', encoding='utf-8') as f:

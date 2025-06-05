@@ -1,0 +1,109 @@
+name: Release Hygiene Restricted
+
+on:
+  push:
+    branches: [main, release/*]
+  pull_request:
+    branches: [main, release/*]
+
+jobs:
+  check-hygiene:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for forbidden personal/restricted files and references
+        run: |
+          # Forbidden file/directory patterns
+          FORBIDDEN_PATHS=(
+            "user_restricted/"
+            "legacy/"
+            "PERSONAL_DEV_MASTER_ARCHIVE.md"
+            "LEGACY_.*_ARCHIVE.md"
+          )
+
+          # Forbidden reference patterns (in code/docs)
+          FORBIDDEN_REFS=(
+            "user_restricted/"
+            "legacy/"
+            "PERSONAL_DEV_MASTER_ARCHIVE.md"
+            "LEGACY_.*_ARCHIVE.md"
+          )
+
+          # Check for forbidden files/directories
+          for pattern in "${FORBIDDEN_PATHS[@]}"; do
+            if git ls-files | grep -E "$pattern" > /dev/null; then
+              echo "[ERROR] Forbidden file or directory detected: $pattern"
+              exit 1
+            fi
+          done
+
+          # Check for forbidden references in code/docs (excluding .github/workflows)
+          for pattern in "${FORBIDDEN_REFS[@]}"; do
+            if grep -r --exclude-dir=.git --exclude-dir=legacy --exclude-dir=.github/workflows -E "$pattern" .; then
+              echo "[ERROR] Forbidden reference to personal/restricted content detected: $pattern"
+              exit 1
+            fi
+          done
+
+      - name: Check for files in user_restricted/ (should be ignored)
+        run: |
+          if git ls-files | grep '^user_restricted/' > /dev/null; then
+            echo "[ERROR] File(s) in user_restricted/ are tracked (should be in .gitignore)"; exit 1;
+          fi
+
+      - name: Check for code/config changes without CHANGELOG.md update
+        run: |
+          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '\.(py|yml)$' > /dev/null; then
+            if ! git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q 'CHANGELOG.md'; then
+              echo '[ERROR] You must update CHANGELOG.md for code/config changes.'; exit 1;
+            fi
+          fi
+
+      - name: Check for build artifacts or large files
+        run: |
+          for pattern in '*.pyc' '__pycache__/' '*.zip' '*.pkg' '*.app' '*.spec' '*.dmg' '*.exe' '*.bin' '*.tar.gz' '*.whl' '*.egg' 'dist/' 'build/' 'logs/' '*.bak' '*.tmp' '*.log' '*.pdf' '*.xlsx'; do
+            if git ls-files | grep "$pattern" > /dev/null; then
+              echo "[ERROR] Build artifact or large file detected: $pattern"; exit 1;
+            fi
+          done
+
+      - name: Check for personal files
+        run: |
+          set -e
+          PERSONAL_FILES=(
+            "FoS_DeckPro/Backups"
+            "buyers.json"
+            "For_Sale.json"
+            "New_For_Sale.json"
+            "packing_slip_summary.csv"
+            "packing_slip_summary.json"
+            "break_list.csv"
+            "500 spot break.json"
+            "50-30-15-5.json"
+            "break_templates.json"
+            "export_item_listing_fields_prefs.json"
+            "fosbot-456712-d8da65f7bfc9.json"
+            "client_secret_425804375982-49q9n1hgv592nhkmdup5egtj1eq6shq5.apps.googleusercontent.com (3).json"
+            "live-7b09df55-5d0c-4dee-a698-6644a2abc082-all-slips-letter-size-168541b2.pdf"
+            "Single_Shot_500.csv"
+            "Whatnot Card Inventory - Template (3).csv"
+            "Whatnot Card Inventory - Template (9).csv"
+          )
+          found=0
+          for f in "${PERSONAL_FILES[@]}"; do
+            if [ -e "$f" ]; then
+              echo "::error file=$f::Personal file $f must not be present in a release branch!"
+              found=1
+            fi
+          done
+          if [ "$found" -eq 1 ]; then
+            echo "\nERROR: One or more personal files are present in this branch."
+            echo "Run ./clean_for_release.sh and re-commit before merging or releasing."
+            echo "See RELEASE.md and CONTRIBUTING.md for instructions."
+            exit 1
+          fi
+      - name: Success message
+        if: success()
+        run: echo "No personal files found. Release hygiene check passed." 

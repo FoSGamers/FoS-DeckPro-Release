@@ -1,0 +1,33 @@
+name: Release GPG Signing
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  gpg-sign:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Download release assets
+        uses: actions/download-artifact@v4
+        with:
+          path: ./artifacts
+      - name: Import GPG key
+        env:
+          GPG_KEY: ${{ secrets.GPG_KEY }}
+        run: |
+          echo "$GPG_KEY" | gpg --batch --import
+      - name: Sign all release assets
+        run: |
+          cd ./artifacts
+          for f in $(find . -type f \( -name '*.zip' -o -name '*.tar.gz' \)); do
+            gpg --armor --detach-sign "$f"
+          done
+      - name: Upload signatures as release assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./artifacts/*.asc
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 

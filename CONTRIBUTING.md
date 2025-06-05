@@ -1,4 +1,17 @@
-# CONTRIBUTING.md
+# Contributing to FoS-DeckPro
+
+## 🚨 Separation of Public and Private Content (MANDATORY)
+
+- **All private, personal, or admin files must live in `user_restricted/` (which is always in `.gitignore`).**
+- **Never commit or push private content or references to public branches.**
+- **Pre-commit and pre-push hooks, as well as CI/CD, will block any attempt to commit or push private files or references outside `user_restricted/`.**
+- **Public documentation must never reference or link to private files or directories.**
+- **If you need to reference private content, use a placeholder or a clear “(private/internal only)” note.**
+- **Violations will block your commit/push and may result in PR rejection.**
+
+---
+
+# Standard Contributing Guidelines
 
 ## 📢 Release Notes Policy
 
@@ -33,7 +46,7 @@ The [GitHub Releases page](https://github.com/FoSGamers/FoS-DeckPro/releases) is
 
 ## 🔀 Branch Workflow
 
-- **personal-dev**: Your private development branch. All personal files (backups, inventory, templates, sensitive configs) live here in `user_private/`.
+- **personal-dev**: Your private development branch. All personal files (backups, inventory, templates, sensitive configs) live here in `user_restricted/`.
 - **main**: Public release branch. No personal files—only code, resources, and docs.
 
 ---

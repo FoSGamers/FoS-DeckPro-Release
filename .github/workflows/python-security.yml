@@ -1,0 +1,22 @@
+name: Python Security (Bandit)
+
+on:
+  push:
+    branches: [main, release/*]
+  pull_request:
+    branches: [main, release/*]
+
+jobs:
+  bandit-security:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Bandit
+        run: pip install bandit
+      - name: Run Bandit security scan
+        run: bandit -r FoS_DeckPro/ --exit-zero --format github 

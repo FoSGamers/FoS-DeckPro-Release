@@ -1,0 +1,18 @@
+name: License Scan (REUSE)
+
+on:
+  push:
+    branches: [main, release/*]
+  pull_request:
+    branches: [main, release/*]
+
+jobs:
+  license-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install REUSE
+        run: pip install reuse
+      - name: Run REUSE compliance check
+        run: reuse lint 

@@ -1,0 +1,71 @@
+name: Enforce Release Hygiene
+
+on:
+  push:
+    branches: [main, v1.5.0-working]
+  pull_request:
+    branches: [main, v1.5.0-working]
+
+jobs:
+  check-personal-files:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Check for personal files
+        run: |
+          set -e
+          PERSONAL_FILES=(
+            "FoS_DeckPro/Backups"
+            "buyers.json"
+            "For_Sale.json"
+            "New_For_Sale.json"
+            "packing_slip_summary.csv"
+            "packing_slip_summary.json"
+            "break_list.csv"
+            "500 spot break.json"
+            "50-30-15-5.json"
+            "break_templates.json"
+            "export_item_listing_fields_prefs.json"
+            "fosbot-456712-d8da65f7bfc9.json"
+            "client_secret_425804375982-49q9n1hgv592nhkmdup5egtj1eq6shq5.apps.googleusercontent.com (3).json"
+            "live-7b09df55-5d0c-4dee-a698-6644a2abc082-all-slips-letter-size-168541b2.pdf"
+            "Single_Shot_500.csv"
+            "Whatnot Card Inventory - Template (3).csv"
+            "Whatnot Card Inventory - Template (9).csv"
+          )
+          # SAFE_ALLOWLIST: Add any files here that are allowed even if private/restricted
+          SAFE_ALLOWLIST=(
+            "user_private/README.md"
+            "user_private/ALLOWED_PLACEHOLDER.txt"
+          )
+          found=0
+          for f in "${PERSONAL_FILES[@]}"; do
+            # Skip .github/workflows/ files to allow workflow files to reference private patterns
+            if [[ $f == .github/workflows/* ]]; then
+              continue
+            fi
+            skip=0
+            for safe in "${SAFE_ALLOWLIST[@]}"; do
+              if [ "$f" = "$safe" ]; then
+                skip=1
+                break
+              fi
+            done
+            if [ $skip -eq 1 ]; then
+              continue
+            fi
+            if [ -e "$f" ]; then
+              echo "::error file=$f::Personal file $f must not be present in a release branch!"
+              found=1
+            fi
+          done
+          if [ "$found" -eq 1 ]; then
+            echo "\nERROR: One or more personal files are present in this branch."
+            echo "Run ./clean_for_release.sh and re-commit before merging or releasing."
+            echo "See RELEASE.md and CONTRIBUTING.md for instructions."
+            exit 1
+          fi
+      - name: Success message
+        if: success()
+        run: echo "No personal files found. Release hygiene check passed." 

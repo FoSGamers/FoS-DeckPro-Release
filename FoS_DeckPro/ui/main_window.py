@@ -25,9 +25,6 @@ from ui.dialogs.export_item_listing_fields import ExportItemListingFieldsDialog
 import pandas as pd
 import re
 from ui.dialogs.break_builder import BreakBuilderDialog
-<<<<<<<< HEAD:FoS-DeckPro/ui/main_window.py
-from models.card import CARD_FIELDS
-========
 from ui.columns_config import DEFAULT_COLUMNS
 import pdfplumber
 import traceback
@@ -37,7 +34,6 @@ from logic.whatnot_inventory_removal import remove_sold_cards_from_inventory
 from logic.whatnot_buyer_db import WhatnotBuyerDB
 from ui.dialogs.packing_slip_summary import PackingSlipSummaryDialog
 from utils import license
->>>>>>>> admin-tool-dev:FoS_DeckPro/ui/main_window.py
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -45,23 +41,9 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("FoS-DeckPro")
         self.setMinimumSize(1200, 700)
 
-<<<<<<<< HEAD:FoS-DeckPro/ui/main_window.py
-        # Use all Scryfall/card fields as columns
-        self.default_columns = list(CARD_FIELDS)
-        try:
-            self.columns, self.visible_columns = self.load_column_prefs()
-            # Fallback: if columns are missing or misaligned, reset to all fields
-            if not self.columns or len(self.columns) != len(self.default_columns):
-                self.columns = self.default_columns.copy()
-                self.visible_columns = self.default_columns.copy()
-        except Exception:
-            self.columns = self.default_columns.copy()
-            self.visible_columns = self.default_columns.copy()
-========
         # Expanded columns for display and filtering
         self.columns = DEFAULT_COLUMNS.copy()
         self.visible_columns = DEFAULT_COLUMNS.copy()
->>>>>>>> admin-tool-dev:FoS_DeckPro/ui/main_window.py
         self.inventory = CardInventory()
         # Load sample data for now
         sample_cards = [

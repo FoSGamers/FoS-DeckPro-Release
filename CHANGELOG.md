@@ -161,3 +161,6 @@ All files that contain project rules—including this file, .cursor files, .gith
 - All workflows and automation are now documented in the repo and in the gold-standard playbook.
 - Created `PROJECT_GOLD_STANDARD_PLAYBOOK.md` for easy porting of all rules, automation, and best practices to new projects.
 - All changes are modular, fully documented, and enforced by automation.
+
+### Fixed
+- Resolved merge conflict in `FoS_DeckPro/ui/main_window.py` to ensure the file is syntactically correct and ready for use.

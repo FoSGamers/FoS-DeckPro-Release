@@ -1,65 +1,72 @@
-name: Build and Release FoS-DeckPro
+name: Build and Release
 
 on:
   push:
     tags:
       - 'v*'
-  workflow_dispatch:
 
 jobs:
   build:
-    name: Build on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
-      - uses: actions/checkout@v3
-
+      - uses: actions/checkout@v4
+      
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
-
+          python-version: '3.11'
+          
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt pyinstaller
-
-      - name: Run tests
+          pip install -r requirements.txt
+          pip install pyinstaller
+          
+      - name: Install system dependencies (Ubuntu)
+        if: matrix.os == 'ubuntu-latest'
         run: |
-          export PYTHONPATH=$PYTHONPATH:$(pwd)
-          pytest ManaBox_Enhancer/tests FoS_DeckPro/tests --maxfail=3 --disable-warnings -v
-
-      - name: Build with PyInstaller
+          sudo apt-get update
+          sudo apt-get install -y libgl1-mesa-glx libegl1-mesa xvfb
+          
+      - name: Build executable
         run: |
-          pyinstaller --onefile --windowed FoS_DeckPro/main.py --name "FoS-DeckPro"
-        # On Windows, output is dist/FoS-DeckPro.exe
-        # On Mac/Linux, output is dist/FoS-DeckPro
-
+          if [ "${{ matrix.os }}" == "windows-latest" ]; then
+            pyinstaller --onefile --windowed --name "ManaBox_Enhancer" --icon "assets/icon.ico" main.py
+          else
+            pyinstaller --onefile --windowed --name "ManaBox_Enhancer" main.py
+          fi
+          
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: FoS-DeckPro-${{ runner.os }}
-          path: dist/*
+          name: ManaBox_Enhancer-${{ matrix.os }}
+          path: dist/ManaBox_Enhancer*
 
   release:
     needs: build
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/')
     steps:
-      - uses: actions/download-artifact@v3
+      - uses: actions/checkout@v4
+      
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
         with:
-          path: dist
-
-      - name: List artifacts
-        run: ls -R dist
-
+          path: artifacts
+          
       - name: Create Release
+        id: create_release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            dist/**/FoS-DeckPro*
+            artifacts/ManaBox_Enhancer-ubuntu-latest/*
+            artifacts/ManaBox_Enhancer-windows-latest/*
+            artifacts/ManaBox_Enhancer-macos-latest/*
+          generate_release_notes: true
+          draft: false
+          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 

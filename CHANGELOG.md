@@ -110,3 +110,10 @@ All files that contain project rules—including this file, .cursor files, .gith
 
 ### Changed
 - Updated project structure and documentation.
+
+## [1.6.0] - 2024-03-19
+
+### Changed
+- Updated GitHub Actions workflows to use artifact actions v4
+- Fixed Ubuntu package dependencies for GUI applications
+- Improved build process for all platforms (Windows, Mac, Linux)

@@ -1,4 +1,44 @@
-<<<<<<< HEAD
+# Ignore all private, personal, and admin files
+user_restricted/
+
+# Ignore build artifacts and large files
+*.pyc
+__pycache__/
+*.zip
+*.pkg
+*.app
+*.spec
+*.dmg
+*.exe
+*.bin
+*.tar.gz
+*.whl
+*.egg
+dist/
+build/
+logs/
+
+# Ignore sensitive and backup files
+*.bak
+*.tmp
+*.log
+.DS_Store
+
+# Ignore all PDFs and Excel files
+*.pdf
+*.xlsx
+
+# Ignore all JSON and CSV except public changelog and break_list
+*.json
+!CHANGELOG.json
+*.csv
+!break_list.csv
+
+# Ignore any other sensitive patterns
+SECRET*
+PRIVATE*
+PERSONAL*
+
 # macOS
 .DS_Store
 
@@ -50,24 +90,4 @@ htmlcov/
 .cache/
 
 # Misc
-*.bak
 *.swp
-=======
-user_private/
-
-# Ignore build artifacts and large files
-/dist/
-/build/
-*.zip
-*.pkg
-*.app
-*.spec
-*.dmg
-*.exe
-*.bin
-*.tar.gz
-*.whl
-*.egg
-*.pyc
-__pycache__/
->>>>>>> admin-tool-dev

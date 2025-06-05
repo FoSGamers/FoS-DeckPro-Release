@@ -9,7 +9,7 @@ The [GitHub Releases page](https://github.com/FoSGamers/FoS-DeckPro/releases) is
 ## 🚀 Public Release Workflow
 
 ### 1. Keep Personal Files Private
-- All personal files (backups, inventory, templates, sensitive configs) must be kept in `user_private/` (which is in `.gitignore`).
+- All personal files (backups, inventory, templates, sensitive configs) must be kept in `user_restricted/` (which is in `.gitignore`).
 - Never commit or push personal files to public branches.
 
 ### 2. Clean the Release Branch
@@ -35,5 +35,23 @@ The [GitHub Releases page](https://github.com/FoSGamers/FoS-DeckPro/releases) is
 
 ## 📝 Final Note
 - For any questions or clarifications, refer to the [GitHub Releases page](https://github.com/FoSGamers/FoS-DeckPro/releases), `CONTRIBUTING.md`, or contact the maintainer.
+
+## GPG Signing of Release Artifacts
+
+To ensure the authenticity and integrity of release assets, maintainers can enable GPG signing:
+
+1. Generate a GPG key pair (if you don't have one):
+   ```sh
+   gpg --full-generate-key
+   gpg --armor --export-secret-keys "Your Name <your@email.com>" > gpg_private_key.asc
+   ```
+2. Add the contents of `gpg_private_key.asc` as a GitHub Actions secret named `GPG_PRIVATE_KEY`.
+3. The release workflow will sign all release assets and upload `.asc` signature files.
+4. Users can verify signatures with:
+   ```sh
+   gpg --verify asset.zip.asc asset.zip
+   ```
+
+**Note:** Never share your private key. Only trusted maintainers should have access.
 
 <!-- Legacy and detailed process notes have been moved to LEGACY_RELEASE_ARCHIVE.md for private reference. --> 

@@ -1,0 +1,26 @@
+name: Release Artifact Verification
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  checksum:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Download release assets
+        uses: actions/download-artifact@v4
+        with:
+          path: ./artifacts
+      - name: Generate SHA256 checksums
+        run: |
+          cd ./artifacts
+          find . -type f \( -name '*.zip' -o -name '*.tar.gz' \) -exec sha256sum {} \; > SHA256SUMS.txt
+      - name: Upload checksums as release asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./artifacts/SHA256SUMS.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 

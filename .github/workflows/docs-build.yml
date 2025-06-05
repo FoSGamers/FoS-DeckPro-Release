@@ -1,0 +1,22 @@
+name: Docs Build (MkDocs)
+
+on:
+  push:
+    branches: [main, release/*]
+  pull_request:
+    branches: [main, release/*]
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install MkDocs
+        run: pip install mkdocs
+      - name: Build documentation
+        run: mkdocs build -f docs-site/mkdocs.yml 

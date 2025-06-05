@@ -4,7 +4,7 @@
 >
 > ## Summary
 > - Only develop on `personal-dev` or `feature/*` branches. Never commit to `main` or release branches.
-> - All personal files go in `user_private/` (in `.gitignore`). Never commit personal files to public branches.
+> - All personal files go in `user_restricted/` (in `.gitignore`). Never commit personal files to public branches.
 > - Never commit build artifacts or large files (e.g., `dist/`, `build/`, `*.zip`, `*.pkg`, `*.app`, `*.spec`, `*.dmg`, `*.exe`, `*.bin`, `*.tar.gz`, `*.whl`, `*.egg`, `*.pyc`, `__pycache__/`). Always add these to `.gitignore` and clean them from git history.
 > - Use the provided scripts for feature, release, onboarding, and cleaning.
 > - CI/CD and branch protection block unsafe merges and releases.
@@ -12,7 +12,7 @@
 > - All PRs and issues use the provided templates and checklists.
 >
 > ## Checklist
-> - [ ] All personal files are in `user_private/` and listed in `.gitignore`.
+> - [ ] All personal files are in `user_restricted/` and listed in `.gitignore`.
 > - [ ] All build artifacts and large files are in `.gitignore` and **never** committed.
 > - [ ] No build artifacts or large files are present in git history (use `git filter-repo` if needed).
 > - [ ] All code is modular, documented, and tested (with docstrings and unit tests).
@@ -65,7 +65,7 @@ All files that contain project rules—including this file, .cursor files, .gith
   - Future versions will include a full-featured deckbuilder, allowing users to build, save, and analyze decks like a pro (FoS-DeckPro).
 
 ### Release Checklist (per project rules)
-- [x] All personal files are in `user_private/` and listed in `.gitignore`.
+- [x] All personal files are in `user_restricted/` and listed in `.gitignore`.
 - [x] No build artifacts or large files are present in git history.
 - [x] All code is modular, documented, and tested (with docstrings and unit tests).
 - [x] All configuration and constants are centralized.
@@ -151,4 +151,13 @@ All files that contain project rules—including this file, .cursor files, .gith
 - All relevant documentation and tests updated to reflect new matching logic and user prompt behavior.
 
 # [Unreleased]
-// This section intentionally left blank after v1.6.0 public release. All future changes will be documented here.
+
+### Gold-Standard Automation, Security, and Documentation Upgrades
+- Added privacy-respecting, opt-in error reporting (disabled by default, fully documented).
+- Added GPG signing workflow for release artifacts and documentation for maintainers.
+- Added and enforced public/private separation: all personal, legacy, and admin files are blocked from public branches by CI and .gitignore.
+- All public docs and code scrubbed of private/internal references.
+- Major CI/CD upgrades: Python linting, markdown/yaml linting, mypy type checks, test coverage enforcement, Bandit security scanning, REUSE license compliance, Dependabot, changelog auto-generation, and docs build checks.
+- All workflows and automation are now documented in the repo and in the gold-standard playbook.
+- Created `PROJECT_GOLD_STANDARD_PLAYBOOK.md` for easy porting of all rules, automation, and best practices to new projects.
+- All changes are modular, fully documented, and enforced by automation.

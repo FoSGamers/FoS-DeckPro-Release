@@ -21,7 +21,7 @@ FoS-DeckPro v1.5.1 is a modular, extensible application for managing card invent
   - **Break templates/configs**: (e.g., `50-30-15-5.json`, `500 spot break.json`) are in the project root for use by the break builder and export tools.
 
 ## Legacy & Backups
-- All legacy scripts, backup data, and non-essential files are now isolated in the `legacy/` folder at the project root.
+- All legacy scripts, backup data, and non-essential files are now isolated in a private folder and are not included in the public release.
 
 ## Main Workflows
 - **Break Builder:** Modular, rule-based, and curated break list generation with dynamic filtering, preview, and export.

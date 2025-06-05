@@ -117,3 +117,5 @@ All files that contain project rules—including this file, .cursor files, .gith
 - Updated GitHub Actions workflows to use artifact actions v4
 - Fixed Ubuntu package dependencies for GUI applications
 - Improved build process for all platforms (Windows, Mac, Linux)
+- Updated release documentation and workflow configuration
+- Streamlined build and upload process

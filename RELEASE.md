@@ -54,4 +54,21 @@ To ensure the authenticity and integrity of release assets, maintainers can enab
 
 **Note:** Never share your private key. Only trusted maintainers should have access.
 
-<!-- Legacy and detailed process notes have been moved to LEGACY_RELEASE_ARCHIVE.md for private reference. --> 
+<!-- Legacy and detailed process notes have been moved to LEGACY_RELEASE_ARCHIVE.md for private reference. -->
+
+## 🚀 FoS-DeckPro v1.6.1 – Public Release
+
+Download the ready-to-run app for your platform:
+- **Mac:** FoS-DeckPro.app.zip
+- **Windows:** FoS-DeckPro.exe
+- **Linux:** FoS-DeckPro.AppImage
+
+If you only see the Mac app, Windows and Linux builds are coming soon!
+
+---
+
+**Changelog Highlights:**
+- Cross-platform build system (Mac, Windows, Linux)
+- Enhanced public/private separation and release hygiene
+- Updated documentation and onboarding
+- Fully modular, maintainable, and extensible codebase 

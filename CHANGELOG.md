@@ -43,6 +43,9 @@ All files that contain project rules—including this file, .cursor files, .gith
 - GitHub Actions workflow for cross-platform builds (Windows, Mac, Linux) to ensure every release includes all platform-specific executables.
 - Updated release hygiene workflow to exclude `.github/workflows/` files from personal files check, ensuring workflow files can reference private patterns without triggering the hygiene check.
 
+### Fixed
+- Use correct stable version for `actions/download-artifact` in build-and-upload workflow to prevent linter errors and ensure reliability.
+
 ## [v1.6.1] - 2024-06-09
 
 ### Added

@@ -37,6 +37,11 @@ All files that contain project rules—including this file, .cursor files, .gith
 
 # Changelog
 
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
 ## [Unreleased]
 
 ### Added
@@ -117,5 +122,5 @@ All files that contain project rules—including this file, .cursor files, .gith
 - Updated GitHub Actions workflows to use artifact actions v4
 - Fixed Ubuntu package dependencies for GUI applications
 - Improved build process for all platforms (Windows, Mac, Linux)
-- Updated release documentation and workflow configuration
-- Streamlined build and upload process
+- Updated Python version to 3.11
+- Enhanced release automation and documentation

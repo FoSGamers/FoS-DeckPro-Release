@@ -164,4 +164,10 @@ All files that contain project rules—including this file, .cursor files, .gith
 
 # [Unreleased]
 
+### Fixed
+- Resolved merge conflict in `FoS_DeckPro/ui/main_window.py` to ensure the file is syntactically correct and ready for use.
+
+### Updated
+- Updated release notes to clearly indicate what users should download and use, ensuring the release page is professional and user-friendly.
+
 // This section intentionally left blank after v1.6.0 public release. All future changes will be documented here.

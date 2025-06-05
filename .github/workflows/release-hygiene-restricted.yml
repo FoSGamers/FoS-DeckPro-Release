@@ -1,0 +1,75 @@
+name: Release Hygiene Restricted
+
+on:
+  push:
+    branches: [main, release/*]
+  pull_request:
+    branches: [main, release/*]
+
+jobs:
+  check-hygiene:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for forbidden personal/restricted files and references
+        run: |
+          # Forbidden file/directory patterns
+          FORBIDDEN_PATHS=(
+            "user_restricted/"
+            "legacy/"
+            "PERSONAL_DEV_MASTER_ARCHIVE.md"
+            "LEGACY_.*_ARCHIVE.md"
+          )
+
+          # Forbidden reference patterns (in code/docs)
+          FORBIDDEN_REFS=(
+            "user_restricted/"
+            "legacy/"
+            "PERSONAL_DEV_MASTER_ARCHIVE.md"
+            "LEGACY_.*_ARCHIVE.md"
+          )
+
+          # Check for forbidden files/directories
+          for pattern in "${FORBIDDEN_PATHS[@]}"; do
+            if git ls-files | grep -E "$pattern" > /dev/null; then
+              echo "[ERROR] Forbidden file or directory detected: $pattern"
+              exit 1
+            fi
+          done
+
+          # Check for forbidden references in code/docs (excluding .github/workflows)
+          for pattern in "${FORBIDDEN_REFS[@]}"; do
+            if grep -r --exclude-dir=.git --exclude-dir=legacy --exclude-dir=.github/workflows -E "$pattern" .; then
+              echo "[ERROR] Forbidden reference to personal/restricted content detected: $pattern"
+              exit 1
+            fi
+          done
+
+      - name: Check for files in user_restricted/ (should be ignored)
+        run: |
+          if git ls-files | grep '^user_restricted/' > /dev/null; then
+            echo "[ERROR] File(s) in user_restricted/ are tracked (should be in .gitignore)"; exit 1;
+          fi
+
+      - name: Check for code/config changes without CHANGELOG.md update
+        run: |
+          if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '\.(py|yml)$' > /dev/null; then
+            if ! git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q 'CHANGELOG.md'; then
+              echo '[ERROR] You must update CHANGELOG.md for code/config changes.'; exit 1;
+            fi
+          fi
+
+      - name: Check for build artifacts or large files
+        run: |
+          for pattern in '*.pyc' '__pycache__/' '*.zip' '*.pkg' '*.app' '*.spec' '*.dmg' '*.exe' '*.bin' '*.tar.gz' '*.whl' '*.egg' 'dist/' 'build/' 'logs/' '*.bak' '*.tmp' '*.log' '*.pdf' '*.xlsx'; do
+            if git ls-files | grep "$pattern" > /dev/null; then
+              echo "[ERROR] Build artifact or large file detected: $pattern"
+              exit 1
+            fi
+          done
+
+      - name: Success message
+        if: success()
+        run: echo "No personal files found. Release hygiene check passed." 

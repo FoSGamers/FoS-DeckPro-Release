@@ -80,6 +80,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refactored GitHub Actions build steps to use OS-specific steps, ensuring Windows runner compatibility (no Bash if statements).
 - Removed the `--icon=icon.icns` argument from the macOS build step to avoid the missing icon file error.
 
+### Improved
+- All Scryfall price and purchase URI fields are now visible, filterable, and exportable in all card UIs (main inventory, break builder, card details). Users can search, filter, and export on these fields just like any other card property.
+
 ## [v1.5.4] - 2024-06-02
 
 ### Added

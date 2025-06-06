@@ -11,6 +11,7 @@ from ui.dialogs.export_item_listing_fields import ExportItemListingFieldsDialog
 import csv
 import os
 from ui.columns_config import DEFAULT_COLUMNS
+from models.card import CARD_FIELDS
 
 # Centralized config/constants for break builder
 BREAK_BUILDER_CONFIG = {
@@ -242,8 +243,8 @@ class BreakBuilderDialog(QDialog):
         # Inventory area: table (left) + preview (right)
         inv_hbox = QHBoxLayout()
         # --- Dynamically get all fields from inventory for filtering ---
-        self.filter_fields = self._get_all_inventory_fields()
-        self.columns = DEFAULT_COLUMNS + [f for f in self.filter_fields if f not in DEFAULT_COLUMNS]
+        self.filter_fields = list(CARD_FIELDS)
+        self.columns = list(CARD_FIELDS)
         self.card_table = CardTableView(self.inventory, self.columns)
         self.card_table.setSelectionMode(QAbstractItemView.MultiSelection)
         self.card_table.setMinimumHeight(220)

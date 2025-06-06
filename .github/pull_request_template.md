@@ -1,3 +1,29 @@
+---
+name: Pull Request
+about: Submit a pull request for review
+---
+
+**Checklist**
+- [ ] I have read the CONTRIBUTING.md and followed all guidelines.
+- [ ] No private, legacy, or personal files are included in this PR.
+- [ ] All code/config changes are reflected in CHANGELOG.md.
+- [ ] All new features/fixes have corresponding tests.
+- [ ] All documentation is professional and public-ready.
+- [ ] I have run all pre-commit and pre-push hooks locally.
+
+**Description**
+Please describe your changes and why they are needed.
+
+**Related Issue(s)**
+Closes #
+
+**Testing**
+Describe how you tested your changes.
+
+## Related Issues
+
+<!-- List any related issues or PRs. -->
+
 ## Summary of Changes
 
 - [ ] **Changelog updated:** [Describe what was changed and why]

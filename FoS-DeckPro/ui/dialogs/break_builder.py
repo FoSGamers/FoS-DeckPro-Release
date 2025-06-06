@@ -34,6 +34,8 @@ class BreakBuilderDialog(QDialog):
         filter_group = QGroupBox("Card Filters (All Fields)")
         filter_grid = QGridLayout()
         self.filter_inputs = {}
+        self.filter_fields = list(CARD_FIELDS)
+        self.columns = list(CARD_FIELDS)
         numeric_fields = {f for f in CARD_FIELDS if any(x in f.lower() for x in ["price", "quantity", "number", "count", "cmc"])}
         for idx, field in enumerate(CARD_FIELDS):
             row = idx // 3

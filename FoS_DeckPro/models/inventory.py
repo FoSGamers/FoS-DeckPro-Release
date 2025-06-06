@@ -11,7 +11,11 @@ class CardInventory:
     def filter_cards(self, filters):
         # filters: dict of {column: value}
         import re
-        NUMERIC_COLUMNS = {"Purchase price", "Whatnot price", "Quantity", "cmc", "ManaBox ID", "Collector number"}
+        NUMERIC_COLUMNS = {
+            "Purchase price", "Whatnot price", "Quantity", "cmc", "ManaBox ID", "Collector number",
+            # Scryfall price fields
+            "usd", "usd_foil", "usd_etched", "eur", "eur_foil", "eur_etched", "tix"
+        }
         def is_float(val):
             try:
                 float(val)

@@ -1,5 +1,15 @@
 # Changelog
 
+All notable changes to this project will be documented in this file.
+
+## [Unreleased]
+
+### Added
+- Full integration of all Scryfall price fields (usd, usd_foil, usd_etched, eur, eur_foil, eur_etched, tix)
+- Full integration of all Scryfall purchase URIs (TCGplayer, Cardmarket, Cardhoarder)
+- All price fields are now visible, filterable, and exportable in all card UIs
+- Numeric filtering support for all price fields with range operators (>, <, >=, <=, -)
+
 ## [v1.5.0] - 2024-05-30
 
 ### Major Enhancements

@@ -5,7 +5,7 @@ alwaysApply: true
 ---
 ---
 description: |
-  ManaBox Enhancer Project Rules: These rules ensure the codebase is modular, maintainable, and safe for ongoing enhancements and refactors. All contributors must follow these at all times.
+  FoS-DeckPro Project Rules: These rules ensure the codebase is modular, maintainable, and safe for ongoing enhancements and refactors. All contributors must follow these at all times.
 globs: 
   - "**/*.py"
 alwaysApply: true

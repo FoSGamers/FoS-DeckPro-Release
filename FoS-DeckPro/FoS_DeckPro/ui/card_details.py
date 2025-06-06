@@ -28,6 +28,19 @@ FRIENDLY_NAMES = {
     "mana_cost": "Mana Cost",
     "type_line": "Type",
     "oracle_text": "Oracle Text",
+    "price_usd": "TCGplayer Market (USD)",
+    "price_usd_foil": "TCGplayer Foil (USD)",
+    "price_usd_etched": "TCGplayer Etched (USD)",
+    "price_eur": "Cardmarket (EUR)",
+    "price_eur_foil": "Cardmarket Foil (EUR)",
+    "price_eur_etched": "Cardmarket Etched (EUR)",
+    "price_tix": "MTGO Tix",
+    "buy_tcgplayer": "Buy on TCGplayer",
+    "buy_cardmarket": "Buy on Cardmarket",
+    "buy_cardhoarder": "Buy on Cardhoarder",
+    "buy_mtgo": "Buy on MTGO",
+    "buy_cardkingdom": "Buy on Card Kingdom",
+    "buy_cardkingdom_foil": "Buy Foil on Card Kingdom",
     # Add more as needed
 }
 

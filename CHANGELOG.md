@@ -69,6 +69,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial public release with gold-standard license and trial system.
 - Automated workflows for code quality, security, and compliance.
+- Scryfall enrichment now includes all available price fields (usd, usd_foil, usd_etched, eur, eur_foil, eur_etched, tix) and purchase URIs (TCGplayer, Cardmarket, Cardhoarder, MTGO, Card Kingdom, Card Kingdom Foil).
 
 ### Changed
 - Reorganized project structure for better maintainability.

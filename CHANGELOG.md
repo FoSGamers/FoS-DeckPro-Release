@@ -77,6 +77,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed legacy files and directories after migration.
 - Updated Ubuntu dependencies in GitHub Actions workflows to use `libgl1` and `libegl1` for Ubuntu 24.04 compatibility.
 - Refactored GitHub Actions build steps to use OS-specific steps, ensuring Windows runner compatibility (no Bash if statements).
+- Removed the `--icon=icon.icns` argument from the macOS build step to avoid the missing icon file error.
 
 ## [v1.5.4] - 2024-06-02
 

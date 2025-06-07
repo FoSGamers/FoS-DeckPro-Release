@@ -251,4 +251,14 @@ All files that contain project rules—including this file, .cursor files, .gith
 ### Fixed
 - Image preview race conditions and network errors.
 - Filtering and selection logic for large inventories.
-- UI layout and usability issues in all break builder tabs. 
+- UI layout and usability issues in all break builder tabs.
+
+## [Unreleased]
+
+### Added
+- Comprehensive debugging guide (`Standards/DEBUGGING.md`) for git hooks and security checks
+- Exemptions for `.github/workflows/` files and `Standards/CHANGELOG.md` from `user_private/` reference checks
+
+### Changed
+- Updated git hooks to allow intentional `user_private/` references in workflow files and documentation
+- Improved error messages and debugging information for git hook failures 

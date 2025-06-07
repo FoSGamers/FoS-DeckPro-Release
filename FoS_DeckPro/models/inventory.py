@@ -96,3 +96,7 @@ class CardInventory:
         # Remove by identity or dict equality
         new_cards = [c for c in self.cards if c not in cards_to_remove]
         self.cards = new_cards
+
+    def add_card(self, card):
+        """Add a single card to the inventory."""
+        self.cards.append(card.copy() if isinstance(card, dict) else card)

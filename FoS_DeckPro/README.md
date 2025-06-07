@@ -167,3 +167,14 @@ PYTHONPATH=$PYTHONPATH:$(pwd) pytest FoS_DeckPro/tests --maxfail=3 --disable-war
 ```sh
 xvfb-run -a pytest FoS_DeckPro/tests --maxfail=3 --disable-warnings -v
 ```
+
+## Test Environment & Safety Features
+
+FoS_DeckPro uses a robust, isolated test environment to ensure reliability and prevent test artifacts from interfering with production data.
+
+- **Test Directories:** All test input, output, and artifacts are stored in `tests/test_data/`, `tests/test_output/`, and `tests/test_artifacts/`.
+- **Test Mode:** Tests run with the environment variable `FOS_TEST_MODE=1`, enabling test-only logic and directory access.
+- **Automatic Cleanup:** Test outputs are archived and test data is deleted after each test session, managed by fixtures in `tests/conftest.py`.
+- **Safety Checks:** The configuration manager (`logic/config.py`) prevents access to test directories in production mode and validates all file paths.
+
+For full details, see `tests/README.md`.

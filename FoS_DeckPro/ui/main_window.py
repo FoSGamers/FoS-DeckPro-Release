@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import (
-    QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QStatusBar, QMenuBar, QFileDialog, QMessageBox, QSplitter, QSizePolicy, QDialog, QPushButton, QTextEdit, QInputDialog, QRadioButton, QButtonGroup, QLineEdit, QProgressDialog
+    QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QStatusBar, QMenuBar, QFileDialog, QMessageBox, QSplitter, QSizePolicy, QDialog, QPushButton, QTextEdit, QInputDialog, QRadioButton, QButtonGroup, QLineEdit, QProgressDialog, QListWidget, QListWidgetItem, QComboBox
 )
 from PySide6.QtGui import QAction
 from PySide6.QtCore import Qt
@@ -42,6 +42,7 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(1200, 700)
 
         # Expanded columns for display and filtering
+        self.default_columns = DEFAULT_COLUMNS.copy()
         self.columns = DEFAULT_COLUMNS.copy()
         self.visible_columns = DEFAULT_COLUMNS.copy()
         self.inventory = CardInventory()
@@ -723,7 +724,7 @@ class MainWindow(QMainWindow):
             QMessageBox.critical(self, "Restore Failed", f"Failed to restore: {e}")
 
     def customize_columns(self):
-        dlg = ColumnCustomizationDialog(self.columns, self.visible_columns, self.columns, self)
+        dlg = ColumnCustomizationDialog(self.columns, self.visible_columns, self.default_columns, self)
         if dlg.exec():
             ordered, visible = dlg.get_columns()
             self.columns = ordered
@@ -743,6 +744,19 @@ class MainWindow(QMainWindow):
                         self.card_table.setColumnWidth(i, self.column_widths[col])
             # Ensure visual order matches logical order
             self._apply_column_order()
+            # --- FULLY REBUILD FILTER OVERLAY TO MATCH NEW COLUMNS ---
+            if hasattr(self, 'filter_overlay'):
+                # Remove old filter widgets
+                for filt in self.filter_overlay.filters.values():
+                    filt.deleteLater()
+                self.filter_overlay.filters = {}
+                # Remove old filter overlay from parent
+                self.filter_overlay.setParent(None)
+                # Create new filter overlay with new columns
+                self.filter_overlay = FilterOverlay(self.card_table, self.columns)
+                self.filter_overlay.show()
+                for col, filt in self.filter_overlay.filters.items():
+                    filt.textChanged.connect(self.update_table_filter)
 
     def save_column_widths(self):
         # Save current column widths to preferences
@@ -828,13 +842,25 @@ class MainWindow(QMainWindow):
             QMessageBox.critical(self, "Load Preset Failed", f"Failed to load preset: {e}")
 
     def _apply_column_order(self):
-        # Ensure the QTableView's visual order matches self.columns
+        """Ensure the QTableView's visual order matches self.columns."""
         header = self.card_table.horizontalHeader()
         model_cols = self.card_table.model.columns
-        for logical, col in enumerate(self.columns):
-            visual = header.visualIndex(model_cols.index(col))
-            if visual != logical:
-                header.moveSection(visual, logical)
+        
+        # First, ensure all columns are in the correct order
+        for i, col in enumerate(self.columns):
+            current_visual = header.visualIndex(model_cols.index(col))
+            if current_visual != i:
+                header.moveSection(current_visual, i)
+        
+        # Then ensure visibility matches
+        for i, col in enumerate(self.columns):
+            self.card_table.setColumnHidden(i, col not in self.visible_columns)
+            
+        # Finally, restore column widths
+        if hasattr(self, 'column_widths') and self.column_widths:
+            for i, col in enumerate(self.columns):
+                if col in self.column_widths:
+                    self.card_table.setColumnWidth(i, self.column_widths[col])
 
     def export_to_whatnot(self):
         import csv
@@ -845,12 +871,24 @@ class MainWindow(QMainWindow):
         if not all_cards:
             QMessageBox.information(self, "Export to Whatnot", "No cards to export.")
             return
-        # Read Whatnot template for columns and defaults
+        # Try to read Whatnot template for columns and defaults
         template_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../Whatnot Card Inventory - Template (3).csv')
-        with open(template_path, newline='', encoding='utf-8') as f:
-            reader = csv.reader(f)
-            columns = next(reader)
-            defaults = next(reader)
+        columns = None
+        defaults = None
+        if os.path.exists(template_path):
+            with open(template_path, newline='', encoding='utf-8') as f:
+                reader = csv.reader(f)
+                columns = next(reader)
+                defaults = next(reader)
+        else:
+            # Use built-in default columns and defaults
+            columns = [
+                "Category", "Sub Category", "Title", "Description", "Quantity", "Type", "Price", "Shipping Profile", "Offerable", "Hazmat", "Condition", "Cost Per Item", "SKU", "Image URL 1", "Image URL 2", "Image URL 3", "Image URL 4", "Image URL 5", "Image URL 6", "Image URL 7", "Image URL 8"
+            ]
+            defaults = [
+                "Trading Card Games", "Magic: The Gathering", "", "", "1", "Buy it Now", "1", "0-1 oz", "No", "Not Hazmat", "Near Mint", "", "", "", "", "", "", "", ""
+            ]
+            QMessageBox.warning(self, "Whatnot Template Missing", "Template file not found. Using built-in default columns for export.")
         # Static columns and their default values
         static_defaults = {
             "Category": "Trading Card Games",
@@ -951,26 +989,42 @@ class MainWindow(QMainWindow):
                     self.save_inventory()
 
     def adjust_whatnot_pricing_dialog(self):
-        from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QRadioButton, QButtonGroup, QMessageBox
+        from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QRadioButton, QButtonGroup, QMessageBox, QComboBox
         import math
+
         dlg = QDialog(self)
         dlg.setWindowTitle("Adjust Whatnot Pricing")
         layout = QVBoxLayout(dlg)
         layout.addWidget(QLabel("Choose adjustment method for Whatnot price (applies to FILTERED cards only):"))
+
+        # Base price selection
+        base_price_layout = QHBoxLayout()
+        base_price_layout.addWidget(QLabel("Base price field:"))
+        base_price_combo = QComboBox()
+        base_price_combo.addItems([
+            "Scryfall price (auto)",
+            "Purchase price"
+        ])
+        base_price_layout.addWidget(base_price_combo)
+        layout.addLayout(base_price_layout)
+
         # Option 1: Set fixed price
         fixed_radio = QRadioButton("Set filtered to fixed price:")
         fixed_input = QLineEdit()
         fixed_input.setPlaceholderText("e.g. 2.00")
+
         # Option 2: Custom rounding logic
         round_radio = QRadioButton("Round: cents >= threshold rounds up, otherwise down")
         round_threshold_label = QLabel("Rounding threshold (e.g. 0.30):")
         round_threshold_input = QLineEdit()
         round_threshold_input.setPlaceholderText("0.30")
         round_threshold_input.setText("0.30")
+
         fixed_radio.setChecked(True)
         group = QButtonGroup(dlg)
         group.addButton(fixed_radio)
         group.addButton(round_radio)
+
         layout.addWidget(fixed_radio)
         layout.addWidget(fixed_input)
         layout.addWidget(round_radio)
@@ -978,38 +1032,51 @@ class MainWindow(QMainWindow):
         round_row.addWidget(round_threshold_label)
         round_row.addWidget(round_threshold_input)
         layout.addLayout(round_row)
+
         btns = QHBoxLayout()
         apply_btn = QPushButton("Apply")
         cancel_btn = QPushButton("Cancel")
         btns.addWidget(apply_btn)
         btns.addWidget(cancel_btn)
         layout.addLayout(btns)
+
+        def get_scryfall_price(card):
+            # Use etched if etched, else foil if foil, else regular
+            is_etched = str(card.get("Etched", "")).strip().lower() in ("yes", "true", "1")
+            is_foil = str(card.get("Foil", "")).strip().lower() in ("yes", "true", "1")
+            if is_etched and card.get("usd_etched"):
+                return card.get("usd_etched")
+            elif is_foil and card.get("usd_foil"):
+                return card.get("usd_foil")
+            else:
+                return card.get("usd")
+
         def apply():
-            # Use all cards in the inventory, not just filtered
             all_cards = self.inventory.get_all_cards()
-            def card_key(card):
-                return (
-                    card.get("Name", "").strip().lower(),
-                    card.get("Set code", "").strip().lower(),
-                    card.get("Collector number", "").strip().lower(),
-                )
-            inventory_map = {card_key(card): card for card in all_cards}
+            base_price_field = base_price_combo.currentText()
+
             for inv_card in all_cards:
-                price_str = str(inv_card.get("Purchase price", "")).replace("$", "").strip()
+                if base_price_field == "Scryfall price (auto)":
+                    price_str = str(get_scryfall_price(inv_card)).replace("$", "").strip()
+                    price_label = "Scryfall (auto)"
+                else:
+                    price_str = str(inv_card.get("Purchase price", "")).replace("$", "").strip()
+                    price_label = "Purchase price"
+
                 if fixed_radio.isChecked():
                     try:
                         val = float(fixed_input.text())
                         inv_card["Whatnot price"] = str(int(round(val)))
-                        print(f"DEBUG: {inv_card.get('Name', '')} | Purchase price: {price_str} | Whatnot price set to: {inv_card['Whatnot price']}")
+                        print(f"DEBUG: {inv_card.get('Name', '')} | {price_label}: {price_str} | Whatnot price set to: {inv_card['Whatnot price']}")
                     except Exception:
-                        print(f"WARNING: {inv_card.get('Name', '')} | Purchase price: {price_str} | Could not parse fixed price input.")
+                        print(f"WARNING: {inv_card.get('Name', '')} | {price_label}: {price_str} | Could not parse fixed price input.")
                         QMessageBox.warning(dlg, "Invalid Input", "Please enter a valid number for fixed price.")
                         return
                 elif round_radio.isChecked():
                     try:
                         threshold = float(round_threshold_input.text())
                     except Exception:
-                        print(f"WARNING: {inv_card.get('Name', '')} | Purchase price: {price_str} | Could not parse rounding threshold.")
+                        print(f"WARNING: {inv_card.get('Name', '')} | {price_label}: {price_str} | Could not parse rounding threshold.")
                         QMessageBox.warning(dlg, "Invalid Input", "Please enter a valid number for rounding threshold.")
                         return
                     try:
@@ -1020,12 +1087,14 @@ class MainWindow(QMainWindow):
                         else:
                             rounded = math.floor(price)
                         inv_card["Whatnot price"] = str(int(rounded))
-                        print(f"DEBUG: {inv_card.get('Name', '')} | Purchase price: {price_str} | Whatnot price set to: {inv_card['Whatnot price']}")
+                        print(f"DEBUG: {inv_card.get('Name', '')} | {price_label}: {price_str} | Whatnot price set to: {inv_card['Whatnot price']}")
                     except Exception:
-                        print(f"WARNING: {inv_card.get('Name', '')} | Purchase price: {price_str} | Could not parse for rounding, skipped.")
+                        print(f"WARNING: {inv_card.get('Name', '')} | {price_label}: {price_str} | Could not parse for rounding, skipped.")
                         continue
+
             self.card_table.update_cards(self.inventory.get_all_cards())
             dlg.accept()
+
         apply_btn.clicked.connect(apply)
         cancel_btn.clicked.connect(dlg.reject)
         dlg.exec()
@@ -1376,3 +1445,22 @@ class MainWindow(QMainWindow):
     # - If not expired, it tries to start a new trial (up to 3 per user/machine).
     # - If a trial is active, all features are unlocked for 3 days.
     # - After 3 trials, a license key is required to use paid features.
+
+    def import_csv_data(self, csv_data):
+        """Import cards from CSV data string."""
+        import csv
+        from io import StringIO
+        reader = csv.DictReader(StringIO(csv_data))
+        cards = []
+        for row in reader:
+            for key, value in row.items():
+                if value == '':
+                    row[key] = None
+            cards.append(row)
+        self.save_undo_state()
+        if cards:
+            self.inventory.load_cards(cards)
+            self._update_columns_from_inventory()
+            self.card_table.update_cards(self.inventory.get_all_cards())
+            self._unsaved_changes = True
+            self.statusBar().showMessage(f"Imported {len(cards)} cards from CSV data")

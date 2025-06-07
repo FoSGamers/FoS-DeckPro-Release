@@ -1,10 +1,12 @@
+# Release Process
+
 > **GOLD STANDARD SUMMARY & CHECKLIST**
 >
 > This project follows a strict, privacy-safe, and automated workflow. Use this summary and checklist to ensure every project is 100% clean, safe, and compliant:
 >
 > ## Summary
 > - Only develop on `personal-dev` or `feature/*` branches. Never commit to `main` or release branches.
-> - All personal files go in `user_private/` (in `.gitignore`). Never commit personal files to public branches.
+> - All personal files go in a private directory (in `.gitignore`). Never commit personal files to public branches.
 > - Never commit build artifacts or large files (e.g., `dist/`, `build/`, `*.zip`, `*.pkg`, `*.app`, `*.spec`, `*.dmg`, `*.exe`, `*.bin`, `*.tar.gz`, `*.whl`, `*.egg`, `*.pyc`, `__pycache__/`). Always add these to `.gitignore` and clean them from git history.
 > - Use the provided scripts for feature, release, onboarding, and cleaning.
 > - CI/CD and branch protection block unsafe merges and releases.
@@ -13,7 +15,7 @@
 > - All PRs and issues use the provided templates and checklists.
 >
 > ## Checklist
-> - [ ] All personal files are in `user_private/` and listed in `.gitignore`.
+> - [ ] All personal files are in a private directory and listed in `.gitignore`.
 > - [ ] All build artifacts and large files are in `.gitignore` and **never** committed.
 > - [ ] No build artifacts or large files are present in git history (use `git filter-repo` if needed).
 > - [ ] All code is modular, documented, and tested (with docstrings and unit tests).
@@ -49,20 +51,33 @@ All files that contain project rules—including this file, .cursor files, .gith
 - Clean them from git tracking before pushing or releasing.
 - Only source code, scripts, and documentation should be versioned.
 
-## 1. Clean Personal Files Before Release
-- All personal files (backups, inventory, templates, sensitive configs, etc.) must be moved to `user_private/`.
-- `user_private/` is in `.gitignore` and will never be included in a public release.
+## Keeping Personal Files Private
+- All personal files (backups, inventory, templates, sensitive configs, etc.) must be moved to a private directory.
+- The private directory is in `.gitignore` and will never be included in a public release.
+- Never commit or push personal files to the release branch.
 - **Never commit build artifacts or large files. See Build Artifact Hygiene above.**
-- Run the provided script before every release:
+- Use the `clean_for_release.sh` script before every release to ensure no personal files are present.
 
-```sh
-./clean_for_release.sh
-```
+## Release Checklist
+- [ ] Run all tests and verify the app works without personal files.
+- [ ] Run `./clean_for_release.sh`.
+- [ ] Check that only public files are present.
+- [ ] **Check that no build artifacts or large files are present.**
+- [ ] Build and package the app for release.
 
-This script will:
-- Move all personal files to `user_private/` (if not already there)
-- Remove any lingering personal files from tracked locations
-- Verify only public files are present
+## Questions?
+- Contact the maintainer for help with branch management or the release process.
+
+## Automated Cleaning Script
+- The `clean_for_release.sh` script will move all personal files to a private directory and ensure only public files are present in the release branch.
+- Run the script with:
+  ```sh
+  ./clean_for_release.sh
+  ```
+
+## Checklist for Every Release
+- [ ] All personal files are in a private directory.
+- [ ] `./clean_for_release.sh`
 
 ## 2. Branch Management
 - **Develop with personal files** on the `personal-dev` branch.

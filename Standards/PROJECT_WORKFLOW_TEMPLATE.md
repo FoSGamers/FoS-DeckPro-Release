@@ -4,7 +4,7 @@
 
 All files that contain project rules—including this file, .cursor files, .github workflows, and any configuration or automation files—must explicitly state and enforce the requirement that all code must be clearly commented, with layman descriptions in code blocks where possible. This ensures that anyone, regardless of technical background, can understand the logic, purpose, and workflow of every part of the project.
 
-# Dummy-Proof, Privacy-Safe, and Automated Project Workflow Template
+# Project Workflow Template
 
 > **GOLD STANDARD SUMMARY & CHECKLIST**
 >
@@ -12,18 +12,20 @@ All files that contain project rules—including this file, .cursor files, .gith
 >
 > ## Summary
 > - Only develop on `personal-dev` or `feature/*` branches. Never commit to `main` or release branches.
-> - All personal files go in `user_private/` (in `.gitignore`). Never commit personal files to public branches.
+> - All personal files go in a private directory (in `.gitignore`). Never commit personal files to public branches.
 > - Never commit build artifacts or large files (e.g., `dist/`, `build/`, `*.zip`, `*.pkg`, `*.app`, `*.spec`, `*.dmg`, `*.exe`, `*.bin`, `*.tar.gz`, `*.whl`, `*.egg`, `*.pyc`, `__pycache__/`). Always add these to `.gitignore` and clean them from git history.
 > - Use the provided scripts for feature, release, onboarding, and cleaning.
 > - CI/CD and branch protection block unsafe merges and releases.
-> - All code is modular, documented, and tested. All changes update the changelog and docs.
+> - All code is modular, documented, and tested. All code must have clear comments explaining what each part does, including layman descriptions in code blocks where possible, so anyone (even non-developers) can understand the logic and purpose.
+> - All changes update the changelog and docs.
 > - All PRs and issues use the provided templates and checklists.
 >
 > ## Checklist
-> - [ ] All personal files are in `user_private/` and listed in `.gitignore`.
+> - [ ] All personal files are in a private directory and listed in `.gitignore`.
 > - [ ] All build artifacts and large files are in `.gitignore` and **never** committed.
 > - [ ] No build artifacts or large files are present in git history (use `git filter-repo` if needed).
 > - [ ] All code is modular, documented, and tested (with docstrings and unit tests).
+> - [ ] All code is clearly commented, with layman descriptions in code blocks where possible, so anyone can understand what it does and why.
 > - [ ] All configuration and constants are centralized.
 > - [ ] All features are independently enable/disable-able.
 > - [ ] All UI/UX follows a consistent style guide.
@@ -61,10 +63,10 @@ This document describes a robust, privacy-safe, and highly automated workflow fo
 - Only source code, scripts, and documentation should be versioned.
 
 ## 2. Personal File Hygiene
-- All personal, backup, or sensitive files must be kept in `user_private/` (add to `.gitignore`).
-- Use a script (`clean_for_release.sh`) to move/remove all personal files before any release.
-- **Never commit or push personal files to public branches.**
+- All personal, backup, or sensitive files must be kept in a private directory (add to `.gitignore`).
+- Never commit or push personal files to the release branch.
 - **Never commit build artifacts or large files. See Build Artifact Hygiene above.**
+- Use the `clean_for_release.sh` script before every release to ensure no personal files are present.
 
 ## 3. Coding Standards & Rules
 - All code must be modular, maintainable, and documented.

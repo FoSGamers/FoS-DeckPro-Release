@@ -4,7 +4,7 @@
 >
 > ## Summary
 > - Only develop on `personal-dev` or `feature/*` branches. Never commit to `main` or release branches.
-> - All personal files go in `user_private/` (in `.gitignore`). Never commit personal files to public branches.
+> - All personal files go in a private directory (in `.gitignore`). Never commit personal files to public branches.
 > - Never commit build artifacts or large files (e.g., `dist/`, `build/`, `*.zip`, `*.pkg`, `*.app`, `*.spec`, `*.dmg`, `*.exe`, `*.bin`, `*.tar.gz`, `*.whl`, `*.egg`, `*.pyc`, `__pycache__/`). Always add these to `.gitignore` and clean them from git history.
 > - Use the provided scripts for feature, release, onboarding, and cleaning.
 > - CI/CD and branch protection block unsafe merges and releases.
@@ -13,7 +13,7 @@
 > - All PRs and issues use the provided templates and checklists.
 >
 > ## Checklist
-> - [ ] All personal files are in `user_private/` and listed in `.gitignore`.
+> - [ ] All personal files are in a private directory and listed in `.gitignore`.
 > - [ ] All build artifacts and large files are in `.gitignore` and **never** committed.
 > - [ ] No build artifacts or large files are present in git history (use `git filter-repo` if needed).
 > - [ ] All code is modular, documented, and tested (with docstrings and unit tests).
@@ -90,7 +90,7 @@ We appreciate your help in making FoS-DeckPro better for everyone!
 # Contributing Guide
 
 ## Branch Workflow
-- **personal-dev**: Your private development branch. All personal files (backups, inventory, templates, sensitive configs) live here in `user_private/`.
+- **personal-dev**: Your private development branch. All personal files (backups, inventory, templates, sensitive configs) should be kept in a private directory.
 - **v1.5.0-working** (or `main`): Public release branch. No personal files—only code, resources, and docs.
 
 ## Build Artifact Hygiene
@@ -100,7 +100,7 @@ We appreciate your help in making FoS-DeckPro better for everyone!
 - Only source code, scripts, and documentation should be versioned.
 
 ## Keeping Personal Files Private
-- All personal files must be in `user_private/`, which is in `.gitignore`.
+- All personal files must be kept in a private directory that is listed in `.gitignore`.
 - Never commit or push personal files to the release branch.
 - **Never commit build artifacts or large files. See Build Artifact Hygiene above.**
 - Use the `clean_for_release.sh` script before every release to ensure no personal files are present.
@@ -123,12 +123,12 @@ We appreciate your help in making FoS-DeckPro better for everyone!
 - Contact the maintainer for help with branch management or the release process.
 
 ## Automated Cleaning Script
-- The `clean_for_release.sh` script will move all personal files to `user_private/` and ensure only public files are present in the release branch.
+- The `clean_for_release.sh` script will move all personal files to a private directory and ensure only public files are present in the release branch.
 - Run the script with:
   ```sh
   ./clean_for_release.sh
   ```
 
 ## Checklist for Every Release
-- [ ] All personal files are in `user_private/`.
+- [ ] All personal files are in a private directory.
 - [ ] `./clean_for_release.sh`

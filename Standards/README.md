@@ -1,10 +1,12 @@
+# Project Standards
+
 > **GOLD STANDARD SUMMARY & CHECKLIST**
 >
 > This project follows a strict, privacy-safe, and automated workflow. Use this summary and checklist to ensure every project is 100% clean, safe, and compliant:
 >
 > ## Summary
 > - Only develop on `personal-dev` or `feature/*` branches. Never commit to `main` or release branches.
-> - All personal files go in `user_private/` (in `.gitignore`). Never commit personal files to public branches.
+> - All personal files go in a private directory (in `.gitignore`). Never commit personal files to public branches.
 > - Never commit build artifacts or large files (e.g., `dist/`, `build/`, `*.zip`, `*.pkg`, `*.app`, `*.spec`, `*.dmg`, `*.exe`, `*.bin`, `*.tar.gz`, `*.whl`, `*.egg`, `*.pyc`, `__pycache__/`). Always add these to `.gitignore` and clean them from git history.
 > - Use the provided scripts for feature, release, onboarding, and cleaning.
 > - CI/CD and branch protection block unsafe merges and releases.
@@ -13,7 +15,7 @@
 > - All PRs and issues use the provided templates and checklists.
 >
 > ## Checklist
-> - [ ] All personal files are in `user_private/` and listed in `.gitignore`.
+> - [ ] All personal files are in a private directory and listed in `.gitignore`.
 > - [ ] All build artifacts and large files are in `.gitignore` and **never** committed.
 > - [ ] No build artifacts or large files are present in git history (use `git filter-repo` if needed).
 > - [ ] All code is modular, documented, and tested (with docstrings and unit tests).
@@ -310,16 +312,17 @@ This repository contains the license key generator tools for FoS-DeckPro. Use th
 
 ## Release and Privacy Process
 
-- All personal files (backups, inventory, templates, sensitive configs, etc.) must be kept in the `user_private/` directory.
-- `user_private/` is listed in `.gitignore` and will never be committed or pushed to public branches.
-- Before every release, run the `clean_for_release.sh` script to ensure no personal files are present in the release branch.
-- See `RELEASE.md` and `CONTRIBUTING.md` for full instructions on safe merging and release management.
+- All personal files (backups, inventory, templates, sensitive configs, etc.) must be kept in a private directory.
+- The private directory is listed in `.gitignore` and will never be committed or pushed to public branches.
+- Never commit or push personal files to the release branch.
+- **Never commit build artifacts or large files. See Build Artifact Hygiene above.**
+- Use the `clean_for_release.sh` script before every release to ensure no personal files are present.
 
 ## Release Hygiene & Personal Data
 
 - **A GitHub Action will block any release or PR if personal files are present.**
 - All contributors must read and follow [RELEASE.md](RELEASE.md) and [CONTRIBUTING.md](CONTRIBUTING.md) for every release or merge.
-- All personal files (backups, inventory, templates, sensitive configs) must be kept in `user_private/` (which is in `.gitignore`).
+- All personal files (backups, inventory, templates, sensitive configs) must be kept in a private directory (which is in `.gitignore`).
 - Never commit or push personal files to the release branch.
 - **Never commit build artifacts or large files. See Build Artifact Hygiene above.**
 - Use the `clean_for_release.sh` script before every release to ensure no personal files are present.

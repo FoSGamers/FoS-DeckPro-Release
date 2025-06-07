@@ -13,63 +13,75 @@ class WhatnotPackingSlipParser:
         self.card_name_validator = card_name_validator
 
     def parse(self, text: str) -> List[Dict[str, Any]]:
-        """
-        Parses the full text of a packing slip PDF (all pages concatenated).
-        Returns a list of dicts, one per buyer, each with show, buyer, and sales info.
-        """
-        print("=== RAW PDF TEXT PASSED TO PARSER ===")
-        print(text)
+        """Parse packing slip text into structured data."""
+        # print("\n=== RAW PDF TEXT PASSED TO PARSER ===\n")
+        # print(text)
+        # print("\n")
+        
         buyers = []
-        pages = re.split(r"--- PAGE \\d+ ---", text)
+        current_buyer = None
+        current_sales = []
+        current_show = None
+        
+        # Split into pages and process each
+        pages = text.split("--- PAGE")
         for page in pages:
             if not page.strip():
                 continue
-            show_info = self._extract_show_info(page)
-            lines = page.splitlines()
-            buyer_info = None
-            sales = []
-            i = 0
-            while i < len(lines):
-                line = lines[i].strip()
-                # Detect buyer block
-                if line.startswith("Ships to:") or line.startswith("( NEW BUYER! )") or re.match(r".+\d{5}(-\d{4})?\. US", line):
-                    if buyer_info and sales:
-                        buyers.append({
-                            "show": show_info,
-                            "buyer": buyer_info,
-                            "sales": sales
-                        })
-                        sales = []
-                    # Parse buyer info (use next lines)
-                    name = ''
-                    username = ''
-                    address = ''
-                    # Try to extract name/username/address from next lines
-                    if i+1 < len(lines):
-                        next_line = lines[i+1].strip()
-                        m = re.match(r"(.+?) \(([^)]+)\) (.+)", next_line)
-                        if m:
-                            name = m.group(1).strip()
-                            username = m.group(2).strip()
-                            address = m.group(3).strip()
-                        else:
-                            name = next_line
-                    buyer_info = {"name": name, "username": username, "address": address}
-                    i += 2
-                    continue
-                i += 1
-            # After collecting all lines, extract sales for this page
-            page_sales = self._extract_sales(page)
-            if buyer_info and page_sales:
-                buyers.append({
-                    "show": show_info,
-                    "buyer": buyer_info,
-                    "sales": page_sales
-                })
-        if buyers:
-            print("=== PARSED SALES FOR FIRST BUYER ===")
-            for sale in buyers[0]["sales"]:
-                print(sale)
+                
+            # Extract show info if present
+            show_match = re.search(r"Livestream Name: ([^\n]+)\nLivestream Date: ([^\n]+)", page)
+            if show_match:
+                current_show = {
+                    "title": show_match.group(1).strip(),
+                    "date": show_match.group(2).strip()
+                }
+            
+            # Extract buyer info
+            buyer_match = re.search(r"Ships to:\n([^\n]+)", page)
+            if buyer_match:
+                # If we have a previous buyer with sales, add them to the list
+                if current_buyer and current_sales:
+                    buyers.append({
+                        "buyer": current_buyer,
+                        "sales": current_sales,
+                        "show": current_show
+                    })
+                    # print(f"=== PARSED SALES FOR PREVIOUS BUYER ===\n")
+                    # for sale in current_sales:
+                    #     print(sale)
+                    # print("\n")
+                
+                # Start new buyer
+                buyer_info = buyer_match.group(1).strip()
+                name_match = re.match(r"([^(]+) \(([^)]+)\)", buyer_info)
+                if name_match:
+                    current_buyer = {
+                        "name": name_match.group(1).strip(),
+                        "username": name_match.group(2).strip(),
+                        "address": buyer_info[name_match.end():].strip()
+                    }
+                    current_sales = []  # Reset sales for new buyer
+            
+            # Extract sales for current buyer
+            if current_buyer:
+                sales = self._extract_sales(page)
+                if sales:
+                    current_sales.extend(sales)
+                    # print(f"Adding buyer with info: {current_buyer} and {len(sales)} sales")
+        
+        # Add the last buyer if they have sales
+        if current_buyer and current_sales:
+            buyers.append({
+                "buyer": current_buyer,
+                "sales": current_sales,
+                "show": current_show
+            })
+            # print(f"=== PARSED SALES FOR LAST BUYER ===\n")
+            # for sale in current_sales:
+            #     print(sale)
+            # print("\n")
+        
         return buyers
 
     def _extract_show_info(self, page: str) -> Dict[str, Any]:
@@ -98,7 +110,6 @@ class WhatnotPackingSlipParser:
         }
 
     def _extract_sales(self, page: str) -> List[Dict[str, Any]]:
-        # Robustly handle Name: ... Quantity: ... [card name/details] Description: ...
         sales = []
         lines = page.splitlines()
         current_break = None
@@ -111,7 +122,34 @@ class WhatnotPackingSlipParser:
                 current_break = break_match.group(0).strip()
                 i += 1
                 continue
-            # Look for Name: ...
+            # Handle 'Name: ... Quantity: ...' on the same line
+            name_qty_match = re.match(r"Name: ([^\n]+) Quantity: (\d+)", line)
+            if name_qty_match:
+                name_part = name_qty_match.group(1).strip()
+                qty = name_qty_match.group(2).strip()
+                # Next line should be Description
+                desc_line = None
+                if i + 1 < len(lines) and lines[i + 1].strip().startswith("Description:"):
+                    desc_line = lines[i + 1].strip()
+                    i += 1
+                # Parse description fields
+                desc_fields = {}
+                if desc_line:
+                    for m in re.finditer(r"([\w ]+): ([^:]+)", desc_line):
+                        k, v = m.group(1).strip(), m.group(2).strip()
+                        desc_fields[k] = v
+                sale = {
+                    "Name": name_part,
+                    "Quantity": qty,
+                    **desc_fields
+                }
+                if current_break:
+                    sale["Break"] = current_break
+                sales.append(sale)
+                # print(f"[DEBUG] Detected sale (single line): {sale}")
+                i += 1
+                continue
+            # Old multi-line format
             if line.startswith("Name:"):
                 # Skip to Quantity
                 i += 1
@@ -139,12 +177,10 @@ class WhatnotPackingSlipParser:
                         break
                     i += 1
                 if card_name_details and desc_line:
-                    # Parse card_name_details (e.g., 'Prime Speaker Zegana foil en')
                     parts = card_name_details.split()
                     name = " ".join(parts[:-2]) if len(parts) > 2 else card_name_details
                     foil = parts[-2] if len(parts) > 1 else ''
                     lang = parts[-1] if len(parts) > 1 else ''
-                    # Parse description fields
                     desc_fields = {}
                     for m in re.finditer(r"([\w ]+): ([^:]+)", desc_line):
                         k, v = m.group(1).strip(), m.group(2).strip()
@@ -158,8 +194,10 @@ class WhatnotPackingSlipParser:
                     if current_break:
                         sale["Break"] = current_break
                     sales.append(sale)
+                    # print(f"[DEBUG] Detected sale (multi-line): {sale}")
                 continue
             i += 1
+        # print(f"[DEBUG] Total sales found for page: {len(sales)}")
         return sales
 
     def _split_name_foil(self, raw_name: str):

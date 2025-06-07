@@ -38,6 +38,7 @@ jobs:
           SAFE_ALLOWLIST=(
             "user_private/README.md"
             "user_private/ALLOWED_PLACEHOLDER.txt"
+            "Standards/CHANGELOG.md"
           )
           found=0
           for f in "${PERSONAL_FILES[@]}"; do

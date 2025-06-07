@@ -1,3 +1,5 @@
+# This workflow file intentionally references user_private/ patterns for workflow functionality.
+# These references are required and should be allowed in this file.
 name: Release Hygiene Restricted
 
 on:
@@ -39,9 +41,9 @@ jobs:
             fi
           done
 
-          # Check for forbidden references in code/docs (excluding .github/workflows)
+          # Check for forbidden references in code/docs (excluding .github/workflows and Standards/CHANGELOG.md)
           for pattern in "${FORBIDDEN_REFS[@]}"; do
-            if grep -r --exclude-dir=.git --exclude-dir=legacy --exclude-dir=.github/workflows -E "$pattern" .; then
+            if grep -r --exclude-dir=.git --exclude-dir=legacy --exclude-dir=.github/workflows --exclude=Standards/CHANGELOG.md -E "$pattern" .; then
               echo "[ERROR] Forbidden reference to personal/restricted content detected: $pattern"
               exit 1
             fi

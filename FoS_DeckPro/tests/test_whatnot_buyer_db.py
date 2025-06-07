@@ -2,7 +2,7 @@ import unittest
 import tempfile
 import os
 import json
-from ManaBox_Enhancer.logic.whatnot_buyer_db import WhatnotBuyerDB
+from FoS_DeckPro.logic.whatnot_buyer_db import WhatnotBuyerDB
 
 class TestWhatnotBuyerDB(unittest.TestCase):
     def setUp(self):

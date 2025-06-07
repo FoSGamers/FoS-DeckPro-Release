@@ -1,4 +1,62 @@
-# Debugging Guide
+# Debugging Guide for Git Hooks and Security Checks
+
+## Overview
+This guide provides comprehensive information for debugging issues with git hooks and security checks in the ManaBox_Enhancer project.
+
+## Git Hooks Debug Logging
+
+### Enabling Debug Logs
+The git hooks now include detailed debug logging that can help diagnose issues. Debug logs are written to stderr and will show:
+- Which files are being checked
+- What patterns are being searched for
+- Which files are exempt from checks
+- The results of each check
+- Any errors that occur
+
+To see the debug logs, you can run git commands with the `GIT_TRACE=1` environment variable:
+```bash
+GIT_TRACE=1 git commit -m "your message"
+GIT_TRACE=1 git push
+```
+
+### Understanding Debug Output
+The debug logs will show:
+1. Hook initialization
+2. Files being processed
+3. Exemptions being applied
+4. Pattern matching results
+5. Content checking results
+6. Final status
+
+Example debug output:
+```
+[DEBUG] Starting pre-commit hook...
+[DEBUG] Found staged files: file1.py file2.md
+[DEBUG] Checking file: file1.py
+[DEBUG] File is text, checking content: file1.py
+[DEBUG] File passed all checks: file1.py
+[DEBUG] Pre-commit hook completed successfully
+```
+
+### Common Debug Patterns
+1. **Missing Exemptions**
+   ```
+   [DEBUG] File is exempt from checks: .github/workflows/example.yml
+   ```
+   If you see this for a file that should be exempt, check the exemption list in the hooks.
+
+2. **Pattern Matches**
+   ```
+   [DEBUG] Forbidden pattern found in filename: private_file.py
+   ```
+   This indicates a file name contains a forbidden pattern.
+
+3. **Content Checks**
+   ```
+   [DEBUG] File is text, checking content: documentation.md
+   [DEBUG] Forbidden pattern found in content: documentation.md
+   ```
+   This shows when forbidden content is found in a file.
 
 ## Git Hooks and Security Checks
 

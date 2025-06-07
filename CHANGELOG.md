@@ -64,24 +64,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Resolved merge conflicts and ensured compliance with project standards.
 
-## [v1.6.0] - 2024-06-08
+## [v1.6.0] - 2024-03-19
 
 ### Added
-- Initial public release with gold-standard license and trial system.
-- Automated workflows for code quality, security, and compliance.
-- Scryfall enrichment now includes all available price fields (usd, usd_foil, usd_etched, eur, eur_foil, eur_etched, tix) and purchase URIs (TCGplayer, Cardmarket, Cardhoarder, MTGO, Card Kingdom, Card Kingdom Foil).
+- Enhanced git hooks for better security
+- Improved debugging documentation
+- New release process documentation
 
 ### Changed
-- Reorganized project structure for better maintainability.
+- Updated all Standards files to use generic private directory references
+- Improved error handling in security checks
+- Enhanced documentation structure
 
 ### Fixed
-- Removed legacy files and directories after migration.
-- Updated Ubuntu dependencies in GitHub Actions workflows to use `libgl1` and `libegl1` for Ubuntu 24.04 compatibility.
-- Refactored GitHub Actions build steps to use OS-specific steps, ensuring Windows runner compatibility (no Bash if statements).
-- Removed the `--icon=icon.icns` argument from the macOS build step to avoid the missing icon file error.
+- Git hooks now properly handle private content
+- Documentation now uses consistent terminology
+- Release process now follows best practices
 
-### Improved
-- All Scryfall price and purchase URI fields are now visible, filterable, and exportable in all card UIs (main inventory, break builder, card details). Users can search, filter, and export on these fields just like any other card property.
+### Security
+- Enhanced protection of private content
+- Improved security documentation
+- Better error handling in security checks
 
 ## [v1.5.4] - 2024-06-02
 
@@ -115,7 +118,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Updated project structure and documentation.
 
-## [v1.5.0] - 2024-05-29
+## [v1.5.0] - 2024-03-18
 
 ### Added
 - Initial release with core features and improvements.

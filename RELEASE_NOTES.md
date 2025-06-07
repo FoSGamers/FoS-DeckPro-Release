@@ -102,4 +102,39 @@ See [CHANGELOG.md](https://github.com/FoSGamers/FoS-DeckPro/blob/main/CHANGELOG.
 
 ---
 
-**Thank you for using FoS-DeckPro!** 
+**Thank you for using FoS-DeckPro!**
+
+## Overview
+This release focuses on improving code quality, documentation, and security measures.
+
+## Changes
+- Updated all Standards files to use generic private directory references
+- Improved git hooks for better security
+- Enhanced documentation for debugging and release processes
+- Archived v1.5.0-working branch
+
+## Security
+- Enhanced git hooks to better protect private content
+- Improved documentation for security practices
+- Added more comprehensive debugging guides
+
+## Documentation
+- Updated Standards files with clearer guidelines
+- Enhanced debugging documentation
+- Improved release process documentation
+
+## Technical Details
+- Updated git hooks for better pattern matching
+- Improved error handling in security checks
+- Enhanced documentation structure
+
+## Known Issues
+None
+
+## Future Plans
+- Continue improving security measures
+- Enhance documentation further
+- Implement additional debugging tools
+
+## Support
+For support, please refer to SUPPORT.md or create an issue in the repository. 

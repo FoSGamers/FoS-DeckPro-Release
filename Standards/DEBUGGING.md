@@ -47,7 +47,7 @@ Example debug output:
 
 2. **Pattern Matches**
    ```
-   [DEBUG] Forbidden pattern found in filename: private_file.py
+   [DEBUG] Forbidden pattern found in filename: [REDACTED]_file.py
    ```
    This indicates a file name contains a forbidden pattern.
 
@@ -66,45 +66,43 @@ The repository uses git hooks to enforce security and hygiene rules. These hooks
 ### Key Hooks
 1. **pre-commit**: Runs before each commit
 2. **pre-push**: Runs before pushing to remote
-3. **pre-commit-personal-dev**: Custom hook for personal development
+3. **pre-commit-[REDACTED]**: Custom hook for [REDACTED] development
 
 ### Common Issues and Debugging
 
-#### 1. "Forbidden private content" or "Reference to private directory found" Errors
+#### 1. "Forbidden [REDACTED] content" or "Reference to [REDACTED] directory found" Errors
 - **Error Message:**
   ```
-  [ERROR] Reference to private directory found in public file: <file>
+  [ERROR] Reference to [REDACTED] directory found in public file: <file>
   ```
 - **Cause:**
-  - The file contains a reference to a private directory
+  - The file contains a reference to a [REDACTED] directory
   - The file is not in an exempt location
 - **Solution:**
-  - Move the reference to a private directory
-  - Add the file to the exemption list if it needs to reference private content
+  - Move the reference to a [REDACTED] directory
+  - Add the file to the exemption list if it needs to reference [REDACTED] content
 
-#### 2. "Forbidden private file pattern" Errors
+#### 2. "Forbidden [REDACTED] file pattern" Errors
 - **Error Message:**
   ```
-  [ERROR] Forbidden private file pattern detected in: <file>
+  [ERROR] Forbidden [REDACTED] file pattern detected in: <file>
   ```
 - **Cause:**
-  - The filename contains a forbidden pattern (PRIVATE, PERSONAL, SECRET)
-  - The file is not in a private directory
+  - The filename contains a forbidden pattern ([REDACTED], [REDACTED], [REDACTED])
+  - The file is not in a [REDACTED] directory
 - **Solution:**
-  - Rename the file to remove the forbidden pattern
-  - Move the file to a private directory if it contains private content
+  - Move the file to a [REDACTED] directory if it contains [REDACTED] content
 
-#### 3. "Attempt to commit file(s) in private directory" Errors
+#### 3. "Attempt to commit file(s) in [REDACTED] directory" Errors
 - **Error Message:**
   ```
-  [ERROR] Attempt to commit file(s) in private directory (should be in .gitignore)
+  [ERROR] Attempt to commit file(s) in [REDACTED] directory (should be in .gitignore)
   ```
 - **Cause:**
-  - Trying to commit files from a private directory
-  - The private directory is not properly ignored
+  - Trying to commit files from a [REDACTED] directory
+  - The [REDACTED] directory is not properly ignored
 - **Solution:**
-  - Ensure the private directory is in `.gitignore`
-  - Move the files to a public location if they should be committed
+  - Ensure the [REDACTED] directory is in `.gitignore`
 
 ### Debugging Process
 
@@ -118,17 +116,17 @@ The repository uses git hooks to enforce security and hygiene rules. These hooks
 
 2. **Check File Content**
    ```bash
-   # Look for private directory references
-   grep -E 'private_directory' "$file"
+   # Look for [REDACTED] directory references
+   grep -E '[REDACTED]_directory' "$file"
    
    # Look for forbidden patterns
-   grep -E 'PRIVATE|PERSONAL|SECRET' "$file"
+   grep -E '[REDACTED]|[REDACTED]|[REDACTED]' "$file"
    ```
 
 3. **Check Git Status**
    ```bash
-   # Check if private directory is being tracked
-   git ls-files | grep 'private_directory'
+   # Check if [REDACTED] directory is being tracked
+   git ls-files | grep '[REDACTED]_directory'
    ```
 
 ### Exemptions and Safelisting
@@ -146,7 +144,7 @@ The repository uses git hooks to enforce security and hygiene rules. These hooks
 ### Best Practices
 
 1. **File Organization:**
-   - Keep all private files in a private directory
+   - Keep all [REDACTED] files in a [REDACTED] directory
    - Use clear, descriptive names for public files
    - Avoid forbidden patterns in filenames
 
@@ -158,29 +156,21 @@ The repository uses git hooks to enforce security and hygiene rules. These hooks
 3. **Testing:**
    - Test hooks with debug logs enabled
    - Verify exemptions work as expected
-   - Check that private content is properly protected
+   - Check that [REDACTED] content is properly protected
 
 ### Troubleshooting Checklist
 
-1. **For "Reference to private directory" Errors:**
+1. **For "Reference to [REDACTED] directory" Errors:**
    - [ ] Is the file in an exempt location?
-   - [ ] Does the file need to reference private content?
-   - [ ] Should the file be moved to a private directory?
+   - [ ] Does the file need to reference [REDACTED] content?
+   - [ ] Should the file be moved to a [REDACTED] directory?
 
 2. **For "Forbidden pattern" Errors:**
    - [ ] Does the filename contain a forbidden pattern?
    - [ ] Should the file be renamed?
-   - [ ] Should the file be moved to a private directory?
+   - [ ] Should the file be moved to a [REDACTED] directory?
 
-3. **For "Attempt to commit private files" Errors:**
-   - [ ] Is the private directory in `.gitignore`?
-   - [ ] Are you trying to commit from the wrong branch?
-   - [ ] Should the files be moved to a public location?
-
-4. **For General Issues:**
-   - [ ] Are the hooks executable?
-   - [ ] Are the debug logs showing the expected output?
-   - [ ] Have all exemptions been properly added?
-   - [ ] Is the changelog updated with recent changes?
+3. **For "Attempt to commit [REDACTED] files" Errors:**
+   - [ ] Is the [REDACTED] directory in `.gitignore`?
 
 Remember: The hooks are there for security. Always consider the security implications before bypassing or modifying them. 

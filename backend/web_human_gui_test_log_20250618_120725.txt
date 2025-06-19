@@ -1,0 +1,36 @@
+[JS] Document ready state: complete
+[JS] Root element exists: True
+[JS] Script count: 1
+[JS] Main bundle loaded: False
+[JS] Global webpack/React vars: __playwright__binding__, __pwInitScripts
+[JS] React available: False
+[JS] ReactDOM available: False
+[JS] Mount attempt: Missing React, ReactDOM, or root element
+[JS] Global error handler: no onerror handler
+[JS] Root content: 
+      <h1>PhaseSynth Ultra+ Test</h1>
+      <p>If you can see this, the basic HTML is working!</p>
+      <p>Current time: <span id="time">6/18/2025, 12:07:28 PM</span></p>
+      <script>
+        document.getElementById('time').textContent = new Date().toLocaleString();
+      </script>
+    
+[JS] Root display style: flex
+[JS] Script check: Scripts checked
+[CONSOLE LOGS] []
+[CONSOLE ERRORS] ['Failed to load resource: the server responded with a status of 404 (File not found)']
+[ERROR] JavaScript errors found: ['Failed to load resource: the server responded with a status of 404 (File not found)']
+[INFO] Screenshot saved: web_gui_screenshot.png
+[OPENAI] {'ready': False, 'missing': ['main content area', 'navigation menu', 'interactive elements', 'footer'], 'suggestion': "Ensure all essential UI components are loaded and visible. Check for missing interactive elements like buttons or links that should be present in the 'initial_load' state."}
+[RAW]
+```json
+{
+  "ready": false,
+  "missing": ["main content area", "navigation menu", "interactive elements", "footer"],
+  "suggestion": "Ensure all essential UI components are loaded and visible. Check for missing interactive elements like buttons or links that should be present in the 'initial_load' state."
+}
+```
+[WARN] GUI not ready: Ensure all essential UI components are loaded and visible. Check for missing interactive elements like buttons or links that should be present in the 'initial_load' state.
+[WARN] GUI not ready: Ensure all essential UI components are loaded, including navigation, content areas, and interactive elements.
+[WARN] GUI not ready: Ensure that all essential elements and controls are loaded and visible on initial load.
+[FAIL] Could not get GUI into correct state after retries.

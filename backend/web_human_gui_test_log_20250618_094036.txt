@@ -1,0 +1,14 @@
+[INFO] Screenshot saved: web_gui_screenshot.png
+[OPENAI] {'ready': False, 'missing': ['app interface', 'menu', 'controls', 'visual content'], 'suggestion': 'The screenshot is completely white, indicating that the app interface has not loaded. Check network connectivity and app initialization.'}
+[RAW]
+```json
+{
+  "ready": false,
+  "missing": ["app interface", "menu", "controls", "visual content"],
+  "suggestion": "The screenshot is completely white, indicating that the app interface has not loaded. Check network connectivity and app initialization."
+}
+```
+[WARN] GUI not ready: The screenshot is completely white, indicating that the app interface has not loaded. Check network connectivity and app initialization.
+[WARN] GUI not ready: Ensure all necessary UI components are loaded and visible on the initial load.
+[WARN] GUI not ready: Load the PhaseSynth Ultra+ web app and ensure all UI components are visible and functional.
+[FAIL] Could not get GUI into correct state after retries.

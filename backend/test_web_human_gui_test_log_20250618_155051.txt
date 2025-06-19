@@ -1,0 +1,34 @@
+[INFO] Navigating to http://localhost:3000
+[INFO] Page title: PhaseSynth Ultra+
+[INFO] Root content length: 0
+[CONSOLE] 19 messages:
+  log: HTML loaded, testing JavaScript execution...
+  log: Document ready state: loading
+  log: Root element exists: false
+  log: About to load main.bundle.js...
+  log: Root element before bundle: JSHandle@node
+  log: Testing basic JavaScript...
+  log: Basic JS test passed: test
+  log: main.bundle.js loaded, checking for errors...
+  log: Root element after bundle: JSHandle@node
+  log: Root element innerHTML: 
+  log: Testing bundle execution...
+  log: Window object keys: [webpackChunkphasesynth_ultra_plus]
+  error: Failed to load resource: the server responded with a status of 404 (File not found)
+  log: Root element content after 1s: 
+  log: React version: undefined
+  log: ReactDOM version: undefined
+  log: Root element content after 3s: 
+  error: React app failed to mount - root element is empty
+  log: ERROR DETECTED: [React app failed to mount - root element is empty]
+[INFO] Screenshot saved: test_web_gui_screenshot.png
+[OPENAI] {'loaded': False, 'elements': [], 'description': 'The screenshot shows a completely blank white screen with no visible UI elements or content.', 'issues': ['The React app is not loaded.', 'There are no UI elements visible on the screen.']}
+[RAW]
+```json
+{
+  "loaded": false,
+  "elements": [],
+  "description": "The screenshot shows a completely blank white screen with no visible UI elements or content.",
+  "issues": ["The React app is not loaded.", "There are no UI elements visible on the screen."]
+}
+```

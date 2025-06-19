@@ -1,8 +1,10 @@
+# All sensitive/private/confidential references have been redacted for public compliance.
+
 # Security Policy
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability, please report it by emailing security@yourdomain.com or by opening a private security advisory on GitHub. We will respond as quickly as possible.
+If you discover a security vulnerability, please report it by emailing security@yourdomain.com or by opening a [REDACTED] security advisory on GitHub. We will respond as quickly as possible.
 
 ## Supported Versions
 

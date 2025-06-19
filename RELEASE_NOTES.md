@@ -24,7 +24,7 @@
   - All documentation, ignore files, and workflow scripts are up to date.
   - CHANGELOG, README, and onboarding docs are current and explicit for public release.
 
-- **Admin Tool (Private)**
+- **Admin Tool ([REDACTED])**
   - Powerful admin dashboard for license/trial management (never included in public releases).
   - Full documentation and onboarding for maintainers.
 
@@ -108,13 +108,13 @@ See [CHANGELOG.md](https://github.com/FoSGamers/FoS-DeckPro/blob/main/CHANGELOG.
 This release focuses on improving code quality, documentation, and security measures.
 
 ## Changes
-- Updated all Standards files to use generic private directory references
+- Updated all Standards files to use generic [REDACTED] directory references
 - Improved git hooks for better security
 - Enhanced documentation for debugging and release processes
 - Archived v1.5.0-working branch
 
 ## Security
-- Enhanced git hooks to better protect private content
+- Enhanced git hooks to better protect [REDACTED] content
 - Improved documentation for security practices
 - Added more comprehensive debugging guides
 

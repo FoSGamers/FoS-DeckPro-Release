@@ -1,0 +1,30 @@
+[JS] Document ready state: complete
+[JS] Root element exists: True
+[JS] Script count: 1
+[JS] Main bundle loaded: True
+[JS] Error checking JavaScript: Page.evaluate: SyntaxError: Illegal return statement
+    at eval (<anonymous>)
+    at UtilityScript.evaluate (<anonymous>:313:29)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+[CONSOLE LOGS] []
+[CONSOLE ERRORS] ['Failed to load resource: the server responded with a status of 404 (File not found)']
+[WARN] React app may not have loaded properly: Page.wait_for_selector: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("#root") to be visible
+    24 × locator resolved to hidden <div id="root"></div>
+
+[ERROR] JavaScript errors found: ['Failed to load resource: the server responded with a status of 404 (File not found)']
+[INFO] Screenshot saved: web_gui_screenshot.png
+[OPENAI] {'ready': False, 'missing': ['all elements'], 'suggestion': 'Reload the web app or check for rendering issues.'}
+[RAW]
+```json
+{
+  "ready": false,
+  "missing": ["all elements"],
+  "suggestion": "Reload the web app or check for rendering issues."
+}
+```
+[WARN] GUI not ready: Reload the web app or check for rendering issues.
+[WARN] GUI not ready: Could not parse OpenAI response.
+[WARN] GUI not ready: Reload the web app or check for any loading issues to display the required elements.
+[FAIL] Could not get GUI into correct state after retries.

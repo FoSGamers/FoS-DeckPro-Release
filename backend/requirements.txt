@@ -1,0 +1,27 @@
+numpy>=1.21.0
+fastapi==0.104.1
+uvicorn==0.24.0
+pydantic==2.5.0
+pyyaml>=5.4.1
+playwright>=1.40.0
+pytest==7.3.1
+pytest-asyncio==0.21.0
+autopep8>=2.0.0
+flake8>=6.0.0
+pylint>=2.17.0
+jinja2>=3.0.0
+httpx==0.24.0
+Pillow>=10.0.0
+pytesseract>=0.3.10
+SpeechRecognition>=3.10.0
+pyobjc>=9.0.0; sys_platform == "darwin"
+networkx>=3.0.0
+markdown>=3.4.0
+beautifulsoup4>=4.12.0
+requests>=2.31.0
+psutil==5.9.5
+python-multipart==0.0.6
+pyautogui>=0.9.54
+matplotlib>=3.7.0
+seaborn>=0.12.0
+pandas>=2.0.0 

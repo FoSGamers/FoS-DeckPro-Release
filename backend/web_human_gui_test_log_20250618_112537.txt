@@ -1,0 +1,32 @@
+[JS] Document ready state: complete
+[JS] Root element exists: True
+[JS] Script count: 1
+[JS] Main bundle loaded: True
+[JS] React available: False
+[JS] ReactDOM available: False
+[JS] Mount check error: Page.evaluate: SyntaxError: Illegal return statement
+    at eval (<anonymous>)
+    at UtilityScript.evaluate (<anonymous>:313:29)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+[JS] Global error handler: no onerror handler
+[JS] Root content: 
+[JS] Root display style: block
+[JS] Script check error: Page.evaluate: SyntaxError: Illegal return statement
+    at eval (<anonymous>)
+    at UtilityScript.evaluate (<anonymous>:313:29)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+[CONSOLE LOGS] []
+[CONSOLE ERRORS] []
+[WARN] React app may not have loaded properly: Page.wait_for_selector: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("#root") to be visible
+    24 × locator resolved to hidden <div id="root"></div>
+
+[INFO] Screenshot saved: web_gui_screenshot.png
+[OPENAI] {'ready': False, 'missing': ['screenshot'], 'suggestion': 'Please provide a valid screenshot to assess the UI state of the PhaseSynth Ultra+ web app.'}
+[RAW]
+{"ready": false, "missing": ["screenshot"], "suggestion": "Please provide a valid screenshot to assess the UI state of the PhaseSynth Ultra+ web app."}
+[WARN] GUI not ready: Please provide a valid screenshot to assess the UI state of the PhaseSynth Ultra+ web app.
+[WARN] GUI not ready: Ensure all necessary UI elements are present and interactive on initial load.
+[WARN] GUI not ready: Reload the app and check for any errors in the console.
+[FAIL] Could not get GUI into correct state after retries.

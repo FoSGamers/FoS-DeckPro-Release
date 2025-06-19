@@ -1,0 +1,28 @@
+[JS] Document ready state: complete
+[JS] Root element exists: True
+[JS] Script count: 1
+[JS] Main bundle loaded: True
+[JS] Global webpack/React vars: __playwright__binding__, __pwInitScripts, webpackChunkphasesynth_ultra_plus
+[JS] React available: False
+[JS] ReactDOM available: False
+[JS] Mount attempt: Missing React, ReactDOM, or root element
+[JS] Global error handler: no onerror handler
+[JS] Root content: 
+[JS] Root display style: block
+[JS] Script check: Scripts checked
+[CONSOLE LOGS] ['Found main bundle script: http://localhost:3000/main.bundle.js']
+[CONSOLE ERRORS] ['Failed to load resource: the server responded with a status of 404 (File not found)']
+[WARN] React app may not have loaded properly: Page.wait_for_selector: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator("#root") to be visible
+    24 × locator resolved to hidden <div id="root"></div>
+
+[ERROR] JavaScript errors found: ['Failed to load resource: the server responded with a status of 404 (File not found)']
+[INFO] Screenshot saved: web_gui_screenshot.png
+[OPENAI] {'ready': False, 'missing': [], 'suggestion': 'Could not parse OpenAI response.'}
+[RAW]
+I'm unable to view the screenshot you're referring to. Therefore, I can't assess the web app state. Please provide a list of required elements or check if the screenshot is accessible.
+[WARN] GUI not ready: Could not parse OpenAI response.
+[WARN] GUI not ready: Ensure all initial UI components are loaded.
+[WARN] GUI not ready: Please provide a valid screenshot with visible UI elements to evaluate the 'initial_load' test state.
+[FAIL] Could not get GUI into correct state after retries.

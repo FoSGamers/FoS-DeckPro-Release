@@ -1,0 +1,32 @@
+[INFO] Navigating to http://localhost:3000
+[INFO] Page title: PhaseSynth Ultra+
+[INFO] Root content length: 0
+[CONSOLE] 17 messages:
+  info: %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
+  log: HTML loaded, testing JavaScript execution...
+  log: Document ready state: loading
+  log: Root element exists: false
+  log: React loaded: true
+  log: ReactDOM loaded: true
+  log: About to load main.bundle.js...
+  log: Root element before bundle: JSHandle@node
+  log: main.bundle.js loaded, checking for errors...
+  log: Root element after bundle: JSHandle@node
+  log: Root element innerHTML: 
+  error: Failed to load resource: the server responded with a status of 404 (File not found)
+  log: Root element content after 1s: 
+  log: React version: 18.3.1
+  log: ReactDOM version: 18.3.1
+  log: Root element content after 3s: 
+  error: React app failed to mount - root element is empty
+[INFO] Screenshot saved: test_web_gui_screenshot.png
+[OPENAI] {'loaded': False, 'elements': [], 'description': 'The screenshot is completely blank with a white background, indicating that no elements are visible.', 'issues': ['The React app did not load properly, displaying no UI elements.']}
+[RAW]
+```json
+{
+  "loaded": false,
+  "elements": [],
+  "description": "The screenshot is completely blank with a white background, indicating that no elements are visible.",
+  "issues": ["The React app did not load properly, displaying no UI elements."]
+}
+```

@@ -1,0 +1,16 @@
+[INFO] Navigating to http://localhost:3000
+[INFO] Page title: PhaseSynth Ultra+
+[INFO] Root content length: 0
+[CONSOLE] 1 messages:
+  error: Failed to load resource: the server responded with a status of 404 (File not found)
+[INFO] Screenshot saved: test_web_gui_screenshot.png
+[OPENAI] {'loaded': False, 'elements': [], 'description': 'The screenshot is completely blank and white, with no visible UI elements or content.', 'issues': ['The React app did not load and no UI elements are visible.']}
+[RAW]
+```json
+{
+  "loaded": false,
+  "elements": [],
+  "description": "The screenshot is completely blank and white, with no visible UI elements or content.",
+  "issues": ["The React app did not load and no UI elements are visible."]
+}
+```

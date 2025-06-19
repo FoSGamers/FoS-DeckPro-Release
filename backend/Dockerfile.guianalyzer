@@ -1,0 +1,10 @@
+# GUI Analyzer Dockerfile
+FROM python:3.12-slim
+WORKDIR /app
+COPY requirements.txt ./
+RUN apt-get update && apt-get install -y gcc python3-dev xvfb && rm -rf /var/lib/apt/lists/*
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+ENV DISPLAY=:99
+ENV PYTHONPATH=/app
+CMD ["sh", "-c", "Xvfb :99 -screen 0 1024x768x24 -ac +extension GLX +render -noreset > /dev/null 2>&1 & sleep 2 && python3 gui_validator.py"] 

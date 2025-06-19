@@ -1,0 +1,14 @@
+[INFO] Screenshot saved: web_gui_screenshot.png
+[OPENAI] {'ready': False, 'missing': ['screenshot'], 'suggestion': 'Please provide a screenshot of the PhaseSynth Ultra+ web app for assessment.'}
+[RAW]
+```json
+{
+  "ready": false,
+  "missing": ["screenshot"],
+  "suggestion": "Please provide a screenshot of the PhaseSynth Ultra+ web app for assessment."
+}
+```
+[WARN] GUI not ready: Please provide a screenshot of the PhaseSynth Ultra+ web app for assessment.
+[WARN] GUI not ready: Ensure all UI components load correctly and check console for errors.
+[WARN] GUI not ready: Could not parse OpenAI response.
+[FAIL] Could not get GUI into correct state after retries.

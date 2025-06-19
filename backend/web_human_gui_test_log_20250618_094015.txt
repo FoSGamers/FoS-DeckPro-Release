@@ -1,0 +1,1 @@
+[INFO] Screenshot saved: web_gui_screenshot.png

@@ -5,8 +5,8 @@
 > This project follows a strict, privacy-safe, and automated workflow. Use this summary and checklist to ensure every project is 100% clean, safe, and compliant:
 >
 > ## Summary
-> - Only develop on `personal-dev` or `feature/*` branches. Never commit to `main` or release branches.
-> - All personal files go in a private directory (in `.gitignore`). Never commit personal files to public branches.
+> - Only develop on `[REDACTED]` or `feature/*` branches. Never commit to `main` or release branches.
+> - All personal files go in a [REDACTED] directory (in `.gitignore`). Never commit personal files to public branches.
 > - Never commit build artifacts or large files (e.g., `dist/`, `build/`, `*.zip`, `*.pkg`, `*.app`, `*.spec`, `*.dmg`, `*.exe`, `*.bin`, `*.tar.gz`, `*.whl`, `*.egg`, `*.pyc`, `__pycache__/`). Always add these to `.gitignore` and clean them from git history.
 > - Use the provided scripts for feature, release, onboarding, and cleaning.
 > - CI/CD and branch protection block unsafe merges and releases.
@@ -15,7 +15,7 @@
 > - All PRs and issues use the provided templates and checklists.
 >
 > ## Checklist
-> - [ ] All personal files are in a private directory and listed in `.gitignore`.
+> - [ ] All personal files are in a [REDACTED] directory and listed in `.gitignore`.
 > - [ ] All build artifacts and large files are in `.gitignore` and **never** committed.
 > - [ ] No build artifacts or large files are present in git history (use `git filter-repo` if needed).
 > - [ ] All code is modular, documented, and tested (with docstrings and unit tests).
@@ -32,7 +32,7 @@
 > - [ ] Branch protection rules are set for `main` and release branches.
 > - [ ] All PRs and issues use the provided templates and checklists.
 > - [ ] All documentation (`README.md`, `RELEASE.md`, `CONTRIBUTING.md`, `PROJECT_WORKFLOW_TEMPLATE.md`) is up to date and explicit.
-> - [ ] No secrets, credentials, or sensitive data are ever committed.
+> - [ ] No secrets, credentials, or [REDACTED] data are ever committed.
 > - [ ] All contributors are aware of and follow these rules.
 
 # FoS-DeckPro
@@ -40,7 +40,7 @@
 **Release: v1.5.1 (2024-06-XX) — Working, Stable, and Fully Modular**
 
 > **IMPORTANT:**
-> - A GitHub Action now enforces release hygiene: any personal files (backups, inventory, templates, sensitive configs, etc.) in a PR or push to a release branch will cause the build to fail.
+> - A GitHub Action now enforces release hygiene: any personal files (backups, inventory, templates, [REDACTED] configs, etc.) in a PR or push to a release branch will cause the build to fail.
 > - You MUST read and follow [RELEASE.md](RELEASE.md) and [CONTRIBUTING.md](CONTRIBUTING.md) before merging or releasing.
 
 > This release is a fully working, stable, and modular version of FoS-DeckPro. All core workflows (break builder, Whatnot packing slip processing, inventory management, buyers database, and analytics) are robust, tested, and documented. All break templates and configuration files are present and correctly referenced. Legacy and backup files are isolated in the `legacy/` folder. See below for usage, features, and details.
@@ -259,7 +259,7 @@ See [LICENSE](LICENSE) for full terms.
 
 For more details, see the in-app help or contact support at the email above.
 
-# FoS-DeckPro License Key Generator (Private)
+# FoS-DeckPro License Key Generator ([REDACTED])
 
 **This repository is private and for maintainers only. Do not share or publish these scripts.**
 

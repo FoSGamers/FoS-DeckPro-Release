@@ -23,6 +23,7 @@ FEATURES = [
     'add_scryfall',
     'adjust_whatnot_pricing',
     'process_packing_slips',
+    'pricing_dashboard',
     'all_features',
 ]
 

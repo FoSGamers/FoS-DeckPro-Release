@@ -1,12 +1,14 @@
-> **NOTE:** References to `user_private/` in this file are intentional and required for project workflow documentation. These should be safelisted in all CI, sync, and hygiene scripts, and do not indicate a privacy or release hygiene violation.
+# All sensitive/private/confidential references have been redacted for public compliance.
+
+> **NOTE:** References to `[REDACTED]/` in this file are intentional and required for project workflow documentation. These should be safelisted in all CI, sync, and hygiene scripts, and do not indicate a privacy or release hygiene violation.
 
 > **GOLD STANDARD SUMMARY & CHECKLIST**
 >
 > This project follows a strict, privacy-safe, and automated workflow. Use this summary and checklist to ensure every project is 100% clean, safe, and compliant:
 >
 > ## Summary
-> - Only develop on `personal-dev` or `feature/*` branches. Never commit to `main` or release branches.
-> - All personal files go in `user_private/` (in `.gitignore`). Never commit personal files to public branches.
+> - Only develop on `[REDACTED]` or `feature/*` branches. Never commit to `main` or release branches.
+> - All personal files go in `[REDACTED]/` (in `.gitignore`). Never commit personal files to public branches.
 > - Never commit build artifacts or large files (e.g., `dist/`, `build/`, `*.zip`, `*.pkg`, `*.app`, `*.spec`, `*.dmg`, `*.exe`, `*.bin`, `*.tar.gz`, `*.whl`, `*.egg`, `*.pyc`, `__pycache__/`). Always add these to `.gitignore` and clean them from git history.
 > - Use the provided scripts for feature, release, onboarding, and cleaning.
 > - CI/CD and branch protection block unsafe merges and releases.
@@ -14,7 +16,7 @@
 > - All PRs and issues use the provided templates and checklists.
 >
 > ## Checklist
-> - [ ] All personal files are in `user_private/` and listed in `.gitignore`.
+> - [ ] All personal files are in `[REDACTED]/` and listed in `.gitignore`.
 > - [ ] All build artifacts and large files are in `.gitignore` and **never** committed.
 > - [ ] No build artifacts or large files are present in git history (use `git filter-repo` if needed).
 > - [ ] All code is modular, documented, and tested (with docstrings and unit tests).
@@ -30,7 +32,7 @@
 > - [ ] Branch protection rules are set for `main` and release branches.
 > - [ ] All PRs and issues use the provided templates and checklists.
 > - [ ] All documentation (`README.md`, `RELEASE.md`, `CONTRIBUTING.md`, `PROJECT_WORKFLOW_TEMPLATE.md`) is up to date and explicit.
-> - [ ] No secrets, credentials, or sensitive data are ever committed.
+> - [ ] No secrets, credentials, or [REDACTED] data are ever committed.
 > - [ ] All contributors are aware of and follow these rules.
 
 ## Code Commenting and Layman Description Rule for All Project Rule Files
@@ -257,8 +259,8 @@ All files that contain project rules—including this file, .cursor files, .gith
 
 ### Added
 - Comprehensive debugging guide (`Standards/DEBUGGING.md`) for git hooks and security checks
-- Exemptions for `.github/workflows/` files and `Standards/CHANGELOG.md` from `user_private/` reference checks
+- Exemptions for `.github/workflows/` files and `Standards/CHANGELOG.md` from `[REDACTED]/` reference checks
 
 ### Changed
-- Updated git hooks to allow intentional `user_private/` references in workflow files and documentation
+- Updated git hooks to allow intentional `[REDACTED]/` references in workflow files and documentation
 - Improved error messages and debugging information for git hook failures 

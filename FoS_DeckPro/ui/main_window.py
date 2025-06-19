@@ -1,8 +1,8 @@
 from PySide6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QStatusBar, QMenuBar, QFileDialog, QMessageBox, QSplitter, QSizePolicy, QDialog, QPushButton, QTextEdit, QInputDialog, QRadioButton, QButtonGroup, QLineEdit, QProgressDialog, QListWidget, QListWidgetItem, QComboBox
 )
-from PySide6.QtGui import QAction
-from PySide6.QtCore import Qt
+from PySide6.QtGui import QAction, QScreen
+from PySide6.QtCore import Qt, QTimer
 from ui.card_table import CardTableView
 from ui.filter_overlay import FilterOverlay
 from ui.image_preview import ImagePreview
@@ -226,6 +226,12 @@ class MainWindow(QMainWindow):
         adjust_whatnot_action.triggered.connect(lambda: self._on_paid_feature_triggered(self.adjust_whatnot_pricing_dialog, feature_name='adjust_whatnot_pricing'))
         tools_menu.addAction(adjust_whatnot_action)
         self.adjust_whatnot_action = adjust_whatnot_action
+        
+        # Add Pricing Dashboard action
+        pricing_dashboard_action = QAction("Pricing Dashboard...", self)
+        pricing_dashboard_action.triggered.connect(lambda: self._on_paid_feature_triggered(self.open_pricing_dashboard, feature_name='pricing_dashboard'))
+        tools_menu.addAction(pricing_dashboard_action)
+        
         # Add Scryfall enrichment action
         enrich_action = QAction("Enrich All Cards from Scryfall...", self)
         enrich_action.triggered.connect(lambda: self._on_paid_feature_triggered(self.enrich_all_cards_from_scryfall, feature_name='enrich_scryfall'))
@@ -239,6 +245,11 @@ class MainWindow(QMainWindow):
         add_scryfall_action = QAction("Add Card by Scryfall ID", self)
         add_scryfall_action.triggered.connect(lambda: self._on_paid_feature_triggered(self.add_card_by_scryfall_id, feature_name='add_scryfall'))
         tools_menu.addAction(add_scryfall_action)
+
+        # Add Screenshot action for testing
+        screenshot_action = QAction("Take Screenshot", self)
+        screenshot_action.triggered.connect(self.screenshot)
+        tools_menu.addAction(screenshot_action)
 
         # Add Whatnot export action (paid)
         self.export_whatnot_action = export_whatnot_action
@@ -263,6 +274,11 @@ class MainWindow(QMainWindow):
         self.process_packing_slips_action = process_packing_slips_action
         self.process_packing_slips_action.triggered.disconnect()
         self.process_packing_slips_action.triggered.connect(lambda: self._on_paid_feature_triggered(self.process_packing_slips, feature_name='process_packing_slips'))
+
+        # Screenshot trigger timer for automation
+        self.screenshot_timer = QTimer(self)
+        self.screenshot_timer.timeout.connect(self.check_screenshot_trigger)
+        self.screenshot_timer.start(500)  # Check every 0.5s
 
     def _update_columns_from_inventory(self):
         # Dynamically set self.columns to all unique fields in inventory, with defaults first
@@ -886,7 +902,7 @@ class MainWindow(QMainWindow):
                 "Category", "Sub Category", "Title", "Description", "Quantity", "Type", "Price", "Shipping Profile", "Offerable", "Hazmat", "Condition", "Cost Per Item", "SKU", "Image URL 1", "Image URL 2", "Image URL 3", "Image URL 4", "Image URL 5", "Image URL 6", "Image URL 7", "Image URL 8"
             ]
             defaults = [
-                "Trading Card Games", "Magic: The Gathering", "", "", "1", "Buy it Now", "1", "0-1 oz", "No", "Not Hazmat", "Near Mint", "", "", "", "", "", "", "", ""
+                "Trading Card Games", "Magic: The Gathering", "", "", "1", "Buy it Now", "1", "0-1 oz", "No", "Not Hazmat", "Near Mint", "", "", "", "", "", "", ""
             ]
             QMessageBox.warning(self, "Whatnot Template Missing", "Template file not found. Using built-in default columns for export.")
         # Static columns and their default values
@@ -1464,3 +1480,66 @@ class MainWindow(QMainWindow):
             self.card_table.update_cards(self.inventory.get_all_cards())
             self._unsaved_changes = True
             self.statusBar().showMessage(f"Imported {len(cards)} cards from CSV data")
+
+    def open_pricing_dashboard(self):
+        """Open the pricing dashboard dialog"""
+        try:
+            from ui.dialogs.pricing_dashboard import PricingDashboard
+            dashboard = PricingDashboard(self.inventory, self)
+            dashboard.exec()
+        except ImportError as e:
+            from PySide6.QtWidgets import QMessageBox
+            QMessageBox.warning(self, "Feature Not Available", 
+                              f"Pricing Dashboard is not available: {e}")
+        except Exception as e:
+            from PySide6.QtWidgets import QMessageBox
+            QMessageBox.critical(self, "Error", 
+                               f"Failed to open Pricing Dashboard: {e}")
+
+    def screenshot(self, filename=None):
+        """Take a screenshot of the current window"""
+        from PySide6.QtWidgets import QApplication
+        import os
+        import datetime
+        
+        if filename is None:
+            timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+            filename = f"screenshot_{timestamp}.png"
+        
+        # Ensure the filename has a .png extension
+        if not filename.endswith('.png'):
+            filename += '.png'
+        
+        # Use absolute path to ensure file is saved in the expected location
+        if not os.path.isabs(filename):
+            filename = os.path.abspath(filename)
+        
+        # Take the screenshot
+        pixmap = self.grab()
+        success = pixmap.save(filename, 'PNG')
+        
+        if success:
+            print(f"[APTPT] Screenshot saved: {filename}")
+            # Only show message box if called from menu (no filename parameter)
+            if filename is None:
+                QMessageBox.information(self, "Screenshot Saved", f"Screenshot saved to {filename}")
+        else:
+            print(f"[APTPT] Failed to save screenshot: {filename}")
+            if filename is None:
+                QMessageBox.critical(self, "Screenshot Error", f"Failed to save screenshot to {filename}")
+        
+        return filename
+
+    def check_screenshot_trigger(self):
+        import os
+        trigger_file = 'take_screenshot.txt'
+        if os.path.exists(trigger_file):
+            try:
+                with open(trigger_file, 'r') as f:
+                    filename = f.read().strip()
+                if not filename:
+                    filename = None
+            except Exception:
+                filename = None
+            self.screenshot(filename)
+            os.remove(trigger_file)

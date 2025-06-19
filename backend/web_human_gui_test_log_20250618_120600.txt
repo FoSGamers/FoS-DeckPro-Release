@@ -1,0 +1,25 @@
+[JS] Document ready state: complete
+[JS] Root element exists: True
+[JS] Script count: 1
+[JS] Main bundle loaded: False
+[JS] Error checking JavaScript: Page.evaluate: SyntaxError: Illegal return statement
+    at eval (<anonymous>)
+    at UtilityScript.evaluate (<anonymous>:313:29)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+[CONSOLE LOGS] []
+[CONSOLE ERRORS] ['Failed to load resource: the server responded with a status of 404 (File not found)']
+[ERROR] JavaScript errors found: ['Failed to load resource: the server responded with a status of 404 (File not found)']
+[INFO] Screenshot saved: web_gui_screenshot.png
+[OPENAI] {'ready': False, 'missing': ['Interactive elements', 'Navigation bar', 'Logo'], 'suggestion': 'Ensure that all required UI components such as interactive elements, navigation bar, and logo are visible and functional.'}
+[RAW]
+```json
+{
+  "ready": false,
+  "missing": ["Interactive elements", "Navigation bar", "Logo"],
+  "suggestion": "Ensure that all required UI components such as interactive elements, navigation bar, and logo are visible and functional."
+}
+```
+[WARN] GUI not ready: Ensure that all required UI components such as interactive elements, navigation bar, and logo are visible and functional.
+[WARN] GUI not ready: Ensure all required UI components including interactive buttons, navigation menu, footer, and logo are visible and functional for the 'initial_load' test.
+[WARN] GUI not ready: Ensure all interactive elements and navigation components are visible and functional on the initial load.
+[FAIL] Could not get GUI into correct state after retries.

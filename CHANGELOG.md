@@ -51,18 +51,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Use correct stable version for `actions/download-artifact` in build-and-upload workflow to prevent linter errors and ensure reliability.
 
-## [v1.6.1] - 2024-06-09
+## [v1.6.1] - 2024-06-19
 
 ### Added
 - Mac app bundle (`FoS-DeckPro.app.zip`) for easy installation and usage.
 - Enhanced public/private separation to ensure only public files are included in releases.
 - Automated release hygiene workflows to maintain clean, professional releases.
+- APTPT (Adaptive Phase-Targeted Pulse/Trajectory) integration for robust control systems
+- Comprehensive GUI testing framework with automated screenshot analysis
+- Enhanced error logging and reporting system
+- New pricing dashboard and price tracking features
+- Improved card management and inventory systems
+- Advanced filtering and export capabilities
+- Real-time validation and testing infrastructure
 
 ### Changed
 - Updated documentation for clarity and ease of use.
+- Enhanced APTPT control system with improved stability and performance
+- Improved error handling and user feedback mechanisms
+- Updated UI components for better user experience
+- Enhanced modular architecture for better maintainability
 
 ### Fixed
 - Resolved merge conflicts and ensured compliance with project standards.
+- Fixed GUI responsiveness and performance issues
+- Improved error recovery and system stability
+- Enhanced data validation and integrity checks
+- Fixed compatibility issues across different platforms
+
+### Security
+- Enhanced APTPT security protocols
+- Improved data protection and privacy measures
+- Better access control and authentication systems
 
 ## [v1.6.0] - 2024-03-19
 

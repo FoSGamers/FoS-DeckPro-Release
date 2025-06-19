@@ -185,7 +185,7 @@ diff -r FoS-DeckPro/README.md FoS_DeckPro/README.md
 2a3,97
 > **Release: v1.6.0 (2024-06-05) — Working, Stable, and Fully Modular**
 > 
-> > This release is a fully working, stable, and modular version of FoS-DeckPro. All core workflows (break builder, Whatnot packing slip processing, inventory management, buyers database, and analytics) are robust, tested, and documented. All break templates and configuration files are present and correctly referenced. Legacy and backup files are isolated in a private folder and are not included in the public release. See below for usage, features, and details.
+> > This release is a fully working, stable, and modular version of FoS-DeckPro. All core workflows (break builder, Whatnot packing slip processing, inventory management, buyers database, and analytics) are robust, tested, and documented. All break templates and configuration files are present and correctly referenced. Legacy and backup files are isolated in a [REDACTED] folder and are not included in the public release. See below for usage, features, and details.
 > 
 > ## Quick Start
 > 
@@ -422,7 +422,7 @@ diff -r FoS-DeckPro/docs/architecture.md FoS_DeckPro/docs/architecture.md
 >   - **Break templates/configs**: (e.g., `50-30-15-5.json`, `500 spot break.json`) are in the project root for use by the break builder and export tools.
 > 
 > ## Legacy & Backups
-> - All legacy scripts, backup data, and non-essential files are now isolated in a private folder and are not included in the public release.
+> - All legacy scripts, backup data, and non-essential files are now isolated in a [REDACTED] folder and are not included in the public release.
 > 
 > ## Main Workflows
 > - **Break Builder:** Modular, rule-based, and curated break list generation with dynamic filtering, preview, and export.

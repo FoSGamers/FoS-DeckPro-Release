@@ -57,7 +57,7 @@ pillow==10.3.0
 platformdirs==4.2.2
 pluggy==1.5.0
 proglog==0.1.10
-prompt_generator @ file:///Users/jgleason/FoSGamers/Development/Development-Main/PromptMaker_v1.1
+# prompt_generator @ file:///Users/jgleason/FoSGamers/Development/Development-Main/PromptMaker_v1.1
 psutil==5.9.8
 pycodestyle==2.11.1
 pycparser==2.22

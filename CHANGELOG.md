@@ -82,6 +82,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PyInstaller configuration for proper application packaging
 - Automated GitHub Actions workflow for release builds
 - Build script for local development and testing
+- Removed local path dependency for prompt_generator from requirements.txt to allow CI builds on GitHub Actions.
 
 ### Changed
 - Updated build-and-upload workflow to work with current project structure

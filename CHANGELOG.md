@@ -55,6 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Fully modular, maintainable, and extensible codebase**
 - **Manual workflow triggering**: Added workflow_dispatch trigger for build workflow
 - **Professional release notes**: Workflow now uses a dedicated, comprehensive release notes file for v1.7.0
+- **Python-only release**: v1.7.0 is now a Python script release with no executables; users should run the app as described in the release notes.
 
 ### Fixed
 - **Build Workflow**: Simplified GitHub Actions workflow to avoid system dependency issues
@@ -70,6 +71,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Documentation**: Updated README and contributing guidelines
 - **Release Process**: Streamlined release workflow with automated builds
 - **Release workflow**: Now uses a professional, versioned release notes file for v1.7.0
+- **Release is Python-only**: No executables are provided in v1.7.0; users must run the app as a Python script.
 
 ## [1.6.0] - 2025-01-18
 

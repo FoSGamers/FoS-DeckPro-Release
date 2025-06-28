@@ -1,4 +1,19 @@
-# 🚀 FoS-DeckPro v1.7.0 - Enhanced APTPT Integration & Cross-Platform Release
+# 🚀 FoS-DeckPro v1.7.0 - Enhanced APTPT Integration & Python Script Release
+
+## ⚡️ How to Run (No Executables Provided)
+
+**This release does not include pre-built executables. To run the app:**
+
+1. Install Python 3.11+
+2. Clone or download this repository
+3. Install requirements:
+   ```sh
+   pip install -r FoS_DeckPro/requirements.txt
+   ```
+4. Launch the app:
+   ```sh
+   python3 FoS_DeckPro/main.py
+   ```
 
 ## 📦 Download
 

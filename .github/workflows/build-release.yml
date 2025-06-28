@@ -1,4 +1,4 @@
-name: Build and Release Executables
+name: Build Windows and Mac Executables
 
 on:
   push:
@@ -12,86 +12,97 @@ on:
         default: 'v1.7.0'
 
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ['3.12']
-
+  build-windows:
+    runs-on: windows-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+      
+      - name: Build executable
+        run: |
+          pyinstaller --onefile --windowed --name "FoS-DeckPro" main.py
+      
+      - name: Upload Windows executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: FoS-DeckPro-Windows
+          path: dist/FoS-DeckPro.exe
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install pyinstaller
-
-    - name: Build executable
-      run: |
-        pyinstaller FoS-DeckPro.spec
-
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: FoS-DeckPro-${{ runner.os }}
-        path: dist/
+  build-mac:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+      
+      - name: Build executable
+        run: |
+          pyinstaller --onefile --windowed --name "FoS-DeckPro" main.py
+      
+      - name: Upload Mac executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: FoS-DeckPro-Mac
+          path: dist/FoS-DeckPro
 
   create-release:
-    needs: build
+    needs: [build-windows, build-mac]
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
-    
+    if: startsWith(github.ref, 'refs/tags/')
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Download all artifacts
-      uses: actions/download-artifact@v4
-      with:
-        path: artifacts
-
-    - name: Create Release
-      id: create_release
-      uses: softprops/action-gh-release@v2
-      with:
-        tag_name: ${{ github.event.inputs.version || github.ref_name }}
-        name: FoS DeckPro ${{ github.event.inputs.version || github.ref_name }}
-        body: |
-          ## FoS DeckPro ${{ github.event.inputs.version || github.ref_name }}
-          
-          ### Downloads
-          - **Windows**: FoS-DeckPro.exe
-          - **macOS**: FoS-DeckPro
-          - **Linux**: FoS-DeckPro
-          
-          ### Installation
-          1. Download the executable for your platform
-          2. Make it executable (Linux/macOS): `chmod +x FoS-DeckPro`
-          3. Run the application
-          
-          ### Features
-          - Magic: The Gathering card inventory management
-          - Scryfall integration for card data
-          - Export to various formats
-          - Deck building tools
-          - Pricing dashboard
-          
-          ### System Requirements
-          - Windows 10+, macOS 10.14+, or Linux
-          - No Python installation required
-        files: |
-          artifacts/FoS-DeckPro-ubuntu-latest/FoS-DeckPro
-          artifacts/FoS-DeckPro-windows-latest/FoS-DeckPro.exe
-          artifacts/FoS-DeckPro-macos-latest/FoS-DeckPro
-        draft: false
-        prerelease: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Download Windows executable
+        uses: actions/download-artifact@v4
+        with:
+          name: FoS-DeckPro-Windows
+          path: windows
+      
+      - name: Download Mac executable
+        uses: actions/download-artifact@v4
+        with:
+          name: FoS-DeckPro-Mac
+          path: mac
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            windows/FoS-DeckPro.exe
+            mac/FoS-DeckPro
+          tag_name: ${{ github.ref_name }}
+          name: FoS DeckPro ${{ github.ref_name }}
+          body: |
+            ## FoS DeckPro ${{ github.ref_name }}
+            
+            ### Downloads
+            - **Windows**: FoS-DeckPro.exe
+            - **macOS**: FoS-DeckPro
+            
+            ### Installation
+            1. Download the appropriate file for your operating system
+            2. Make the file executable (macOS/Linux): `chmod +x FoS-DeckPro`
+            3. Run the application
+            
+            ### Changes
+            - Automated build and release system
+            - Standalone executables for easy installation
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

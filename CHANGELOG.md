@@ -42,14 +42,49 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [v1.7.0] - 2024-12-19
 
 ### Added
 - GitHub Actions workflow for cross-platform builds (Windows, Mac, Linux) to ensure every release includes all platform-specific executables.
 - Updated release hygiene workflow to exclude `.github/workflows/` files from personal files check, ensuring workflow files can reference private patterns without triggering the hygiene check.
+- Enhanced APTPT (Adaptive Phase-Targeted Pulse/Trajectory) integration for robust control systems
+- Comprehensive GUI testing framework with automated screenshot analysis
+- Enhanced error logging and reporting system
+- New pricing dashboard and price tracking features
+- Improved card management and inventory systems
+- Advanced filtering and export capabilities
+- Real-time validation and testing infrastructure
+
+### Changed
+- Updated documentation for clarity and ease of use.
+- Enhanced APTPT control system with improved stability and performance
+- Improved error handling and user feedback mechanisms
+- Updated UI components for better user experience
+- Enhanced modular architecture for better maintainability
 
 ### Fixed
 - Use correct stable version for `actions/download-artifact` in build-and-upload workflow to prevent linter errors and ensure reliability.
+- Resolved merge conflicts and ensured compliance with project standards.
+- Fixed GUI responsiveness and performance issues
+- Improved error recovery and system stability
+- Enhanced data validation and integrity checks
+- Fixed compatibility issues across different platforms
+
+### Security
+- Enhanced APTPT security protocols
+- Improved data protection and privacy measures
+- Better access control and authentication systems
+
+## [Unreleased]
+
+### Added
+- 
+
+### Changed
+- 
+
+### Fixed
+- 
 
 ## [v1.6.1] - 2024-06-19
 

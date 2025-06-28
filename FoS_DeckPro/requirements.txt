@@ -59,7 +59,7 @@ pluggy==1.5.0
 proglog==0.1.10
 # prompt_generator @ file:///Users/jgleason/FoSGamers/Development/Development-Main/PromptMaker_v1.1
 psutil==5.9.8
-pycodestyle==2.11.1
+pycodestyle==2.14.0
 pycparser==2.22
 pydantic==2.7.1
 pydantic_core==2.18.2

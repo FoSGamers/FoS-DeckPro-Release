@@ -88,7 +88,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhanced PyInstaller spec file with proper data inclusion and hidden imports
 
 ### Fixed
-- 
+- Resolved macOS build issues by using --onedir instead of --onefile --windowed
+- Removed missing icon file references from build workflow
+- Fixed working directory paths in GitHub Actions workflow
 
 ## [v1.6.1] - 2024-06-19
 

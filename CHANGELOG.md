@@ -53,6 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Enhanced public/private separation** and release hygiene
 - **Updated documentation** and onboarding
 - **Fully modular, maintainable, and extensible codebase**
+- **Manual workflow triggering**: Added workflow_dispatch trigger for build workflow
 
 ### Fixed
 - **Build Workflow**: Simplified GitHub Actions workflow to avoid system dependency issues

@@ -1,6 +1,0 @@
-FoS-DeckPro/ui/main_window.py:<<<<<<<< HEAD:FoS-DeckPro/ui/main_window.py
-FoS-DeckPro/ui/main_window.py:========
-FoS-DeckPro/ui/main_window.py:>>>>>>>> admin-tool-dev:FoS_DeckPro/ui/main_window.py
-FoS-DeckPro/ui/main_window.py:<<<<<<<< HEAD:FoS-DeckPro/ui/main_window.py
-FoS-DeckPro/ui/main_window.py:========
-FoS-DeckPro/ui/main_window.py:>>>>>>>> admin-tool-dev:FoS_DeckPro/ui/main_window.py

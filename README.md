@@ -1,75 +1,33 @@
-# 🚀 FoS-DeckPro
+# FoS DeckPro v1.7.0
 
-## 📢 Release Notes
+A professional card inventory management system for Magic: The Gathering and other trading card games.
 
-**Latest Version: v1.7.0** - Enhanced APTPT Integration & Comprehensive Testing
+## Quick Start
 
-The latest, official release notes are always available on the [GitHub Releases page](https://github.com/FoSGamers/FoS-DeckPro/releases). This is the single source of truth for all features, changes, and upgrade instructions. The release notes are always kept 100% up to date and reflect the current public version.
+1. **Install Python 3.11+** if you haven't already
+2. **Install dependencies**: `pip install -r requirements.txt`
+3. **Run the app**: `python main.py`
 
-**🎉 New in v1.7.0:**
-- **APTPT Integration**: Advanced adaptive feedback control system for robust operation
-- **Comprehensive Testing**: Automated GUI testing with vision-based validation
-- **Enhanced Performance**: 40-75% improvements across key metrics
-- **Improved Architecture**: Better modular design and extensibility
+## Features
 
----
+- **Card Management**: Add, edit, and organize your card collection
+- **Advanced Filtering**: Find cards by name, set, condition, price, and more
+- **Export Options**: Export to CSV, JSON, or Whatnot format
+- **Price Tracking**: Monitor card values over time
+- **Break Builder**: Create and manage card breaks
+- **Packing Slip Processing**: Import cards from Whatnot packing slips
 
-## ✨ Features
-- **APTPT Control System**: Advanced adaptive feedback control for system stability
-- Unified License & Trial System: Start a free trial or enter a license key for paid features.
-- Break Builder: Build and export Whatnot breaks with advanced filtering and curation.
-- Packing Slip Processor: Scan Whatnot packing slip PDFs and remove sold cards from inventory.
-- Buyers Database & Analytics: Track buyers, purchase history, and analytics.
-- Undo/Restore: Instantly undo packing slip removals.
-- Modern UI/UX: Clean, resizable, and user-friendly interface.
-- Full Test Coverage: All core logic is fully tested for reliability.
-- Cross-Platform Support: Windows, Mac, and Linux compatibility.
+## System Requirements
 
----
+- Python 3.11 or higher
+- macOS, Windows, or Linux
+- 4GB RAM minimum
+- 500MB free disk space
 
-## 🚦 Quick Start
-1. **Install requirements:**
-   ```sh
-   pip install -r FoS_DeckPro/requirements.txt
-   ```
-2. **Launch the app:**
-   ```sh
-   python3 FoS_DeckPro/main.py
-   ```
-3. **Access paid features:**
-   - When prompted, start a free trial or enter a license key.
+## Support
 
----
+For support or feature requests, contact: Thereal.FosGameres@gmail.com
 
-## 💡 Free vs. Paid Features
-**Free:** Inventory management (import/export, local database, view/edit/delete/filter/search), APTPT control system
+## License
 
-**Paid:** Whatnot features (break builder, export listing, packing slip tools, analytics), add card via Scryfall, Scryfall enrichment (auto-fill card details/images), advanced analytics dashboard
-
----
-
-## 🔑 License Key System
-- Paid features are locked by default.
-- On first use of a paid feature, you will be prompted to enter a license key or start a free trial.
-- The app checks your key online and unlocks only the features your key is valid for.
-- License key is stored locally for future use.
-- Each paid feature can be unlocked for a limited time (subscription) or permanently (lifetime).
-- All license key and expiration management is handled automatically.
-
-**To request a license key for paid features, contact:** Thereal.FosGameres@gmail.com
-
----
-
-## 💬 Support & Feedback
-- [Open an Issue](https://github.com/FoSGamers/FoS-DeckPro/issues)
-- [Read the Docs](https://github.com/FoSGamers/FoS-DeckPro/blob/main/README.md)
-- [Contact Maintainer](mailto:Thereal.FosGameres@gmail.com)
-
----
-
-## 📝 Full Changelog
-See [CHANGELOG.md](https://github.com/FoSGamers/FoS-DeckPro/blob/main/CHANGELOG.md) for detailed history.
-
----
-
-<!-- Legacy and detailed documentation has been moved to LEGACY_README_ARCHIVE.md for private reference. --> 
+This software requires a valid license key for full functionality. Contact the developer for licensing information. 

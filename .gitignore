@@ -1,93 +1,38 @@
-# Ignore all private, personal, and admin files
-user_restricted/
-
-# Ignore build artifacts and large files
-*.pyc
-__pycache__/
-*.zip
-*.pkg
-*.app
-*.spec
-*.dmg
-*.exe
-*.bin
-*.tar.gz
-*.whl
-*.egg
-dist/
-build/
-logs/
-
-# Ignore sensitive and backup files
-*.bak
-*.tmp
-*.log
-.DS_Store
-
-# Ignore all PDFs and Excel files
-*.pdf
-*.xlsx
-
-# Ignore all JSON and CSV except public changelog and break_list
-*.json
-!CHANGELOG.json
-*.csv
-!break_list.csv
-
-# Ignore any other sensitive patterns
-SECRET*
-PRIVATE*
-PERSONAL*
-
-# macOS
-.DS_Store
-
 # Python
 __pycache__/
 *.py[cod]
 *.pyo
 *.pyd
-*.pdb
 *.so
 *.egg
 *.egg-info/
 dist/
 build/
 .eggs/
-*.log
 
 # Virtual environments
 .venv/
-.venv311/
 venv/
 ENV/
 
-# Backup and output folders
-backups/
-Backup*/
-backup*/
-output/
-logs/
-*.zip
-
-# Jupyter Notebook checkpoints
-.ipynb_checkpoints
-
 # System files
+.DS_Store
 Thumbs.db
-ehthumbs.db
-Icon?
 
-# VSCode
+# IDE
 .vscode/
-
-# PyCharm
 .idea/
 
-# Test output
-htmlcov/
-.coverage
-.cache/
+# Logs
+*.log
 
-# Misc
-*.swp
+# User data (will be created by app)
+*.json
+*.csv
+!requirements.txt
+!CHANGELOG.json
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3 

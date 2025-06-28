@@ -1,3 +1,0 @@
-# service_account.json must NOT be ignored for deployment!
-# See README.md for security and deployment rules.
-# Do NOT commit this file to public repos, but it must be present for Cloud Function deployment. 

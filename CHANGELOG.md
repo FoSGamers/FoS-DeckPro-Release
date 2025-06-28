@@ -54,6 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Updated documentation** and onboarding
 - **Fully modular, maintainable, and extensible codebase**
 - **Manual workflow triggering**: Added workflow_dispatch trigger for build workflow
+- **Professional release notes**: Workflow now uses a dedicated, comprehensive release notes file for v1.7.0
 
 ### Fixed
 - **Build Workflow**: Simplified GitHub Actions workflow to avoid system dependency issues
@@ -67,6 +68,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Testing**: Implemented comprehensive automated testing suite
 - **Documentation**: Updated README and contributing guidelines
 - **Release Process**: Streamlined release workflow with automated builds
+- **Release workflow**: Now uses a professional, versioned release notes file for v1.7.0
 
 ## [1.6.0] - 2025-01-18
 

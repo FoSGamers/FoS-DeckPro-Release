@@ -77,31 +77,12 @@ jobs:
         with:
           path: dist
           
-      - name: Create Release Notes
-        run: |
-          echo "## 🚀 FoS-DeckPro ${{ github.ref_name }} – Cross-Platform Release" > release_notes.md
-          echo "" >> release_notes.md
-          echo "**FoS-DeckPro** is the all-in-one toolkit for Whatnot sellers and card enthusiasts." >> release_notes.md
-          echo "" >> release_notes.md
-          echo "### 📦 Download" >> release_notes.md
-          echo "Download the ready-to-run app for your platform:" >> release_notes.md
-          echo "- **macOS**: FoS-DeckPro-macOS.zip (extract and run FoS-DeckPro/FoS-DeckPro)" >> release_notes.md
-          echo "- **Windows**: FoS-DeckPro-Windows.exe (double-click to run)" >> release_notes.md
-          echo "- **Linux**: FoS-DeckPro-Linux.AppImage (make executable and run)" >> release_notes.md
-          echo "" >> release_notes.md
-          echo "### 🆕 What's New in ${{ github.ref_name }}" >> release_notes.md
-          echo "- **APTPT Integration**: Advanced adaptive feedback control system" >> release_notes.md
-          echo "- **Cross-platform builds** for Mac, Windows, and Linux" >> release_notes.md
-          echo "- **Enhanced performance** and stability improvements" >> release_notes.md
-          echo "" >> release_notes.md
-          echo "**Thank you for supporting FoS-DeckPro!**" >> release_notes.md
-          
       - name: Create or Update Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.ref_name }}
-          name: "🚀 FoS-DeckPro ${{ github.ref_name }}: Cross-Platform Release"
-          body_path: release_notes.md
+          name: "🚀 FoS-DeckPro ${{ github.ref_name }}: Enhanced APTPT Integration & Cross-Platform Release"
+          body_path: release_notes_v1.7.0.md
           draft: false
           prerelease: false
           files: |

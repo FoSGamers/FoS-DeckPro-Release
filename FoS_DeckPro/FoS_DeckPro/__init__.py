@@ -8,4 +8,4 @@ from . import models
 from . import logic
 from . import aptpt
 
-__version__ = "1.6.0" 
+__version__ = "1.7.0" 

@@ -1,0 +1,46 @@
+[
+  {
+    "Name": "Paradise Plume",
+    "Set name": "Time Spiral Remastered",
+    "Set code": "TSR",
+    "Collector number": "271",
+    "Rarity": "uncommon",
+    "Condition": "near_mint",
+    "Foil": "normal",
+    "Language": "en",
+    "Purchase price": "$0.25",
+    "Whatnot price": "$1"
+  },
+  {
+    "Name": "Lightning Bolt",
+    "Set name": "Magic 2011",
+    "Set code": "M11",
+    "Collector number": "145",
+    "Rarity": "common",
+    "Condition": "near_mint",
+    "Foil": "foil",
+    "Language": "en",
+    "Purchase price": "$2.00",
+    "Whatnot price": "$2"
+  },
+  {
+    "Name": "Card0",
+    "Set name": "SetA"
+  },
+  {
+    "Name": "Card1",
+    "Set name": "SetA"
+  },
+  {
+    "Name": "Card2",
+    "Set name": "SetA"
+  },
+  {
+    "Name": "Card3",
+    "Set name": "SetA"
+  },
+  {
+    "Name": "Card4",
+    "Set name": "SetA"
+  }
+]

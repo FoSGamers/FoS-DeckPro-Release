@@ -1,0 +1,12 @@
+[
+  {
+    "Name": "Card1",
+    "Set name": "SetA",
+    "Price": null
+  },
+  {
+    "Name": "Card2",
+    "Set name": "SetB",
+    "Price": "10.00"
+  }
+]

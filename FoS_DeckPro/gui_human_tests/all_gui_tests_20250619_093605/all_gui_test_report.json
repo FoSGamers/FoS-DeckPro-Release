@@ -1,0 +1,47 @@
+{
+  "summary": {
+    "total_tests": 5,
+    "passed": 0,
+    "failed": 5,
+    "errors": 0,
+    "success_rate": 0.0,
+    "timestamp": "2025-06-19T09:38:12.628415"
+  },
+  "results": [
+    {
+      "feature": "Launch App",
+      "screenshot": "all_gui_tests_20250619_093605/Launch_App_20250619_093637.png",
+      "vision_result": "NO. \n\nThe screenshot shows part of a desktop environment, with menu options for Python, File, Edit, View, and Tools, but it doesn't explicitly show the main window of FoS_DeckPro or a card table interface. Instead, there's an image of a forest scene.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T09:36:41.900660"
+    },
+    {
+      "feature": "Menu: File > New",
+      "screenshot": "all_gui_tests_20250619_093605/Menu__File___New_20250619_093658.png",
+      "vision_result": "NO.\n\nThe screenshot shows an image of a forest scene. There is no visible dialog, inventory, or card table present.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T09:37:01.604438"
+    },
+    {
+      "feature": "Menu: File > Open",
+      "screenshot": "all_gui_tests_20250619_093605/Menu__File___Open_20250619_093719.png",
+      "vision_result": "NO. The screenshot shows a forest scene with trees, not a file dialog or an inventory. The menu bar at the top suggests that an application is open, but the main content area shows an image of trees, not any interface elements related to file dialogs or inventories.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T09:37:24.746787"
+    },
+    {
+      "feature": "Menu: File > Save",
+      "screenshot": "all_gui_tests_20250619_093605/Menu__File___Save_20250619_093743.png",
+      "vision_result": "NO, this screenshot does not show a save dialog or confirmation. It displays an image of a forest with a menu bar at the top, but there is no dialog box or confirmation prompt visible.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T09:37:47.447693"
+    },
+    {
+      "feature": "Menu: File > Export",
+      "screenshot": "all_gui_tests_20250619_093605/Menu__File___Export_20250619_093805.png",
+      "vision_result": "NO, the screenshot does not show an export dialog or confirmation. It displays an image of a forest with trees and no visible export or confirmation dialog boxes.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T09:38:09.462957"
+    }
+  ]
+}

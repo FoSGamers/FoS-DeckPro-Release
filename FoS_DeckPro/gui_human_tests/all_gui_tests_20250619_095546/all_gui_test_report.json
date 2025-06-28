@@ -1,0 +1,159 @@
+{
+  "summary": {
+    "total_tests": 21,
+    "passed": 0,
+    "failed": 21,
+    "errors": 0,
+    "success_rate": 0.0,
+    "timestamp": "2025-06-19T10:00:52.241904"
+  },
+  "results": [
+    {
+      "feature": "Launch App",
+      "screenshot": "all_gui_tests_20250619_095546/Launch_App_20250619_095601.png",
+      "vision_result": "NO. The screenshot does not show the main window of FoS_DeckPro. It shows a forest scene with a menu bar at the top labeled \"Python\" with menus for File, Edit, View, and Tools, but there is no visible card table.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T09:56:05.481175"
+    },
+    {
+      "feature": "Menu: File > New",
+      "screenshot": "all_gui_tests_20250619_095546/Menu__File___New_20250619_095613.png",
+      "vision_result": "NO.\n\nThe screenshot shows a forest scene with trees and foliage. There is no visible dialog, inventory, or card table displayed.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T09:56:18.263946"
+    },
+    {
+      "feature": "Menu: File > Open",
+      "screenshot": "all_gui_tests_20250619_095546/Menu__File___Open_20250619_095628.png",
+      "vision_result": "NO. The screenshot does not show a file dialog or any inventory. It displays an image of a forest with trees, and the top bar with menu items such as \"File,\" \"Edit,\" \"View,\" and \"Tools,\" which are typical of a software application but do not indicate a file dialog or inventory display.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T09:56:33.382034"
+    },
+    {
+      "feature": "Menu: File > Save",
+      "screenshot": "all_gui_tests_20250619_095546/Menu__File___Save_20250619_095643.png",
+      "vision_result": "NO. The screenshot shows an image of a forest with a menu bar at the top, likely from a software interface. There is no save dialog or confirmation window visible.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T09:56:49.004314"
+    },
+    {
+      "feature": "Menu: File > Export",
+      "screenshot": "all_gui_tests_20250619_095546/Menu__File___Export_20250619_095659.png",
+      "vision_result": "NO. The screenshot shows a forest scene with trees and some fog. There is no visible export dialog or confirmation message on the screen.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T09:57:03.510009"
+    },
+    {
+      "feature": "Menu: Edit > Undo",
+      "screenshot": "all_gui_tests_20250619_095546/Menu__Edit___Undo_20250619_095712.png",
+      "vision_result": "NO, the screenshot does not show any indication that the last change is undone in the card table. It is an image of a forest with trees; there is no visible interface or context related to an undo action or a card table.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T09:57:16.585403"
+    },
+    {
+      "feature": "Menu: Edit > Redo",
+      "screenshot": "all_gui_tests_20250619_095546/Menu__Edit___Redo_20250619_095725.png",
+      "vision_result": "NO. The screenshot shows an image of a forest with trees. There is no indication of actions related to a card table or the redoing of changes visible in this image.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T09:57:30.148392"
+    },
+    {
+      "feature": "Menu: Tools > Pricing Dashboard",
+      "screenshot": "all_gui_tests_20250619_095546/Menu__Tools___Pricing_Dashboard_20250619_095741.png",
+      "vision_result": "NO. The screenshot shows a forest scene with trees and greenery, not a dashboard with real-time pricing and analytics.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T09:57:44.075390"
+    },
+    {
+      "feature": "Menu: Tools > Analytics",
+      "screenshot": "all_gui_tests_20250619_095546/Menu__Tools___Analytics_20250619_095755.png",
+      "vision_result": "NO. The screenshot shows a forest scene with trees. There is no visible window or panel with collection analytics displayed.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T09:57:58.533148"
+    },
+    {
+      "feature": "Menu: Help > About",
+      "screenshot": "all_gui_tests_20250619_095546/Menu__Help___About_20250619_095807.png",
+      "vision_result": "NO.\n\nThe screenshot shows a menu bar at the top with options like \"File,\" \"Edit,\" \"View,\" and \"Tools,\" above an image of a forest. There is no visible About dialog with app information.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T09:58:11.946980"
+    },
+    {
+      "feature": "Card Table: Select Card",
+      "screenshot": "all_gui_tests_20250619_095546/Card_Table__Select_Card_20250619_095819.png",
+      "vision_result": "NO, the screenshot shows a forest with trees, not a card table or any highlighted card row.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T09:58:22.577347"
+    },
+    {
+      "feature": "Card Table: Edit Card",
+      "screenshot": "all_gui_tests_20250619_095546/Card_Table__Edit_Card_20250619_095831.png",
+      "vision_result": "NO. The screenshot shows an image of a forest. There is no visible card edit dialog or indication that card details are editable.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T09:58:35.117716"
+    },
+    {
+      "feature": "Card Table: Delete Card",
+      "screenshot": "all_gui_tests_20250619_095546/Card_Table__Delete_Card_20250619_095844.png",
+      "vision_result": "NO. The screenshot depicts a forest scene with tall trees and does not show a card being removed from a table or a confirmation dialog appearing.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T09:58:48.276687"
+    },
+    {
+      "feature": "Card Table: Enrich Card",
+      "screenshot": "all_gui_tests_20250619_095546/Card_Table__Enrich_Card_20250619_095900.png",
+      "vision_result": "NO. The screenshot shows a forest scene with trees, and there is no text or information regarding card details or enrichment info.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T09:59:03.536394"
+    },
+    {
+      "feature": "Search: Basic",
+      "screenshot": "all_gui_tests_20250619_095546/Search__Basic_20250619_095913.png",
+      "vision_result": "NO, the screenshot shows an image of a forest with trees, not a card table with search results.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T09:59:17.343383"
+    },
+    {
+      "feature": "Search: Advanced",
+      "screenshot": "all_gui_tests_20250619_095546/Search__Advanced_20250619_095929.png",
+      "vision_result": "NO. This is an image of a forest with tall trees and vegetation. It does not show any advanced search dialog or search results.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T09:59:33.784578"
+    },
+    {
+      "feature": "Paywall: Unlock Premium",
+      "screenshot": "all_gui_tests_20250619_095546/Paywall__Unlock_Premium_20250619_095948.png",
+      "vision_result": "NO. \n\nThe screenshot shows a forest scene with trees, and there's a typical application menu bar at the top, but there is no visible dialog for entering a password/key or any indication of premium features being unlocked.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T09:59:52.455756"
+    },
+    {
+      "feature": "Deck Builder: Create Deck",
+      "screenshot": "all_gui_tests_20250619_095546/Deck_Builder__Create_Deck_20250619_100004.png",
+      "vision_result": "NO. The screenshot shows a forest scene with tall trees and greenery, not a deck builder interface.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T10:00:07.844242"
+    },
+    {
+      "feature": "Deck Builder: Export Deck",
+      "screenshot": "all_gui_tests_20250619_095546/Deck_Builder__Export_Deck_20250619_100017.png",
+      "vision_result": "NO. The screenshot shows an image of a forest with large trees, and there is no visible dialog or confirmation box for a deck export.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T10:00:21.162185"
+    },
+    {
+      "feature": "Backup: Export Data",
+      "screenshot": "all_gui_tests_20250619_095546/Backup__Export_Data_20250619_100031.png",
+      "vision_result": "NO, this screenshot does not show a dialog or confirmation for data export. It displays an image of a forest with large trees and has a menu bar at the top, but there are no visible dialogs or confirmation messages related to data export.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T10:00:37.293874"
+    },
+    {
+      "feature": "Restore: Import Data",
+      "screenshot": "all_gui_tests_20250619_095546/Restore__Import_Data_20250619_100047.png",
+      "vision_result": "NO.\n\nThe screenshot shows an image of a forest with tall trees. There is no dialog or confirmation related to data import visible.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T10:00:50.238710"
+    }
+  ]
+}

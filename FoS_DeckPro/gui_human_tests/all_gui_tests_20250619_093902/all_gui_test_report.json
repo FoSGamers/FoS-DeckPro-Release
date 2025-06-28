@@ -1,0 +1,40 @@
+{
+  "summary": {
+    "total_tests": 4,
+    "passed": 0,
+    "failed": 4,
+    "errors": 0,
+    "success_rate": 0.0,
+    "timestamp": "2025-06-19T09:40:30.173226"
+  },
+  "results": [
+    {
+      "feature": "Launch App",
+      "screenshot": "all_gui_tests_20250619_093902/Launch_App_20250619_093916.png",
+      "vision_result": "NO. The screenshot shows a forested scene, and the menu bar contains \"Python,\" \"File,\" \"Edit,\" \"View,\" and \"Tools.\" The \"Help\" menu is missing, and there is no visible card table, so it doesn't match the description of the FoS_DeckPro window.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T09:39:20.950944"
+    },
+    {
+      "feature": "Menu: File > New",
+      "screenshot": "all_gui_tests_20250619_093902/Menu__File___New_20250619_093933.png",
+      "vision_result": "NO, the screenshot does not show a dialog or new inventory, and the card table is not shown to be empty or reset. It appears to be an image of a forest with trees and vegetation, with no visible dialog or inventory interface.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T09:39:36.616468"
+    },
+    {
+      "feature": "Menu: File > Open",
+      "screenshot": "all_gui_tests_20250619_093902/Menu__File___Open_20250619_093950.png",
+      "vision_result": "NO. The screenshot shows an image of a forest, and a menu bar with options like \"File\" and \"Edit,\" but there is no file dialog or inventory visible.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T09:39:55.324506"
+    },
+    {
+      "feature": "Menu: File > Save",
+      "screenshot": "all_gui_tests_20250619_093902/Menu__File___Save_20250619_094009.png",
+      "vision_result": "NO, this screenshot does not show a save dialog or confirmation. It shows an image of a forest with trees and a software menu bar at the top, but there is no visible dialog or pop-up window.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T09:40:13.901938"
+    }
+  ]
+}

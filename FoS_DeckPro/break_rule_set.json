@@ -1,0 +1,13 @@
+[
+  {
+    "count_type": "Count",
+    "count": 1,
+    "criteria": [
+      [
+        "Altered",
+        ""
+      ]
+    ],
+    "enabled": true
+  }
+]

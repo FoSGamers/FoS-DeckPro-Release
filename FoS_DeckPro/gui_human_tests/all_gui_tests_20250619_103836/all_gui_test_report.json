@@ -1,0 +1,159 @@
+{
+  "summary": {
+    "total_tests": 21,
+    "passed": 0,
+    "failed": 0,
+    "errors": 21,
+    "success_rate": 0.0,
+    "timestamp": "2025-06-19T12:33:18.776730"
+  },
+  "results": [
+    {
+      "feature": "Launch App",
+      "screenshot": null,
+      "vision_result": "Screenshot failed",
+      "status": "ERROR",
+      "timestamp": "2025-06-19T10:38:56.032693"
+    },
+    {
+      "feature": "Menu: File > New",
+      "screenshot": null,
+      "vision_result": "Screenshot failed",
+      "status": "ERROR",
+      "timestamp": "2025-06-19T10:39:09.827154"
+    },
+    {
+      "feature": "Menu: File > Open",
+      "screenshot": null,
+      "vision_result": "Screenshot failed",
+      "status": "ERROR",
+      "timestamp": "2025-06-19T10:39:24.917496"
+    },
+    {
+      "feature": "Menu: File > Save",
+      "screenshot": null,
+      "vision_result": "Screenshot failed",
+      "status": "ERROR",
+      "timestamp": "2025-06-19T10:39:39.984526"
+    },
+    {
+      "feature": "Menu: File > Export",
+      "screenshot": null,
+      "vision_result": "Screenshot failed",
+      "status": "ERROR",
+      "timestamp": "2025-06-19T10:39:55.090742"
+    },
+    {
+      "feature": "Menu: Edit > Undo",
+      "screenshot": null,
+      "vision_result": "Screenshot failed",
+      "status": "ERROR",
+      "timestamp": "2025-06-19T10:40:08.618420"
+    },
+    {
+      "feature": "Menu: Edit > Redo",
+      "screenshot": null,
+      "vision_result": "Screenshot failed",
+      "status": "ERROR",
+      "timestamp": "2025-06-19T10:40:22.167625"
+    },
+    {
+      "feature": "Menu: Tools > Pricing Dashboard",
+      "screenshot": null,
+      "vision_result": "Screenshot failed",
+      "status": "ERROR",
+      "timestamp": "2025-06-19T10:40:38.226938"
+    },
+    {
+      "feature": "Menu: Tools > Analytics",
+      "screenshot": null,
+      "vision_result": "Screenshot failed",
+      "status": "ERROR",
+      "timestamp": "2025-06-19T10:40:54.324698"
+    },
+    {
+      "feature": "Menu: Help > About",
+      "screenshot": null,
+      "vision_result": "Screenshot failed",
+      "status": "ERROR",
+      "timestamp": "2025-06-19T10:41:08.748544"
+    },
+    {
+      "feature": "Card Table: Select Card",
+      "screenshot": null,
+      "vision_result": "Screenshot failed",
+      "status": "ERROR",
+      "timestamp": "2025-06-19T10:41:21.169861"
+    },
+    {
+      "feature": "Card Table: Edit Card",
+      "screenshot": null,
+      "vision_result": "Screenshot failed",
+      "status": "ERROR",
+      "timestamp": "2025-06-19T10:41:35.125998"
+    },
+    {
+      "feature": "Card Table: Delete Card",
+      "screenshot": null,
+      "vision_result": "Screenshot failed",
+      "status": "ERROR",
+      "timestamp": "2025-06-19T10:41:49.596608"
+    },
+    {
+      "feature": "Card Table: Enrich Card",
+      "screenshot": null,
+      "vision_result": "Screenshot failed",
+      "status": "ERROR",
+      "timestamp": "2025-06-19T10:42:06.584898"
+    },
+    {
+      "feature": "Search: Basic",
+      "screenshot": null,
+      "vision_result": "Screenshot failed",
+      "status": "ERROR",
+      "timestamp": "2025-06-19T10:42:21.556590"
+    },
+    {
+      "feature": "Search: Advanced",
+      "screenshot": null,
+      "vision_result": "Screenshot failed",
+      "status": "ERROR",
+      "timestamp": "2025-06-19T10:42:38.561734"
+    },
+    {
+      "feature": "Paywall: Unlock Premium",
+      "screenshot": null,
+      "vision_result": "Screenshot failed",
+      "status": "ERROR",
+      "timestamp": "2025-06-19T11:34:19.766535"
+    },
+    {
+      "feature": "Deck Builder: Create Deck",
+      "screenshot": null,
+      "vision_result": "Screenshot failed",
+      "status": "ERROR",
+      "timestamp": "2025-06-19T12:25:33.491065"
+    },
+    {
+      "feature": "Deck Builder: Export Deck",
+      "screenshot": null,
+      "vision_result": "Screenshot failed",
+      "status": "ERROR",
+      "timestamp": "2025-06-19T12:32:46.556935"
+    },
+    {
+      "feature": "Backup: Export Data",
+      "screenshot": null,
+      "vision_result": "Screenshot failed",
+      "status": "ERROR",
+      "timestamp": "2025-06-19T12:33:01.683847"
+    },
+    {
+      "feature": "Restore: Import Data",
+      "screenshot": null,
+      "vision_result": "Screenshot failed",
+      "status": "ERROR",
+      "timestamp": "2025-06-19T12:33:16.775271"
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+import sys; print("Python executable:", sys.executable); import pyautogui; print("Attempting mouse movement..."); pos = pyautogui.position(); pyautogui.moveTo(pos.x+1, pos.y+1); print("This should trigger accessibility dialog!")

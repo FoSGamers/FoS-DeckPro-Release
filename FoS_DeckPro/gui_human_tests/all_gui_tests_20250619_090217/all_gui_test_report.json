@@ -1,0 +1,128 @@
+[
+  {
+    "feature": "Launch App",
+    "screenshot": null,
+    "vision_result": "[Errno 2] No such file or directory: 'all_gui_tests_20250619_090217/Launch_App_20250619_090228.png'",
+    "status": "ERROR"
+  },
+  {
+    "feature": "Menu: File > New",
+    "screenshot": null,
+    "vision_result": "[Errno 2] No such file or directory: 'all_gui_tests_20250619_090217/Menu:_File_>_New_20250619_090233.png'",
+    "status": "ERROR"
+  },
+  {
+    "feature": "Menu: File > Open",
+    "screenshot": null,
+    "vision_result": "[Errno 2] No such file or directory: 'all_gui_tests_20250619_090217/Menu:_File_>_Open_20250619_090239.png'",
+    "status": "ERROR"
+  },
+  {
+    "feature": "Menu: File > Save",
+    "screenshot": null,
+    "vision_result": "[Errno 2] No such file or directory: 'all_gui_tests_20250619_090217/Menu:_File_>_Save_20250619_090245.png'",
+    "status": "ERROR"
+  },
+  {
+    "feature": "Menu: File > Export",
+    "screenshot": null,
+    "vision_result": "[Errno 2] No such file or directory: 'all_gui_tests_20250619_090217/Menu:_File_>_Export_20250619_090252.png'",
+    "status": "ERROR"
+  },
+  {
+    "feature": "Menu: Edit > Undo",
+    "screenshot": null,
+    "vision_result": "[Errno 2] No such file or directory: 'all_gui_tests_20250619_090217/Menu:_Edit_>_Undo_20250619_090257.png'",
+    "status": "ERROR"
+  },
+  {
+    "feature": "Menu: Edit > Redo",
+    "screenshot": null,
+    "vision_result": "[Errno 2] No such file or directory: 'all_gui_tests_20250619_090217/Menu:_Edit_>_Redo_20250619_090302.png'",
+    "status": "ERROR"
+  },
+  {
+    "feature": "Menu: Tools > Pricing Dashboard",
+    "screenshot": null,
+    "vision_result": "[Errno 2] No such file or directory: 'all_gui_tests_20250619_090217/Menu:_Tools_>_Pricing_Dashboard_20250619_090309.png'",
+    "status": "ERROR"
+  },
+  {
+    "feature": "Menu: Tools > Analytics",
+    "screenshot": null,
+    "vision_result": "PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.",
+    "status": "ERROR"
+  },
+  {
+    "feature": "Menu: Help > About",
+    "screenshot": null,
+    "vision_result": "PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.",
+    "status": "ERROR"
+  },
+  {
+    "feature": "Card Table: Select Card",
+    "screenshot": null,
+    "vision_result": "PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.",
+    "status": "ERROR"
+  },
+  {
+    "feature": "Card Table: Edit Card",
+    "screenshot": null,
+    "vision_result": "PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.",
+    "status": "ERROR"
+  },
+  {
+    "feature": "Card Table: Delete Card",
+    "screenshot": null,
+    "vision_result": "PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.",
+    "status": "ERROR"
+  },
+  {
+    "feature": "Card Table: Enrich Card",
+    "screenshot": null,
+    "vision_result": "PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.",
+    "status": "ERROR"
+  },
+  {
+    "feature": "Search: Basic",
+    "screenshot": null,
+    "vision_result": "PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.",
+    "status": "ERROR"
+  },
+  {
+    "feature": "Search: Advanced",
+    "screenshot": null,
+    "vision_result": "PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.",
+    "status": "ERROR"
+  },
+  {
+    "feature": "Paywall: Unlock Premium",
+    "screenshot": null,
+    "vision_result": "PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.",
+    "status": "ERROR"
+  },
+  {
+    "feature": "Deck Builder: Create Deck",
+    "screenshot": null,
+    "vision_result": "PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.",
+    "status": "ERROR"
+  },
+  {
+    "feature": "Deck Builder: Export Deck",
+    "screenshot": null,
+    "vision_result": "PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.",
+    "status": "ERROR"
+  },
+  {
+    "feature": "Backup: Export Data",
+    "screenshot": null,
+    "vision_result": "PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.",
+    "status": "ERROR"
+  },
+  {
+    "feature": "Restore: Import Data",
+    "screenshot": null,
+    "vision_result": "PyAutoGUI fail-safe triggered from mouse moving to a corner of the screen. To disable this fail-safe, set pyautogui.FAILSAFE to False. DISABLING FAIL-SAFE IS NOT RECOMMENDED.",
+    "status": "ERROR"
+  }
+]

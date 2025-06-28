@@ -1,0 +1,33 @@
+{
+  "summary": {
+    "total_tests": 3,
+    "passed": 0,
+    "failed": 3,
+    "errors": 0,
+    "success_rate": 0.0,
+    "timestamp": "2025-06-19T09:45:33.323212"
+  },
+  "results": [
+    {
+      "feature": "Launch App",
+      "screenshot": "all_gui_tests_20250619_094437/Launch_App_20250619_094452.png",
+      "vision_result": "NO. The screenshot shows a window with menus for File, Edit, View, and Tools, but it does not display FoS_DeckPro or a card table. The background is a forest scene.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T09:44:56.212837"
+    },
+    {
+      "feature": "Menu: File > New",
+      "screenshot": "all_gui_tests_20250619_094437/Menu__File___New_20250619_094506.png",
+      "vision_result": "NO.\n\nThe screenshot shows an image of a forest with tall trees. There is no visible dialog, inventory, or card table present in the image.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T09:45:10.365337"
+    },
+    {
+      "feature": "Menu: File > Open",
+      "screenshot": "all_gui_tests_20250619_094437/Menu__File___Open_20250619_094522.png",
+      "vision_result": "NO. The screenshot does not show a file dialog or an inventory being loaded. It shows a forest scene with trees and a menu bar at the top.",
+      "status": "FAIL",
+      "timestamp": "2025-06-19T09:45:25.977003"
+    }
+  ]
+}

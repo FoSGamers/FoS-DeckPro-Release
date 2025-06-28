@@ -78,10 +78,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- 
+- Cross-platform build workflow for generating Mac, Windows, and Linux executables
+- PyInstaller configuration for proper application packaging
+- Automated GitHub Actions workflow for release builds
+- Build script for local development and testing
 
 ### Changed
-- 
+- Updated build-and-upload workflow to work with current project structure
+- Enhanced PyInstaller spec file with proper data inclusion and hidden imports
 
 ### Fixed
 - 

@@ -62,6 +62,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Cross-platform compatibility**: Fixed PyInstaller configurations for all platforms
 - **PyQt5-Qt5 error**: Removed invalid PyQt5-Qt5 requirement to fix CI build
 - **PyInstaller .spec cleanup**: Added cleanup step to remove old .spec files before build
+- **Aggressive .spec cleanup**: Now aggressively deletes all .spec files before build to ensure PyInstaller does not use old or broken spec files
 
 ### Changed
 - **Architecture**: Refactored to follow APTPT principles for robust, adaptive control

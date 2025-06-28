@@ -1,6 +1,0 @@
-FoS_DeckPro
-aptpt
-deckforge_ai
-models
-tests
-utils

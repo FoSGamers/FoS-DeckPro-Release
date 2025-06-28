@@ -110,13 +110,16 @@ This is the tool that makes it real.
 **FoS DeckPro is a premium, commercial software product.**  
 Access to advanced features, updates, and support requires a valid license.
 
-- **Free Trial:** Available for evaluation
+- **3-Day Free Trial:** Available for evaluation - experience the full power of FoS DeckPro
+- **30-Day Extended Trial:** Get a full month when you purchase any Repack from FoSGamers
 - **Individual License:** For personal use and small collections
 - **Business License:** For stores, organizations, and commercial use
 - **Enterprise License:** For large companies and custom integrations
 
-**Contact us for pricing and licensing options.**
+**Ready to unlock the full potential?**  
+Start with our 3-day free trial, or get a 30-day trial with any FoSGamers Repack purchase!
 
+**Contact us for pricing and licensing options.**
 ---
 
 ## 🙏 Thank You

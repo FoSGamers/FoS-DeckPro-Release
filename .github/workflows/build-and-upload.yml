@@ -27,6 +27,12 @@ jobs:
           pip install -r FoS_DeckPro/requirements.txt
           pip install pyinstaller
           
+      - name: Clean build artifacts
+        run: |
+          cd FoS_DeckPro
+          rm -rf build dist *.spec
+          cd ..
+          
       - name: Build executable (macOS)
         if: matrix.os == 'macos-latest'
         run: |

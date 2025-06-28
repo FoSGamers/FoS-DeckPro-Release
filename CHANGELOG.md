@@ -59,6 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Build Workflow**: Simplified GitHub Actions workflow to avoid system dependency issues
 - **Requirements**: Removed local path dependencies that caused build failures
 - **Cross-platform compatibility**: Fixed PyInstaller configurations for all platforms
+- **PyQt5-Qt5 error**: Removed invalid PyQt5-Qt5 requirement to fix CI build
 
 ### Changed
 - **Architecture**: Refactored to follow APTPT principles for robust, adaptive control
